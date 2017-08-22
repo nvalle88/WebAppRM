@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp1.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Negocio\ve-7044.tmp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Negocio\" />
+  </ItemGroup>
+
+</Project>
