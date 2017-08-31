@@ -18,7 +18,6 @@ namespace bd.webapprm.web.Controllers.MVC
     {
         private readonly IApiServicio apiServicio;
 
-
         public MotivoRecepcionController(IApiServicio apiServicio)
         {
             this.apiServicio = apiServicio;

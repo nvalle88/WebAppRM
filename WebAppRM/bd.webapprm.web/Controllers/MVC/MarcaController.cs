@@ -86,7 +86,7 @@ namespace bd.webapprm.web.Controllers.MVC
                                                                   "/api/Marca");
 
 
-                    respuesta.Resultado = JsonConvert.DeserializeObject<TipoCertificado>(respuesta.Resultado.ToString());
+                    respuesta.Resultado = JsonConvert.DeserializeObject<Marca>(respuesta.Resultado.ToString());
                     if (respuesta.IsSuccess)
                     {
                         return View(respuesta.Resultado);

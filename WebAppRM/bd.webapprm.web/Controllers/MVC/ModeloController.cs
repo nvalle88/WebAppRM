@@ -24,8 +24,10 @@ namespace bd.webapprm.web.Controllers.MVC
             this.apiServicio = apiServicio;
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            ViewData["IdMarca"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<Marca>(new Uri(WebApp.BaseAddress), "/api/Marca/ListarMarca"), "IdMarca", "Nombre");
+
             return View();
         }
 
@@ -78,6 +80,8 @@ namespace bd.webapprm.web.Controllers.MVC
 
         public async Task<IActionResult> Edit(string id)
         {
+            ViewData["IdMarca"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<Marca>(new Uri(WebApp.BaseAddress), "/api/Marca/ListarMarca"), "IdMarca", "Nombre");
+
             try
             {
                 if (!string.IsNullOrEmpty(id))
@@ -157,7 +161,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 lista = await apiServicio.Listar<Modelo>(new Uri(WebApp.BaseAddress)
-                                                                    , "/api/Modelo/ListarModelo");
+                                                                    , "/api/Modelo/ListarModelos");
                 return View(lista);
             }
             catch (Exception ex)
