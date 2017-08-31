@@ -1,4 +1,5 @@
-﻿using bd.webapprm.servicios.Servicios;
+﻿using bd.webapprm.servicios.Interfaces;
+using bd.webapprm.servicios.Servicios;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -27,7 +28,8 @@ namespace bd.webapprm.web
 
             // Add framework services.
             services.AddMvc();
-            await InicializarWebApp.Inicializar("WebAppTH");
+            services.AddSingleton<IApiServicio, ApiServicio>();
+            await InicializarWebApp.Inicializar("WebAppRM");
            
 
         }

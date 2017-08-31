@@ -89,3 +89,8 @@
 #extr-page .smart-form div + fieldset {
     padding-top: 15px;
 }
+
+.bootstrap-touchspin-up, .bootstrap-touchspin-down {
+    height: 32px !important;
+    width: 32px !important;
+}
