@@ -24,15 +24,19 @@ namespace bd.webapprm.web.Controllers.MVC
             this.apiServicio = apiServicio;
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            ViewData["IdArticulo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<Articulo>(new Uri(WebApp.BaseAddress), "/api/Articulo/ListarArticulos"), "IdArticulo", "Nombre");
+            ViewData["Minimo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<MaestroArticuloSucursal>(new Uri(WebApp.BaseAddress), "/api/MaestroArticuloSucursal/ListarMaestroArticuloSucursal"), "IdMaestroArticuloSucursal", "Minimo");
+            ViewData["Maximo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<Articulo>(new Uri(WebApp.BaseAddress), "/api/MaestroArticuloSucursal/ListarMaestroArticuloSucursal"), "IdMaestroArticuloSucursal", "Maximo");
+
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(MaestroDetalleArticulo maestroDetalleArticulo)
-        {
+        {            
             Response response = new Response();
             try
             {
