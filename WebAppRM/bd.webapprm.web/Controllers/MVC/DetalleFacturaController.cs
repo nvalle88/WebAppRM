@@ -47,8 +47,10 @@ namespace bd.webapprm.web.Controllers.MVC
             }
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            ViewData["IdFactura"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<Factura>(new Uri(WebApp.BaseAddress), "/api/Factura/ListarFacturas"), "IdFactura", "Numero");
+            ViewData["IdArticulo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<Articulo>(new Uri(WebApp.BaseAddress), "/api/Articulo/ListarArticulos"), "IdArticulo", "Nombre");
             return View();
         }
 

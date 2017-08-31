@@ -47,8 +47,9 @@ namespace bd.webapprm.web.Controllers.MVC
             }
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            ViewData["IdTipoArticulo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<TipoArticulo>(new Uri(WebApp.BaseAddress), "/api/TipoArticulo/ListarTipoArticulo"), "IdTipoArticulo", "Nombre");
             return View();
         }
 
@@ -110,6 +111,7 @@ namespace bd.webapprm.web.Controllers.MVC
 
 
                     respuesta.Resultado = JsonConvert.DeserializeObject<ClaseArticulo>(respuesta.Resultado.ToString());
+                    ViewData["IdTipoArticulo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<TipoArticulo>(new Uri(WebApp.BaseAddress), "/api/TipoArticulo/ListarTipoArticulo"), "IdTipoArticulo", "Nombre");
                     if (respuesta.IsSuccess)
                     {
                         return View(respuesta.Resultado);
