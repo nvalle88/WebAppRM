@@ -36,6 +36,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\MVC\" />
+    <Folder Include="Controllers\MVC\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
