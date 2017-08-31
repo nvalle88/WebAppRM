@@ -47,8 +47,10 @@ namespace bd.webapprm.web.Controllers.MVC
             }
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            ViewData["IdTipoActivoFijo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<TipoActivoFijo>(new Uri(WebApp.BaseAddress), "/api/TipoActivoFijo/ListarTipoActivoFijos"), "IdTipoActivoFijo", "Nombre");
+            ViewData["IdTablaDepreciacion"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<TablaDepreciacion>(new Uri(WebApp.BaseAddress), "/api/TablaDepreciacion/ListarTablaDepreciacion"), "IdTablaDepreciacion", "IndiceDepreciacion");
             return View();
         }
 
@@ -110,6 +112,8 @@ namespace bd.webapprm.web.Controllers.MVC
 
 
                     respuesta.Resultado = JsonConvert.DeserializeObject<ClaseActivoFijo>(respuesta.Resultado.ToString());
+                    ViewData["IdTipoActivoFijo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<TipoActivoFijo>(new Uri(WebApp.BaseAddress), "/api/TipoActivoFijo/ListarTipoActivoFijos"), "IdTipoActivoFijo", "Nombre");
+                    ViewData["IdTablaDepreciacion"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<TablaDepreciacion>(new Uri(WebApp.BaseAddress), "/api/TablaDepreciacion/ListarTablaDepreciacion"), "IdTablaDepreciacion", "IndiceDepreciacion");
                     if (respuesta.IsSuccess)
                     {
                         return View(respuesta.Resultado);

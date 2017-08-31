@@ -47,8 +47,9 @@ namespace bd.webapprm.web.Controllers.MVC
             }
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            ViewData["IdCatalogoCuentaHijo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<CatalogoCuenta>(new Uri(WebApp.BaseAddress), "/api/CatalogoCuenta/ListarCatalogosCuenta"), "IdCatalogoCuenta", "Codigo");
             return View();
         }
 
@@ -110,6 +111,7 @@ namespace bd.webapprm.web.Controllers.MVC
 
 
                     respuesta.Resultado = JsonConvert.DeserializeObject<CatalogoCuenta>(respuesta.Resultado.ToString());
+                    ViewData["IdCatalogoCuentaHijo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<CatalogoCuenta>(new Uri(WebApp.BaseAddress), "/api/CatalogoCuenta/ListarCatalogosCuenta"), "IdCatalogoCuenta", "Codigo");
                     if (respuesta.IsSuccess)
                     {
                         return View(respuesta.Resultado);
