@@ -30,6 +30,16 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 lista = await apiServicio.Listar<CatalogoCuenta>(new Uri(WebApp.BaseAddress)
                                                                     , "/api/CatalogoCuenta/ListarCatalogosCuenta");
+                foreach (var item in lista)
+                {
+                    try
+                    {
+                        item.CatalogoCuentaReferencia = lista.SingleOrDefault(c => c.IdCatalogoCuenta == item.IdCatalogoCuentaHijo);
+                    }
+                    catch (Exception)
+                    { }
+                }
+
                 return View(lista);
             }
             catch (Exception ex)
