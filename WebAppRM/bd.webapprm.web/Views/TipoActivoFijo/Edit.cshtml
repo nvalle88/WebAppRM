@@ -1,0 +1,53 @@
+﻿@model List<bd.webapprm.entidades.TipoActivoFijo>
+
+@{
+    ViewData["Title"] = "TipoActivoFijo";
+}
+
+
+<div id="content">
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-sm-12 col-md-12 col-lg-10">
+                <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+                        <h2>Tipo Activo Fijo</h2>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox">
+                        </div>
+                        <div class="widget-body no-padding">
+                            <form asp-action="Edit" id="checkout-form" class="smart-form" novalidate="novalidate">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <input type="hidden" asp-for="IdTipoActivoFijo" />
+                                <fieldset>
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label class="input">
+                                                <i class="icon-prepend fa fa-user"></i>
+                                                <input maxlength="32" asp-for="Nombre" class="form-control" placeholder="@Html.DisplayNameFor(model=>model.Nombre)" />
+                                                <span asp-validation-for="Nombre" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+                                </fieldset>
+                                <footer>
+                                    <span class="text-danger">@ViewData["Error"]</span>
+                                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                                    <a asp-action="Index" class="btn btn-default">Cancelar</a>
+                                </footer>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+@section Scripts {
+    <script type="text/javascript">
+
+
+    </script>
+}
