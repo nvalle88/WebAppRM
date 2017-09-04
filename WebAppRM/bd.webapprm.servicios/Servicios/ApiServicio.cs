@@ -99,13 +99,13 @@ namespace bd.webapprm.servicios.Servicios
 
                     var resultado = await respuesta.Content.ReadAsStringAsync();
                     var response = JsonConvert.DeserializeObject<List<T>>(resultado);
-                    return response;
+                    return response ?? new List<T>();
                 }
             }
 
             catch (Exception )
             {
-                return null;
+                return new List<T>();
             }
                            
         }
