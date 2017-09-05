@@ -1,7 +1,7 @@
 @model bd.webapprm.entidades.FondoFinanciamiento
 
 @{
-    ViewData["Title"] = "Fondo Financiamiento";
+    ViewData["Title"] = "Fondo de Financiamiento";
 }
 <link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
 <div id="content">
@@ -11,20 +11,23 @@
                 <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
                     <header>
                         <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
-                        <h2>Fondos Financiamiento</h2>
+                        <h2>Fondos de Financiamiento</h2>
                     </header>
                     <div>
                         <div class="jarviswidget-editbox"></div>
                         <div class="widget-body no-padding">
                             <form asp-action="Edit" id="checkout-form" class="smart-form" novalidate="novalidate">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                                <input type="hidden" asp-for="IdArticulo" />
+                                <input type="hidden" asp-for="IdFondoFinanciamiento" />
                                 <fieldset>
                                     <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="Nombre"></label>
+                                        </section>
+
                                         <section class="col col-8">
                                             <label class="input">
-                                                <i class="icon-prepend fa fa-user"></i>
-                                                <input maxlength="20" asp-for="Nombre" class="form-control" placeholder="@Html.DisplayNameFor(model=>model.Nombre)" />
+                                                <input maxlength="20" asp-for="Nombre" class="form-control" />
                                                 <span asp-validation-for="Nombre" class="text-danger"></span>
                                             </label>
                                         </section>
@@ -43,13 +46,3 @@
         </div>
     </section>
 </div>
-@section Scripts {
-    <script src='~/lib/select2/dist/js/select2.min.js'></script>
-    <script src='~/lib/select2/dist/js/i18n/es.js'></script>
-    <script src='~/js/site.js'></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            Init_Select2();
-        });
-    </script>
-}

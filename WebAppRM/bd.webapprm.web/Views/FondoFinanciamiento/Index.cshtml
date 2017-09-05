@@ -1,12 +1,12 @@
 @model List<bd.webapprm.entidades.FondoFinanciamiento>
 
 @{
-    ViewData["Title"] = "Fondo Financiamiento";
+    ViewData["Title"] = "Fondo de Financiamiento";
 }
 
 <div id="content">
     <p>
-        <a asp-action="Create" class="btn btn-success">Nuevo Artículo</a>
+        <a asp-action="Create" class="btn btn-success">Nuevo Fondo de Financiamiento</a>
     </p>
 
     <section id="widget-grid" class="">
@@ -15,7 +15,7 @@
                 <div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
                     <header>
                         <span class="widget-icon"> <i class="fa fa-table"></i> </span>
-                        <h2>Fondos Financiamiento</h2>
+                        <h2>Fondos de Financiamiento</h2>
                     </header>
                     <div>
                         <div class="jarviswidget-editbox"></div>
@@ -39,7 +39,7 @@
 
                                             <td>
                                                 @Html.ActionLink("Editar", "Edit", new { id = item.IdFondoFinanciamiento }) |
-                                                @Html.ActionLink("Eliminar", "Delete", new { id = item.IdFondoFinanciamiento }, new { onclick = "return confirm('Desea eliminar el Fondo Financiamiento... ?');" })
+                                                @Html.ActionLink("Eliminar", "Delete", new { id = item.IdFondoFinanciamiento }, new { onclick = "return confirm('Desea eliminar el Fondo de Financiamiento... ?');" })
                                             </td>
                                         </tr>
                                     }
