@@ -11,7 +11,7 @@
                 <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
                     <header>
                         <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
-                        <h2>Artículos</h2>
+                        <h2>Art&iacute;culos</h2>
                     </header>
                     <div>
                         <div class="jarviswidget-editbox"></div>
@@ -21,9 +21,12 @@
                                 <input type="hidden" asp-for="IdArticulo" />
                                 <fieldset>
                                     <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="IdSubClaseArticulo"></label>
+                                        </section>
+
                                         <section class="col col-8">
                                             <label class="input">
-                                                <i class="icon-prepend fa fa-user"></i>
                                                 <select asp-for="IdSubClaseArticulo" class="form-control" asp-items="ViewBag.IdSubClaseArticulo"></select>
                                                 <span asp-validation-for="IdSubClaseArticulo" class="text-danger"></span>
                                             </label>
@@ -31,9 +34,12 @@
                                     </div>
 
                                     <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="IdUnidadMedida"></label>
+                                        </section>
+
                                         <section class="col col-8">
                                             <label class="input">
-                                                <i class="icon-prepend fa fa-user"></i>
                                                 <select asp-for="IdUnidadMedida" class="form-control" asp-items="ViewBag.IdUnidadMedida"></select>
                                                 <span asp-validation-for="IdUnidadMedida" class="text-danger"></span>
                                             </label>
@@ -41,9 +47,12 @@
                                     </div>
 
                                     <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="IdModelo"></label>
+                                        </section>
+
                                         <section class="col col-8">
                                             <label class="input">
-                                                <i class="icon-prepend fa fa-user"></i>
                                                 <select asp-for="IdModelo" class="form-control" asp-items="ViewBag.IdModelo"></select>
                                                 <span asp-validation-for="IdModelo" class="text-danger"></span>
                                             </label>
@@ -51,10 +60,13 @@
                                     </div>
 
                                     <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="Nombre"></label>
+                                        </section>
+
                                         <section class="col col-8">
                                             <label class="input">
-                                                <i class="icon-prepend fa fa-user"></i>
-                                                <input maxlength="20" asp-for="Nombre" class="form-control" placeholder="@Html.DisplayNameFor(model=>model.Nombre)" />
+                                                <input maxlength="20" asp-for="Nombre" class="form-control" />
                                                 <span asp-validation-for="Nombre" class="text-danger"></span>
                                             </label>
                                         </section>

@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Catálogo de Cuenta";
+    bool IdCatalogoCuentaHijoVisible = (bool)ViewData["IdCatalogoCuentaHijoVisible"];
 }
 
 <link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
@@ -12,7 +13,7 @@
                 <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
                     <header>
                         <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
-                        <h2>Catálogos de Cuenta</h2>
+                        <h2>Cat&aacute;logos de Cuenta</h2>
                     </header>
                     <div>
                         <div class="jarviswidget-editbox"></div>
@@ -20,21 +21,32 @@
                             <form asp-action="Create" id="checkout-form" class="smart-form" novalidate="novalidate">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <fieldset>
-                                    <div class="row">
-                                        <section class="col col-8">
-                                            <label class="input">
-                                                <i class="icon-prepend fa fa-user"></i>
-                                                <select asp-for="IdCatalogoCuentaHijo" class="form-control" asp-items="ViewBag.IdCatalogoCuentaHijo"></select>
-                                                <span asp-validation-for="IdCatalogoCuentaHijo" class="text-danger"></span>
-                                            </label>
-                                        </section>
-                                    </div>
+                                    @{
+                                        if (IdCatalogoCuentaHijoVisible)
+                                        {
+                                            <div class="row">
+                                                <section class="col col-4">
+                                                    <label asp-for="IdCatalogoCuentaHijo"></label>
+                                                </section>
+
+                                                <section class="col col-8">
+                                                    <label class="input">
+                                                        <select asp-for="IdCatalogoCuentaHijo" class="form-control" asp-items="ViewBag.IdCatalogoCuentaHijo"></select>
+                                                        <span asp-validation-for="IdCatalogoCuentaHijo" class="text-danger"></span>
+                                                    </label>
+                                                </section>
+                                            </div>
+                                        }
+                                    }
 
                                     <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="Codigo"></label>
+                                        </section>
+
                                         <section class="col col-8">
                                             <label class="input">
-                                                <i class="icon-prepend fa fa-user"></i>
-                                                <input maxlength="20" asp-for="Codigo" class="form-control" placeholder="@Html.DisplayNameFor(model=>model.Codigo)" />
+                                                <input maxlength="20" asp-for="Codigo" class="form-control" />
                                                 <span asp-validation-for="Codigo" class="text-danger"></span>
                                             </label>
                                         </section>

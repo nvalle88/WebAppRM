@@ -59,7 +59,9 @@ namespace bd.webapprm.web.Controllers.MVC
 
         public async Task<IActionResult> Create()
         {
-            ViewData["IdCatalogoCuentaHijo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<CatalogoCuenta>(new Uri(WebApp.BaseAddress), "/api/CatalogoCuenta/ListarCatalogosCuenta"), "IdCatalogoCuenta", "Codigo");
+            var lista_catalogos_cuenta = await apiServicio.Listar<CatalogoCuenta>(new Uri(WebApp.BaseAddress), "/api/CatalogoCuenta/ListarCatalogosCuenta");
+            ViewData["IdCatalogoCuentaHijoVisible"] = lista_catalogos_cuenta.Count > 0;
+            ViewData["IdCatalogoCuentaHijo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(lista_catalogos_cuenta, "IdCatalogoCuenta", "Codigo");
             return View();
         }
 
