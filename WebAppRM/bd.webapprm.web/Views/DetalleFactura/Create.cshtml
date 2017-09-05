@@ -23,9 +23,12 @@
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <fieldset>
                                     <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="IdFactura"></label>
+                                        </section>
+
                                         <section class="col col-8">
                                             <label class="input">
-                                                <i class="icon-prepend fa fa-user"></i>
                                                 <select asp-for="IdFactura" class="form-control" asp-items="ViewBag.IdFactura"></select>
                                                 <span asp-validation-for="IdFactura" class="text-danger"></span>
                                             </label>
@@ -33,9 +36,12 @@
                                     </div>
 
                                     <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="IdArticulo"></label>
+                                        </section>
+
                                         <section class="col col-8">
                                             <label class="input">
-                                                <i class="icon-prepend fa fa-user"></i>
                                                 <select asp-for="IdArticulo" class="form-control" asp-items="ViewBag.IdArticulo"></select>
                                                 <span asp-validation-for="IdArticulo" class="text-danger"></span>
                                             </label>
@@ -43,15 +49,23 @@
                                     </div>
 
                                     <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="Cantidad"></label>
+                                        </section>
+
                                         <section class="col col-8">
                                             <label class="input">
-                                                <input asp-for="Cantidad" class="form-control" min="0" placeholder="@Html.DisplayNameFor(model=>model.Cantidad)" />
+                                                <input asp-for="Cantidad" class="form-control" min="0" />
                                                 <span asp-validation-for="Cantidad" class="text-danger"></span>
                                             </label>
                                         </section>
                                     </div>
 
                                     <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="Precio"></label>
+                                        </section>
+
                                         <section class="col col-8">
                                             <label class="input">
                                                 <input asp-for="Precio" class="form-control touchspin_tasa" />
