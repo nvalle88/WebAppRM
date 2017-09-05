@@ -30,7 +30,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 lista = await apiServicio.Listar<SubClaseArticulo>(new Uri(WebApp.BaseAddress)
-                                                                    , "/api/SubClaseArticulo/ListarSubClaseArticulo");
+                                                                    , "/api/SubClaseArticulo/ListarSubClaseArticulos");
                 return View(lista);
             }
             catch (Exception ex)

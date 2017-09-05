@@ -154,7 +154,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 lista = await apiServicio.Listar<TipoActivoFijo>(new Uri(WebApp.BaseAddress)
-                                                                    , "/api/TipoActivoFijo/ListarTipoActivoFijo");
+                                                                    , "/api/TipoActivoFijo/ListarTipoActivoFijos");
                 return View(lista);
             }
             catch (Exception ex)

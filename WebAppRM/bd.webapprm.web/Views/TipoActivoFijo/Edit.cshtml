@@ -1,4 +1,4 @@
-﻿@model List<bd.webapprm.entidades.TipoActivoFijo>
+﻿@model bd.webapprm.entidades.TipoActivoFijo
 
 @{
     ViewData["Title"] = "TipoActivoFijo";
@@ -23,6 +23,10 @@
                                 <input type="hidden" asp-for="IdTipoActivoFijo" />
                                 <fieldset>
                                     <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="Nombre"></label>
+                                        </section>
+
                                         <section class="col col-4">
                                             <label class="input">
                                                 <i class="icon-prepend fa fa-user"></i>

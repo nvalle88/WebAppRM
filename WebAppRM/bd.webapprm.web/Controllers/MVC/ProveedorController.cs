@@ -154,7 +154,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 lista = await apiServicio.Listar<Proveedor>(new Uri(WebApp.BaseAddress)
-                                                                    , "/api/Proveedor/ListarProveedor");
+                                                                    , "/api/Proveedor/ListarProveedores");
                 return View(lista);
             }
             catch (Exception ex)

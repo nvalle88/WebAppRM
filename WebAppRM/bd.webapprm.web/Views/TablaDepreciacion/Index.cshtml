@@ -3,11 +3,10 @@
     ViewData["Title"] = "Index";
 }
 
-<p>
-    <a asp-action="Create">Nuevo Tabla Depreciación</a>
-</p>
-
 <div id="content">
+    <p>
+        <a asp-action="Create" class="btn btn-success"> Nuevo Tabla Depreciación</a>
+    </p>
     <section id="widget-grid" class="">
         <div class="row">
             <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -39,7 +38,7 @@
 
                                             <td>
                                                 @Html.ActionLink("Editar", "Edit", new { id = item.IdTablaDepreciacion }) |
-                                                @Html.ActionLink("Eliminar", "Delete", new { id = item.IdTablaDepreciacion }, new { onclick = "return confirm('Desea eliminar la Tabla Depreciacion... ?');" })
+                                                @Html.ActionLink("Eliminar", "Delete", new { id = item.IdTablaDepreciacion }, new { onclick = "return confirm('Desea eliminar la Tabla Depreciación... ?');" })
                                             </td>
                                         </tr>
                                     }

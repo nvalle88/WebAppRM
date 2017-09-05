@@ -1,4 +1,4 @@
-﻿@model List<bd.webapprm.entidades.TablaDepreciacion>
+﻿@model bd.webapprm.entidades.TablaDepreciacion
 
 @{
     ViewData["Title"] = "TablaDepreciacion";
@@ -23,6 +23,10 @@
                                 <input type="hidden" asp-for="IdTablaDepreciacion" />
                                 <fieldset>
                                     <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="IndiceDepreciacion"></label>
+                                        </section>
+
                                         <section class="col col-4">
                                             <label class="input">
                                                 <i class="icon-prepend fa fa-user"></i>
