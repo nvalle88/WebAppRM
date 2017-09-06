@@ -1,7 +1,7 @@
 @model List<bd.webapprm.entidades.MotivoAsiento>
 
 @{
-    ViewData["Title"] = "Motivo Asiento";
+    ViewData["Title"] = "Motivo de Asiento";
 }
 
 <div id="content">
@@ -15,7 +15,7 @@
                 <div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
                     <header>
                         <span class="widget-icon"> <i class="fa fa-table"></i> </span>
-                        <h2>Motivo Asiento</h2>
+                        <h2>Motivos de Asiento</h2>
                     </header>
                     <div>
                         <div class="jarviswidget-editbox"></div>
@@ -24,10 +24,10 @@
                                 <thead>
                                     <tr>
                                         <th>
-                                            Descripción
+                                            Descripci&oacute;n
                                         </th>
                                         <th>
-                                            Configuracion Contabilidad
+                                            Configuraci&oacute;n Contabilidad
                                         </th>                                        
                                         <th>Opciones</th>
                                     </tr>
@@ -45,7 +45,7 @@
                                             </td>
                                             <td>
                                                 @Html.ActionLink("Editar", "Edit", new { id = item.IdMotivoAsiento }) |
-                                                @Html.ActionLink("Eliminar", "Delete", new { id = item.IdMotivoAsiento }, new { onclick = "return confirm('Desea eliminar el Motivo Asiento... ?');" })
+                                                @Html.ActionLink("Eliminar", "Delete", new { id = item.IdMotivoAsiento }, new { onclick = "return confirm('Desea eliminar el Motivo de Asiento... ?');" })
                                             </td>
                                         </tr>
                                     }
