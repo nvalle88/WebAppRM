@@ -1,0 +1,75 @@
+@model bd.webapprm.entidades.ActivoFijo
+
+<link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
+<div id="content">
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-sm-12 col-md-12 col-lg-4">
+                <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+                        <h2>Recepci&oacute;n de Activo Fijo</h2>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox"></div>
+                        <div class="widget-body no-padding">
+                            <form asp-action="Recepcion" id="checkout-form" class="smart-form" novalidate="novalidate">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <fieldset>
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.Nombre"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <select asp-for="SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.IdTipoActivoFijo" class="form-control" asp-items="ViewBag.TipoActivoFijo" id="IdTipoActivoFijo"></select>
+                                                <span asp-validation-for="SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.IdTipoActivoFijo" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="SubClaseActivoFijo.ClaseActivoFijo.Nombre"></label>
+                                        </section>
+
+                                        <div id="div_claseActivoFijo">
+                                            @{ await Html.RenderPartialAsync("_ClaseActivoFijoSelect"); }
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="SubClaseActivoFijo.Nombre"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <select asp-for="SubClaseActivoFijo.IdSubClaseActivoFijo" class="form-control" asp-items="ViewBag.SubClaseActivoFijo" id="IdSubClaseActivoFijo"></select>
+                                                <span asp-validation-for="SubClaseActivoFijo.IdSubClaseActivoFijo" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+                                </fieldset>
+                                <footer>
+                                    <span class="text-danger">@ViewData["Error"]</span>
+                                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                                </footer>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+@section Scripts {
+    <script src='~/lib/select2/dist/js/select2.min.js'></script>
+    <script src='~/lib/select2/dist/js/i18n/es.js'></script>
+    <script src='~/js/site.js'></script>
+    <script src='~/js/activofijo/recepcion.js'></script>
+    <script type="text/javascript">
+        var urlClaseActivoFijo = "@Url.Action("ClaseActivoFijo_SelectResult", "ActivoFijo")";
+    </script>
+}

@@ -1,0 +1,7 @@
+@model bd.webapprm.entidades.ActivoFijo
+<section class="col col-8">
+    <label class="input">
+        <select asp-for="SubClaseActivoFijo.ClaseActivoFijo.IdClaseActivoFijo" class="form-control" asp-items="ViewBag.ClaseActivoFijo" id="IdClaseActivoFijo"></select>
+        <span asp-validation-for="SubClaseActivoFijo.ClaseActivoFijo.IdClaseActivoFijo" class="text-danger"></span>
+    </label>
+</section>
