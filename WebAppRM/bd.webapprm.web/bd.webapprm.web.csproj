@@ -43,7 +43,6 @@
     <Folder Include="Controllers\MVC\" />
     <Folder Include="Controllers\MVC\" />
     <Folder Include="Models\" />
-    <Folder Include="Views\ActivoFijo\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\SalvarLogEntry\bd.guardarlog.servicios\bd.log.guardar.csproj" />
