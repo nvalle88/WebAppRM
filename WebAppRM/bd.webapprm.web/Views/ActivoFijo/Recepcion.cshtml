@@ -1,6 +1,7 @@
 @model bd.webapprm.entidades.ActivoFijo
 
 <link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
+<link rel="stylesheet" href="~/lib/waitMe/waitMe.min.css" />
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
@@ -44,12 +45,9 @@
                                             <label asp-for="SubClaseActivoFijo.Nombre"></label>
                                         </section>
 
-                                        <section class="col col-8">
-                                            <label class="input">
-                                                <select asp-for="SubClaseActivoFijo.IdSubClaseActivoFijo" class="form-control" asp-items="ViewBag.SubClaseActivoFijo" id="IdSubClaseActivoFijo"></select>
-                                                <span asp-validation-for="SubClaseActivoFijo.IdSubClaseActivoFijo" class="text-danger"></span>
-                                            </label>
-                                        </section>
+                                        <div id="div_subClaseActivoFijo">
+                                            @{ await Html.RenderPartialAsync("_SubClaseActivoFijoSelect"); }
+                                        </div>
                                     </div>
                                 </fieldset>
                                 <footer>
@@ -68,8 +66,10 @@
     <script src='~/lib/select2/dist/js/select2.min.js'></script>
     <script src='~/lib/select2/dist/js/i18n/es.js'></script>
     <script src='~/js/site.js'></script>
+    <script src='~/lib/waitMe/waitMe.min.js'></script>
     <script src='~/js/activofijo/recepcion.js'></script>
     <script type="text/javascript">
         var urlClaseActivoFijo = "@Url.Action("ClaseActivoFijo_SelectResult", "ActivoFijo")";
+        var urlSubClaseActivoFijo = "@Url.Action("SubClaseActivoFijo_SelectResult", "ActivoFijo")";
     </script>
 }
