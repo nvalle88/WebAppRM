@@ -81,6 +81,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 }
 
                 ViewData["Error"] = response.Message;
+                ViewData["IdTipoArticulo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<TipoArticulo>(new Uri(WebApp.BaseAddress), "/api/TipoArticulo/ListarTipoArticulo"), "IdTipoArticulo", "Nombre");
                 return View(claseArticulo);
 
             }
@@ -155,7 +156,9 @@ namespace bd.webapprm.web.Controllers.MVC
                     }
 
                 }
-                return BadRequest();
+                ViewData["Error"] = response.Message;
+                ViewData["IdTipoArticulo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<TipoArticulo>(new Uri(WebApp.BaseAddress), "/api/TipoArticulo/ListarTipoArticulo"), "IdTipoArticulo", "Nombre");
+                return View(claseArticulo);
             }
             catch (Exception ex)
             {

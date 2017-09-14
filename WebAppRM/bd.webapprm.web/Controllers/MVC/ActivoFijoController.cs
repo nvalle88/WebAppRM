@@ -11,6 +11,7 @@ using bd.log.guardar.Enumeradores;
 using Newtonsoft.Json;
 using bd.webapprm.entidades;
 using bbd.webapprm.servicios.Enumeradores;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace bd.webapprm.web.Controllers.MVC
 {
@@ -30,7 +31,9 @@ namespace bd.webapprm.web.Controllers.MVC
 
         public async Task<IActionResult> Recepcion()
         {
-            ViewData["TipoActivoFijo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<TipoActivoFijo>(new Uri(WebApp.BaseAddress), "/api/TipoActivoFijo/ListarTipoActivoFijos"), "IdTipoActivoFijo", "Nombre");
+            ViewData["TipoActivoFijo"] = new SelectList(await apiServicio.Listar<TipoActivoFijo>(new Uri(WebApp.BaseAddress), "/api/TipoActivoFijo/ListarTipoActivoFijos"), "IdTipoActivoFijo", "Nombre");
+            ViewData["ClaseActivoFijo"] = await ObtenerSelectListClaseActivoFijo((ViewData["TipoActivoFijo"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["TipoActivoFijo"] as SelectList).FirstOrDefault().Value) : -1);
+            ViewData["SubClaseActivoFijo"] = await ObtenerSelectListSubClaseActivoFijo((ViewData["ClaseActivoFijo"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["ClaseActivoFijo"] as SelectList).FirstOrDefault().Value) : -1);
             return View();
         }
 
@@ -41,6 +44,8 @@ namespace bd.webapprm.web.Controllers.MVC
             Response response = new Response();
             try
             {
+                var listaSubClaseActivoFijo = await apiServicio.Listar<SubClaseActivoFijo>(new Uri(WebApp.BaseAddress), "/api/SubClaseActivoFijo/ListarSubClasesActivoFijo");
+                activoFijo.SubClaseActivoFijo = listaSubClaseActivoFijo.SingleOrDefault(c => c.IdSubClaseActivoFijo == activoFijo.IdSubClaseActivoFijo);
                 response = await apiServicio.InsertarAsync(activoFijo,
                                                              new Uri(WebApp.BaseAddress),
                                                              "/api/ActivoFijo/InsertarActivoFijo");
@@ -62,6 +67,9 @@ namespace bd.webapprm.web.Controllers.MVC
                 }
 
                 ViewData["Error"] = response.Message;
+                ViewData["TipoActivoFijo"] = new SelectList(await apiServicio.Listar<TipoActivoFijo>(new Uri(WebApp.BaseAddress), "/api/TipoActivoFijo/ListarTipoActivoFijos"), "IdTipoActivoFijo", "Nombre");
+                ViewData["ClaseActivoFijo"] = await ObtenerSelectListClaseActivoFijo(activoFijo?.SubClaseActivoFijo?.ClaseActivoFijo?.TipoActivoFijo?.IdTipoActivoFijo ?? -1);
+                ViewData["SubClaseActivoFijo"] = await ObtenerSelectListSubClaseActivoFijo(activoFijo?.SubClaseActivoFijo?.ClaseActivoFijo?.IdClaseActivoFijo ?? -1);
                 return View(activoFijo);
 
             }
@@ -80,23 +88,47 @@ namespace bd.webapprm.web.Controllers.MVC
                 return BadRequest();
             }
         }
+        
+        public async Task<SelectList> ObtenerSelectListClaseActivoFijo(int idTipoActivoFijo)
+        {
+            try
+            {
+                var listaClaseActivoFijo = await apiServicio.Listar<ClaseActivoFijo>(new Uri(WebApp.BaseAddress), "/api/ClaseActivoFijo/ListarClaseActivoFijo");
+                listaClaseActivoFijo = idTipoActivoFijo != -1 ? listaClaseActivoFijo.Where(c => c.IdTipoActivoFijo == idTipoActivoFijo).ToList() : new List<ClaseActivoFijo>();
+                return new SelectList(listaClaseActivoFijo, "IdClaseActivoFijo", "Nombre");
+            }
+            catch (Exception)
+            {
+                return new SelectList(new List<ClaseActivoFijo>());
+            }
+        }
 
         [HttpPost]
         public async Task<IActionResult> ClaseActivoFijo_SelectResult(int idTipoActivoFijo)
         {
-            var listaClaseActivoFijo = await apiServicio.Listar<ClaseActivoFijo>(new Uri(WebApp.BaseAddress), "/api/ClaseActivoFijo/ListarClaseActivoFijo");
-            listaClaseActivoFijo = idTipoActivoFijo != -1 ? listaClaseActivoFijo.Where(c => c.IdTipoActivoFijo == idTipoActivoFijo).ToList() : new List<ClaseActivoFijo>();
-            ViewBag.ClaseActivoFijo = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(listaClaseActivoFijo, "IdClaseActivoFijo", "Nombre");
-            return PartialView("_ClaseActivoFijoSelect", new ActivoFijo());
+            ViewBag.ClaseActivoFijo = await ObtenerSelectListClaseActivoFijo(idTipoActivoFijo);
+            return PartialView("_ClaseActivoFijoSelect", new ClaseActivoFijo());
+        }
+
+        public async Task<SelectList> ObtenerSelectListSubClaseActivoFijo(int idClaseActivoFijo)
+        {
+            try
+            {
+                var listaSubClaseActivoFijo = await apiServicio.Listar<SubClaseActivoFijo>(new Uri(WebApp.BaseAddress), "/api/SubClaseActivoFijo/ListarSubClasesActivoFijo");
+                listaSubClaseActivoFijo = idClaseActivoFijo != -1 ? listaSubClaseActivoFijo.Where(c => c.IdClaseActivoFijo == idClaseActivoFijo).ToList() : new List<SubClaseActivoFijo>();
+                return new SelectList(listaSubClaseActivoFijo, "IdSubClaseActivoFijo", "Nombre");
+            }
+            catch (Exception)
+            {
+                return new SelectList(new List<SubClaseActivoFijo>());
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> SubClaseActivoFijo_SelectResult(int idClaseActivoFijo)
         {
-            var listaSubClaseActivoFijo = await apiServicio.Listar<SubClaseActivoFijo>(new Uri(WebApp.BaseAddress), "/api/SubClaseActivoFijo/ListarSubClasesActivoFijo");
-            listaSubClaseActivoFijo = idClaseActivoFijo != -1 ? listaSubClaseActivoFijo.Where(c => c.IdClaseActivoFijo == idClaseActivoFijo).ToList() : new List<SubClaseActivoFijo>();
-            ViewBag.SubClaseActivoFijo = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(listaSubClaseActivoFijo, "IdSubClaseActivoFijo", "Nombre");
-            return PartialView("_SubClaseActivoFijoSelect", new ActivoFijo());
+            ViewBag.SubClaseActivoFijo = await ObtenerSelectListSubClaseActivoFijo(idClaseActivoFijo);
+            return PartialView("_SubClaseActivoFijoSelect", new SubClaseActivoFijo());
         }
     }
 }

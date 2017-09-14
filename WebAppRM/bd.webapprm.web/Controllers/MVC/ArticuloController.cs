@@ -83,6 +83,9 @@ namespace bd.webapprm.web.Controllers.MVC
                 }
 
                 ViewData["Error"] = response.Message;
+                ViewData["IdSubClaseArticulo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<SubClaseArticulo>(new Uri(WebApp.BaseAddress), "/api/SubClaseArticulo/ListarSubClaseArticulos"), "IdSubClaseArticulo", "Nombre");
+                ViewData["IdUnidadMedida"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<UnidadMedida>(new Uri(WebApp.BaseAddress), "/api/UnidadMedida/ListarUnidadMedida"), "IdUnidadMedida", "Nombre");
+                ViewData["IdModelo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<Modelo>(new Uri(WebApp.BaseAddress), "/api/Modelo/ListarModelos"), "IdModelo", "Nombre");
                 return View(articulo);
 
             }
@@ -159,7 +162,11 @@ namespace bd.webapprm.web.Controllers.MVC
                     }
 
                 }
-                return BadRequest();
+                ViewData["Error"] = response.Message;
+                ViewData["IdSubClaseArticulo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<SubClaseArticulo>(new Uri(WebApp.BaseAddress), "/api/SubClaseArticulo/ListarSubClaseArticulos"), "IdSubClaseArticulo", "Nombre");
+                ViewData["IdUnidadMedida"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<UnidadMedida>(new Uri(WebApp.BaseAddress), "/api/UnidadMedida/ListarUnidadMedida"), "IdUnidadMedida", "Nombre");
+                ViewData["IdModelo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<Modelo>(new Uri(WebApp.BaseAddress), "/api/Modelo/ListarModelos"), "IdModelo", "Nombre");
+                return View(articulo);
             }
             catch (Exception ex)
             {

@@ -72,6 +72,7 @@ namespace bd.webapprm.web.Controllers.MVC
             Response response = new Response();
             try
             {
+                var lista_catalogos_cuenta = await apiServicio.Listar<CatalogoCuenta>(new Uri(WebApp.BaseAddress), "/api/CatalogoCuenta/ListarCatalogosCuenta");
                 response = await apiServicio.InsertarAsync(catalogoCuenta,
                                                              new Uri(WebApp.BaseAddress),
                                                              "/api/CatalogoCuenta/InsertarCatalogoCuenta");
@@ -93,6 +94,8 @@ namespace bd.webapprm.web.Controllers.MVC
                 }
 
                 ViewData["Error"] = response.Message;
+                ViewData["IdCatalogoCuentaHijoVisible"] = lista_catalogos_cuenta.Count > 0;
+                ViewData["IdCatalogoCuentaHijo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(lista_catalogos_cuenta, "IdCatalogoCuenta", "Codigo");
                 return View(catalogoCuenta);
 
             }
@@ -167,7 +170,9 @@ namespace bd.webapprm.web.Controllers.MVC
                     }
 
                 }
-                return BadRequest();
+                ViewData["Error"] = response.Message;
+                ViewData["IdCatalogoCuentaHijo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<CatalogoCuenta>(new Uri(WebApp.BaseAddress), "/api/CatalogoCuenta/ListarCatalogosCuenta"), "IdCatalogoCuenta", "Codigo");
+                return View(catalogoCuenta);
             }
             catch (Exception ex)
             {
