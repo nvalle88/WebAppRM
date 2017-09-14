@@ -20,8 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="wwwroot\js\activofijo\recepcion.js" />
+    <Content Include="wwwroot\js\activoFijo\recepcion.js" />
     <Content Include="wwwroot\js\datatables\init.js" />
+    <Content Include="wwwroot\js\subClaseActivoFijo\subClaseActivoFijo.js" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.0.0" />

@@ -1,28 +1,24 @@
 ﻿$(document).ready(function () {
     Init_Select2();
     eventoTipoActivoFijo();
-    partialViewTipoActivoFijo($("#IdTipoActivoFijo").val());
 });
 
-function eventoTipoActivoFijo()
-{
-    $("#IdTipoActivoFijo").on("change", function (e) {
+function eventoTipoActivoFijo() {
+    $("#SubClaseActivoFijo_ClaseActivoFijo_TipoActivoFijo_IdTipoActivoFijo").on("change", function (e) {
         partialViewTipoActivoFijo(e.val);
     });
 }
 
-function eventoClaseActivoFijo()
-{
+function eventoClaseActivoFijo() {
     $("#IdClaseActivoFijo").on("change", function (e) {
         partialViewClaseActivoFijo(e.val);
     });
 }
 
-function partialViewTipoActivoFijo(idTipoActivoFijo)
-{
+function partialViewTipoActivoFijo(idTipoActivoFijo) {
     mostrarLoadingPanel("checkout-form", "Cargando clases de activo fijo...");
     $.ajax({
-        url: urlClaseActivoFijo,
+        url: "/ActivoFijo/ClaseActivoFijo_SelectResult",
         method: "POST",
         data: { idTipoActivoFijo: idTipoActivoFijo != null ? idTipoActivoFijo : -1 },
         success: function (data) {
@@ -31,18 +27,16 @@ function partialViewTipoActivoFijo(idTipoActivoFijo)
             partialViewClaseActivoFijo($("#IdClaseActivoFijo").val());
             eventoClaseActivoFijo();
         },
-        complete: function (data)
-        {
+        complete: function (data) {
             ocultarLoadingPanel("checkout-form");
         }
     });
 }
 
-function partialViewClaseActivoFijo(idClaseActivoFijo)
-{
+function partialViewClaseActivoFijo(idClaseActivoFijo) {
     mostrarLoadingPanel("checkout-form", "Cargando sub clases de activo fijo...");
     $.ajax({
-        url: urlSubClaseActivoFijo,
+        url: "/ActivoFijo/SubClaseActivoFijo_SelectResult",
         method: "POST",
         data: { idClaseActivoFijo: idClaseActivoFijo != null ? idClaseActivoFijo : -1 },
         success: function (data) {

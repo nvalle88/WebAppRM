@@ -82,6 +82,8 @@ namespace bd.webapprm.web.Controllers.MVC
                 }
 
                 ViewData["Error"] = response.Message;
+                ViewData["IdFactura"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<Factura>(new Uri(WebApp.BaseAddress), "/api/Factura/ListarFacturas"), "IdFactura", "Numero");
+                ViewData["IdArticulo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<Articulo>(new Uri(WebApp.BaseAddress), "/api/Articulo/ListarArticulos"), "IdArticulo", "Nombre");
                 return View(detalleFactura);
 
             }
@@ -112,6 +114,8 @@ namespace bd.webapprm.web.Controllers.MVC
 
 
                     respuesta.Resultado = JsonConvert.DeserializeObject<DetalleFactura>(respuesta.Resultado.ToString());
+                    ViewData["IdFactura"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<Factura>(new Uri(WebApp.BaseAddress), "/api/Factura/ListarFacturas"), "IdFactura", "Numero");
+                    ViewData["IdArticulo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<Articulo>(new Uri(WebApp.BaseAddress), "/api/Articulo/ListarArticulos"), "IdArticulo", "Nombre");
                     if (respuesta.IsSuccess)
                     {
                         return View(respuesta.Resultado);
@@ -155,7 +159,10 @@ namespace bd.webapprm.web.Controllers.MVC
                     }
 
                 }
-                return BadRequest();
+                ViewData["Error"] = response.Message;
+                ViewData["IdFactura"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<Factura>(new Uri(WebApp.BaseAddress), "/api/Factura/ListarFacturas"), "IdFactura", "Numero");
+                ViewData["IdArticulo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<Articulo>(new Uri(WebApp.BaseAddress), "/api/Articulo/ListarArticulos"), "IdArticulo", "Nombre");
+                return View(detalleFactura);
             }
             catch (Exception ex)
             {

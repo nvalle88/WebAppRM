@@ -82,6 +82,8 @@ namespace bd.webapprm.web.Controllers.MVC
                 }
 
                 ViewData["Error"] = response.Message;
+                ViewData["IdTipoActivoFijo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<TipoActivoFijo>(new Uri(WebApp.BaseAddress), "/api/TipoActivoFijo/ListarTipoActivoFijos"), "IdTipoActivoFijo", "Nombre");
+                ViewData["IdTablaDepreciacion"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<TablaDepreciacion>(new Uri(WebApp.BaseAddress), "/api/TablaDepreciacion/ListarTablaDepreciacion"), "IdTablaDepreciacion", "IndiceDepreciacion");
                 return View(claseActivoFijo);
 
             }
@@ -157,7 +159,10 @@ namespace bd.webapprm.web.Controllers.MVC
                     }
 
                 }
-                return BadRequest();
+                ViewData["Error"] = response.Message;
+                ViewData["IdTipoActivoFijo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<TipoActivoFijo>(new Uri(WebApp.BaseAddress), "/api/TipoActivoFijo/ListarTipoActivoFijos"), "IdTipoActivoFijo", "Nombre");
+                ViewData["IdTablaDepreciacion"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<TablaDepreciacion>(new Uri(WebApp.BaseAddress), "/api/TablaDepreciacion/ListarTablaDepreciacion"), "IdTablaDepreciacion", "IndiceDepreciacion");
+                return View(claseActivoFijo);
             }
             catch (Exception ex)
             {

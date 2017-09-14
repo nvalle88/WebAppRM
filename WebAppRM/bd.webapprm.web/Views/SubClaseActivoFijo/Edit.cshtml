@@ -1,5 +1,8 @@
-@model bd.webapprm.entidades.ActivoFijo
+@model bd.webapprm.entidades.SubClaseActivoFijo
 
+@{
+    ViewData["Title"] = "Sub Clase de Activo Fijo";
+}
 <link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
 <link rel="stylesheet" href="~/lib/waitMe/waitMe.min.css" />
 <div id="content">
@@ -9,50 +12,55 @@
                 <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
                     <header>
                         <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
-                        <h2>Recepci&oacute;n de Activo Fijo</h2>
+                        <h2>Sub Clases de Activo Fijo</h2>
                     </header>
                     <div>
                         <div class="jarviswidget-editbox"></div>
                         <div class="widget-body no-padding">
-                            <form asp-action="Recepcion" id="checkout-form" class="smart-form" novalidate="novalidate">
+                            <form asp-action="Edit" id="checkout-form" class="smart-form" novalidate="novalidate">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <input type="hidden" asp-for="IdSubClaseActivoFijo" />
                                 <fieldset>
                                     <div class="row">
                                         <section class="col col-4">
-                                            <label asp-for="SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.Nombre"></label>
+                                            <label asp-for="ClaseActivoFijo.TipoActivoFijo.Nombre"></label>
                                         </section>
 
                                         <section class="col col-8">
                                             <label class="input">
-                                                <select asp-for="SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.IdTipoActivoFijo" class="form-control" asp-items="ViewBag.TipoActivoFijo"></select>
-                                                <span asp-validation-for="SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.IdTipoActivoFijo" class="text-danger"></span>
+                                                <select asp-for="ClaseActivoFijo.TipoActivoFijo.IdTipoActivoFijo" class="form-control" asp-items="ViewBag.TipoActivoFijo"></select>
+                                                <span asp-validation-for="ClaseActivoFijo.TipoActivoFijo.IdTipoActivoFijo" class="text-danger"></span>
                                             </label>
                                         </section>
                                     </div>
 
                                     <div class="row">
                                         <section class="col col-4">
-                                            <label asp-for="SubClaseActivoFijo.ClaseActivoFijo.Nombre"></label>
+                                            <label asp-for="ClaseActivoFijo.Nombre"></label>
                                         </section>
 
                                         <div id="div_claseActivoFijo">
-                                            @{ await Html.RenderPartialAsync("_ClaseActivoFijoSelect", Model?.SubClaseActivoFijo?.ClaseActivoFijo ?? new bd.webapprm.entidades.ClaseActivoFijo()); }
+                                            @{ await Html.RenderPartialAsync("_ClaseActivoFijoSelect", Model?.ClaseActivoFijo ?? new bd.webapprm.entidades.ClaseActivoFijo()); }
                                         </div>
                                     </div>
 
                                     <div class="row">
                                         <section class="col col-4">
-                                            <label asp-for="SubClaseActivoFijo.Nombre"></label>
+                                            <label asp-for="Nombre"></label>
                                         </section>
 
-                                        <div id="div_subClaseActivoFijo">
-                                            @{ await Html.RenderPartialAsync("_SubClaseActivoFijoSelect", Model?.SubClaseActivoFijo ?? new bd.webapprm.entidades.SubClaseActivoFijo()); }
-                                        </div>
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <input maxlength="20" asp-for="Nombre" class="form-control" />
+                                                <span asp-validation-for="Nombre" class="text-danger"></span>
+                                            </label>
+                                        </section>
                                     </div>
                                 </fieldset>
                                 <footer>
                                     <span class="text-danger">@ViewData["Error"]</span>
                                     <input type="submit" value="Guardar" class="btn btn-primary" />
+                                    <a asp-action="Index" class="btn btn-default">Cancelar</a>
                                 </footer>
                             </form>
                         </div>
@@ -67,5 +75,5 @@
     <script src='~/lib/select2/dist/js/i18n/es.js'></script>
     <script src='~/js/site.js'></script>
     <script src='~/lib/waitMe/waitMe.min.js'></script>
-    <script src='~/js/activoFijo/recepcion.js'></script>
+    <script src='~/js/subClaseActivoFijo/subClaseActivoFijo.js'></script>
 }
