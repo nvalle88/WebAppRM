@@ -30,9 +30,3 @@ function mostrarLoadingPanel(idElemento, texto)
         color: '#ef4c0c'
     });
 }
-
-function ocultarLoadingPanel(idElemento)
-{
-    $("#" + idElemento).removeClass("waitMe_container");
-    $(".waitMe").remove();
-}

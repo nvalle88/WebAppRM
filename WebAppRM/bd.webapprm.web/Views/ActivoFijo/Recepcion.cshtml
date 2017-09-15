@@ -5,7 +5,7 @@
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
-            <article class="col-sm-12 col-md-12 col-lg-4">
+            <article class="col-sm-12 col-md-12 col-lg-6">
                 <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
                     <header>
                         <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
@@ -17,6 +17,7 @@
                             <form asp-action="Recepcion" id="checkout-form" class="smart-form" novalidate="novalidate">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <fieldset>
+                                    <legend>Datos Generales</legend>
                                     <div class="row">
                                         <section class="col col-4">
                                             <label asp-for="SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.Nombre"></label>
@@ -49,7 +50,23 @@
                                             @{ await Html.RenderPartialAsync("_SubClaseActivoFijoSelect", Model?.SubClaseActivoFijo ?? new bd.webapprm.entidades.SubClaseActivoFijo()); }
                                         </div>
                                     </div>
+
+                                    <legend>Datos Espec&iacute;ficos</legend>
+                                    <div class="row" style="margin-top:25px;">
+                                        <section class="col col-4">
+                                            <label asp-for="Modelo.Marca.Nombre"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <select asp-for="Modelo.Marca.IdMarca" class="form-control" asp-items="ViewBag.Marca"></select>
+                                                <span asp-validation-for="Modelo.Marca.IdMarca" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
                                 </fieldset>
+
+                                
                                 <footer>
                                     <span class="text-danger">@ViewData["Error"]</span>
                                     <input type="submit" value="Guardar" class="btn btn-primary" />

@@ -27,8 +27,8 @@ function partialViewTipoActivoFijo(idTipoActivoFijo) {
             partialViewClaseActivoFijo($("#IdClaseActivoFijo").val());
             eventoClaseActivoFijo();
         },
-        complete: function (data) {
-            ocultarLoadingPanel("checkout-form");
+        error: function (data) {
+            $("#checkout-form").waitMe("hide");
         }
     });
 }
@@ -44,7 +44,7 @@ function partialViewClaseActivoFijo(idClaseActivoFijo) {
             Init_Select2();
         },
         complete: function (data) {
-            ocultarLoadingPanel("checkout-form");
+            $("#checkout-form").waitMe("hide");
         }
     });
 }
