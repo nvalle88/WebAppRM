@@ -20,7 +20,7 @@ function partialViewTipoActivoFijo(idTipoActivoFijo) {
             Init_Select2();
         },
         complete: function (data) {
-            ocultarLoadingPanel("checkout-form");
+            $("#checkout-form").waitMe("hide");
         }
     });
 }
