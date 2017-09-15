@@ -1,6 +1,23 @@
 ﻿$(document).ready(function () {
     Init_Select2();
+    Init_Touchspin();
     eventoTipoActivoFijo();
+    eventoClaseActivoFijo();
+    eventoMarca();
+
+    var wizard = $('.wizard').wizard();
+    wizard.on('finished', function (e, data) {
+        alert("Finalizar");
+        //$("#fuelux-wizard").submit();
+        //console.log("submitted!");
+        //$.smallBox({
+        //    title: "Congratulations! Your form was submitted",
+        //    content: "<i class='fa fa-clock-o'></i> <i>1 seconds ago...</i>",
+        //    color: "#5F895F",
+        //    iconSmall: "fa fa-check bounce animated",
+        //    timeout: 4000
+        //});
+    });
 });
 
 function eventoTipoActivoFijo() {
@@ -12,6 +29,25 @@ function eventoTipoActivoFijo() {
 function eventoClaseActivoFijo() {
     $("#IdClaseActivoFijo").on("change", function (e) {
         partialViewClaseActivoFijo(e.val);
+    });
+}
+
+function eventoMarca()
+{
+    $("#Modelo_Marca_IdMarca").on("change", function (e) {
+        mostrarLoadingPanel("checkout-form", "Cargando modelos...");
+        $.ajax({
+            url: "/ActivoFijo/Modelo_SelectResult",
+            method: "POST",
+            data: { idMarca: e.val },
+            success: function (data) {
+                $("#div_modelo").html(data);
+                Init_Select2();
+            },
+            complete: function (data) {
+                $("#checkout-form").waitMe("hide");
+            }
+        });
     });
 }
 
