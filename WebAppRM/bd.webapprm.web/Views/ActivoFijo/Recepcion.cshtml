@@ -2,6 +2,8 @@
 
 <link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
 <link rel="stylesheet" href="~/lib/waitMe/waitMe.min.css" />
+<link rel="stylesheet" href="~/lib/bootstrap-touchspin-master/src/jquery.bootstrap-touchspin.css" />
+<link rel="stylesheet" href="~/css/site.css" />
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
@@ -17,56 +19,161 @@
                             <form asp-action="Recepcion" id="checkout-form" class="smart-form" novalidate="novalidate">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <fieldset>
-                                    <legend>Datos Generales</legend>
-                                    <div class="row">
-                                        <section class="col col-4">
-                                            <label asp-for="SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.Nombre"></label>
-                                        </section>
-
-                                        <section class="col col-8">
-                                            <label class="input">
-                                                <select asp-for="SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.IdTipoActivoFijo" class="form-control" asp-items="ViewBag.TipoActivoFijo"></select>
-                                                <span asp-validation-for="SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.IdTipoActivoFijo" class="text-danger"></span>
-                                            </label>
-                                        </section>
-                                    </div>
-
-                                    <div class="row">
-                                        <section class="col col-4">
-                                            <label asp-for="SubClaseActivoFijo.ClaseActivoFijo.Nombre"></label>
-                                        </section>
-
-                                        <div id="div_claseActivoFijo">
-                                            @{ await Html.RenderPartialAsync("_ClaseActivoFijoSelect", Model?.SubClaseActivoFijo?.ClaseActivoFijo ?? new bd.webapprm.entidades.ClaseActivoFijo()); }
+                                    <div class="widget-body fuelux">
+                                        <div class="wizard">
+                                            <ul class="steps">
+                                                <li data-target="#step1" class="active">
+                                                    <span class="badge badge-info" style="padding:3px 4px !important;">1</span>Recepci&oacute;n<span class="chevron"></span>
+                                                </li>
+                                                <li data-target="#step2">
+                                                    <span class="badge" style="padding:3px 4px !important;">2</span>Codificaci&oacute;n<span class="chevron"></span>
+                                                </li>
+                                            </ul>
+                                            <div class="actions">
+                                                <button type="button" class="btn btn-sm btn-primary btn-prev">
+                                                    <i class="fa fa-arrow-left"></i>Anterior
+                                                </button>
+                                                <button type="button" class="btn btn-sm btn-success btn-next" data-last="Finalizar">
+                                                    Siguiente<i class="fa fa-arrow-right"></i>
+                                                </button>
+                                            </div>
                                         </div>
-                                    </div>
+                                        <div class="step-content">
+                                            <div class="step-pane active" id="step1">
+                                                <fieldset style="margin-top:15px;">
+                                                    <legend>Datos Generales</legend>
+                                                    <div class="row" style="margin-top:25px;">
+                                                        <section class="col col-4">
+                                                            <label asp-for="SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.Nombre"></label>
+                                                        </section>
 
-                                    <div class="row">
-                                        <section class="col col-4">
-                                            <label asp-for="SubClaseActivoFijo.Nombre"></label>
-                                        </section>
+                                                        <section class="col col-8">
+                                                            <label class="input">
+                                                                <select asp-for="SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.IdTipoActivoFijo" class="form-control" asp-items="ViewBag.TipoActivoFijo"></select>
+                                                                <span asp-validation-for="SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.IdTipoActivoFijo" class="text-danger"></span>
+                                                            </label>
+                                                        </section>
+                                                    </div>
 
-                                        <div id="div_subClaseActivoFijo">
-                                            @{ await Html.RenderPartialAsync("_SubClaseActivoFijoSelect", Model?.SubClaseActivoFijo ?? new bd.webapprm.entidades.SubClaseActivoFijo()); }
+                                                    <div class="row">
+                                                        <section class="col col-4">
+                                                            <label asp-for="SubClaseActivoFijo.ClaseActivoFijo.Nombre"></label>
+                                                        </section>
+
+                                                        <div id="div_claseActivoFijo">
+                                                            @{ await Html.RenderPartialAsync("_ClaseActivoFijoSelect", Model?.SubClaseActivoFijo?.ClaseActivoFijo ?? new bd.webapprm.entidades.ClaseActivoFijo()); }
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <section class="col col-4">
+                                                            <label asp-for="SubClaseActivoFijo.Nombre"></label>
+                                                        </section>
+
+                                                        <div id="div_subClaseActivoFijo">
+                                                            @{ await Html.RenderPartialAsync("_SubClaseActivoFijoSelect", Model?.SubClaseActivoFijo ?? new bd.webapprm.entidades.SubClaseActivoFijo()); }
+                                                        </div>
+                                                    </div>
+
+                                                    <legend>Datos Espec&iacute;ficos</legend>
+                                                    <div class="row" style="margin-top:25px;">
+                                                        <section class="col col-4">
+                                                            <label asp-for="Modelo.Marca.Nombre"></label>
+                                                        </section>
+
+                                                        <section class="col col-8">
+                                                            <label class="input">
+                                                                <select asp-for="Modelo.Marca.IdMarca" class="form-control" asp-items="ViewBag.Marca"></select>
+                                                                <span asp-validation-for="Modelo.Marca.IdMarca" class="text-danger"></span>
+                                                            </label>
+                                                        </section>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <section class="col col-4">
+                                                            <label asp-for="Modelo.Nombre"></label>
+                                                        </section>
+
+                                                        <div id="div_modelo">
+                                                            @{ await Html.RenderPartialAsync("_ModeloSelect", Model?.Modelo ?? new bd.webapprm.entidades.Modelo()); }
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row" style="margin-top:15px;">
+                                                        <section class="col col-4">
+                                                            <label asp-for="UnidadMedida.Nombre"></label>
+                                                        </section>
+
+                                                        <section class="col col-8">
+                                                            <label class="input">
+                                                                <select asp-for="UnidadMedida.IdUnidadMedida" class="form-control" asp-items="ViewBag.UnidadMedida"></select>
+                                                                <span asp-validation-for="UnidadMedida.IdUnidadMedida" class="text-danger"></span>
+                                                            </label>
+                                                        </section>
+                                                    </div>
+
+                                                    <div class="row" style="margin-top:15px;">
+                                                        <section class="col col-4">
+                                                            <label asp-for="Nombre"></label>
+                                                        </section>
+
+                                                        <section class="col col-8">
+                                                            <label class="input">
+                                                                <input maxlength="100" asp-for="Nombre" class="form-control" />
+                                                                <span asp-validation-for="Nombre" class="text-danger"></span>
+                                                            </label>
+                                                        </section>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <section class="col col-4">
+                                                            <label asp-for="Serie"></label>
+                                                        </section>
+
+                                                        <section class="col col-8">
+                                                            <label class="input">
+                                                                <input maxlength="50" asp-for="Serie" class="form-control" />
+                                                                <span asp-validation-for="Serie" class="text-danger"></span>
+                                                            </label>
+                                                        </section>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <section class="col col-4">
+                                                            <label asp-for="Ubicacion"></label>
+                                                        </section>
+
+                                                        <section class="col col-8">
+                                                            <label class="input">
+                                                                <textarea maxlength="100" asp-for="Ubicacion" class="form-control" style="padding:5px 11px !important;width:95%;"></textarea>
+                                                                <span asp-validation-for="Ubicacion" class="text-danger"></span>
+                                                            </label>
+                                                        </section>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <section class="col col-4">
+                                                            <label asp-for="ValorCompra"></label>
+                                                        </section>
+
+                                                        <section class="col col-8">
+                                                            <label class="input">
+                                                                <input asp-for="ValorCompra" class="form-control touchspin_tasa" />
+                                                                <span asp-validation-for="ValorCompra" class="text-danger"></span>
+                                                            </label>
+                                                        </section>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                            <div class="step-pane" id="step2">
+                                                <fieldset>
+                                                    <br>
+                                                    <h3><strong>Step 3</strong> - Domain Setup</h3>
+                                                </fieldset>
+                                            </div>
                                         </div>
-                                    </div>
-
-                                    <legend>Datos Espec&iacute;ficos</legend>
-                                    <div class="row" style="margin-top:25px;">
-                                        <section class="col col-4">
-                                            <label asp-for="Modelo.Marca.Nombre"></label>
-                                        </section>
-
-                                        <section class="col col-8">
-                                            <label class="input">
-                                                <select asp-for="Modelo.Marca.IdMarca" class="form-control" asp-items="ViewBag.Marca"></select>
-                                                <span asp-validation-for="Modelo.Marca.IdMarca" class="text-danger"></span>
-                                            </label>
-                                        </section>
                                     </div>
                                 </fieldset>
-
-                                
                                 <footer>
                                     <span class="text-danger">@ViewData["Error"]</span>
                                     <input type="submit" value="Guardar" class="btn btn-primary" />
@@ -85,4 +192,7 @@
     <script src='~/js/site.js'></script>
     <script src='~/lib/waitMe/waitMe.min.js'></script>
     <script src='~/js/activoFijo/recepcion.js'></script>
+    <script src="~/lib//bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
+    <script src="~/lib/fuelux/wizard/wizard.min.js"></script>
+    <script src='~/lib/bootstrap-touchspin-master/src/jquery.bootstrap-touchspin.js'></script>
 }
