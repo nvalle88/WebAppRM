@@ -153,7 +153,7 @@ namespace bd.webapprm.web.Controllers.MVC
                     }
 
                 }
-                return BadRequest();
+                return View(tipoArticulo);
             }
             catch (Exception ex)
             {

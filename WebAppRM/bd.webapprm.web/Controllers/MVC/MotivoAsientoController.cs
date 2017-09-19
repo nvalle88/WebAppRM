@@ -157,7 +157,7 @@ namespace bd.webapprm.web.Controllers.MVC
                     }
 
                 }
-                return BadRequest();
+                return View(motivoAsiento);
             }
             catch (Exception ex)
             {
