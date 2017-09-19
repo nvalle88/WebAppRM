@@ -129,6 +129,36 @@
 
                                                     <div class="row">
                                                         <section class="col col-4">
+                                                            <label asp-for="RecepcionActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.Nombre"></label>
+                                                        </section>
+
+                                                        <div id="div_provincia">
+                                                            @{ await Html.RenderPartialAsync("_ProvinciaSelect", Model); }
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <section class="col col-4">
+                                                            <label asp-for="RecepcionActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Nombre"></label>
+                                                        </section>
+
+                                                        <div id="div_ciudad">
+                                                            @{ await Html.RenderPartialAsync("_CiudadSelect", Model); }
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <section class="col col-4">
+                                                            <label asp-for="RecepcionActivoFijo.LibroActivoFijo.Sucursal.Nombre"></label>
+                                                        </section>
+
+                                                        <div id="div_sucursal">
+                                                            @{ await Html.RenderPartialAsync("_SucursalSelect", Model); }
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <section class="col col-4">
                                                             <label asp-for="RecepcionActivoFijo.FechaRecepcion"></label>
                                                         </section>
 

@@ -38,7 +38,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 lista = await apiServicio.Listar<RecepcionActivoFijoDetalle>(new Uri(WebApp.BaseAddress)
                                                                     , "/api/RecepcionActivoFijo/ListarRecepcionActivoFijo");
 
-                var listaActivosFijosValidacionTecnica = lista.Where(c => c.Estado.Nombre == "Recepcionado");
+                var listaActivosFijosValidacionTecnica = lista.Where(c => c.Estado.Nombre == "Validación Técnica").ToList();
                 return View(listaActivosFijosValidacionTecnica);
             }
             catch (Exception ex)
@@ -62,6 +62,11 @@ namespace bd.webapprm.web.Controllers.MVC
             ViewData["ClaseActivoFijo"] = await ObtenerSelectListClaseActivoFijo((ViewData["TipoActivoFijo"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["TipoActivoFijo"] as SelectList).FirstOrDefault().Value) : -1);
             ViewData["SubClaseActivoFijo"] = await ObtenerSelectListSubClaseActivoFijo((ViewData["ClaseActivoFijo"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["ClaseActivoFijo"] as SelectList).FirstOrDefault().Value) : -1);
             ViewData["MotivoRecepcion"] = new SelectList(await apiServicio.Listar<MotivoRecepcion>(new Uri(WebApp.BaseAddress), "/api/MotivoRecepcion/ListarMotivoRecepcion"), "IdMotivoRecepcion", "Descripcion");
+            
+            ViewData["Pais"] = new SelectList(await apiServicio.Listar<Pais>(new Uri(WebApp.BaseAddress), "/api/Pais/ListarPaises"), "IdPais", "Nombre");
+            ViewData["Provincia"] = await ObtenerSelectListProvincia((ViewData["Pais"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Pais"] as SelectList).FirstOrDefault().Value) : -1);
+            ViewData["Ciudad"] = await ObtenerSelectListCiudad((ViewData["Provincia"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Provincia"] as SelectList).FirstOrDefault().Value) : -1);
+            ViewData["Sucursal"] = await ObtenerSelectListSucursal((ViewData["Ciudad"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Ciudad"] as SelectList).FirstOrDefault().Value) : -1);
 
             var listaProveedor = await apiServicio.Listar<Proveedor>(new Uri(WebApp.BaseAddress), "/api/Proveedor/ListarProveedores");
             var tlistaProveedor = listaProveedor.Select(c => new { IdProveedor = c.IdProveedor, NombreApellidos = String.Format("{0} {1}", c.Nombre, c.Apellidos) });
@@ -258,6 +263,75 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             ViewBag.Modelo = await ObtenerSelectListModelo(idMarca);
             return PartialView("_ModeloSelect", new RecepcionActivoFijoDetalle());
+        }
+        #endregion
+
+        #region AJAX_Provincia
+        public async Task<SelectList> ObtenerSelectListProvincia(int idPais)
+        {
+            try
+            {
+                var listaProvincia = await apiServicio.Listar<Provincia>(new Uri(WebApp.BaseAddress), "/api/Provincia/ListarProvincias");
+                listaProvincia = idPais != -1 ? listaProvincia.Where(c => c.IdPais == idPais).ToList() : new List<Provincia>();
+                return new SelectList(listaProvincia, "IdProvincia", "Nombre");
+            }
+            catch (Exception)
+            {
+                return new SelectList(new List<Provincia>());
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Provincia_SelectResult(int idPais)
+        {
+            ViewBag.Provincia = await ObtenerSelectListProvincia(idPais);
+            return PartialView("_ProvinciaSelect", new RecepcionActivoFijoDetalle());
+        }
+        #endregion
+
+        #region AJAX_Ciudad
+        public async Task<SelectList> ObtenerSelectListCiudad(int idProvincia)
+        {
+            try
+            {
+                var listaCiudad = await apiServicio.Listar<Ciudad>(new Uri(WebApp.BaseAddress), "/api/Ciudad/ListarCiudades");
+                listaCiudad = idProvincia != -1 ? listaCiudad.Where(c => c.IdProvincia == idProvincia).ToList() : new List<Ciudad>();
+                return new SelectList(listaCiudad, "IdCiudad", "Nombre");
+            }
+            catch (Exception)
+            {
+                return new SelectList(new List<Ciudad>());
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Ciudad_SelectResult(int idProvincia)
+        {
+            ViewBag.Ciudad = await ObtenerSelectListCiudad(idProvincia);
+            return PartialView("_CiudadSelect", new RecepcionActivoFijoDetalle());
+        }
+        #endregion
+
+        #region AJAX_Sucursal
+        public async Task<SelectList> ObtenerSelectListSucursal(int idCiudad)
+        {
+            try
+            {
+                var listaSucursal = await apiServicio.Listar<Sucursal>(new Uri(WebApp.BaseAddress), "/api/Sucursal/ListarSucursales");
+                listaSucursal = idCiudad != -1 ? listaSucursal.Where(c => c.IdCiudad == idCiudad).ToList() : new List<Sucursal>();
+                return new SelectList(listaSucursal, "IdSucursal", "Nombre");
+            }
+            catch (Exception)
+            {
+                return new SelectList(new List<Sucursal>());
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Sucursal_SelectResult(int idCiudad)
+        {
+            ViewBag.Sucursal = await ObtenerSelectListSucursal(idCiudad);
+            return PartialView("_SucursalSelect", new RecepcionActivoFijoDetalle());
         }
         #endregion
     }
