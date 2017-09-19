@@ -67,11 +67,19 @@
             <li class="@Html.RouteIf("activos_fijos", "active")">
                 <a href="#"><i class="fa fa-lg fa-fw fa-building"></i> <span class="menu-item-parent">Activos Fijos</span></a>
                 <ul>
-                    <li class="@Html.RouteIf("Recepcion", "active")">
-                        <a href="@Url.Action("Recepcion", "ActivoFijo")">Recepci&oacute;n</a>
+                    <li class="@Html.RouteIf("recepcion_activo", "active")">
+                        <a href="#"><span class="menu-item-parent">Recepci&oacute;n</span></a>
+                        <ul>
+                            <li class="@Html.RouteIf("Recepcion", "active")">
+                                <a href="@Url.Action("Recepcion", "ActivoFijo")">Recepcionar Activo</a>
+                            </li>
+                            <li class="@Html.RouteIf("ActivoValidacionTecnica", "active")">
+                                <a href="@Url.Action("ActivoValidacionTecnica", "ActivoFijo")">Activos que requieren Validaci&oacute;n T&eacute;cnica</a>
+                            </li>
+                        </ul>
                     </li>
-                    <li class="@Html.RouteIf("Codificacion", "active")">
-                        <a href="@Url.Action("Codificacion", "ActivoFijo")">Codificaci&oacute;n</a>
+                    <li class="@Html.RouteIf("Recepcion", "active")">
+                        <a href="@Url.Action("Recepcion", "ActivoFijo")">P&oacute;liza de Seguro</a>
                     </li>
                     <li class="@Html.RouteIf("PolizaSeguro", "active")">
                         <a href="@Url.Action("PolizaSeguro", "ActivoFijo")">P&oacute;liza de Seguro</a>

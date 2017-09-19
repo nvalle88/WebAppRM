@@ -7,6 +7,8 @@
     "jquery-validation": "1.14.0",
     "jquery-validation-unobtrusive": "3.2.6",
     "select2": "^4.0.3",
-    "bootstrap-touchspin-master": "^3.1.2"
+    "bootstrap-touchspin-master": "^3.1.2",
+    "eonasdan-bootstrap-datetimepicker": "^4.17.45",
+    "moment": "^2.17.1"
   }
 }

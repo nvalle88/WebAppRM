@@ -4,6 +4,10 @@
     eventoTipoActivoFijo();
     eventoClaseActivoFijo();
     eventoMarca();
+    eventoValidacionTecnicaChange();
+    $('.datepicker').datetimepicker({
+        'format': 'D-M-Y hh:mm'
+    });
 
     var wizard = $('.wizard').wizard();
     wizard.on('finished', function (e, data) {
@@ -20,21 +24,42 @@
     });
 });
 
+function eventoValidacionTecnicaChange()
+{
+    $("#RecepcionActivoFijo_ValidacionTecnica").on("change", function (e) {
+        mostrarOcultarDatosEspecificosCodificacion(e.currentTarget.checked);
+    });
+}
+
+function mostrarOcultarDatosEspecificosCodificacion(mostrarOcultar)
+{
+    if (mostrarOcultar)
+    {
+        $("#btn_next").hide();
+        $("#li_codificacion").hide();
+    }
+    else
+    {
+        $("#btn_next").show();
+        $("#li_codificacion").show();
+    }
+}
+
 function eventoTipoActivoFijo() {
-    $("#SubClaseActivoFijo_ClaseActivoFijo_TipoActivoFijo_IdTipoActivoFijo").on("change", function (e) {
+    $("#RecepcionActivoFijo_SubClaseActivoFijo_ClaseActivoFijo_IdTipoActivoFijo").on("change", function (e) {
         partialViewTipoActivoFijo(e.val);
     });
 }
 
 function eventoClaseActivoFijo() {
-    $("#IdClaseActivoFijo").on("change", function (e) {
+    $("#RecepcionActivoFijo_SubClaseActivoFijo_IdClaseActivoFijo").on("change", function (e) {
         partialViewClaseActivoFijo(e.val);
     });
 }
 
 function eventoMarca()
 {
-    $("#Modelo_Marca_IdMarca").on("change", function (e) {
+    $("#ActivoFijo_Modelo_IdMarca").on("change", function (e) {
         mostrarLoadingPanel("checkout-form", "Cargando modelos...");
         $.ajax({
             url: "/ActivoFijo/Modelo_SelectResult",
@@ -60,7 +85,7 @@ function partialViewTipoActivoFijo(idTipoActivoFijo) {
         success: function (data) {
             $("#div_claseActivoFijo").html(data);
             Init_Select2();
-            partialViewClaseActivoFijo($("#IdClaseActivoFijo").val());
+            partialViewClaseActivoFijo($("#RecepcionActivoFijo_SubClaseActivoFijo_IdClaseActivoFijo").val());
             eventoClaseActivoFijo();
         },
         error: function (data) {
