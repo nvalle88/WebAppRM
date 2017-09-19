@@ -1,7 +1,7 @@
 ﻿function Init_Touchspin()
 {
     $('.touchspin_tasa').TouchSpin({
-        min: 0,
+        min: 0.00,
         max: 99999999999,
         decimals: 2,
         prefix: '$',

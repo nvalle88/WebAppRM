@@ -1,13 +1,13 @@
-@model bd.webapprm.entidades.ActivoFijo
-
+@model bd.webapprm.entidades.RecepcionActivoFijoDetalle
 <link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
 <link rel="stylesheet" href="~/lib/waitMe/waitMe.min.css" />
 <link rel="stylesheet" href="~/lib/bootstrap-touchspin-master/src/jquery.bootstrap-touchspin.css" />
 <link rel="stylesheet" href="~/css/site.css" />
+<link rel="stylesheet" href="~/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
-            <article class="col-sm-12 col-md-12 col-lg-6">
+            <article class="col-sm-12 col-md-12 col-lg-8">
                 <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
                     <header>
                         <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
@@ -23,9 +23,9 @@
                                         <div class="wizard">
                                             <ul class="steps">
                                                 <li data-target="#step1" class="active">
-                                                    <span class="badge badge-info" style="padding:3px 4px !important;">1</span>Recepci&oacute;n<span class="chevron"></span>
+                                                    <span class="badge badge-info" style="padding:3px 4px !important;">1</span>Datos Generales<span class="chevron"></span>
                                                 </li>
-                                                <li data-target="#step2">
+                                                <li data-target="#step2" id="li_codificacion">
                                                     <span class="badge" style="padding:3px 4px !important;">2</span>Codificaci&oacute;n<span class="chevron"></span>
                                                 </li>
                                             </ul>
@@ -33,133 +33,237 @@
                                                 <button type="button" class="btn btn-sm btn-primary btn-prev">
                                                     <i class="fa fa-arrow-left"></i>Anterior
                                                 </button>
-                                                <button type="button" class="btn btn-sm btn-success btn-next" data-last="Finalizar">
+                                                <button type="button" class="btn btn-sm btn-success btn-next" data-last="Finalizar" id="btn_next">
                                                     Siguiente<i class="fa fa-arrow-right"></i>
                                                 </button>
                                             </div>
                                         </div>
-                                        <div class="step-content">
+                                        <div class="step-content" style="margin-top:15px;">
                                             <div class="step-pane active" id="step1">
-                                                <fieldset style="margin-top:15px;">
+                                                <fieldset>
                                                     <legend>Datos Generales</legend>
-                                                    <div class="row" style="margin-top:25px;">
+                                                    <div class="row">
                                                         <section class="col col-4">
-                                                            <label asp-for="SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.Nombre"></label>
+                                                            <label asp-for="RecepcionActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.Nombre"></label>
                                                         </section>
 
                                                         <section class="col col-8">
                                                             <label class="input">
-                                                                <select asp-for="SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.IdTipoActivoFijo" class="form-control" asp-items="ViewBag.TipoActivoFijo"></select>
-                                                                <span asp-validation-for="SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.IdTipoActivoFijo" class="text-danger"></span>
+                                                                <select asp-for="RecepcionActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.IdTipoActivoFijo" class="form-control" asp-items="ViewBag.TipoActivoFijo"></select>
+                                                                <span asp-validation-for="RecepcionActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.IdTipoActivoFijo" class="text-danger"></span>
                                                             </label>
                                                         </section>
                                                     </div>
 
                                                     <div class="row">
                                                         <section class="col col-4">
-                                                            <label asp-for="SubClaseActivoFijo.ClaseActivoFijo.Nombre"></label>
+                                                            <label asp-for="RecepcionActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.Nombre"></label>
                                                         </section>
 
                                                         <div id="div_claseActivoFijo">
-                                                            @{ await Html.RenderPartialAsync("_ClaseActivoFijoSelect", Model?.SubClaseActivoFijo?.ClaseActivoFijo ?? new bd.webapprm.entidades.ClaseActivoFijo()); }
+                                                            @{ await Html.RenderPartialAsync("_ClaseActivoFijoSelect", Model); }
                                                         </div>
                                                     </div>
 
                                                     <div class="row">
                                                         <section class="col col-4">
-                                                            <label asp-for="SubClaseActivoFijo.Nombre"></label>
+                                                            <label asp-for="RecepcionActivoFijo.SubClaseActivoFijo.Nombre"></label>
                                                         </section>
 
                                                         <div id="div_subClaseActivoFijo">
-                                                            @{ await Html.RenderPartialAsync("_SubClaseActivoFijoSelect", Model?.SubClaseActivoFijo ?? new bd.webapprm.entidades.SubClaseActivoFijo()); }
+                                                            @{ await Html.RenderPartialAsync("_SubClaseActivoFijoSelect", Model); }
                                                         </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <section class="col col-4">
+                                                            <label asp-for="RecepcionActivoFijo.IdMotivoRecepcion"></label>
+                                                        </section>
+
+                                                        <section class="col col-8">
+                                                            <label class="input">
+                                                                <select asp-for="RecepcionActivoFijo.IdMotivoRecepcion" class="form-control" asp-items="ViewBag.MotivoRecepcion"></select>
+                                                                <span asp-validation-for="RecepcionActivoFijo.IdMotivoRecepcion" class="text-danger"></span>
+                                                            </label>
+                                                        </section>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <section class="col col-4">
+                                                            <label asp-for="RecepcionActivoFijo.IdProveedor"></label>
+                                                        </section>
+
+                                                        <section class="col col-8">
+                                                            <label class="input">
+                                                                <select asp-for="RecepcionActivoFijo.IdProveedor" class="form-control" asp-items="ViewBag.Proveedor"></select>
+                                                                <span asp-validation-for="RecepcionActivoFijo.IdProveedor" class="text-danger"></span>
+                                                            </label>
+                                                        </section>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <section class="col col-4">
+                                                            <label asp-for="RecepcionActivoFijo.IdEmpleado"></label>
+                                                        </section>
+
+                                                        <section class="col col-8">
+                                                            <label class="input">
+                                                                <select asp-for="RecepcionActivoFijo.IdEmpleado" class="form-control" asp-items="ViewBag.Empleado"></select>
+                                                                <span asp-validation-for="RecepcionActivoFijo.IdEmpleado" class="text-danger"></span>
+                                                            </label>
+                                                        </section>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <section class="col col-4">
+                                                            <label asp-for="RecepcionActivoFijo.FechaRecepcion"></label>
+                                                        </section>
+
+                                                        <section class="col col-8">
+                                                            <label class="input">
+                                                                <input asp-for="RecepcionActivoFijo.FechaRecepcion" class="datepicker form-control" />
+                                                                <span asp-validation-for="RecepcionActivoFijo.FechaRecepcion" class="text-danger"></span>
+                                                            </label>
+                                                        </section>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <section class="col col-4">
+                                                            <label asp-for="RecepcionActivoFijo.Fondo"></label>
+                                                        </section>
+
+                                                        <section class="col col-8">
+                                                            <label class="input">
+                                                                <textarea maxlength="100" asp-for="RecepcionActivoFijo.Fondo" class="form-control" style="padding:5px 13px !important;width:96%;"></textarea>
+                                                                <span asp-validation-for="RecepcionActivoFijo.Fondo" class="text-danger"></span>
+                                                            </label>
+                                                        </section>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <section class="col col-4">
+                                                            <label asp-for="RecepcionActivoFijo.OrdenCompra"></label>
+                                                        </section>
+
+                                                        <section class="col col-8">
+                                                            <label class="input">
+                                                                <textarea maxlength="100" asp-for="RecepcionActivoFijo.OrdenCompra" class="form-control" style="padding:5px 13px !important;width:96%;"></textarea>
+                                                                <span asp-validation-for="RecepcionActivoFijo.OrdenCompra" class="text-danger"></span>
+                                                            </label>
+                                                        </section>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <section class="col col-4">
+                                                            <label asp-for="RecepcionActivoFijo.Cantidad"></label>
+                                                        </section>
+
+                                                        <section class="col col-8">
+                                                            <label class="input">
+                                                                <input asp-for="RecepcionActivoFijo.Cantidad" class="form-control" type="number" min="0" />
+                                                                <span asp-validation-for="RecepcionActivoFijo.Cantidad" class="text-danger"></span>
+                                                            </label>
+                                                        </section>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <section class="col col-4">
+                                                            <label asp-for="RecepcionActivoFijo.ValidacionTecnica"></label>
+                                                        </section>
+
+                                                        <section class="col col-8">
+                                                            <label class="toggle" style="float:left;padding-right:50px !important;">
+                                                                <input type="checkbox" name="checkbox-toggle" asp-for="RecepcionActivoFijo.ValidacionTecnica">
+                                                                <i data-swchon-text="SI" data-swchoff-text="NO"></i>
+                                                            </label>
+                                                        </section>
                                                     </div>
 
                                                     <legend>Datos Espec&iacute;ficos</legend>
                                                     <div class="row" style="margin-top:25px;">
                                                         <section class="col col-4">
-                                                            <label asp-for="Modelo.Marca.Nombre"></label>
+                                                            <label asp-for="ActivoFijo.Modelo.Marca.Nombre"></label>
                                                         </section>
 
                                                         <section class="col col-8">
                                                             <label class="input">
-                                                                <select asp-for="Modelo.Marca.IdMarca" class="form-control" asp-items="ViewBag.Marca"></select>
-                                                                <span asp-validation-for="Modelo.Marca.IdMarca" class="text-danger"></span>
+                                                                <select asp-for="ActivoFijo.Modelo.IdMarca" class="form-control" asp-items="ViewBag.Marca"></select>
+                                                                <span asp-validation-for="ActivoFijo.Modelo.IdMarca" class="text-danger"></span>
                                                             </label>
                                                         </section>
                                                     </div>
 
                                                     <div class="row">
                                                         <section class="col col-4">
-                                                            <label asp-for="Modelo.Nombre"></label>
+                                                            <label asp-for="ActivoFijo.Modelo.Nombre"></label>
                                                         </section>
 
                                                         <div id="div_modelo">
-                                                            @{ await Html.RenderPartialAsync("_ModeloSelect", Model?.Modelo ?? new bd.webapprm.entidades.Modelo()); }
+                                                            @{ await Html.RenderPartialAsync("_ModeloSelect", Model); }
                                                         </div>
                                                     </div>
 
-                                                    <div class="row" style="margin-top:15px;">
+                                                    <div class="row">
                                                         <section class="col col-4">
-                                                            <label asp-for="UnidadMedida.Nombre"></label>
+                                                            <label asp-for="ActivoFijo.UnidadMedida.Nombre"></label>
                                                         </section>
 
                                                         <section class="col col-8">
                                                             <label class="input">
-                                                                <select asp-for="UnidadMedida.IdUnidadMedida" class="form-control" asp-items="ViewBag.UnidadMedida"></select>
-                                                                <span asp-validation-for="UnidadMedida.IdUnidadMedida" class="text-danger"></span>
-                                                            </label>
-                                                        </section>
-                                                    </div>
-
-                                                    <div class="row" style="margin-top:15px;">
-                                                        <section class="col col-4">
-                                                            <label asp-for="Nombre"></label>
-                                                        </section>
-
-                                                        <section class="col col-8">
-                                                            <label class="input">
-                                                                <input maxlength="100" asp-for="Nombre" class="form-control" />
-                                                                <span asp-validation-for="Nombre" class="text-danger"></span>
+                                                                <select asp-for="ActivoFijo.UnidadMedida.IdUnidadMedida" class="form-control" asp-items="ViewBag.UnidadMedida"></select>
+                                                                <span asp-validation-for="ActivoFijo.UnidadMedida.IdUnidadMedida" class="text-danger"></span>
                                                             </label>
                                                         </section>
                                                     </div>
 
                                                     <div class="row">
                                                         <section class="col col-4">
-                                                            <label asp-for="Serie"></label>
+                                                            <label asp-for="ActivoFijo.Nombre"></label>
                                                         </section>
 
                                                         <section class="col col-8">
                                                             <label class="input">
-                                                                <input maxlength="50" asp-for="Serie" class="form-control" />
-                                                                <span asp-validation-for="Serie" class="text-danger"></span>
+                                                                <input maxlength="100" asp-for="ActivoFijo.Nombre" class="form-control" />
+                                                                <span asp-validation-for="ActivoFijo.Nombre" class="text-danger"></span>
                                                             </label>
                                                         </section>
                                                     </div>
 
                                                     <div class="row">
                                                         <section class="col col-4">
-                                                            <label asp-for="Ubicacion"></label>
+                                                            <label asp-for="ActivoFijo.Serie"></label>
                                                         </section>
 
                                                         <section class="col col-8">
                                                             <label class="input">
-                                                                <textarea maxlength="100" asp-for="Ubicacion" class="form-control" style="padding:5px 11px !important;width:95%;"></textarea>
-                                                                <span asp-validation-for="Ubicacion" class="text-danger"></span>
+                                                                <input maxlength="50" asp-for="ActivoFijo.Serie" class="form-control" />
+                                                                <span asp-validation-for="ActivoFijo.Serie" class="text-danger"></span>
                                                             </label>
                                                         </section>
                                                     </div>
 
                                                     <div class="row">
                                                         <section class="col col-4">
-                                                            <label asp-for="ValorCompra"></label>
+                                                            <label asp-for="ActivoFijo.Ubicacion"></label>
                                                         </section>
 
                                                         <section class="col col-8">
                                                             <label class="input">
-                                                                <input asp-for="ValorCompra" class="form-control touchspin_tasa" />
-                                                                <span asp-validation-for="ValorCompra" class="text-danger"></span>
+                                                                <textarea maxlength="100" asp-for="ActivoFijo.Ubicacion" class="form-control" style="padding:5px 13px !important;width:96%;"></textarea>
+                                                                <span asp-validation-for="ActivoFijo.Ubicacion" class="text-danger"></span>
+                                                            </label>
+                                                        </section>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <section class="col col-4">
+                                                            <label asp-for="ActivoFijo.ValorCompra"></label>
+                                                        </section>
+
+                                                        <section class="col col-8">
+                                                            <label class="input">
+                                                                <input asp-for="ActivoFijo.ValorCompra" class="form-control touchspin_tasa" />
+                                                                <span asp-validation-for="ActivoFijo.ValorCompra" class="text-danger"></span>
                                                             </label>
                                                         </section>
                                                     </div>
@@ -195,4 +299,7 @@
     <script src="~/lib//bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
     <script src="~/lib/fuelux/wizard/wizard.min.js"></script>
     <script src='~/lib/bootstrap-touchspin-master/src/jquery.bootstrap-touchspin.js'></script>
+    <script src='~/lib/moment/min/moment.min.js'></script>
+    <script src='~/lib/moment/locale/es.js'></script>
+    <script src='~/lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'></script>
 }
