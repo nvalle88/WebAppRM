@@ -116,6 +116,19 @@
 
                                                     <div class="row">
                                                         <section class="col col-4">
+                                                            <label asp-for="RecepcionActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.Pais.Nombre"></label>
+                                                        </section>
+
+                                                        <section class="col col-8">
+                                                            <label class="input">
+                                                                <select asp-for="RecepcionActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.IdPais" class="form-control" asp-items="ViewBag.Pais"></select>
+                                                                <span asp-validation-for="RecepcionActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.IdPais" class="text-danger"></span>
+                                                            </label>
+                                                        </section>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <section class="col col-4">
                                                             <label asp-for="RecepcionActivoFijo.FechaRecepcion"></label>
                                                         </section>
 
