@@ -197,6 +197,32 @@ namespace bd.webapprm.web.Controllers.MVC
             }
         }
 
+        public async Task<IActionResult> ActivosFijosRecepcionados()
+        {
+            var lista = new List<RecepcionActivoFijoDetalle>();
+            try
+            {
+                lista = await apiServicio.Listar<RecepcionActivoFijoDetalle>(new Uri(WebApp.BaseAddress)
+                                                                    , "/api/RecepcionActivoFijo/ListarRecepcionActivoFijo");
+
+                var listaActivosFijosRecepcionados = lista.Where(c => c.Estado.Nombre == "Recepcionado").ToList();
+                return View(listaActivosFijosRecepcionados);
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                {
+                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                    Message = "Listando activos fijos con estado Recepcionado",
+                    ExceptionTrace = ex,
+                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
+                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                    UserName = "Usuario APP webappth"
+                });
+                return BadRequest();
+            }
+        }
+
         #region AJAX_ClaseActivoFijo
         public async Task<SelectList> ObtenerSelectListClaseActivoFijo(int idTipoActivoFijo)
         {
