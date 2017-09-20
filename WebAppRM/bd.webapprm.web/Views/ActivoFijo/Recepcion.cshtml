@@ -116,20 +116,20 @@
 
                                                     <div class="row">
                                                         <section class="col col-4">
-                                                            <label asp-for="RecepcionActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.Pais.Nombre"></label>
+                                                            <label asp-for="ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.Pais.Nombre"></label>
                                                         </section>
 
                                                         <section class="col col-8">
                                                             <label class="input">
-                                                                <select asp-for="RecepcionActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.IdPais" class="form-control" asp-items="ViewBag.Pais"></select>
-                                                                <span asp-validation-for="RecepcionActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.IdPais" class="text-danger"></span>
+                                                                <select asp-for="ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.IdPais" class="form-control" asp-items="ViewBag.Pais"></select>
+                                                                <span asp-validation-for="ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.IdPais" class="text-danger"></span>
                                                             </label>
                                                         </section>
                                                     </div>
 
                                                     <div class="row">
                                                         <section class="col col-4">
-                                                            <label asp-for="RecepcionActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.Nombre"></label>
+                                                            <label asp-for="ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.Nombre"></label>
                                                         </section>
 
                                                         <div id="div_provincia">
@@ -139,7 +139,7 @@
 
                                                     <div class="row">
                                                         <section class="col col-4">
-                                                            <label asp-for="RecepcionActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Nombre"></label>
+                                                            <label asp-for="ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Nombre"></label>
                                                         </section>
 
                                                         <div id="div_ciudad">
@@ -149,11 +149,21 @@
 
                                                     <div class="row">
                                                         <section class="col col-4">
-                                                            <label asp-for="RecepcionActivoFijo.LibroActivoFijo.Sucursal.Nombre"></label>
+                                                            <label asp-for="ActivoFijo.LibroActivoFijo.Sucursal.Nombre"></label>
                                                         </section>
 
                                                         <div id="div_sucursal">
                                                             @{ await Html.RenderPartialAsync("_SucursalSelect", Model); }
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <section class="col col-4">
+                                                            <label asp-for="ActivoFijo.IdLibroActivoFijo"></label>
+                                                        </section>
+
+                                                        <div id="div_libroActivoFijo">
+                                                            @{ await Html.RenderPartialAsync("_LibroActivoFijoSelect", Model); }
                                                         </div>
                                                     </div>
 
@@ -253,8 +263,8 @@
 
                                                         <section class="col col-8">
                                                             <label class="input">
-                                                                <select asp-for="ActivoFijo.UnidadMedida.IdUnidadMedida" class="form-control" asp-items="ViewBag.UnidadMedida"></select>
-                                                                <span asp-validation-for="ActivoFijo.UnidadMedida.IdUnidadMedida" class="text-danger"></span>
+                                                                <select asp-for="ActivoFijo.IdUnidadMedida" class="form-control" asp-items="ViewBag.UnidadMedida"></select>
+                                                                <span asp-validation-for="ActivoFijo.IdUnidadMedida" class="text-danger"></span>
                                                             </label>
                                                         </section>
                                                     </div>

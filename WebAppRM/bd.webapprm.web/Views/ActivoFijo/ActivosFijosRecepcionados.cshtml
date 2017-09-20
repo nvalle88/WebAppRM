@@ -57,7 +57,7 @@
                                                 </td>
 
                                                 <td>
-                                                    @Html.DisplayFor(modelItem => String.Format("{0} {1}", item.RecepcionActivoFijo.Proveedor.Nombre, item.RecepcionActivoFijo.Proveedor.Apellidos))
+                                                    @{ await ViewContext.Writer.WriteAsync(String.Format("{0} {1}", item.RecepcionActivoFijo.Proveedor.Nombre, item.RecepcionActivoFijo.Proveedor.Apellidos)); }
                                                 </td>
                                             </tr>
                                         }

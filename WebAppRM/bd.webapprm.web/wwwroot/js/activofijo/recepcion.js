@@ -7,6 +7,7 @@
     eventoPais();
     eventoProvincia();
     eventoCiudad();
+    eventoSucursal();
     eventoValidacionTecnicaChange();
     $('.datepicker').datetimepicker({
         'format': 'D-M-Y hh:mm'
@@ -80,22 +81,28 @@ function eventoMarca()
 }
 
 function eventoPais() {
-    $("#RecepcionActivoFijo_LibroActivoFijo_Sucursal_Ciudad_Provincia_IdPais").on("change", function (e) {
+    $("#ActivoFijo_LibroActivoFijo_Sucursal_Ciudad_Provincia_IdPais").on("change", function (e) {
         partialViewProvincia(e.val);
     });
 }
 
 function eventoProvincia()
 {
-    $("#RecepcionActivoFijo_LibroActivoFijo_Sucursal_Ciudad_IdProvincia").on("change", function (e) {
+    $("#ActivoFijo_LibroActivoFijo_Sucursal_Ciudad_IdProvincia").on("change", function (e) {
         partialViewCiudad(e.val);
     });
 }
 
 function eventoCiudad()
 {
-    $("#RecepcionActivoFijo_LibroActivoFijo_Sucursal_IdCiudad").on("change", function (e) {
+    $("#ActivoFijo_LibroActivoFijo_Sucursal_IdCiudad").on("change", function (e) {
         partialViewSucursal(e.val);
+    });
+}
+
+function eventoSucursal() {
+    $("#ActivoFijo_LibroActivoFijo_IdSucursal").on("change", function (e) {
+        partialViewLibroActivoFijo(e.val);
     });
 }
 
@@ -114,9 +121,7 @@ function partialViewProvincia(idPais) {
         },
         complete: function (data)
         {
-            partialViewCiudad($("#RecepcionActivoFijo_LibroActivoFijo_Sucursal_Ciudad_IdProvincia").val());
-            eventoProvincia();
-            eventoCiudad();
+            partialViewCiudad($("#ActivoFijo_LibroActivoFijo_Sucursal_Ciudad_IdProvincia").val());
         }
     });
 }
@@ -135,8 +140,7 @@ function partialViewCiudad(idProvincia) {
             $("#checkout-form").waitMe("hide");
         },
         complete: function (data) {
-            partialViewSucursal($("#RecepcionActivoFijo_LibroActivoFijo_Sucursal_IdCiudad").val());
-            eventoCiudad();
+            partialViewSucursal($("#ActivoFijo_LibroActivoFijo_Sucursal_IdCiudad").val());
         }
     });
 }
@@ -151,8 +155,30 @@ function partialViewSucursal(idCiudad) {
             $("#div_sucursal").html(data);
             Init_Select2();
         },
+        error: function (data) {
+            $("#checkout-form").waitMe("hide");
+        },
+        complete: function (data) {
+            partialViewLibroActivoFijo($("#ActivoFijo_LibroActivoFijo_IdSucursal").val());
+        }
+    });
+}
+
+function partialViewLibroActivoFijo(idSucursal) {
+    mostrarLoadingPanel("checkout-form", "Cargando libros de activo fijo...");
+    $.ajax({
+        url: "/ActivoFijo/LibroActivoFijo_SelectResult",
+        method: "POST",
+        data: { idSucursal: idSucursal != null ? idSucursal : -1 },
+        success: function (data) {
+            $("#div_libroActivoFijo").html(data);
+            Init_Select2();
+        },
         complete: function (data) {
             $("#checkout-form").waitMe("hide");
+            eventoProvincia();
+            eventoCiudad();
+            eventoSucursal();
         }
     });
 }

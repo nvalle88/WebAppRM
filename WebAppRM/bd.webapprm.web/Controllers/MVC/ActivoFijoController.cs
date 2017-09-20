@@ -67,6 +67,7 @@ namespace bd.webapprm.web.Controllers.MVC
             ViewData["Provincia"] = await ObtenerSelectListProvincia((ViewData["Pais"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Pais"] as SelectList).FirstOrDefault().Value) : -1);
             ViewData["Ciudad"] = await ObtenerSelectListCiudad((ViewData["Provincia"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Provincia"] as SelectList).FirstOrDefault().Value) : -1);
             ViewData["Sucursal"] = await ObtenerSelectListSucursal((ViewData["Ciudad"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Ciudad"] as SelectList).FirstOrDefault().Value) : -1);
+            ViewData["LibroActivoFijo"] = await ObtenerSelectListLibroActivoFijo((ViewData["Sucursal"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Sucursal"] as SelectList).FirstOrDefault().Value) : -1);
 
             var listaProveedor = await apiServicio.Listar<Proveedor>(new Uri(WebApp.BaseAddress), "/api/Proveedor/ListarProveedores");
             var tlistaProveedor = listaProveedor.Select(c => new { IdProveedor = c.IdProveedor, NombreApellidos = String.Format("{0} {1}", c.Nombre, c.Apellidos) });
@@ -95,6 +96,9 @@ namespace bd.webapprm.web.Controllers.MVC
                 var listaSubClaseActivoFijo = await apiServicio.Listar<SubClaseActivoFijo>(new Uri(WebApp.BaseAddress), "/api/SubClaseActivoFijo/ListarSubClasesActivoFijo");
                 recepcionActivoFijoDetalle.RecepcionActivoFijo.SubClaseActivoFijo = listaSubClaseActivoFijo.SingleOrDefault(c => c.IdSubClaseActivoFijo == recepcionActivoFijoDetalle?.RecepcionActivoFijo?.IdSubClaseActivoFijo);
 
+                var listaLibroActivoFijo = await apiServicio.Listar<LibroActivoFijo>(new Uri(WebApp.BaseAddress), "/api/LibroActivoFijo/ListarLibrosActivoFijo");
+                recepcionActivoFijoDetalle.ActivoFijo.LibroActivoFijo = listaLibroActivoFijo.SingleOrDefault(c => c.IdLibroActivoFijo == recepcionActivoFijoDetalle?.ActivoFijo?.IdLibroActivoFijo);
+
                 if (recepcionActivoFijoDetalle.RecepcionActivoFijo.SubClaseActivoFijo == null)
                 {
                     try
@@ -120,6 +124,57 @@ namespace bd.webapprm.web.Controllers.MVC
                     }
                 }
 
+                if (recepcionActivoFijoDetalle.ActivoFijo.LibroActivoFijo == null)
+                {
+                    try
+                    {
+                        recepcionActivoFijoDetalle.ActivoFijo.LibroActivoFijo = new LibroActivoFijo();
+                        int IdSucursal = int.Parse(Request.Form["ActivoFijo.LibroActivoFijo.IdSucursal"].ToString());
+
+                        var listaSucursal = await apiServicio.Listar<Sucursal>(new Uri(WebApp.BaseAddress), "/api/Sucursal/ListarSucursales");
+                        recepcionActivoFijoDetalle.ActivoFijo.LibroActivoFijo.Sucursal = listaSucursal.SingleOrDefault(c => c.IdSucursal == IdSucursal);
+                        recepcionActivoFijoDetalle.ActivoFijo.LibroActivoFijo.IdSucursal = IdSucursal;
+                    }
+                    catch (Exception)
+                    {
+                        try
+                        {
+                            recepcionActivoFijoDetalle.ActivoFijo.LibroActivoFijo.Sucursal = new Sucursal();
+                            int IdCiudad = int.Parse(Request.Form["ActivoFijo.LibroActivoFijo.Sucursal.IdCiudad"].ToString());
+
+                            var listaCiudad = await apiServicio.Listar<Ciudad>(new Uri(WebApp.BaseAddress), "/api/Ciudad/ListarCiudades");
+                            recepcionActivoFijoDetalle.ActivoFijo.LibroActivoFijo.Sucursal.Ciudad = listaCiudad.SingleOrDefault(c => c.IdCiudad == IdCiudad);
+                            recepcionActivoFijoDetalle.ActivoFijo.LibroActivoFijo.Sucursal.IdCiudad = IdCiudad;
+                        }
+                        catch (Exception)
+                        {
+                            try
+                            {
+                                recepcionActivoFijoDetalle.ActivoFijo.LibroActivoFijo.Sucursal.Ciudad = new Ciudad();
+                                int IdProvincia = int.Parse(Request.Form["ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.IdProvincia"].ToString());
+
+                                var listaProvincia = await apiServicio.Listar<Provincia>(new Uri(WebApp.BaseAddress), "/api/Provincia/ListarProvincias");
+                                recepcionActivoFijoDetalle.ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia = listaProvincia.SingleOrDefault(c => c.IdProvincia == IdProvincia);
+                                recepcionActivoFijoDetalle.ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.IdProvincia = IdProvincia;
+                            }
+                            catch (Exception)
+                            {
+                                try
+                                {
+                                    recepcionActivoFijoDetalle.ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia = new Provincia();
+                                    int IdPais = int.Parse(Request.Form["ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.IdPais"].ToString());
+
+                                    var listaPais = await apiServicio.Listar<Pais>(new Uri(WebApp.BaseAddress), "/api/Pais/ListarPaises");
+                                    recepcionActivoFijoDetalle.ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.Pais = listaPais.SingleOrDefault(c => c.IdPais == IdPais);
+                                    recepcionActivoFijoDetalle.ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.IdPais = IdPais;
+                                }
+                                catch (Exception)
+                                { }
+                            }
+                        }
+                    }
+                }
+
                 var listaModelo = await apiServicio.Listar<Modelo>(new Uri(WebApp.BaseAddress), "/api/Modelo/ListarModelos");
                 recepcionActivoFijoDetalle.ActivoFijo.Modelo = listaModelo.SingleOrDefault(c => c.IdModelo == recepcionActivoFijoDetalle?.ActivoFijo?.IdModelo);
 
@@ -139,11 +194,37 @@ namespace bd.webapprm.web.Controllers.MVC
                 var listaUnidadMedida = await apiServicio.Listar<UnidadMedida>(new Uri(WebApp.BaseAddress), "/api/UnidadMedida/ListarUnidadMedida");
                 recepcionActivoFijoDetalle.ActivoFijo.UnidadMedida = listaUnidadMedida.SingleOrDefault(c => c.IdUnidadMedida == recepcionActivoFijoDetalle.ActivoFijo.IdUnidadMedida);
 
+                recepcionActivoFijoDetalle.ActivoFijo.Ciudad = recepcionActivoFijoDetalle.ActivoFijo.LibroActivoFijo?.Sucursal?.Ciudad;
+                recepcionActivoFijoDetalle.ActivoFijo.IdCiudad = recepcionActivoFijoDetalle.ActivoFijo.LibroActivoFijo?.Sucursal?.Ciudad?.IdCiudad ?? 0;
+
+                recepcionActivoFijoDetalle.RecepcionActivoFijo.LibroActivoFijo = recepcionActivoFijoDetalle.ActivoFijo.LibroActivoFijo;
+                recepcionActivoFijoDetalle.RecepcionActivoFijo.IdLibroActivoFijo = recepcionActivoFijoDetalle.ActivoFijo.LibroActivoFijo?.IdLibroActivoFijo ?? 0;
+
+                recepcionActivoFijoDetalle.ActivoFijo.CodigoActivoFijo = new CodigoActivoFijo { Codigosecuencial = "N/A", CodigoBarras = "N/A" };
+                recepcionActivoFijoDetalle.NumeroPoliza = "N/A";
+
+                await apiServicio.InsertarAsync(new Estado { Nombre = "Recepcionado" },
+                                                             new Uri(WebApp.BaseAddress),
+                                                             "/api/Estado/InsertarEstado");
+
+                await apiServicio.InsertarAsync(new Estado { Nombre = "Validación Técnica" },
+                                                             new Uri(WebApp.BaseAddress),
+                                                             "/api/Estado/InsertarEstado");
+
+                var listaEstado = await apiServicio.Listar<Estado>(new Uri(WebApp.BaseAddress), "/api/Estado/ListarEstados");
+                var nombreEstado = recepcionActivoFijoDetalle.RecepcionActivoFijo.ValidacionTecnica ? "Recepcionado" : "Validación Técnica";
+                var estado = listaEstado.SingleOrDefault(c => c.Nombre == nombreEstado);
+                recepcionActivoFijoDetalle.Estado = estado;
+                recepcionActivoFijoDetalle.IdEstado = estado.IdEstado;
+
+                recepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo = recepcionActivoFijoDetalle.RecepcionActivoFijo.SubClaseActivoFijo;
+                recepcionActivoFijoDetalle.ActivoFijo.IdSubClaseActivoFijo = recepcionActivoFijoDetalle.RecepcionActivoFijo.IdSubClaseActivoFijo;
+
                 TryValidateModel(recepcionActivoFijoDetalle);
 
-                /*response = await apiServicio.InsertarAsync(activoFijo,
+                response = await apiServicio.InsertarAsync(recepcionActivoFijoDetalle,
                                                              new Uri(WebApp.BaseAddress),
-                                                             "/api/ActivoFijo/InsertarActivoFijo");
+                                                             "/api/RecepcionActivoFijo/InsertarRecepcionActivoFijo");
                 if (response.IsSuccess)
                 {
 
@@ -151,21 +232,27 @@ namespace bd.webapprm.web.Controllers.MVC
                     {
                         ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                         ExceptionTrace = null,
-                        Message = "Se ha creado un activo fijo",
+                        Message = "Se ha recepcionado un activo fijo",
                         UserName = "Usuario 1",
                         LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
                         LogLevelShortName = Convert.ToString(LogLevelParameter.ADV),
-                        EntityID = string.Format("{0} {1}", "Activo Fijo:", activoFijo.IdActivoFijo),
+                        EntityID = string.Format("{0} {1}", "Activo Fijo:", recepcionActivoFijoDetalle.ActivoFijo.IdActivoFijo),
                     });
 
-                    return RedirectToAction("Index");
-                }*/
+                    return RedirectToAction("ActivosFijosRecepcionados");
+                }
 
                 ViewData["Error"] = response.Message;
                 ViewData["TipoActivoFijo"] = new SelectList(listaTipoActivoFijo, "IdTipoActivoFijo", "Nombre");
                 ViewData["ClaseActivoFijo"] = await ObtenerSelectListClaseActivoFijo(recepcionActivoFijoDetalle?.RecepcionActivoFijo?.SubClaseActivoFijo?.ClaseActivoFijo?.TipoActivoFijo?.IdTipoActivoFijo ?? -1);
                 ViewData["SubClaseActivoFijo"] = await ObtenerSelectListSubClaseActivoFijo(recepcionActivoFijoDetalle?.RecepcionActivoFijo?.SubClaseActivoFijo?.ClaseActivoFijo?.IdClaseActivoFijo ?? -1);
                 ViewData["MotivoRecepcion"] = new SelectList(await apiServicio.Listar<MotivoRecepcion>(new Uri(WebApp.BaseAddress), "/api/MotivoRecepcion/ListarMotivoRecepcion"), "IdMotivoRecepcion", "Descripcion");
+
+                ViewData["Pais"] = new SelectList(await apiServicio.Listar<Pais>(new Uri(WebApp.BaseAddress), "/api/Pais/ListarPaises"), "IdPais", "Nombre");
+                ViewData["Provincia"] = await ObtenerSelectListProvincia(recepcionActivoFijoDetalle?.ActivoFijo?.LibroActivoFijo?.Sucursal?.Ciudad?.Provincia?.Pais?.IdPais ?? -1);
+                ViewData["Ciudad"] = await ObtenerSelectListCiudad(recepcionActivoFijoDetalle?.ActivoFijo?.LibroActivoFijo?.Sucursal?.Ciudad?.Provincia?.IdProvincia ?? -1);
+                ViewData["Sucursal"] = await ObtenerSelectListSucursal(recepcionActivoFijoDetalle?.ActivoFijo?.LibroActivoFijo?.Sucursal?.Ciudad?.IdCiudad ?? -1);
+                ViewData["LibroActivoFijo"] = await ObtenerSelectListLibroActivoFijo(recepcionActivoFijoDetalle?.ActivoFijo?.LibroActivoFijo?.Sucursal?.IdSucursal ?? -1);
 
                 var listaProveedor = await apiServicio.Listar<Proveedor>(new Uri(WebApp.BaseAddress), "/api/Proveedor/ListarProveedores");
                 var tlistaProveedor = listaProveedor.Select(c => new { IdProveedor = c.IdProveedor, NombreApellidos = String.Format("{0} {1}", c.Nombre, c.Apellidos) });
@@ -358,6 +445,29 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             ViewBag.Sucursal = await ObtenerSelectListSucursal(idCiudad);
             return PartialView("_SucursalSelect", new RecepcionActivoFijoDetalle());
+        }
+        #endregion
+
+        #region AJAX_LibroActivoFijo
+        public async Task<SelectList> ObtenerSelectListLibroActivoFijo(int idSucursal)
+        {
+            try
+            {
+                var listaLibroActivoFijo = await apiServicio.Listar<LibroActivoFijo>(new Uri(WebApp.BaseAddress), "/api/LibroActivoFijo/ListarLibrosActivoFijo");
+                listaLibroActivoFijo = idSucursal != -1 ? listaLibroActivoFijo.Where(c => c.IdSucursal == idSucursal).ToList() : new List<LibroActivoFijo>();
+                return new SelectList(listaLibroActivoFijo, "IdLibroActivoFijo", "IdLibroActivoFijo");
+            }
+            catch (Exception)
+            {
+                return new SelectList(new List<LibroActivoFijo>());
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> LibroActivoFijo_SelectResult(int idSucursal)
+        {
+            ViewBag.LibroActivoFijo = await ObtenerSelectListLibroActivoFijo(idSucursal);
+            return PartialView("_LibroActivoFijoSelect", new RecepcionActivoFijoDetalle());
         }
         #endregion
     }
