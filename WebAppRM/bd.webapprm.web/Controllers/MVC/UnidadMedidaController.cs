@@ -167,7 +167,8 @@ namespace bd.webapprm.web.Controllers.MVC
                     UserName = "Usuario APP webappth"
                 });
 
-                return BadRequest();
+                ViewData["Error"] = response.Message;
+                return View(unidadMedida);
             }
         }
 
