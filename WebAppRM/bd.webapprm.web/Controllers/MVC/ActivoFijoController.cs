@@ -39,7 +39,10 @@ namespace bd.webapprm.web.Controllers.MVC
                                                                     , "/api/RecepcionActivoFijo/ListarRecepcionActivoFijo");
 
                 var listaActivosFijosValidacionTecnica = lista.Where(c => c.Estado.Nombre == "Validación Técnica").ToList();
-                return View(listaActivosFijosValidacionTecnica);
+                ViewData["titulo"] = "Activos Fijos que requieren Validación Técnica";
+                ViewData["textoColumna"] = "Aprobar";
+                ViewData["url"] = "Recepcion";
+                return View("ListadoActivoFijo", listaActivosFijosValidacionTecnica);
             }
             catch (Exception ex)
             {
@@ -350,7 +353,10 @@ namespace bd.webapprm.web.Controllers.MVC
                                                                     , "/api/RecepcionActivoFijo/ListarRecepcionActivoFijo");
 
                 var listaActivosFijosRecepcionados = lista.Where(c => c.Estado.Nombre == "Recepcionado").ToList();
-                return View(listaActivosFijosRecepcionados);
+                ViewData["titulo"] = "Activos Fijos Recepcionados";
+                ViewData["textoColumna"] = "Dar Alta";
+                ViewData["url"] = ""; //Url de la ventana para gestionar el Alta
+                return View("ListadoActivoFijo", listaActivosFijosRecepcionados);
             }
             catch (Exception ex)
             {
