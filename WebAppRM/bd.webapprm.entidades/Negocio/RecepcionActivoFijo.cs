@@ -52,7 +52,7 @@ namespace bd.webapprm.entidades
         public int IdSubClaseActivoFijo { get; set; }
         public virtual SubClaseActivoFijo SubClaseActivoFijo { get; set; }
 
-        [Display(Name = "MotivoRecepción:")]
+        [Display(Name = "Motivo de Recepción:")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
         public int? IdMotivoRecepcion { get; set; }
         public virtual MotivoRecepcion MotivoRecepcion { get; set; }
