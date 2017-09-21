@@ -34,6 +34,9 @@
                                         <th>
                                             Proveedor
                                         </th>
+                                        <th>
+                                            Opciones
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -58,6 +61,10 @@
 
                                             <td>
                                                 @{ await ViewContext.Writer.WriteAsync(String.Format("{0} {1}", item.RecepcionActivoFijo.Proveedor.Nombre, item.RecepcionActivoFijo.Proveedor.Apellidos)); }
+                                            </td>
+
+                                            <td>
+
                                             </td>
                                         </tr>
                                     }
