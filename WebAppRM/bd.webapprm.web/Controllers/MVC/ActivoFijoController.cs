@@ -40,8 +40,8 @@ namespace bd.webapprm.web.Controllers.MVC
 
                 var listaActivosFijosValidacionTecnica = lista.Where(c => c.Estado.Nombre == "Validación Técnica").ToList();
                 ViewData["titulo"] = "Activos Fijos que requieren Validación Técnica";
-                ViewData["textoColumna"] = "Aprobar";
-                ViewData["url"] = "Recepcion";
+                ViewData["textoColumna"] = "Revisar";
+                ViewData["url"] = "RevisionActivoFijo";
                 return View("ListadoActivoFijo", listaActivosFijosValidacionTecnica);
             }
             catch (Exception ex)
@@ -340,6 +340,34 @@ namespace bd.webapprm.web.Controllers.MVC
                     UserName = "Usuario APP WebAppTh"
                 });
 
+                return BadRequest();
+            }
+        }
+
+        public async Task<IActionResult> RevisionActivoFijo(string id) => await ObtenerRecepcionActivoFijo(id);
+
+        public async Task<IActionResult> ObtenerRecepcionActivoFijo(string id)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(id))
+                {
+                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddress),
+                                                                  "/api/RecepcionActivoFijo");
+
+
+                    respuesta.Resultado = JsonConvert.DeserializeObject<RecepcionActivoFijoDetalle>(respuesta.Resultado.ToString());
+                    if (respuesta.IsSuccess)
+                    {
+                        return View(respuesta.Resultado);
+                    }
+
+                }
+
+                return BadRequest();
+            }
+            catch (Exception)
+            {
                 return BadRequest();
             }
         }
