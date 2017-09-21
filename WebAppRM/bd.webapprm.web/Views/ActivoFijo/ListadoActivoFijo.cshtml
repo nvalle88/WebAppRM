@@ -1,9 +1,5 @@
 @model List<bd.webapprm.entidades.RecepcionActivoFijoDetalle>
 
-@{
-    ViewData["Title"] = "Detalle de Recepción de Activo Fijo";
-}
-
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
@@ -11,7 +7,7 @@
                 <div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
                     <header>
                         <span class="widget-icon"> <i class="fa fa-table"></i> </span>
-                        <h2>Activos Fijos que requieren Validaci&oacute;n T&eacute;cnica</h2>
+                        <h2>@ViewData["titulo"]</h2>
                     </header>
                     <div>
                         <div class="jarviswidget-editbox"></div>
@@ -64,7 +60,7 @@
                                             </td>
 
                                             <td>
-
+                                                @Html.ActionLink(ViewData["textoColumna"].ToString(), ViewData["url"].ToString(), new { id = item.IdRecepcionActivoFijoDetalle })
                                             </td>
                                         </tr>
                                     }
