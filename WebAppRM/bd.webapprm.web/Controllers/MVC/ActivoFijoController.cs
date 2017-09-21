@@ -83,6 +83,28 @@ namespace bd.webapprm.web.Controllers.MVC
             return View();
         }
 
+        public async Task<Response> InsertarRecepcionActivoFijoDetalle(RecepcionActivoFijoDetalle recepcionActivoFijoDetalle)
+        {
+            Response response = new Response();
+            response = await apiServicio.InsertarAsync(recepcionActivoFijoDetalle,
+                                                             new Uri(WebApp.BaseAddress),
+                                                             "/api/RecepcionActivoFijo/InsertarRecepcionActivoFijo");
+            if (response.IsSuccess)
+            {
+                var responseLog = await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                {
+                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                    ExceptionTrace = null,
+                    Message = "Se ha recepcionado un activo fijo",
+                    UserName = "Usuario 1",
+                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
+                    LogLevelShortName = Convert.ToString(LogLevelParameter.ADV),
+                    EntityID = string.Format("{0} {1}", "Activo Fijo:", recepcionActivoFijoDetalle.ActivoFijo.IdActivoFijo),
+                });
+            }
+            return response;
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Recepcion(RecepcionActivoFijoDetalle recepcionActivoFijoDetalle)
@@ -90,6 +112,7 @@ namespace bd.webapprm.web.Controllers.MVC
             Response response = new Response();
             try
             {
+                int valor_tab = int.Parse(Request.Form["tab"].ToString());
                 var listaTipoActivoFijo = await apiServicio.Listar<TipoActivoFijo>(new Uri(WebApp.BaseAddress), "/api/TipoActivoFijo/ListarTipoActivoFijos");
                 var listaMarca = await apiServicio.Listar<Marca>(new Uri(WebApp.BaseAddress), "/api/Marca/ListarMarca");
 
@@ -212,7 +235,7 @@ namespace bd.webapprm.web.Controllers.MVC
                                                              "/api/Estado/InsertarEstado");
 
                 var listaEstado = await apiServicio.Listar<Estado>(new Uri(WebApp.BaseAddress), "/api/Estado/ListarEstados");
-                var nombreEstado = recepcionActivoFijoDetalle.RecepcionActivoFijo.ValidacionTecnica ? "Recepcionado" : "Validación Técnica";
+                var nombreEstado = !recepcionActivoFijoDetalle.RecepcionActivoFijo.ValidacionTecnica ? "Recepcionado" : "Validación Técnica";
                 var estado = listaEstado.SingleOrDefault(c => c.Nombre == nombreEstado);
                 recepcionActivoFijoDetalle.Estado = estado;
                 recepcionActivoFijoDetalle.IdEstado = estado.IdEstado;
@@ -221,26 +244,6 @@ namespace bd.webapprm.web.Controllers.MVC
                 recepcionActivoFijoDetalle.ActivoFijo.IdSubClaseActivoFijo = recepcionActivoFijoDetalle.RecepcionActivoFijo.IdSubClaseActivoFijo;
 
                 TryValidateModel(recepcionActivoFijoDetalle);
-
-                response = await apiServicio.InsertarAsync(recepcionActivoFijoDetalle,
-                                                             new Uri(WebApp.BaseAddress),
-                                                             "/api/RecepcionActivoFijo/InsertarRecepcionActivoFijo");
-                if (response.IsSuccess)
-                {
-
-                    var responseLog = await GuardarLogService.SaveLogEntry(new LogEntryTranfer
-                    {
-                        ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                        ExceptionTrace = null,
-                        Message = "Se ha recepcionado un activo fijo",
-                        UserName = "Usuario 1",
-                        LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
-                        LogLevelShortName = Convert.ToString(LogLevelParameter.ADV),
-                        EntityID = string.Format("{0} {1}", "Activo Fijo:", recepcionActivoFijoDetalle.ActivoFijo.IdActivoFijo),
-                    });
-
-                    return RedirectToAction("ActivosFijosRecepcionados");
-                }
 
                 ViewData["Error"] = response.Message;
                 ViewData["TipoActivoFijo"] = new SelectList(listaTipoActivoFijo, "IdTipoActivoFijo", "Nombre");
@@ -266,6 +269,54 @@ namespace bd.webapprm.web.Controllers.MVC
                 ViewData["Modelo"] = await ObtenerSelectListModelo(recepcionActivoFijoDetalle?.ActivoFijo?.Modelo?.Marca?.IdMarca ?? -1);
                 ViewData["UnidadMedida"] = new SelectList(await apiServicio.Listar<UnidadMedida>(new Uri(WebApp.BaseAddress), "/api/UnidadMedida/ListarUnidadMedida"), "IdUnidadMedida", "Nombre");
 
+                if (valor_tab == 1) //Datos Generales
+                {
+                    response = await apiServicio.InsertarAsync(recepcionActivoFijoDetalle,
+                                                             new Uri(WebApp.BaseAddress),
+                                                             "/api/RecepcionActivoFijo/ValidarModeloRecepcionActivoFijo");
+
+                    if (response.IsSuccess)
+                    {
+                        if (!recepcionActivoFijoDetalle.RecepcionActivoFijo.ValidacionTecnica)
+                        {
+                            ViewBag.Codificacion = true;
+                            return View(recepcionActivoFijoDetalle);
+                        }
+
+                        response = await InsertarRecepcionActivoFijoDetalle(recepcionActivoFijoDetalle);
+                        if (response.IsSuccess)
+                            return RedirectToAction("ActivoValidacionTecnica");
+                    }
+                }
+                else //Codificación
+                {
+                    try
+                    {
+                        int numeroConsecutivo = int.Parse(Request.Form["numeroConsecutivo"].ToString());
+                        string codigoSecuencial = String.Format("{0}{1}{2}", recepcionActivoFijoDetalle.RecepcionActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.Nombre, recepcionActivoFijoDetalle.RecepcionActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.Nombre, numeroConsecutivo);
+
+                        var listaCodigoActivoFijo = await apiServicio.Listar<CodigoActivoFijo>(new Uri(WebApp.BaseAddress), "/api/CodigoActivoFijo/ListarCodigosActivoFijo");
+                        if (listaCodigoActivoFijo.Count(c => c.Codigosecuencial == codigoSecuencial) == 0)
+                        {
+                            recepcionActivoFijoDetalle.ActivoFijo.CodigoActivoFijo.Codigosecuencial = codigoSecuencial;
+                            //Falta asignar el Código de Barras
+                            response = await InsertarRecepcionActivoFijoDetalle(recepcionActivoFijoDetalle);
+                            if (response.IsSuccess)
+                                return RedirectToAction("ActivosFijosRecepcionados");
+                        }
+                        else
+                        {
+                            ViewBag.Codificacion = true;
+                            ViewBag.Error = "Ya existe un Activo Fijo con el mismo Código Único";
+                        }
+                    }
+                    catch (Exception)
+                    {
+                        ViewBag.Codificacion = true;
+                        ViewBag.Error = "Modelo inválido";
+                        ViewData["errorNumeroConsecutivo"] = "Tiene que escribir un número";
+                    }
+                }
                 return View(recepcionActivoFijoDetalle);
             }
             catch (Exception ex)

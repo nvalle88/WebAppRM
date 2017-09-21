@@ -9,22 +9,9 @@
     eventoCiudad();
     eventoSucursal();
     eventoValidacionTecnicaChange();
+    var wizard = $('.wizard').wizard();
     $('.datepicker').datetimepicker({
         'format': 'D-M-Y hh:mm'
-    });
-
-    var wizard = $('.wizard').wizard();
-    wizard.on('finished', function (e, data) {
-        alert("Finalizar");
-        //$("#fuelux-wizard").submit();
-        //console.log("submitted!");
-        //$.smallBox({
-        //    title: "Congratulations! Your form was submitted",
-        //    content: "<i class='fa fa-clock-o'></i> <i>1 seconds ago...</i>",
-        //    color: "#5F895F",
-        //    iconSmall: "fa fa-check bounce animated",
-        //    timeout: 4000
-        //});
     });
 });
 
@@ -38,15 +25,9 @@ function eventoValidacionTecnicaChange()
 function mostrarOcultarDatosEspecificosCodificacion(mostrarOcultar)
 {
     if (mostrarOcultar)
-    {
-        $("#btn_next").hide();
         $("#li_codificacion").hide();
-    }
     else
-    {
-        $("#btn_next").show();
         $("#li_codificacion").show();
-    }
 }
 
 function eventoTipoActivoFijo() {
