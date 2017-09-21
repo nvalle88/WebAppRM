@@ -1,0 +1,86 @@
+@model List<bd.webapprm.entidades.RecepcionActivoFijoDetalle>
+
+@{
+    ViewData["Title"] = "RecepcionadosSinPoliza";
+}
+
+<div id="content">
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                        <h2>Activos Fijos Recepcionados sin Póliza de Seguro</h2>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox"></div>
+                        <div class="widget-body no-padding">
+                            <table id="dt_basic" class="table table-striped table-bordered table-hover" style="width:100%;">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            Tipo
+                                        </th>
+                                        <th>
+                                            Clase
+                                        </th>
+                                        <th>
+                                            Sub Clase
+                                        </th>
+                                        <th>
+                                            Fecha de Registro
+                                        </th>
+                                        @*<th>
+                                                Proveedor
+                                            </th>*@
+                                        <th>
+
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.RecepcionActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.Nombre)
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.RecepcionActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.Nombre)
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.RecepcionActivoFijo.SubClaseActivoFijo.Nombre)
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.RecepcionActivoFijo.FechaRecepcion)
+                                            </td>
+
+                                            @*<td>
+                                                    @Html.DisplayFor(modelItem => String.Format("{0} {1}", item.RecepcionActivoFijo.Proveedor.Nombre, item.RecepcionActivoFijo.Proveedor.Apellidos))
+                                                </td>*@
+
+                                            <td>
+                                                @Html.ActionLink("Asignar Poliza", "AsignarPoliza", new { id = item.IdRecepcionActivoFijoDetalle })
+                                            </td>
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+@section Scripts {
+    <script src='~/js/datatables/init.js'></script>
+}
+
+
+
