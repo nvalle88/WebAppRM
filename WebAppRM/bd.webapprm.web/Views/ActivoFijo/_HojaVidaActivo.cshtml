@@ -1,1 +1,36 @@
 @model bd.webapprm.entidades.RecepcionActivoFijoDetalle
+<style>
+    .fc-border-separate thead tr, .table thead tr{font-size:14px !important;}
+</style>
+<fieldset>
+    <legend>Detalles de Activo Fijo</legend>
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Propiedad</th>
+                <th>Descripci&oacute;n</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><a href="javascript:void(0);">Tipo de Activo Fijo</a></td>
+                <td>@Html.DisplayFor(m => m.RecepcionActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.Nombre)</td>
+            </tr>
+
+            <tr>
+                <td><b>Clase de Activo Fijo</b></td>
+                <td>@Html.DisplayFor(m => m.RecepcionActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.Nombre)</td>
+            </tr>
+
+            <tr>
+                <td><b>Sub Clase de Activo Fijo</b></td>
+                <td>@Html.DisplayFor(m => m.RecepcionActivoFijo.SubClaseActivoFijo.Nombre)</td>
+            </tr>
+
+            <tr>
+                <td><b>Motivo de Recepci&oacute;n</b></td>
+                <td>@Html.DisplayFor(m => m.RecepcionActivoFijo.SubClaseActivoFijo.Nombre)</td>
+            </tr>
+        </tbody>
+    </table>
+</fieldset>
