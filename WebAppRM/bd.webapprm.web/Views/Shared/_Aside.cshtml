@@ -79,7 +79,12 @@
                         </ul>
                     </li>
                     <li class="@Html.RouteIf("PolizaSeguro", "active")">
-                        <a href="@Url.Action("PolizaSeguro", "ActivoFijo")">P&oacute;liza de Seguro</a>
+                        <a href="#"><span class="menu-item-parent">P&oacute;liza de Seguro</span></a>
+                        <ul>
+                            <li class="@Html.RouteIf("PolizaSeguro", "active")">
+                                <a href="@Url.Action("RecepcionadosSinPoliza", "ActivoFijo")">Asignar P&oacute;liza</a>
+                            </li>
+                        </ul>
                     </li>
                     <li class="@Html.RouteIf("ActivosFijosRecepcionados", "active")">
                         <a href="@Url.Action("ActivosFijosRecepcionados", "ActivoFijo")">Alta</a>
