@@ -33,6 +33,12 @@
                                         <th>
                                             Activo Fijo
                                         </th>
+                                        @if (ViewData["poliza"] != null)
+                                        {
+                                            <th>
+                                                N&uacute;mero de P&oacute;liza
+                                            </th>
+                                        }
                                         <th>
                                             Opciones
                                         </th>
@@ -65,6 +71,13 @@
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.ActivoFijo.Nombre)
                                             </td>
+
+                                            @if (ViewData["poliza"] != null)
+                                            {
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.RecepcionActivoFijo.RecepcionActivoFijoDetalle.FirstOrDefault().NumeroPoliza)
+                                                </td>
+                                            }
 
                                             <td>
                                                 @Html.ActionLink(ViewData["textoColumna"].ToString(), ViewData["url"].ToString(), new { id = item.IdRecepcionActivoFijoDetalle })

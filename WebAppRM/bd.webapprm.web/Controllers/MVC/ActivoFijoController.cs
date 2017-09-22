@@ -462,8 +462,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 return BadRequest();
             }
         }
-
-        public async Task<IActionResult> AsignarPoliza(string id) => await ObtenerRecepcionActivoFijo(id);
+                
         public async Task<IActionResult> ActivosFijosRecepcionadosSinPoliza()
         {
             var lista = new List<RecepcionActivoFijoDetalle>();
@@ -491,7 +490,83 @@ namespace bd.webapprm.web.Controllers.MVC
                 });
                 return BadRequest();
             }
-        }        
+        }
+
+        public async Task<IActionResult> ActivosFijosRecepcionadosConPoliza()
+        {
+            var lista = new List<RecepcionActivoFijoDetalle>();
+            try
+            {
+                lista = await apiServicio.Listar<RecepcionActivoFijoDetalle>(new Uri(WebApp.BaseAddress)
+                                                                    , "/api/RecepcionActivoFijo/ListarRecepcionActivoFijo");
+
+                var listaActivosFijosRecepcionados = lista.Where(c => c.Estado.Nombre == "Recepcionado" && c.NumeroPoliza != "N/A").ToList();
+                ViewData["titulo"] = "Activos Fijos con Póliza de Seguro";
+                ViewData["textoColumna"] = "Editar";
+                ViewData["url"] = "AsignarPoliza";
+                ViewData["poliza"] = 1;
+                return View("ListadoActivoFijo", listaActivosFijosRecepcionados);
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                {
+                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                    Message = "Listando activos fijos con estado Recepcionado con número de póliza asignado",
+                    ExceptionTrace = ex,
+                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
+                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                    UserName = "Usuario APP webappth"
+                });
+                return BadRequest();
+            }
+        }
+
+        public async Task<IActionResult> AsignarPoliza(string id) => await ObtenerRecepcionActivoFijo(id);
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AsignarPoliza(RecepcionActivoFijoDetalle recepcionActivoFijoDetalle)
+        {
+            Response response = new entidades.Utils.Response();
+            try
+            {
+                response = await apiServicio.InsertarAsync(recepcionActivoFijoDetalle,
+                                                             new Uri(WebApp.BaseAddress),
+                                                             "/api/RecepcionActivoFijo/AsignarPoliza");
+
+                if (response.IsSuccess)
+                {
+                    var responseLog = await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                    {
+                        ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                        ExceptionTrace = null,
+                        Message = "Se ha asignado el número de póliza",
+                        UserName = "Usuario 1",
+                        LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
+                        LogLevelShortName = Convert.ToString(LogLevelParameter.ADV),
+                        EntityID = string.Format("{0} {1}", "Recepción Activo Fijo Detalle:", recepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle),
+                    });
+                    ViewData["mensaje"] = "Póliza de seguro asignada correctamente";
+                    return View(recepcionActivoFijoDetalle);
+                }
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                {
+                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                    Message = "Asignando Póliza",
+                    ExceptionTrace = ex,
+                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
+                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                    UserName = "Usuario APP WebAppTh"
+                });
+
+                return BadRequest();
+            }
+            return View();
+        }
 
         #region AJAX_ClaseActivoFijo
         public async Task<SelectList> ObtenerSelectListClaseActivoFijo(int idTipoActivoFijo)
