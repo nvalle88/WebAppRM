@@ -7,6 +7,7 @@ namespace bd.webapprm.entidades
     {
         [Key]
         public int IdActivoFijo { get; set; }
+        public virtual ActivosFijosAlta ActivosFijosAlta { get; set; }
 
         [Required(ErrorMessage = "Debe introducir {0}")]
         [Display(Name = "Activo fijo:")]
