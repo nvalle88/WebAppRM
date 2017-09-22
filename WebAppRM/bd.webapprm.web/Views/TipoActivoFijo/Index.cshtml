@@ -39,7 +39,7 @@
 
                                             <td>
                                                 @Html.ActionLink("Editar", "Edit", new { id = item.IdTipoActivoFijo }) |
-                                                @Html.ActionLink("Eliminar", "Delete", new { id = item.IdTipoActivoFijo }, new { onclick = "return confirm('Desea eliminar el Tipo Activo Fijo... ?');" })
+                                                <a href="javascript:void(0);" id="@item.IdTipoActivoFijo" onclick="abrirVentanaConfirmacion('@item.IdTipoActivoFijo')" data-url="@Url.Action("Delete", values: new { id = item.IdTipoActivoFijo })" data-descripcion="&#191;Desea eliminar el Tipo Activo Fijo... ?">Eliminar</a>
                                             </td>
                                         </tr>
                                     }

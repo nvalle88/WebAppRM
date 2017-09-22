@@ -16,11 +16,12 @@
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                @{ await Html.RenderPartialAsync("_HojaVidaActivo", Model); }
 
-                                @*<footer>
+                                <footer>
                                     <span class="text-danger">@ViewData["Error"]</span>
-                                    <input type="submit" value="Guardar" class="btn btn-primary" />
-                                    <a asp-action="Index" class="btn btn-default">Cancelar</a>
-                                </footer>*@
+                                    <input type="submit" value="Aprobar" class="btn btn-primary" />
+                                    <a href="#" id="smart-mod-eg1" class="btn btn-danger">Desaprobar</a>
+                                    <a asp-action="ActivoValidacionTecnica" class="btn btn-default">Cancelar</a>
+                                </footer>
                             </form>
                         </div>
                     </div>
@@ -29,3 +30,29 @@
         </div>
     </section>
 </div>
+
+@section Scripts{
+    <script>
+        jQuery(document).ready(function () {
+            $("#smart-mod-eg1").click(function (e) {
+                $.SmartMessageBox({
+                    title: "Emitir desaprobaci&oacute;n",
+                    content: "&#191;Desea desaprobar la recepci&oacute;n de este Activo Fijo?",
+                    buttons: '[No][Si]'
+                }, function (ButtonPressed) {
+                    if (ButtonPressed === "Si")
+                    {
+                        $.smallBox({
+                            title: "Callback function",
+                            content: "<i class='fa fa-clock-o'></i> <i>You pressed Yes...</i>",
+                            color: "#659265",
+                            iconSmall: "fa fa-check fa-2x fadeInRight animated",
+                            timeout: 4000
+                        });
+                    }
+                });
+                e.preventDefault();
+            })
+        });
+    </script>
+}
