@@ -401,6 +401,68 @@ namespace bd.webapprm.web.Controllers.MVC
             }
         }
 
+        public async Task<IActionResult> ActivoFijoBaja(string id) => await ObtenerRecepcionActivoFijo(id);
+
+        public async Task<IActionResult> ActivosFijosRecepcionadosBaja()
+        {
+            var lista = new List<RecepcionActivoFijoDetalle>();
+            try
+            {
+                lista = await apiServicio.Listar<RecepcionActivoFijoDetalle>(new Uri(WebApp.BaseAddress)
+                                                                    , "/api/RecepcionActivoFijo/ListarRecepcionActivoFijo");
+
+                var listaActivosFijosRecepcionados = lista.Where(c => c.Estado.Nombre == "Alta").ToList();
+                ViewData["titulo"] = "Activos Fijos de Alta";
+                ViewData["textoColumna"] = "Dar Baja";
+                ViewData["url"] = "ActivoFijoBaja"; //Url de la ventana para gestionar el Alta
+                return View("ListadoActivoFijo", listaActivosFijosRecepcionados);
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                {
+                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                    Message = "Listando activos fijos con estado Recepcionado",
+                    ExceptionTrace = ex,
+                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
+                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                    UserName = "Usuario APP webappth"
+                });
+                return BadRequest();
+            }
+        }
+
+        public async Task<IActionResult> HojaVidaActivoFijo(string id) => await ObtenerRecepcionActivoFijo(id);
+
+        public async Task<IActionResult> HojaVidaReporte()
+        {
+            var lista = new List<RecepcionActivoFijoDetalle>();
+            try
+            {
+                lista = await apiServicio.Listar<RecepcionActivoFijoDetalle>(new Uri(WebApp.BaseAddress)
+                                                                    , "/api/RecepcionActivoFijo/ListarRecepcionActivoFijo");
+
+                var listaActivosFijosRecepcionados = lista.Where(c => c.Estado.Nombre == "Alta").ToList();//LIstar por algun argumento por definir??
+                ViewData["titulo"] = "Activos Fijos";
+                ViewData["textoColumna"] = "Ver Hoja de Vida";
+                ViewData["url"] = "HojaVidaActivoFijo"; //Url de la ventana para gestionar el Alta
+                return View("ListadoActivoFijo", listaActivosFijosRecepcionados);
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                {
+                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                    Message = "Listando activos fijos con estado Recepcionado",
+                    ExceptionTrace = ex,
+                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
+                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                    UserName = "Usuario APP webappth"
+                });
+                return BadRequest();
+            }
+        }
+
         public async Task<IActionResult> RecepcionadosSinPoliza()
         {
             var lista = new List<RecepcionActivoFijoDetalle>();
