@@ -1,11 +1,6 @@
-@model bd.webapprm.entidades.CodigoActivoFijo
-@{ 
-    var tipoActivoFijo = ViewData["TipoAF"] ?? "";
-    var claseActivoFijo = ViewData["ClaseAF"] ?? "";
-}
+@model bd.webapprm.entidades.RecepcionActivoFijoDetalle
 <fieldset>
     <legend>Generaci&oacute;n y asignaci&oacute;n del C&oacute;digo &Uacute;nico</legend>
-    <input type="hidden" asp-for="IdCodigoActivoFijo" />
     <div class="row">
         <div class="alert alert-info alert-block" style="border-left-width:5px !important;">
             <h4 class="alert-heading">Informaci&oacute;n</h4>
@@ -20,7 +15,7 @@
 
         <section class="col col-8">
             <label class="input">
-                <input class="form-control" disabled="disabled" value="@tipoActivoFijo" style="background:#ededed !important;" />
+                <input class="form-control" asp-for="RecepcionActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.Nombre" disabled="disabled" style="background:#ededed !important;" />
             </label>
         </section>
     </div>
@@ -32,7 +27,7 @@
 
         <section class="col col-8">
             <label class="input">
-                <input class="form-control" disabled="disabled" value="@claseActivoFijo" style="background:#ededed !important;" />
+                <input class="form-control" asp-for="RecepcionActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.Nombre" disabled="disabled" style="background:#ededed !important;" />
             </label>
         </section>
     </div>

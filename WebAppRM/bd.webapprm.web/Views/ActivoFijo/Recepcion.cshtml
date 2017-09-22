@@ -330,7 +330,7 @@
                                                 </fieldset>
                                             </div>
                                             <div class="step-pane @claseActive("Codificación")" id="step2">
-                                                @{ await Html.RenderPartialAsync("_Codificacion", Model?.ActivoFijo?.CodigoActivoFijo, new ViewDataDictionary(ViewData) { { "TipoAF", Model?.RecepcionActivoFijo?.SubClaseActivoFijo?.ClaseActivoFijo?.TipoActivoFijo?.Nombre }, { "ClaseAF", Model?.RecepcionActivoFijo?.SubClaseActivoFijo?.ClaseActivoFijo?.Nombre } }); }
+                                                @{ await Html.RenderPartialAsync("_Codificacion", Model); }
                                             </div>
                                         </div>
                                     </div>

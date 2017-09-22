@@ -111,7 +111,7 @@ function abrirVentanaConfirmacion(id)
 {
     var btn_eliminar = $("#" + id);
     $.SmartMessageBox({
-        title: "Eliminar",
+        title: btn_eliminar.data("titulo"),
         content: btn_eliminar.data("descripcion"),
         buttons: '[No][Si]'
     }, function (ButtonPressed) {
