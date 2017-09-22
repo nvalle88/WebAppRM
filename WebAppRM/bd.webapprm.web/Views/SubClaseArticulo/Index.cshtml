@@ -47,7 +47,7 @@
                                             
                                             <td>
                                                 @Html.ActionLink("Editar", "Edit", new { id = item.IdSubClaseArticulo }) |
-                                                <a href="javascript:void(0);" id="@item.IdSubClaseArticulo" onclick="abrirVentanaConfirmacion('@item.IdSubClaseArticulo')" data-url="@Url.Action("Delete", values: new { id = item.IdSubClaseArticulo })" data-descripcion="&#191;Desea eliminar la Sub Clase Art&iacute;culo... ?">Eliminar</a>
+                                                <a href="javascript:void(0);" id="@item.IdSubClaseArticulo" onclick="abrirVentanaConfirmacion('@item.IdSubClaseArticulo')" data-url="@Url.Action("Delete", values: new { id = item.IdSubClaseArticulo })" data-titulo="Eliminar" data-descripcion="&#191;Desea eliminar la Sub Clase Art&iacute;culo... ?">Eliminar</a>
                                             </td>
                                         </tr>
                                     }

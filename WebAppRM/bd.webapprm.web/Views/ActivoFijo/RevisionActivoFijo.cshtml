@@ -12,17 +12,15 @@
                     <div>
                         <div class="jarviswidget-editbox"></div>
                         <div class="widget-body no-padding">
-                            <form asp-action="Create" id="checkout-form" class="smart-form" novalidate="novalidate">
-                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                               @{ await Html.RenderPartialAsync("_HojaVidaActivo", Model); }
+                            <div class="smart-form">
+                                @{ await Html.RenderPartialAsync("_HojaVidaActivo", Model); }
 
                                 <footer>
-                                    <span class="text-danger">@ViewData["Error"]</span>
-                                    <input type="submit" value="Aprobar" class="btn btn-primary" />
-                                    <a href="#" id="smart-mod-eg1" class="btn btn-danger">Desaprobar</a>
+                                    @Html.ActionLink("Aprobar", "CodificacionActivoFijo", new { id = Model.IdRecepcionActivoFijoDetalle }, new { @class = "btn btn-primary" })
+                                    <a href="javascript:void(0);" id="btn_desaprobar" class="btn btn-danger" onclick="abrirVentanaConfirmacion('btn_desaprobar')" data-url="@Url.Action("DesaprobarActivoFijo", values: new { id = Model.IdRecepcionActivoFijoDetalle })" data-titulo="Emitir desaprobaci&oacute;n" data-descripcion="&#191;Desea desaprobar la recepci&oacute;n de este Activo Fijo?">Desaprobar</a>
                                     <a asp-action="ActivoValidacionTecnica" class="btn btn-default">Cancelar</a>
                                 </footer>
-                            </form>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -31,28 +29,6 @@
     </section>
 </div>
 
-@section Scripts{
-    <script>
-        jQuery(document).ready(function () {
-            $("#smart-mod-eg1").click(function (e) {
-                $.SmartMessageBox({
-                    title: "Emitir desaprobaci&oacute;n",
-                    content: "&#191;Desea desaprobar la recepci&oacute;n de este Activo Fijo?",
-                    buttons: '[No][Si]'
-                }, function (ButtonPressed) {
-                    if (ButtonPressed === "Si")
-                    {
-                        $.smallBox({
-                            title: "Callback function",
-                            content: "<i class='fa fa-clock-o'></i> <i>You pressed Yes...</i>",
-                            color: "#659265",
-                            iconSmall: "fa fa-check fa-2x fadeInRight animated",
-                            timeout: 4000
-                        });
-                    }
-                });
-                e.preventDefault();
-            })
-        });
-    </script>
+@section Scripts {
+    <script src='~/js/datatables/init.js'></script>
 }

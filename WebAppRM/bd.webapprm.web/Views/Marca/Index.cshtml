@@ -67,7 +67,7 @@
                                                 </td>
                                                 <td>
                                                     @Html.ActionLink("Editar", "Edit", new { id = item.IdMarca }) |
-                                                    <a href="javascript:void(0);" id="@item.IdMarca" onclick="abrirVentanaConfirmacion('@item.IdMarca')" data-url="@Url.Action("Delete", values: new { id = item.IdMarca })" data-descripcion="&#191;Desea eliminar la Marca... ?">Eliminar</a>
+                                                    <a href="javascript:void(0);" id="@item.IdMarca" onclick="abrirVentanaConfirmacion('@item.IdMarca')" data-url="@Url.Action("Delete", values: new { id = item.IdMarca })" data-titulo="Eliminar" data-descripcion="&#191;Desea eliminar la Marca... ?">Eliminar</a>
                                                 </td>
                                             </tr>
                                         }
