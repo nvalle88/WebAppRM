@@ -1,4 +1,16 @@
 @model bd.webapprm.entidades.RecepcionActivoFijoDetalle
+@{ 
+    var codigoActivoFijo = Model?.ActivoFijo?.CodigoActivoFijo;
+    if (codigoActivoFijo != null)
+    {
+        if (codigoActivoFijo.CodigoBarras == "N/A")
+        {
+            codigoActivoFijo.CodigoBarras = "";
+        }
+    }
+
+    var numeroConsecutivo = ViewBag.numeroConsecutivo ?? 1;
+}
 <fieldset>
     <legend>Generaci&oacute;n y asignaci&oacute;n del C&oacute;digo &Uacute;nico</legend>
     <div class="row">
@@ -10,7 +22,7 @@
 
     <div class="row" style="margin-top:10px;">
         <section class="col col-4">
-            <label>Tipo de Activo Fijo</label>
+            <label asp-for="RecepcionActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.Nombre"></label>
         </section>
 
         <section class="col col-8">
@@ -22,7 +34,7 @@
 
     <div class="row">
         <section class="col col-4">
-            <label>Clase de Activo Fijo</label>
+            <label asp-for="RecepcionActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.Nombre"></label>
         </section>
 
         <section class="col col-8">
@@ -39,11 +51,33 @@
 
         <section class="col col-8">
             <label class="input">
-                <input type="number" id="numeroConsecutivo" name="numeroConsecutivo" min="1" value="1" class="form-control" />
+                <input type="number" id="numeroConsecutivo" name="numeroConsecutivo" min="1" value="@numeroConsecutivo" class="form-control" />
                 <span class="text-danger">@ViewData["errorNumeroConsecutivo"]</span>
             </label>
         </section>
     </div>
 
     <legend>Generaci&oacute;n del C&oacute;digo de Barras</legend>
+
+    <div class="row" style="margin-top:20px;">
+        <section class="col col-4">
+            <label asp-for="ActivoFijo.CodigoActivoFijo.CodigoBarras"></label>
+        </section>
+
+        <section class="col col-8">
+            <label class="input">
+                <input class="form-control" asp-for="ActivoFijo.CodigoActivoFijo.CodigoBarras" maxlength="20" />
+            </label>
+        </section>
+    </div>
+
+    <div class="row">
+        <section class="col col-4"></section>
+
+        <section class="col col-8">
+            <label class="input">
+                <canvas id="barcode"></canvas>
+            </label>
+        </section>
+    </div>
 </fieldset>
