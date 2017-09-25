@@ -38,3 +38,12 @@
         </div>
     </section>
 </div>
+<script src="~/lib/JsBarcode-master/dist/JsBarcode.all.min.js"></script>
+@section Scripts{
+    <script>
+        jQuery(document).ready(function () {
+            alert('Si');
+            $("#barcode").JsBarcode("Hi!");
+        });
+    </script>
+}
