@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="wwwroot\js\activoFijo\codificacion.js" />
     <Content Include="wwwroot\js\activoFijo\recepcion.js" />
     <Content Include="wwwroot\js\datatables\init.js" />
     <Content Include="wwwroot\js\subClaseActivoFijo\subClaseActivoFijo.js" />
