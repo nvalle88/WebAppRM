@@ -24,7 +24,7 @@
                                 <input type="hidden" asp-for="ActivoFijo.CodigoActivoFijo.IdCodigoActivoFijo" />
                                 <input type="hidden" asp-for="IdRecepcionActivoFijoDetalle" />
                                 @{ await Html.RenderPartialAsync("_Codificacion", Model); }
-
+                                
                                 <footer>
                                     <span class="text-danger">@ViewData["Error"]</span>
                                     <input type="submit" value="Guardar" class="btn btn-primary" />
@@ -38,12 +38,6 @@
         </div>
     </section>
 </div>
-<script src="~/lib/JsBarcode-master/dist/JsBarcode.all.min.js"></script>
 @section Scripts{
-    <script>
-        jQuery(document).ready(function () {
-            alert('Si');
-            $("#barcode").JsBarcode("Hi!");
-        });
-    </script>
+    <script src='~/js/activoFijo/codificacion.js'></script>
 }
