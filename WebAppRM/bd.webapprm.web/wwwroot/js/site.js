@@ -30,3 +30,11 @@ function mostrarLoadingPanel(idElemento, texto)
         color: '#ef4c0c'
     });
 }
+
+function Asignar_Codigo_Barras(idElemento, valor) {
+    JsBarcode("#" + idElemento, valor, {
+        format: "CODE128",
+        displayValue: true,
+        fontSize: 20
+    });
+}

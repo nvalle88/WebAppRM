@@ -2,6 +2,8 @@
 <style>
     .div_mostrarOcultar:hover{cursor:pointer;}
 </style>
+<script src="~/lib/JsBarcode-master/dist/JsBarcode.all.min.js"></script>
+<script src='~/js/site.js'></script>
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
@@ -71,8 +73,8 @@
                                         {
                                             <tr>
                                                 <td>
-                                                    <div class="div_mostrarOcultar" style="width:20px;height:20px;border:1px solid black;" onclick="mostrarOcultar(@item.IdRecepcionActivoFijoDetalle)">
-                                                        <i class="fa fa-plus" style="position:relative;left:4px;top:-1px;"></i>
+                                                    <div class="div_mostrarOcultar" style="width:20px;height:20px;border:1px solid #686262;border-radius:50%;" onclick="mostrarOcultar(@item.IdRecepcionActivoFijoDetalle)">
+                                                        <i class="fa fa-plus" style="position:relative;left:4px;top:-1px;color:#686262;" id="i_@item.IdRecepcionActivoFijoDetalle" title="Mostrar Hoja de Vida"></i>
                                                     </div>
                                                 </td>
 
