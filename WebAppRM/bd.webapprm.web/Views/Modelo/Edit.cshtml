@@ -39,16 +39,23 @@
                                 <input type="hidden" asp-for="IdModelo" />
                                 <fieldset>
                                     <div class="row">
-                                        <section class="col col-10">
+                                        <section class="col col-4">
+                                            <label asp-for="Nombre"></label>
+                                        </section>
+
+                                        <section class="col col-8">
                                             <label class="input">
-                                                <i class="icon-append fa fa-check"></i>
-                                                <input maxlength="32" asp-for="Nombre" class="form-control" placeholder="@Html.DisplayNameFor(model=>model.Nombre)" />
+                                                <input maxlength="32" asp-for="Nombre" class="form-control" />
                                                 <span asp-validation-for="Nombre" class="text-danger"></span>
                                             </label>
                                         </section>
                                     </div>
                                     <div class="row">
-                                        <section class="col col-5">
+                                        <section class="col col-4">
+                                            <label asp-for="IdMarca"></label>
+                                        </section>
+
+                                        <section class="col col-8">
                                             <label class="input">
                                                 <select asp-for="IdMarca" class="form-control" asp-items="ViewBag.IdMarca"></select>
                                                 <span asp-validation-for="IdMarca" class="text-danger"></span>
