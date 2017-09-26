@@ -735,10 +735,6 @@ namespace bd.webapprm.web.Controllers.MVC
                                                                     , "/api/RecepcionActivoFijo/ListarRecepcionActivoFijo");
 
                 var listaActivosFijos = lista.Where(c => c.Estado.Nombre != "Validación Técnica" && c.Estado.Nombre != "Desaprobado").ToList();
-
-                //var listaAux = listaActivosFijos.GroupBy(c => c.ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.Pais.IdPais);
-
-
                 return View(listaActivosFijos);
             }
             catch (Exception ex)
