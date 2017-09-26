@@ -690,6 +690,10 @@ namespace bd.webapprm.web.Controllers.MVC
         }
         #endregion
 
+        #region Mantenimiento de Activos
+        //Implementar aquí
+        #endregion
+
         #region Reportes
         public async Task<IActionResult> HojaVidaActivoFijo(string id) => await ObtenerRecepcionActivoFijo(id, null);
 
@@ -722,8 +726,6 @@ namespace bd.webapprm.web.Controllers.MVC
             }
         }
         #endregion
-
-
 
         #region AJAX_ClaseActivoFijo
         public async Task<SelectList> ObtenerSelectListClaseActivoFijo(int idTipoActivoFijo)
