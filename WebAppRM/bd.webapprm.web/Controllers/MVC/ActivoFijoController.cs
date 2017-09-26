@@ -725,6 +725,36 @@ namespace bd.webapprm.web.Controllers.MVC
                 return BadRequest();
             }
         }
+
+        public async Task<IActionResult> BienesReporte()
+        {
+            var lista = new List<RecepcionActivoFijoDetalle>();
+            try
+            {
+                lista = await apiServicio.Listar<RecepcionActivoFijoDetalle>(new Uri(WebApp.BaseAddress)
+                                                                    , "/api/RecepcionActivoFijo/ListarRecepcionActivoFijo");
+
+                var listaActivosFijos = lista.Where(c => c.Estado.Nombre != "Validación Técnica" && c.Estado.Nombre != "Desaprobado").ToList();
+
+                //var listaAux = listaActivosFijos.GroupBy(c => c.ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.Pais.IdPais);
+
+
+                return View(listaActivosFijos);
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                {
+                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                    Message = "Listando activos fijos por área usuaria y clasificado por funcionario",
+                    ExceptionTrace = ex,
+                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
+                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                    UserName = "Usuario APP webappth"
+                });
+                return BadRequest();
+            }
+        }
         #endregion
 
         #region AJAX_ClaseActivoFijo
