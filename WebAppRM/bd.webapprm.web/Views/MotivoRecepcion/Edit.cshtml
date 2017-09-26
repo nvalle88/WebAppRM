@@ -37,10 +37,13 @@
                                 <input type="hidden" asp-for="IdMotivoRecepcion" />
                                 <fieldset>
                                     <div class="row">
-                                        <section class="col col-10">
+                                        <section class="col col-4">
+                                            <label asp-for="Descripcion"></label>
+                                        </section>
+
+                                        <section class="col col-8">
                                             <label class="input">
-                                                <i class="icon-append fa fa-check"></i>
-                                                <input maxlength="32" asp-for="Descripcion" class="form-control" placeholder="@Html.DisplayNameFor(model=>model.Descripcion)" />
+                                                <input maxlength="32" asp-for="Descripcion" class="form-control" />
                                                 <span asp-validation-for="Descripcion" class="text-danger"></span>
                                             </label>
                                         </section>
