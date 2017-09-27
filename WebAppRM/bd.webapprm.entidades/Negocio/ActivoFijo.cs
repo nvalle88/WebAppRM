@@ -63,17 +63,6 @@ namespace bd.webapprm.entidades
         public virtual Modelo Modelo { get; set; }
 
 
-
-
-
-
-
-
-
-        
-
-
-
         public virtual ICollection<EmpleadoActivoFijo> EmpleadoActivoFijo { get; set; }
 
         public virtual ICollection<DepreciacionActivoFijo> DepreciacionActivoFijo { get; set; }
