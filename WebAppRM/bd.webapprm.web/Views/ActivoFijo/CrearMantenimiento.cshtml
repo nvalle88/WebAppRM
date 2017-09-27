@@ -1,0 +1,134 @@
+@model bd.webapprm.entidades.MantenimientoActivoFijo
+<link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
+<div id="content">
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-sm-12 col-md-12 col-lg-8">
+                <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+                        <h2>Registrar Mantenimiento</h2>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox"></div>
+                        <div class="widget-body no-padding">
+                            <span class="text-success">@ViewData["mensaje"]</span>
+                            <form asp-action="AsignarPoliza" id="checkout-form" class="smart-form" novalidate="novalidate">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>                                
+                                <fieldset>
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="IdMantenimientoActivoFijo" class="col-md-2 control-label"></label>
+                                        </section>
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <input asp-for="IdMantenimientoActivoFijo" class="form-control" />
+                                                <span asp-validation-for="IdMantenimientoActivoFijo" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+                                </fieldset>
+                                <fieldset>
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="FechaMantenimiento" class="col-md-2 control-label"></label>
+                                        </section>
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <input asp-for="FechaMantenimiento" class="form-control" />
+                                                <span asp-validation-for="FechaMantenimiento" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+                                </fieldset>
+                                <fieldset>
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="FechaDesde" class="col-md-2 control-label"></label>
+                                        </section>
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <input asp-for="FechaDesde" class="form-control" />
+                                                <span asp-validation-for="FechaDesde" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+                                </fieldset>
+                                <fieldset>
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="FechaHasta" class="col-md-2 control-label"></label>
+                                        </section>
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <input asp-for="FechaHasta" class="form-control" />
+                                                <span asp-validation-for="FechaHasta" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+                                </fieldset>
+                                <fieldset>
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="Valor" class="col-md-2 control-label"></label>
+                                        </section>
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <input asp-for="Valor" class="form-control" />
+                                                <span asp-validation-for="Valor" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+                                </fieldset>
+                                <fieldset>
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="Observaciones" class="col-md-2 control-label"></label>
+                                        </section>
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <input asp-for="Observaciones" class="form-control" />
+                                                <span asp-validation-for="Observaciones" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+                                </fieldset>
+                                <fieldset>
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="IdEmpleado" class="col-md-2 control-label"></label>
+                                        </section>
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <select asp-for="IdEmpleado" class="form-control" asp-items="ViewBag.IdEmpleado"></select>
+                                                <span asp-validation-for="IdEmpleado" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+                                </fieldset>
+                                <fieldset>
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="IdActivoFijo" class="col-md-2 control-label"></label>
+                                        </section>
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <select asp-for="IdActivoFijo" class="form-control" asp-items="ViewBag.IdActivoFijo"></select>
+                                                <span asp-validation-for="IdActivoFijo" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+                                </fieldset>                                
+                                <footer>
+                                    <span class="text-danger">@ViewData["Error"]</span>
+                                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                                    <a asp-action="ActivosFijosRecepcionadosSinPoliza" class="btn btn-default">Cancelar</a>
+                                </footer>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
