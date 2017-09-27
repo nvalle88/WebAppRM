@@ -1,7 +1,5 @@
 @model List<bd.webapprm.entidades.RecepcionActivoFijoDetalle>
-<style>
-    .div_mostrarOcultar:hover{cursor:pointer;}
-</style>
+<link rel="stylesheet" href="~/css/site.css" />
 <script src="~/lib/JsBarcode-master/dist/JsBarcode.all.min.js"></script>
 <script src='~/js/site.js'></script>
 <div id="content">
@@ -44,10 +42,24 @@
                                 </div>
                                 <div class="clearfix"></div>
 
-                                <table class="table table-hover" style="width:100%;">
+                                <table id="tbReporte" class="table table-striped table-bordered table-hover" style="width:100%;">
                                     <thead>
                                         <tr>
-                                            <th></th>
+                                            <th>
+                                                Pa&iacute;s
+                                            </th>
+                                            <th>
+                                                Provincia
+                                            </th>
+                                            <th>
+                                                Ciudad
+                                            </th>
+                                            <th>
+                                                Sucursal
+                                            </th>
+                                            <th>
+                                                Funcionario
+                                            </th>
                                             <th>
                                                 Tipo
                                             </th>
@@ -58,14 +70,50 @@
                                                 Sub Clase
                                             </th>
                                             <th>
+                                                Motivo de Recepci&oacute;n
+                                            </th>
+                                            <th>
                                                 Fecha de Registro
                                             </th>
                                             <th>
                                                 Proveedor
                                             </th>
                                             <th>
+                                                Fondo
+                                            </th>
+                                            <th>
+                                                Orden de compra
+                                            </th>
+                                            <th>
+                                                Cantidad
+                                            </th>
+                                            <th>
+                                                Marca
+                                            </th>
+                                            <th>
+                                                Modelo
+                                            </th>
+                                            <th>
+                                                Unidad de medida
+                                            </th>
+                                            <th>
                                                 Activo Fijo
                                             </th>
+                                            <th>
+                                                Serie
+                                            </th>
+                                            <th>
+                                                Ubicaci&oacute;n
+                                            </th>
+                                            <th>
+                                                Valor de compra
+                                            </th>
+                                            @*<th>
+                                                C&oacute;digo &Uacute;nico
+                                            </th>
+                                            <th>
+                                                C&oacute;digo de barras
+                                            </th>*@
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -73,9 +121,23 @@
                                         {
                                             <tr>
                                                 <td>
-                                                    <div class="div_mostrarOcultar" style="width:20px;height:20px;border:1px solid #686262;border-radius:50%;" onclick="mostrarOcultar(@item.IdRecepcionActivoFijoDetalle)">
-                                                        <i class="fa fa-plus" style="position:relative;left:4px;top:-1px;color:#686262;" id="i_@item.IdRecepcionActivoFijoDetalle" title="Mostrar Hoja de Vida"></i>
-                                                    </div>
+                                                    @Html.DisplayFor(modelItem => item.ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.Pais.Nombre)
+                                                </td>
+
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.Nombre)
+                                                </td>
+
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Nombre)
+                                                </td>
+
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.ActivoFijo.LibroActivoFijo.Sucursal.Nombre)
+                                                </td>
+
+                                                <td>
+                                                    @{ await ViewContext.Writer.WriteAsync(String.Format("{0} {1}", item.RecepcionActivoFijo.Empleado.Persona.Nombres, item.RecepcionActivoFijo.Empleado.Persona.Apellidos)); }
                                                 </td>
 
                                                 <td>
@@ -91,6 +153,10 @@
                                                 </td>
 
                                                 <td>
+                                                    @Html.DisplayFor(modelItem => item.RecepcionActivoFijo.MotivoRecepcion.Descripcion)
+                                                </td>
+
+                                                <td>
                                                     @Html.DisplayFor(modelItem => item.RecepcionActivoFijo.FechaRecepcion)
                                                 </td>
 
@@ -99,14 +165,61 @@
                                                 </td>
 
                                                 <td>
+                                                    @Html.DisplayFor(modelItem => item.RecepcionActivoFijo.Fondo)
+                                                </td>
+
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.RecepcionActivoFijo.OrdenCompra)
+                                                </td>
+
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.RecepcionActivoFijo.Cantidad)
+                                                </td>
+
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.ActivoFijo.Modelo.Marca.Nombre)
+                                                </td>
+
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.ActivoFijo.Modelo.Nombre)
+                                                </td>
+
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.ActivoFijo.UnidadMedida.Nombre)
+                                                </td>
+
+                                                <td>
                                                     @Html.DisplayFor(modelItem => item.ActivoFijo.Nombre)
                                                 </td>
-                                            </tr>
 
-                                            <tr id="trHojaVida_@item.IdRecepcionActivoFijoDetalle" style="display:none;">
-                                                <td colspan="7">
-                                                    @{ await Html.RenderPartialAsync("_HojaVidaActivo", item); }
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.ActivoFijo.Serie)
                                                 </td>
+
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.ActivoFijo.Ubicacion)
+                                                </td>
+
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.ActivoFijo.ValorCompra)
+                                                </td>
+
+                                                @*<td>
+                                                    @Html.DisplayFor(modelItem => item.ActivoFijo.CodigoActivoFijo.Codigosecuencial)
+                                                </td>
+
+                                                <td>
+                                                    <img id="barcode_@item.ActivoFijo.CodigoActivoFijo.IdCodigoActivoFijo" />
+                                                    @{
+                                                        <script type="text/javascript">
+                                                            setTimeout(function () {
+                                                                var idElemento = "barcode_" + "@item.ActivoFijo.CodigoActivoFijo.IdCodigoActivoFijo";
+                                                                var valor = "@item.ActivoFijo.CodigoActivoFijo.CodigoBarras";
+                                                                Asignar_Codigo_Barras(idElemento, valor);
+                                                            });
+                                                        </script>
+                                                    }
+                                                </td>*@
                                             </tr>
                                         }
                                     </tbody>
@@ -131,5 +244,6 @@
     </section>
 </div>
 @section Scripts{
-    <script src='~/js/activoFijo/reportes.js'></script>
+    <script src="~/lib/TableTools-master/src/dataTables.tableTools.js"></script>
+    <script src="~/js/activoFijo/reporteBienes.js"></script>
 }
