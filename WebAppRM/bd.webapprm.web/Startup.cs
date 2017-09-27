@@ -29,7 +29,7 @@ namespace bd.webapprm.web
             // Add framework services.
             services.AddMvc();
             services.AddSingleton<IApiServicio, ApiServicio>();
-            await InicializarWebApp.Inicializar("WebAppRM");
+            InicializarWebApp.Inicializar("WebAppRM");
            
 
         }
