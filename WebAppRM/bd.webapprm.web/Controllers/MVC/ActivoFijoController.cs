@@ -457,6 +457,7 @@ namespace bd.webapprm.web.Controllers.MVC
                                     });
                                 }
 
+                                recepcionActivoFijoDetalle.Estado = new Estado { Nombre = "Recepcionado" };
                                 response = await apiServicio.EditarAsync(recepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle.ToString(), recepcionActivoFijoDetalle, new Uri(WebApp.BaseAddress), "/api/RecepcionActivoFijo/EstadoActivoFijo");
                                 if (response.IsSuccess)
                                 {
