@@ -89,8 +89,16 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="@Html.RouteIf("ActivosFijosRecepcionados", "active")">
-                        <a href="@Url.Action("ActivosFijosRecepcionados", "ActivoFijo")">Alta</a>
+                    <li class="@Html.RouteIf("altas", "active")">
+                        <a href="#"><i class="fa fa-file-text-o"></i> <span class="menu-item-parent">Altas</span></a>
+                        <ul>
+                            <li class="@Html.RouteIf("ActivosFijosRecepcionados", "active")">
+                                <a href="@Url.Action("ActivosFijosRecepcionados", "ActivoFijo")">Dar Altas</a>
+                            </li>
+                            <li class="@Html.RouteIf("ActivosFijosAltas", "active")">
+                                <a href="@Url.Action("ActivosFijosAltas", "ActivoFijo")">Listado de Altas</a>
+                            </li>
+                        </ul>
                     </li>
                     <li class="@Html.RouteIf("Transferencia", "active")">
                         <a href="@Url.Action("Transferencia", "ActivoFijo")">Transferencia</a>

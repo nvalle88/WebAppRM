@@ -16,7 +16,7 @@ namespace bd.webapprm.entidades
 
         [Display(Name = "Número de Factura:")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
-        public int IdFactura { get; set; }
+        public int? IdFactura { get; set; }
         public virtual Factura Factura { get; set; }
 
         [Key]

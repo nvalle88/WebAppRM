@@ -16,6 +16,9 @@
                                 <thead>
                                     <tr>
                                         <th>
+                                            Activo Fijo
+                                        </th>
+                                        <th>
                                             Tipo
                                         </th>
                                         <th>
@@ -29,25 +32,22 @@
                                         </th>
                                         <th>
                                             Proveedor
+                                        </th>                                        
+                                        <th>
+                                            Fecha de Alta
                                         </th>
                                         <th>
-                                            Activo Fijo
-                                        </th>
-                                        @if (ViewData["poliza"] != null)
-                                        {
-                                            <th>
-                                                N&uacute;mero de P&oacute;liza
-                                            </th>
-                                        }
-                                        <th>
-                                            Opciones
+                                            No. de Factura
                                         </th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach (var item in Model)
-                                    {
+                                    {                                    
                                         <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.ActivoFijo.Nombre)
+                                            </td>
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.RecepcionActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.Nombre)
                                             </td>
@@ -67,30 +67,11 @@
                                             <td>
                                                 @{ await ViewContext.Writer.WriteAsync(String.Format("{0} {1}", item.RecepcionActivoFijo.Proveedor.Nombre, item.RecepcionActivoFijo.Proveedor.Apellidos)); }
                                             </td>
-
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.ActivoFijo.Nombre)
+                                                @Html.DisplayFor(modelItem => item.ActivoFijo.ActivosFijosAlta.FechaAlta)
                                             </td>
-
-                                            @if (ViewData["poliza"] != null)
-                                            {
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.RecepcionActivoFijo.RecepcionActivoFijoDetalle.FirstOrDefault().NumeroPoliza)
-                                                </td>
-                                            }
-
                                             <td>
-                                                @{
-                                                    if (ViewBag.RequerirAlta != null)
-                                                    {
-                                                        @Html.ActionLink(ViewData["textoColumna"].ToString(), item.RecepcionActivoFijo.MotivoRecepcion.Descripcion == "Compra" ? ViewData["url"].ToString() : "AprobarAlta", new { id = item.IdRecepcionActivoFijoDetalle })
-                                                    }
-                                                    else
-                                                    {
-                                                        @Html.ActionLink(ViewData["textoColumna"].ToString(), ViewData["url"].ToString(), new { id = item.IdRecepcionActivoFijoDetalle })
-                                                    }                                                    
-                                                }
-
+                                                @Html.DisplayFor(modelItem => item.ActivoFijo.ActivosFijosAlta.Factura.Numero)
                                             </td>
                                         </tr>
                                     }

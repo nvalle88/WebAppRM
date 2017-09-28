@@ -1,7 +1,17 @@
-@model bd.webapprm.entidades.Modelo
+@model bd.webapprm.entidades.RecepcionActivoFijoDetalle
+@{ 
+    ICollection<bd.webapprm.entidades.Factura> lista = Model.RecepcionActivoFijo.Proveedor.Factura;
 
-@{
-    ViewData["Title"] = "Create";
+    List<SelectListItem> listadoFacturas = new List<SelectListItem>();
+    
+    foreach (var item in lista)
+    {
+        SelectListItem _item = new SelectListItem();
+        _item.Text = item.Numero;
+        _item.Value = item.IdFactura.ToString();
+
+        listadoFacturas.Add(_item);
+    }
 }
 
 <link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
@@ -19,7 +29,7 @@
 
                     <header>
                         <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
-                        <h2>Modelo</h2>
+                        <h2>Asignar n&uacute;mero de factura</h2>
                     </header>
                     <!-- widget div-->
                     <div>
@@ -33,39 +43,36 @@
                         <!-- widget content -->
                         <div class="widget-body no-padding">
 
-                            <form asp-action="Create" id="checkout-form" class="smart-form" novalidate="novalidate">
+                            <form asp-action="AsignarNumeroFactura" id="checkout-form" class="smart-form" novalidate="novalidate">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <fieldset>
                                     <div class="row">
+                                        <input type="hidden" asp-for="IdActivoFijo" />
+                                        <input type="hidden" asp-for="IdRecepcionActivoFijoDetalle" />
                                         <section class="col col-4">
-                                            <label asp-for="Nombre"></label>
+                                            <label>Seleccionar el n&uacute;mero de la Factura</label>
                                         </section>
-
                                         <section class="col col-8">
                                             <label class="input">
-                                                <input maxlength="32" asp-for="Nombre" class="form-control" />
-                                                <span asp-validation-for="Nombre" class="text-danger"></span>
-                                            </label>
-                                        </section>
-                                    </div>
-                                    <div class="row">
-                                        <section class="col col-4">
-                                            <label asp-for="IdMarca"></label>
-                                        </section>
-
-                                        <section class="col col-8">
-                                            <label class="input">
-                                                <select asp-for="IdMarca" class="form-control" asp-items="ViewBag.IdMarca"></select>
-                                                <span asp-validation-for="IdMarca" class="text-danger"></span>
+                                                @Html.DropDownList("facturas", listadoFacturas, new { @class = "form-control" })
                                             </label>
                                         </section>
                                     </div>
                                 </fieldset>
 
                                 <footer>
-                                    <span class="text-danger">@ViewData["Error"]</span>
-                                    <input type="submit" value="Guardar" class="btn btn-primary" />
-                                    <a asp-action="Index" class="btn btn-default">Cancelar</a>
+                                    @{
+                                        if (listadoFacturas.Count > 0)
+                                        {
+                                            <input type="submit" value="Dar Alta" class="btn btn-primary" />
+                                        }
+                                        else
+                                        {
+                                            <input type="submit" value="Dar Alta" class="btn btn-primary" disabled="disabled" />
+                                        }
+                                    }
+                                    
+                                    <a asp-action="ActivosFijosRecepcionados" class="btn btn-default">Cancelar</a>
 
                                 </footer>
 
