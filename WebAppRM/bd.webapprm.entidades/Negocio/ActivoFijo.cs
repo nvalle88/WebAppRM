@@ -9,6 +9,8 @@ namespace bd.webapprm.entidades
         public int IdActivoFijo { get; set; }
         public virtual ActivosFijosAlta ActivosFijosAlta { get; set; }
 
+        public virtual ActivosFijosBaja ActivosFijosBaja { get; set; }
+
         [Required(ErrorMessage = "Debe introducir {0}")]
         [Display(Name = "Activo fijo:")]
         [StringLength(100, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]

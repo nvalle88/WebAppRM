@@ -106,8 +106,17 @@
                     <li class="@Html.RouteIf("Depreciacion", "active")">
                         <a href="@Url.Action("Depreciacion", "ActivoFijo")">Depreciaci&oacute;n</a>
                     </li>
-                    <li class="@Html.RouteIf("ActivosFijosRecepcionadosBaja", "active")">
-                        <a href="@Url.Action("ActivosFijosRecepcionadosBaja", "ActivoFijo")">Baja</a>
+
+                    <li class="@Html.RouteIf("bajas", "active")">
+                        <a href="#"><i class="fa fa-file-text-o"></i> <span class="menu-item-parent">Bajas</span></a>
+                        <ul>
+                            <li class="@Html.RouteIf("ActivosFijosRecepcionadosBaja", "active")">
+                                <a href="@Url.Action("ActivosFijosRecepcionadosBaja", "ActivoFijo")">Dar Bajas</a>
+                            </li>
+                            <li class="@Html.RouteIf("ActivosFijosBajas", "active")">
+                                <a href="@Url.Action("ActivosFijosBajas", "ActivoFijo")">Listado de Bajas</a>
+                            </li>
+                        </ul>
                     </li>
                     <li class="@Html.RouteIf("Mantenimiento", "active")">
                         <a href="@Url.Action("Mantenimiento", "ActivoFijo")">Mantenimiento</a>

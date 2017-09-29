@@ -917,7 +917,108 @@ namespace bd.webapprm.web.Controllers.MVC
         #endregion
 
         #region Baja de Activos
-        public async Task<IActionResult> ActivoFijoBaja(string id) => await ObtenerRecepcionActivoFijo(id, "Alta");
+        public async Task<IActionResult> ActivoFijoBaja(string id)
+        {
+            ViewData["MotivoActivoFijoBaja"] = new SelectList(await apiServicio.Listar<ActivoFijoMotivoBaja>(new Uri(WebApp.BaseAddress), "/api/ActivoFijoMotivoBaja/ListarActivoFijoMotivoBaja"), "IdActivoFijoMotivoBaja", "Nombre");
+            return await ObtenerRecepcionActivoFijo(id, "Alta");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ActivoFijoBaja(RecepcionActivoFijoDetalle recepcionActivoFijoDetalle)
+        {
+            Response response = new Response();
+            try
+            {
+                ActivosFijosBaja activosFijosBaja = new ActivosFijosBaja {FechaBaja = DateTime.Now, IdMotivoBaja = recepcionActivoFijoDetalle.ActivoFijo.ActivosFijosBaja.IdMotivoBaja, IdActivo = recepcionActivoFijoDetalle.IdActivoFijo };
+                response = await apiServicio.InsertarAsync(activosFijosBaja,
+                                                             new Uri(WebApp.BaseAddress),
+                                                             "/api/ActivosFijosBaja/InsertarActivosFijosBaja");
+                if (response.IsSuccess)
+                {
+
+                    var responseLog = await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                    {
+                        ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                        ExceptionTrace = null,
+                        Message = "Se ha creado una Baja de Activo Fijo",
+                        UserName = "Usuario 1",
+                        LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
+                        LogLevelShortName = Convert.ToString(LogLevelParameter.ADV),
+                        EntityID = string.Format("{0} {1}", "ActivosFijosBaja:", activosFijosBaja.IdMotivoBaja),
+                    });
+
+                    
+                }
+
+                await apiServicio.InsertarAsync(new Estado { Nombre = "Baja" },
+                                                             new Uri(WebApp.BaseAddress),
+                                                             "/api/Estado/InsertarEstado");
+
+                recepcionActivoFijoDetalle.Estado = new Estado { Nombre = "Baja" };
+                response = await apiServicio.EditarAsync(recepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle.ToString(), recepcionActivoFijoDetalle, new Uri(WebApp.BaseAddress), "/api/RecepcionActivoFijo/EstadoActivoFijo");
+                if (response.IsSuccess)
+                {
+                    await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                    {
+                        ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                        EntityID = string.Format("{0} : {1}", "Estado de Activo Fijo", recepcionActivoFijoDetalle.ActivoFijo.CodigoActivoFijo.IdCodigoActivoFijo.ToString()),
+                        LogCategoryParametre = Convert.ToString(LogCategoryParameter.Edit),
+                        LogLevelShortName = Convert.ToString(LogLevelParameter.ADV),
+                        Message = "Se ha actualizado un registro estado de activo fijo",
+                        UserName = "Usuario 1"
+                    });
+                    return RedirectToAction("ActivosFijosRecepcionadosBaja");
+                }
+
+                ViewData["Error"] = response.Message;
+                ViewData["MotivoActivoFijoBaja"] = new SelectList(await apiServicio.Listar<ActivoFijoMotivoBaja>(new Uri(WebApp.BaseAddress), "/api/ActivoFijoMotivoBaja/ListarActivoFijoMotivoBaja"), "IdActivoFijoMotivoBaja", "Nombre");
+                return View(recepcionActivoFijoDetalle);
+
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                {
+                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                    Message = "Creando Tipo Activo Fijo",
+                    ExceptionTrace = ex,
+                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
+                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                    UserName = "Usuario APP WebAppRM"
+                });
+
+                return BadRequest();
+            }
+        }
+
+        public async Task<IActionResult> ActivosFijosBajas()
+        {
+            var lista = new List<RecepcionActivoFijoDetalle>();
+
+            try
+            {
+                lista = await apiServicio.Listar<RecepcionActivoFijoDetalle>(new Uri(WebApp.BaseAddress)
+                                                                    , "/api/RecepcionActivoFijo/ListarRecepcionActivoFijo");
+
+                var listaActivosFijosBajas = lista.Where(c => c.Estado.Nombre == "Baja").ToList();
+                ViewData["titulo"] = "Activos Fijos con Estado Baja";
+                return View("ListadoActivoFijoBaja", listaActivosFijosBajas);
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                {
+                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                    Message = "Listando activos fijos con estado Baja",
+                    ExceptionTrace = ex,
+                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
+                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                    UserName = "Usuario APP webappth"
+                });
+                return BadRequest();
+            }
+        }
 
         public async Task<IActionResult> ActivosFijosRecepcionadosBaja()
         {
