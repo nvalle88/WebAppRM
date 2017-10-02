@@ -25,12 +25,12 @@ namespace bd.webapprm.web.Controllers.MVC
             this.apiServicio = apiServicio;
         }
 
+        #region Recepción de Activos
         public IActionResult Index()
         {
             return RedirectToAction("Recepcion");
         }
 
-        #region Recepción de Activos
         public async Task<IActionResult> Recepcion()
         {
             ViewData["TipoActivoFijo"] = new SelectList(await apiServicio.Listar<TipoActivoFijo>(new Uri(WebApp.BaseAddress), "/api/TipoActivoFijo/ListarTipoActivoFijos"), "IdTipoActivoFijo", "Nombre");
@@ -76,6 +76,26 @@ namespace bd.webapprm.web.Controllers.MVC
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ADV),
                     EntityID = string.Format("{0} {1}", "Activo Fijo:", recepcionActivoFijoDetalle.ActivoFijo.IdActivoFijo),
                 });
+
+                recepcionActivoFijoDetalle = JsonConvert.DeserializeObject<RecepcionActivoFijoDetalle>(response.Resultado.ToString());
+                EmpleadoActivoFijo nuevoEmpleadoActivoFijo = new EmpleadoActivoFijo { IdActivoFijo = recepcionActivoFijoDetalle.IdActivoFijo, IdEmpleado = recepcionActivoFijoDetalle.RecepcionActivoFijo.IdEmpleado, FechaAsignacion = DateTime.Now };
+                response = await apiServicio.InsertarAsync(nuevoEmpleadoActivoFijo,
+                                                             new Uri(WebApp.BaseAddress),
+                                                             "/api/EmpleadoActivoFijo/InsertarEmpleadoActivoFijo");
+
+                if (response.IsSuccess)
+                {
+                    responseLog = await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                    {
+                        ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                        ExceptionTrace = null,
+                        Message = "Se ha adicionado un empleado a un activo fijo",
+                        UserName = "Usuario 1",
+                        LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
+                        LogLevelShortName = Convert.ToString(LogLevelParameter.ADV),
+                        EntityID = string.Format("{0} {1}", "Empleado de Activo Fijo:", recepcionActivoFijoDetalle.RecepcionActivoFijo.IdEmpleado),
+                    });
+                }
             }
             return response;
         }
