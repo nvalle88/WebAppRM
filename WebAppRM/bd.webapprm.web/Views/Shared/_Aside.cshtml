@@ -23,6 +23,12 @@
                     <li class="@Html.RouteIf("Empleado", "active")">
                         <a href="@Url.Action("Index", "Empleado")">Empleado</a>
                     </li>
+                    <li class="@Html.RouteIf("EstadoCivil", "active")">
+                        <a href="@Url.Action("Index", "EstadoCivil")">Estado Civil</a>
+                    </li>
+                    <li class="@Html.RouteIf("Etnia", "active")">
+                        <a href="@Url.Action("Index", "Etnia")">Etnia</a>
+                    </li>
                     <li class="@Html.RouteIf("DetalleFactura", "active")">
                         <a href="@Url.Action("Index", "DetalleFactura")">Detalle de Factura</a>
                     </li>
