@@ -24,6 +24,7 @@
     <Content Include="wwwroot\js\activoFijo\recepcion.js" />
     <Content Include="wwwroot\js\activoFijo\reporteBienes.js" />
     <Content Include="wwwroot\js\datatables\init.js" />
+    <Content Include="wwwroot\js\empleado\empleado.js" />
     <Content Include="wwwroot\js\subClaseActivoFijo\subClaseActivoFijo.js" />
     <Content Include="wwwroot\js\sucursal\sucursal.js" />
   </ItemGroup>

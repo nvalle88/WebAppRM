@@ -10,7 +10,7 @@
     eventoSucursal();
     eventoValidacionTecnicaChange();
     var wizard = $('.wizard').wizard();
-    $('.datepicker').datetimepicker({
+    $('#RecepcionActivoFijo_FechaRecepcion').datetimepicker({
         'format': 'D-M-Y hh:mm'
     });
 });
