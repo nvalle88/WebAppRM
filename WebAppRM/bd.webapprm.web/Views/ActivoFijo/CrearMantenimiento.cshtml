@@ -1,6 +1,9 @@
 @model bd.webapprm.entidades.MantenimientoActivoFijo
+
 <link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
+
 <div id="content">
+
     <section id="widget-grid" class="">
         <div class="row">
             <article class="col-sm-12 col-md-12 col-lg-8">
@@ -15,20 +18,8 @@
                             <span class="text-success">@ViewData["mensaje"]</span>
                             <form asp-action="AsignarPoliza" id="checkout-form" class="smart-form" novalidate="novalidate">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>                                
-                                <fieldset>
-                                    <div class="row">
-                                        <section class="col col-4">
-                                            <label asp-for="IdMantenimientoActivoFijo" class="col-md-2 control-label"></label>
-                                        </section>
-                                        <section class="col col-8">
-                                            <label class="input">
-                                                <input asp-for="IdMantenimientoActivoFijo" class="form-control" />
-                                                <span asp-validation-for="IdMantenimientoActivoFijo" class="text-danger"></span>
-                                            </label>
-                                        </section>
-                                    </div>
-                                </fieldset>
-                                <fieldset>
+                                <fieldset>                                    
+                                
                                     <div class="row">
                                         <section class="col col-4">
                                             <label asp-for="FechaMantenimiento" class="col-md-2 control-label"></label>
@@ -40,8 +31,7 @@
                                             </label>
                                         </section>
                                     </div>
-                                </fieldset>
-                                <fieldset>
+                                
                                     <div class="row">
                                         <section class="col col-4">
                                             <label asp-for="FechaDesde" class="col-md-2 control-label"></label>
@@ -53,8 +43,7 @@
                                             </label>
                                         </section>
                                     </div>
-                                </fieldset>
-                                <fieldset>
+                                
                                     <div class="row">
                                         <section class="col col-4">
                                             <label asp-for="FechaHasta" class="col-md-2 control-label"></label>
@@ -66,8 +55,7 @@
                                             </label>
                                         </section>
                                     </div>
-                                </fieldset>
-                                <fieldset>
+                                
                                     <div class="row">
                                         <section class="col col-4">
                                             <label asp-for="Valor" class="col-md-2 control-label"></label>
@@ -79,8 +67,7 @@
                                             </label>
                                         </section>
                                     </div>
-                                </fieldset>
-                                <fieldset>
+                                
                                     <div class="row">
                                         <section class="col col-4">
                                             <label asp-for="Observaciones" class="col-md-2 control-label"></label>
@@ -92,32 +79,31 @@
                                             </label>
                                         </section>
                                     </div>
-                                </fieldset>
-                                <fieldset>
+                                
                                     <div class="row">
                                         <section class="col col-4">
                                             <label asp-for="IdEmpleado" class="col-md-2 control-label"></label>
                                         </section>
                                         <section class="col col-8">
                                             <label class="input">
-                                                <select asp-for="IdEmpleado" class="form-control" asp-items="ViewBag.IdEmpleado"></select>
+                                                <select asp-for="IdEmpleado" class="form-control" asp-items="ViewBag.Empleado"></select>
                                                 <span asp-validation-for="IdEmpleado" class="text-danger"></span>
                                             </label>
                                         </section>
                                     </div>
-                                </fieldset>
-                                <fieldset>
+
                                     <div class="row">
                                         <section class="col col-4">
                                             <label asp-for="IdActivoFijo" class="col-md-2 control-label"></label>
                                         </section>
                                         <section class="col col-8">
                                             <label class="input">
-                                                <select asp-for="IdActivoFijo" class="form-control" asp-items="ViewBag.IdActivoFijo"></select>
+                                                <select asp-for="IdActivoFijo" class="form-control" asp-items="ViewBag.ActivoFijo"></select>
                                                 <span asp-validation-for="IdActivoFijo" class="text-danger"></span>
                                             </label>
                                         </section>
                                     </div>
+
                                 </fieldset>                                
                                 <footer>
                                     <span class="text-danger">@ViewData["Error"]</span>

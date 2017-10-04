@@ -1,0 +1,86 @@
+@model bd.webapprm.entidades.RecepcionActivoFijoDetalle
+
+<div id="content">   
+
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                        <h2>Mantenimientos del Activo</h2>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox"></div>
+                        <div class="widget-body no-padding">
+                            <table id="dt_basic" class="table table-striped table-bordered table-hover" style="width:100%;">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            Fecha de Registro
+                                        </th>
+                                        <th>
+                                            Fecha de Inicio
+                                        </th>
+                                        <th>
+                                            Fecha de Fin
+                                        </th>
+                                        <th>
+                                            Responsable
+                                        </th>
+                                        <th>
+                                            Valor
+                                        </th>
+                                        <th>
+                                            Observaciones
+                                        </th>                                       
+                                        <th>
+                                            Opciones
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.ActivoFijo.MantenimientoActivoFijo)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.FechaMantenimiento)
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.FechaDesde)
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.FechaHasta)
+                                            </td>                                            
+
+                                            <td>
+                                                @{ await ViewContext.Writer.WriteAsync(String.Format("{0} {1}", item.Empleado.Persona.Nombres, item.Empleado.Persona.Apellidos)); }
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Valor)
+                                            </td>                                           
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Observaciones)
+                                            </td>
+
+                                            <td>
+                                                @Html.ActionLink("Editar", "EditarMantenimiento", new { id = item.IdMantenimientoActivoFijo })
+                                            </td>
+                                        </tr>
+                                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+@section Scripts {
+    <script src='~/js/datatables/init.js'></script>
+}
