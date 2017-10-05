@@ -39,41 +39,57 @@
                                         <th>
                                             No. de Factura
                                         </th>
+                                        <th>
+                                            Motivo de Recepci&oacute;n
+                                        </th>
+                                        <th>
+                                            Opciones
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @foreach (var item in Model)
-                                    {                                    
-                                        <tr>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.ActivoFijo.Nombre)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.RecepcionActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.Nombre)
-                                            </td>
+                                    {
+                                        if (item.RecepcionActivoFijo.IdMotivoRecepcion != 2)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.ActivoFijo.Nombre)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.RecepcionActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.Nombre)
+                                                </td>
 
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.RecepcionActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.Nombre)
-                                            </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.RecepcionActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.Nombre)
+                                                </td>
 
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.RecepcionActivoFijo.SubClaseActivoFijo.Nombre)
-                                            </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.RecepcionActivoFijo.SubClaseActivoFijo.Nombre)
+                                                </td>
 
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.RecepcionActivoFijo.FechaRecepcion)
-                                            </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.RecepcionActivoFijo.FechaRecepcion)
+                                                </td>
 
-                                            <td>
-                                                @{ await ViewContext.Writer.WriteAsync(String.Format("{0} {1}", item.RecepcionActivoFijo.Proveedor.Nombre, item.RecepcionActivoFijo.Proveedor.Apellidos)); }
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.ActivoFijo.ActivosFijosAlta.FechaAlta)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.ActivoFijo.ActivosFijosAlta.Factura.Numero)
-                                            </td>
-                                        </tr>
+                                                <td>
+                                                    @{ await ViewContext.Writer.WriteAsync(String.Format("{0} {1}", item.RecepcionActivoFijo.Proveedor.Nombre, item.RecepcionActivoFijo.Proveedor.Apellidos)); }
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.ActivoFijo.ActivosFijosAlta.FechaAlta)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.ActivoFijo.ActivosFijosAlta.Factura.Numero)
+                                                </td>
+                                                <td>
+                                                    @item.RecepcionActivoFijo.MotivoRecepcion.Descripcion
+                                                
+                                                </td>
+                                                <td>
+                                                    @Html.ActionLink("Componentes", "AddComponentes", new { id = item.IdRecepcionActivoFijoDetalle })                                             
+                                                </td>
+                                            </tr>
+                                        }
                                     }
                                 </tbody>
                             </table>
@@ -82,6 +98,9 @@
                 </div>
             </article>
         </div>
+    </section>
+    <section>
+        <button class="btn btn-warning"><i class="fa fa-file-text-o"></i> Generar Acta de Entrega</button>
     </section>
 </div>
 @section Scripts {

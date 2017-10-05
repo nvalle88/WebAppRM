@@ -926,10 +926,175 @@ namespace bd.webapprm.web.Controllers.MVC
                         
             return View();
         }
+
+        public async Task<IActionResult> AddComponentes(string id)
+        {
+            Response response = new Response();
+
+            try
+            {
+                RecepcionActivoFijoDetalle RecepcionActivoFijoDetalle = new RecepcionActivoFijoDetalle();
+
+                var respuesta = await apiServicio.SeleccionarAsync<Response>(id.ToString(), new Uri(WebApp.BaseAddress), "/api/RecepcionActivoFijo");
+
+                respuesta.Resultado = JsonConvert.DeserializeObject<RecepcionActivoFijoDetalle>(respuesta.Resultado.ToString());
+
+                RecepcionActivoFijoDetalle = respuesta.Resultado as RecepcionActivoFijoDetalle;
+
+                if (respuesta.IsSuccess)
+                {
+                    var lista = new List<RecepcionActivoFijoDetalle>();
+
+                    try
+                    {
+                        lista = await apiServicio.Listar<RecepcionActivoFijoDetalle>(new Uri(WebApp.BaseAddress)
+                                                                   , "/api/RecepcionActivoFijo/ListarRecepcionActivoFijo");
+
+                        var listaActivosFijosRecepcionados = lista.Where(c => c.Estado.Nombre == "Recepcionado" && c.RecepcionActivoFijo.IdMotivoRecepcion == 2).ToList();
+
+                        ViewBag.objeto = RecepcionActivoFijoDetalle;
+
+                        try
+                        {
+                            List<ActivosFijosAdicionados> listaActivosFijosAdicionados = new List<ActivosFijosAdicionados>();
+
+                            listaActivosFijosAdicionados = await apiServicio.Listar<ActivosFijosAdicionados>(new Uri(WebApp.BaseAddress),
+                                                                             "/api/ActivosFijosAdicionados/ListarActivosFijosAdicionados");
+
+                            ViewBag.listaActivosFijosAdicionados = listaActivosFijosAdicionados;
+                        }
+                        catch (Exception ex)
+                        {
+
+                            throw;
+                        }
+
+                        return View("AdicionarComponentes", listaActivosFijosRecepcionados);
+
+                    } catch (Exception ex)
+                    {
+                        await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                        {
+                            ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                            Message = "Listando activos fijos con estado Recepcionado para adicionar componentes",
+                            ExceptionTrace = ex,
+                            LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
+                            LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                            UserName = "Usuario APP webappth"
+                        });
+                        return BadRequest();
+                    }                    
+                }
+                
+            } catch (Exception ex)
+            {
+
+            }
+
+            return View("AdicionarComponentes");
+        }
+
+        public async Task<IActionResult> AdicionarActivo(string id, string id1, string id2)
+        {
+            Response response = new Response();
+            
+            ActivosFijosAdicionados ActivosFijosAdicionados = new ActivosFijosAdicionados { idActivoFijoOrigen = int.Parse(id1), idActivoFijoDestino = int.Parse(id), fechaAdicion = DateTime.Now };
+
+            response = await apiServicio.InsertarAsync(ActivosFijosAdicionados,
+                                                                 new Uri(WebApp.BaseAddress),
+                                                                 "/api/ActivosFijosAdicionados/InsertarActivosFijosAdicionados");
+            if (response.IsSuccess)
+            {
+                List<ActivosFijosAdicionados> listaActivosFijosAdicionados = new List<ActivosFijosAdicionados>();
+
+                listaActivosFijosAdicionados = await apiServicio.Listar<ActivosFijosAdicionados>(new Uri(WebApp.BaseAddress),
+                                                                 "/api/ActivosFijosAdicionados/ListarActivosFijosAdicionados");
+
+                ViewBag.listaActivosFijosAdicionados = listaActivosFijosAdicionados;
+            }
+
+            return RedirectToAction("AddComponentes", new { id = id2});
+        }
+
+        public async Task<IActionResult> EliminarActivoAdicionado(string idAdicion, string id2)
+        {
+            Response response = new Response();
+
+            ActivosFijosAdicionados ActivosFijosAdicionados = new ActivosFijosAdicionados();
+
+            var respuesta = await apiServicio.SeleccionarAsync<Response>(idAdicion, new Uri(WebApp.BaseAddress),
+                                                                 "/api/ActivosFijosAdicionados");
+
+            if (respuesta.IsSuccess)
+            {
+                response = await apiServicio.EliminarAsync(idAdicion,
+                                                                 new Uri(WebApp.BaseAddress),
+                                                                 "/api/ActivosFijosAdicionados");
+                if (response.IsSuccess)
+                {
+                    return RedirectToAction("AddComponentes", new { id = id2});
+                }
+            }
+
+            return RedirectToAction("AddComponentes", id2);
+        }
         #endregion
 
         #region Transferencias
         //Implementar aquí
+        public async Task<IActionResult> ActivosFijosATransferir()
+        {
+            var lista = new List<RecepcionActivoFijoDetalle>();
+            try
+            {
+                lista = await apiServicio.Listar<RecepcionActivoFijoDetalle>(new Uri(WebApp.BaseAddress)
+                                                                    , "/api/RecepcionActivoFijo/ListarRecepcionActivoFijo");
+
+                var listaActivosFijosRecepcionados = lista.Select(c => c).ToList();
+
+                return View("ActivosFijosATransferir", listaActivosFijosRecepcionados);
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                {
+                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                    Message = "Listando activos fijos con estado Recepcionado",
+                    ExceptionTrace = ex,
+                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
+                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                    UserName = "Usuario APP webappth"
+                });
+                return BadRequest();
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> TransferirActivoFijo(RecepcionActivoFijoDetalle recepcionActivoFijoDetalle)
+        {
+            Response response = new Response();
+            try
+            {
+                var listaMotivoTransferencia = await apiServicio.Listar<MotivoTransferencia>(new Uri(WebApp.BaseAddress), "/api/MotivoTransferencia/ListarMotivoTransferencia");
+                                                               
+                return View(recepcionActivoFijoDetalle);
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                {
+                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                    Message = "Creando Transferencia de Activo Fijo",
+                    ExceptionTrace = ex,
+                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
+                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                    UserName = "Usuario APP WebAppTh"
+                });
+
+                return BadRequest();
+            }
+        }
         #endregion
 
         #region Depreciación
