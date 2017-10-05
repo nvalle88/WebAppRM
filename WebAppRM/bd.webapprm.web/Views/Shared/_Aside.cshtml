@@ -143,15 +143,7 @@
                         </ul>
                     </li>
                     <li class="@Html.RouteIf("Mantenimiento", "active")">
-                        <a href="#"><i class="fa fa-file-text-o"></i> <span class="menu-item-parent">Mantenimientos</span></a>
-                        <ul>
-                            <li class="@Html.RouteIf("PolizaSeguro", "active")">
-                                <a href="@Url.Action("Mantenimiento", "ActivoFijo")">Gestionar Mantenimientos</a>
-                            </li>
-                            <li class="@Html.RouteIf("PolizaSeguro", "active")">
-                                <a href="@Url.Action("CrearMantenimiento", "ActivoFijo")">Nuevo Mantenimiento</a>
-                            </li>
-                        </ul>                        
+                        <a href="@Url.Action("ListarMantenimientos", "ActivoFijo")">Mantenimientos</a>                                              
                     </li>
                     <li class="@Html.RouteIf("reportes", "active")">
                         <a href="#"><i class="fa fa-file-text-o"></i> <span class="menu-item-parent">Reportes</span></a>
