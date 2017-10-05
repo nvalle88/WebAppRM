@@ -3,7 +3,10 @@
 @{
     ViewData["Title"] = "EditarMantenimiento";
 }
+
 <link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
+<link rel="stylesheet" href="~/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
@@ -118,13 +121,26 @@
         </div>
     </section>
 </div>
+
 @section Scripts {
     <script src='~/lib/select2/dist/js/select2.min.js'></script>
     <script src='~/lib/select2/dist/js/i18n/es.js'></script>
     <script src='~/js/site.js'></script>
+    <script src='~/lib/moment/min/moment.min.js'></script>
+    <script src='~/lib/moment/locale/es.js'></script>
+    <script src='~/lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'></script>
     <script type="text/javascript">
         $(document).ready(function () {
             Init_Select2();
+            $('#FechaMantenimiento').datetimepicker({
+                'format': 'D-M-Y'
+            });
+            $('#FechaDesde').datetimepicker({
+                'format': 'D-M-Y'
+            });
+            $('#FechaHasta').datetimepicker({
+                'format': 'D-M-Y'
+            });
         });
     </script>
 }
