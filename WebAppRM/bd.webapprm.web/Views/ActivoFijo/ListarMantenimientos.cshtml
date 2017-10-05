@@ -1,6 +1,9 @@
-@model bd.webapprm.entidades.RecepcionActivoFijoDetalle
+@model List<bd.webapprm.entidades.MantenimientoActivoFijo>
 
 <div id="content">   
+    <p>
+        <a asp-action="CrearMantenimiento" class="btn btn-success">Nuevo Mantenimiento</a>
+    </p>
 
     <section id="widget-grid" class="">
         <div class="row">
@@ -8,7 +11,7 @@
                 <div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
                     <header>
                         <span class="widget-icon"> <i class="fa fa-table"></i> </span>
-                        <h2>Mantenimientos del Activo</h2>
+                        <h2>Mantenimientos de Activos Fijos</h2>
                     </header>
                     <div>
                         <div class="jarviswidget-editbox"></div>
@@ -40,7 +43,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var item in Model.ActivoFijo.MantenimientoActivoFijo)
+                                    @foreach (var item in Model)
                                     {
                                         <tr>
                                             <td>
@@ -53,7 +56,7 @@
 
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.FechaHasta)
-                                            </td>                                            
+                                            </td>
 
                                             <td>
                                                 @{ await ViewContext.Writer.WriteAsync(String.Format("{0} {1}", item.Empleado.Persona.Nombres, item.Empleado.Persona.Apellidos)); }
@@ -68,10 +71,12 @@
                                             </td>
 
                                             <td>
-                                                @Html.ActionLink("Editar", "EditarMantenimiento", new { id = item.IdMantenimientoActivoFijo })
+                                                @Html.ActionLink("Editar", "EditarMantenimiento", new { id = item.IdMantenimientoActivoFijo }) |
+                                                <a href="javascript:void(0);" id="@item.IdMantenimientoActivoFijo" onclick="abrirVentanaConfirmacion('@item.IdMantenimientoActivoFijo')" data-url="@Url.Action("EliminarMantenimiento", values: new { id = item.IdMantenimientoActivoFijo })" data-titulo="Eliminar" data-descripcion="&#191;Desea eliminar el Mantenimiento... ?">Eliminar</a>
                                             </td>
+
                                         </tr>
-                                                    }
+                                    }
                                 </tbody>
                             </table>
                         </div>

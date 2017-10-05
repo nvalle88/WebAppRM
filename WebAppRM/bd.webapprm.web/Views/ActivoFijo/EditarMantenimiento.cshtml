@@ -1,34 +1,32 @@
 @model bd.webapprm.entidades.MantenimientoActivoFijo
 
 @{
-    ViewData["Title"] = "CrearMantenimiento";
+    ViewData["Title"] = "EditarMantenimiento";
 }
 
 <link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
 <link rel="stylesheet" href="~/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
 
 <div id="content">
-
     <section id="widget-grid" class="">
         <div class="row">
-            <article class="col-sm-12 col-md-12 col-lg-8">
+            <article class="col-sm-12 col-md-12 col-lg-6">
                 <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
                     <header>
                         <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
-                        <h2>Registrar Mantenimiento</h2>
+                        <h2>Mantenimientos Activo Fijo</h2>
                     </header>
                     <div>
                         <div class="jarviswidget-editbox"></div>
                         <div class="widget-body no-padding">
-                            <span class="text-success">@ViewData["mensaje"]</span>
-                            <form asp-action="CrearMantenimiento" id="checkout-form" class="smart-form" novalidate="novalidate">
-                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>                                
-                                <fieldset>                                    
-                                
+                            <form asp-action="EditarMantenimiento" id="checkout-form" class="smart-form" novalidate="novalidate">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <input type="hidden" asp-for="IdMantenimientoActivoFijo" />
+                                <fieldset>
                                     <div class="row">
                                         <section class="col col-4">
                                             <label asp-for="FechaMantenimiento" class="col-md-2 control-label"></label>
-                                        </section>
+                                        </section>                                        
                                         <section class="col col-8">
                                             <label class="input">
                                                 <input asp-for="FechaMantenimiento" class="form-control" />
@@ -36,7 +34,7 @@
                                             </label>
                                         </section>
                                     </div>
-                                
+
                                     <div class="row">
                                         <section class="col col-4">
                                             <label asp-for="FechaDesde" class="col-md-2 control-label"></label>
@@ -48,7 +46,7 @@
                                             </label>
                                         </section>
                                     </div>
-                                
+
                                     <div class="row">
                                         <section class="col col-4">
                                             <label asp-for="FechaHasta" class="col-md-2 control-label"></label>
@@ -60,7 +58,7 @@
                                             </label>
                                         </section>
                                     </div>
-                                
+
                                     <div class="row">
                                         <section class="col col-4">
                                             <label asp-for="Valor" class="col-md-2 control-label"></label>
@@ -72,7 +70,7 @@
                                             </label>
                                         </section>
                                     </div>
-                                
+
                                     <div class="row">
                                         <section class="col col-4">
                                             <label asp-for="Observaciones" class="col-md-2 control-label"></label>
@@ -84,7 +82,7 @@
                                             </label>
                                         </section>
                                     </div>
-                                
+
                                     <div class="row">
                                         <section class="col col-4">
                                             <label asp-for="IdEmpleado" class="col-md-2 control-label"></label>
@@ -108,8 +106,8 @@
                                             </label>
                                         </section>
                                     </div>
-
-                                </fieldset>                                
+                                    
+                                </fieldset>
                                 <footer>
                                     <span class="text-danger">@ViewData["Error"]</span>
                                     <input type="submit" value="Guardar" class="btn btn-primary" />
