@@ -41,6 +41,9 @@
                     <li class="@Html.RouteIf("MotivoRecepcion", "active")">
                         <a href="@Url.Action("Index", "MotivoRecepcion")">Motivo de Recepción</a>
                     </li>
+                    <li class="@Html.RouteIf("MotivoTransferencia", "active")">
+                        <a href="@Url.Action("Index", "MotivoTransferencia")">Motivo de Transferencia</a>
+                    </li>
                     <li class="@Html.RouteIf("Proveedor", "active")">
                         <a href="@Url.Action("Index", "Proveedor")">Proveedor</a>
                     </li>
@@ -90,7 +93,7 @@
                         </ul>
                     </li>
                     <li class="@Html.RouteIf("altas", "active")">
-                        <a href="#"><i class="fa fa-file-text-o"></i> <span class="menu-item-parent">Altas</span></a>
+                        <a href="#"><span class="menu-item-parent">Altas</span></a>
                         <ul>
                             <li class="@Html.RouteIf("ActivosFijosRecepcionados", "active")">
                                 <a href="@Url.Action("ActivosFijosRecepcionados", "ActivoFijo")">Dar Altas</a>
@@ -98,10 +101,13 @@
                             <li class="@Html.RouteIf("ActivosFijosAltas", "active")">
                                 <a href="@Url.Action("ActivosFijosAltas", "ActivoFijo")">Listado de Altas</a>
                             </li>
+                            <li class="@Html.RouteIf("AddComponentes", "active")">
+                                <a href="@Url.Action("AddComponentes", "ActivoFijo")">Adicionar Componentes</a>
+                            </li>
                         </ul>
                     </li>
-                    <li class="@Html.RouteIf("Transferencia", "active")">
-                        <a href="@Url.Action("Transferencia", "ActivoFijo")">Transferencia</a>
+                    <li class="@Html.RouteIf("ActivosFijosATransferir", "active")">
+                        <a href="@Url.Action("ActivosFijosATransferir", "ActivoFijo")">Transferencia</a>
                     </li>
                     <li class="@Html.RouteIf("Depreciacion", "active")">
                         <a href="@Url.Action("Depreciacion", "ActivoFijo")">Depreciaci&oacute;n</a>
