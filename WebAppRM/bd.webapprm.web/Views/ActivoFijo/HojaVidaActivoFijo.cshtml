@@ -1,21 +1,51 @@
 @model bd.webapprm.entidades.RecepcionActivoFijoDetalle
-<link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
+<link rel="stylesheet" href="~/css/site.css" />
+<script src="~/lib/JsBarcode-master/dist/JsBarcode.all.min.js"></script>
+<script src='~/js/site.js'></script>
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
-            <article class="col-sm-12 col-md-12 col-lg-8">
-                <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
                     <header>
                         <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
                         <h2>Hoja de Vida del de Activo Fijo</h2>
                     </header>
+
+
                     <div>
                         <div class="jarviswidget-editbox"></div>
                         <div class="widget-body no-padding">
-                            <fieldset style="padding:15px 15px !important;">
-                                @{ await Html.RenderPartialAsync("_HojaVidaActivo", Model); }
-                            </fieldset>
-                            
+                            <div class="padding-10">
+                                <br>
+                                <div class="pull-left">
+                                    <h1 style="font-size:260% !important;"><i class="fa fa-file-text-o"></i> Hoja de Vida del Activo Fijo</h1>
+                                </div>
+                                <div class="pull-right">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div>
+                                                <div class="font-md">
+                                                    <strong>Fecha:&nbsp;&nbsp;&nbsp;&nbsp;</strong>
+                                                    <span class="pull-right"> <i class="fa fa-calendar"></i>&nbsp;&nbsp;@DateTime.Now.ToString("dd/MM/yyyy hh:mm tt") </span>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <div class="well well-sm  bg-color-darken txt-color-white no-border">
+                                            </div>
+                                            <br>
+                                            <br>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+
+                                <fieldset style="padding:15px 15px !important;">
+                                    @{ await Html.RenderPartialAsync("_HojaVidaActivo", Model); }
+                                </fieldset>
+
+
+                            </div>
                         </div>
                     </div>
                 </div>

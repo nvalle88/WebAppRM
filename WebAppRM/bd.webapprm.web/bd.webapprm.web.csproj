@@ -20,7 +20,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="wwwroot\js\activoFijo\codificacion.js" />
     <Content Include="wwwroot\js\activoFijo\recepcion.js" />
+    <Content Include="wwwroot\js\activoFijo\reporteHojaVida.js" />
+    <Content Include="wwwroot\js\activoFijo\reporteBienes.js" />
+    <Content Include="wwwroot\js\datatables\init.js" />
+    <Content Include="wwwroot\js\empleado\empleado.js" />
+    <Content Include="wwwroot\js\subClaseActivoFijo\subClaseActivoFijo.js" />
+    <Content Include="wwwroot\js\sucursal\sucursal.js" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="2.0.0" />
@@ -39,8 +46,6 @@
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.1" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controllers\MVC\" />
-    <Folder Include="Controllers\MVC\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>

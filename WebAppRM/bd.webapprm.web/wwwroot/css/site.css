@@ -94,3 +94,9 @@
     height: 32px !important;
     width: 32px !important;
 }
+
+tr.group,
+tr.group:hover {
+    background-color: #ddd !important;
+    cursor: pointer;
+}

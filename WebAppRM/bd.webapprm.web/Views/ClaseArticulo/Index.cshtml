@@ -46,7 +46,7 @@
 
                                             <td>
                                                 @Html.ActionLink("Editar", "Edit", new { id = item.IdClaseArticulo }) |
-                                                @Html.ActionLink("Eliminar", "Delete", new { id = item.IdClaseArticulo }, new { onclick = "return confirm('Desea eliminar la Clase de Artículo... ?');" })
+                                                <a href="javascript:void(0);" id="@item.IdClaseArticulo" onclick="abrirVentanaConfirmacion('@item.IdClaseArticulo')" data-url="@Url.Action("Delete", values: new { id = item.IdClaseArticulo })" data-titulo="Eliminar" data-descripcion="&#191;Desea eliminar la Clase de Art&iacute;culo... ?">Eliminar</a>
                                             </td>
                                         </tr>
                                     }

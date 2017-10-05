@@ -13,7 +13,7 @@
         <!-- START ROW -->
         <div class="row">
             <!-- NEW COL START -->
-            <article class="col-sm-12 col-md-12 col-lg-4">
+            <article class="col-sm-12 col-md-12 col-lg-6">
                 <!-- Widget ID (each widget will need unique ID)-->
                 <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
 
@@ -39,9 +39,12 @@
                                 <input type="hidden" asp-for="IdMaestroArticuloSucursal" />
                                 <fieldset>
                                     <div class="row">
-                                        <section class="col col-10">
+                                        <section class="col col-4">
+                                            <label>Cantidad</label>
+                                        </section>
+
+                                        <section class="col col-8">
                                             <label class="input">
-                                                <i class="icon-append fa fa-check"></i>
                                                 <input maxlength="32" type="number" asp-for="Cantidad" class="form-control" placeholder="@Html.DisplayNameFor(model=>model.Cantidad)" />
                                                 <span asp-validation-for="Cantidad" class="text-danger"></span>
                                             </label>

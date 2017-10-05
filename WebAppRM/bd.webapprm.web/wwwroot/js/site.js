@@ -27,6 +27,15 @@ function mostrarLoadingPanel(idElemento, texto)
         effect: 'roundBounce',
         text: texto != null ? texto : 'Procesando datos, por favor espere...',
         bg: 'rgba(255, 255, 255, 0.7)',
-        color: '#ef4c0c'
+        color: '#ef4c0c',
+        fontSize: '15px'
+    });
+}
+
+function Asignar_Codigo_Barras(idElemento, valor) {
+    JsBarcode("#" + idElemento, valor, {
+        format: "CODE128",
+        displayValue: true,
+        fontSize: 20
     });
 }

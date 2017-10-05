@@ -55,7 +55,7 @@
 
                                             <td>
                                                 @Html.ActionLink("Editar", "Edit", new { id = item.IdProveedor }) |
-                                                @Html.ActionLink("Eliminar", "Delete", new { id = item.IdProveedor }, new { onclick = "return confirm('Desea eliminar el Proveedor... ?');" })
+                                                <a href="javascript:void(0);" id="@item.IdProveedor" onclick="abrirVentanaConfirmacion('@item.IdProveedor')" data-url="@Url.Action("Delete", values: new { id = item.IdProveedor })" data-titulo="Eliminar" data-descripcion="&#191;Desea eliminar el Proveedor... ?">Eliminar</a>
                                             </td>
                                         </tr>
                                     }

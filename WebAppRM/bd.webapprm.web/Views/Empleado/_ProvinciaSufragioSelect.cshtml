@@ -1,0 +1,7 @@
+@model bd.webapprm.entidades.Empleado
+<section class="col col-8">
+    <label class="input">
+        <select asp-for="IdProvinciaLugarSufragio" class="form-control" asp-items="ViewBag.ProvinciaSufragio"></select>
+        <span asp-validation-for="IdProvinciaLugarSufragio" class="text-danger"></span>
+    </label>
+</section>

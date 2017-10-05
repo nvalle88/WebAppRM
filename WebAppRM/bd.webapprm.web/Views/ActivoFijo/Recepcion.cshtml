@@ -181,7 +181,7 @@
 
                                                         <section class="col col-8">
                                                             <label class="input">
-                                                                <input asp-for="RecepcionActivoFijo.FechaRecepcion" class="datepicker form-control" />
+                                                                <input asp-for="RecepcionActivoFijo.FechaRecepcion" class="form-control" />
                                                                 <span asp-validation-for="RecepcionActivoFijo.FechaRecepcion" class="text-danger"></span>
                                                             </label>
                                                         </section>
@@ -265,7 +265,7 @@
 
                                                     <div class="row">
                                                         <section class="col col-4">
-                                                            <label asp-for="ActivoFijo.UnidadMedida.Nombre"></label>
+                                                            <label asp-for="ActivoFijo.IdUnidadMedida"></label>
                                                         </section>
 
                                                         <section class="col col-8">
@@ -330,7 +330,7 @@
                                                 </fieldset>
                                             </div>
                                             <div class="step-pane @claseActive("Codificación")" id="step2">
-                                                @{ await Html.RenderPartialAsync("_Codificacion", Model?.ActivoFijo?.CodigoActivoFijo, new ViewDataDictionary(ViewData) { { "TipoAF", Model?.RecepcionActivoFijo?.SubClaseActivoFijo?.ClaseActivoFijo?.TipoActivoFijo?.Nombre }, { "ClaseAF", Model?.RecepcionActivoFijo?.SubClaseActivoFijo?.ClaseActivoFijo?.Nombre } }); }
+                                                @{ await Html.RenderPartialAsync("_Codificacion", Model); }
                                             </div>
                                         </div>
                                     </div>
@@ -359,4 +359,5 @@
     <script src='~/lib/moment/min/moment.min.js'></script>
     <script src='~/lib/moment/locale/es.js'></script>
     <script src='~/lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'></script>
+    <script src='~/js/activoFijo/codificacion.js'></script>
 }

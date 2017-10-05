@@ -23,7 +23,7 @@ namespace bd.webapprm.entidades
         public DateTime? FechaIngresoSectorPublico { get; set; }
 
         [Required(ErrorMessage = "Debe introducir {0}")]
-        [Display(Name = "¿Trabajó en la Superintendencia de InstitucionesFinancieras?")]
+        [Display(Name = "¿Trabajó en la Superintendencia de Instituciones Financieras?")]
         public bool TrabajoSuperintendenciaBanco { get; set; }
 
         [Required(ErrorMessage = "Debe introducir {0}")]

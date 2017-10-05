@@ -8,7 +8,7 @@
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
-            <article class="col-sm-12 col-md-12 col-lg-4">
+            <article class="col-sm-12 col-md-12 col-lg-6">
                 <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
                     <header>
                         <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
@@ -27,7 +27,6 @@
 
                                         <section class="col col-8">
                                             <label class="input">
-                                                <i class="icon-prepend fa fa-user"></i>
                                                 <select asp-for="IdClaseArticulo" class="form-control" asp-items="ViewBag.IdClaseArticulo"></select>
                                                 <span asp-validation-for="IdClaseArticulo" class="text-danger"></span>
                                             </label>
@@ -41,8 +40,7 @@
 
                                         <section class="col col-8">
                                             <label class="input">
-                                                <i class="icon-prepend fa fa-user"></i>
-                                                <input maxlength="50" asp-for="Nombre" class="form-control" placeholder="@Html.DisplayNameFor(model=>model.Nombre)" />
+                                                <input maxlength="50" asp-for="Nombre" class="form-control" />
                                                 <span asp-validation-for="Nombre" class="text-danger"></span>
                                             </label>
                                         </section>

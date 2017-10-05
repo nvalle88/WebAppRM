@@ -39,7 +39,7 @@
 
                                             <td>
                                                 @Html.ActionLink("Editar", "Edit", new { id = item.IdFondoFinanciamiento }) |
-                                                @Html.ActionLink("Eliminar", "Delete", new { id = item.IdFondoFinanciamiento }, new { onclick = "return confirm('Desea eliminar el Fondo de Financiamiento... ?');" })
+                                                <a href="javascript:void(0);" id="@item.IdFondoFinanciamiento" onclick="abrirVentanaConfirmacion('@item.IdFondoFinanciamiento')" data-url="@Url.Action("Delete", values: new { id = item.IdFondoFinanciamiento })" data-titulo="Eliminar" data-descripcion="&#191;Desea eliminar el Fondo de Financiamiento... ?">Eliminar</a>
                                             </td>
                                         </tr>
                                     }

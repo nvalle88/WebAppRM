@@ -8,8 +8,4 @@
     <None Remove="Negocio\ve-7044.tmp" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Negocio\" />
-  </ItemGroup>
-
 </Project>

@@ -1,6 +1,6 @@
 @model List<bd.webapprm.entidades.RecepcionActivoFijoDetalle>
 
-<div id="content">
+<div id="content">    
     <section id="widget-grid" class="">
         <div class="row">
             <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -33,6 +33,12 @@
                                         <th>
                                             Activo Fijo
                                         </th>
+                                        @if (ViewData["poliza"] != null)
+                                        {
+                                            <th>
+                                                N&uacute;mero de P&oacute;liza
+                                            </th>
+                                        }
                                         <th>
                                             Opciones
                                         </th>
@@ -66,8 +72,25 @@
                                                 @Html.DisplayFor(modelItem => item.ActivoFijo.Nombre)
                                             </td>
 
+                                            @if (ViewData["poliza"] != null)
+                                            {
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.NumeroPoliza)
+                                                </td>
+                                            }
+
                                             <td>
-                                                @Html.ActionLink(ViewData["textoColumna"].ToString(), ViewData["url"].ToString(), new { id = item.IdRecepcionActivoFijoDetalle })
+                                                @{
+                                                    if (ViewBag.RequerirAlta != null)
+                                                    {
+                                                        @Html.ActionLink(ViewData["textoColumna"].ToString(), item.RecepcionActivoFijo.MotivoRecepcion.Descripcion == "Compra" ? ViewData["url"].ToString() : "AprobarAlta", new { id = item.IdRecepcionActivoFijoDetalle })
+                                                    }
+                                                    else
+                                                    {
+                                                        @Html.ActionLink(ViewData["textoColumna"].ToString(), ViewData["url"].ToString(), new { id = item.IdRecepcionActivoFijoDetalle })
+                                                    }                                                    
+                                                }
+
                                             </td>
                                         </tr>
                                     }
