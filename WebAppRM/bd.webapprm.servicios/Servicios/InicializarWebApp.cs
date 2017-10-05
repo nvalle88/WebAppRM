@@ -24,7 +24,7 @@ namespace bd.webapprm.servicios.Servicios
                     var response = JsonConvert.DeserializeObject<Response>(resultado);
                     var sistema = JsonConvert.DeserializeObject<Adscsist>(response.Resultado.ToString());
                     WebApp.BaseAddress = sistema.AdstHost;
-                   
+
                 }
                
             }
