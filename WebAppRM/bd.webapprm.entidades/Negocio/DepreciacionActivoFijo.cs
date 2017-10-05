@@ -20,6 +20,11 @@ namespace bd.webapprm.entidades
         [DisplayFormat(DataFormatString = "{0:C2}", ApplyFormatInEditMode = false)]
         public decimal DepreciacionAcumulada { get; set; }
 
+        [Required(ErrorMessage = "Debe introducir {0}")]
+        [Display(Name = "Valor Residual:")]
+        [DisplayFormat(DataFormatString = "{0:C2}", ApplyFormatInEditMode = false)]
+        public decimal ValorResidual { get; set; }
+
         //Propiedades Virtuales Referencias a otras clases
         [Display(Name = "Activo fijo:")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]

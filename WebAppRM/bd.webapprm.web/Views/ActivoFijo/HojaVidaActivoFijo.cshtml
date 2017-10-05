@@ -43,8 +43,6 @@
                                 <fieldset style="padding:15px 15px !important;">
                                     @{ await Html.RenderPartialAsync("_HojaVidaActivo", Model); }
                                 </fieldset>
-
-
                             </div>
                         </div>
                     </div>
@@ -53,4 +51,8 @@
         </div>
     </section>
 </div>
+@section Scripts{
+    <script src="~/lib/TableTools-master/src/dataTables.tableTools.js"></script>
+    <script src="~/js/activoFijo/reporteHojaVida.js"></script>
+}
 
