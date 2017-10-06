@@ -75,6 +75,6 @@ namespace bd.webapprm.entidades
 
         public virtual ICollection<TransferenciaActivoFijoDetalle> TransferenciaActivoFijoDetalle { get; set; }
 
-       
+        public virtual ICollection<ActivosFijosAdicionados> ActivosFijosAdicionados { get; set; }
     }
 }

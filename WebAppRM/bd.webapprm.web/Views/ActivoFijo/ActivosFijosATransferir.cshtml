@@ -1,13 +1,16 @@
 @model List<bd.webapprm.entidades.RecepcionActivoFijoDetalle>
+@{
+    ViewData["Title"] = "ActivosFijosATransferir";
+}
 
-<div id="content">    
+<div id="content">
     <section id="widget-grid" class="">
         <div class="row">
             <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
                     <header>
                         <span class="widget-icon"> <i class="fa fa-table"></i> </span>
-                        <h2>@ViewData["titulo"]</h2>
+                        <h2>Activos Fijos a Transferir</h2>
                     </header>
                     <div>
                         <div class="jarviswidget-editbox"></div>
@@ -16,29 +19,32 @@
                                 <thead>
                                     <tr>
                                         <th>
+                                            Activo Fijo
+                                        </th>
+                                        <th>
                                             Tipo
                                         </th>
                                         <th>
                                             Clase
                                         </th>
                                         <th>
-                                            Sub Clase
+                                            Pa&Iacute;s
                                         </th>
                                         <th>
-                                            Fecha de Registro
+                                            Provincia
+                                        </th>
+                                        <th>
+                                            Ciudad
+                                        </th>
+                                        <th>
+                                            Sucursal
                                         </th>
                                         <th>
                                             Proveedor
                                         </th>
                                         <th>
-                                            Activo Fijo
-                                        </th>
-                                        @if (ViewData["poliza"] != null)
-                                        {
-                                            <th>
-                                                N&uacute;mero de P&oacute;liza
-                                            </th>
-                                        }
+                                            Fecha de Registro
+                                        </th>                                        
                                         <th>
                                             Opciones
                                         </th>
@@ -49,6 +55,9 @@
                                     {
                                         <tr>
                                             <td>
+                                                @Html.DisplayFor(modelItem => item.ActivoFijo.Nombre)
+                                            </td>
+                                            <td>
                                                 @Html.DisplayFor(modelItem => item.RecepcionActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.Nombre)
                                             </td>
 
@@ -57,40 +66,30 @@
                                             </td>
 
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.RecepcionActivoFijo.SubClaseActivoFijo.Nombre)
+                                                @Html.DisplayFor(modelItem => item.ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.Pais.Nombre)
                                             </td>
 
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.RecepcionActivoFijo.FechaRecepcion)
+                                                @Html.DisplayFor(modelItem => item.ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.Nombre)
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Nombre)
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.ActivoFijo.LibroActivoFijo.Sucursal.Nombre)
                                             </td>
 
                                             <td>
                                                 @{ await ViewContext.Writer.WriteAsync(String.Format("{0} {1}", item.RecepcionActivoFijo.Proveedor.Nombre, item.RecepcionActivoFijo.Proveedor.Apellidos)); }
                                             </td>
-
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.ActivoFijo.Nombre)
+                                                @Html.DisplayFor(modelItem => item.RecepcionActivoFijo.FechaRecepcion)
                                             </td>
-
-                                            @if (ViewData["poliza"] != null)
-                                            {
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.NumeroPoliza)
-                                                </td>
-                                            }
-
+                                                
                                             <td>
-                                                @{
-                                                    if (ViewBag.RequerirAlta != null)
-                                                    {
-                                                        @Html.ActionLink(ViewData["textoColumna"].ToString(), item.RecepcionActivoFijo.MotivoRecepcion.Descripcion.IndexOf("Compra") > -1 ? ViewData["url"].ToString() : "AprobarAlta", new { id = item.IdRecepcionActivoFijoDetalle })
-                                                    }
-                                                    else
-                                                    {
-                                                        @Html.ActionLink(ViewData["textoColumna"].ToString(), ViewData["url"].ToString(), new { id = item.IdRecepcionActivoFijoDetalle })
-                                                    }                                                    
-                                                }
-
+                                                @Html.ActionLink("Transferir", "ActivoFijoRealizarTransferencia", new { id = item.IdActivoFijo })
                                             </td>
                                         </tr>
                                     }
@@ -106,3 +105,7 @@
 @section Scripts {
     <script src='~/js/datatables/init.js'></script>
 }
+
+
+
+

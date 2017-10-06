@@ -1,5 +1,6 @@
 namespace bd.webapprm.entidades
 {
+    using bd.webapprm.entidades.Negocio;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -13,9 +14,7 @@ namespace bd.webapprm.entidades
 
         public int IdEmpleado { get; set; }
 
-        //public int IdEmpleadoResponsableEnvio { get; set; }
-
-        //public int IdEmpleadoResponsableRecibo { get; set; }
+        public int IdMotivoTransferencia { get; set; }
 
         public DateTime FechaTransferencia { get; set; }
 
@@ -30,9 +29,7 @@ namespace bd.webapprm.entidades
 
         public virtual Empleado Empleado { get; set; }
 
-        //public virtual Empleado Empleado1 { get; set; }
-
-        //public virtual Empleado Empleado2 { get; set; }
+        public virtual MotivoTransferencia MotivoTransferencia { get; set; }
 
         public virtual ICollection<TransferenciaActivoFijoDetalle> TransferenciaActivoFijoDetalle { get; set; }
     }
