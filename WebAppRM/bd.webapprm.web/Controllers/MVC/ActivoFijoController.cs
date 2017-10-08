@@ -1038,6 +1038,46 @@ namespace bd.webapprm.web.Controllers.MVC
 
             return RedirectToAction("AddComponentes", id2);
         }
+
+        public async Task<IActionResult> ActivosFijosReporteAltas()
+        {
+            var lista = new List<RecepcionActivoFijoDetalle>();
+            var listaAFA = new List<ActivosFijosAlta>();
+
+            try
+            {
+                lista = await apiServicio.Listar<RecepcionActivoFijoDetalle>(new Uri(WebApp.BaseAddress)
+                                                                    , "/api/RecepcionActivoFijo/ListarRecepcionActivoFijo");
+                
+                try
+                {
+                    listaAFA = await apiServicio.Listar<ActivosFijosAlta>(new Uri(WebApp.BaseAddress)
+                                                                    , "/api/ActivosFijosAlta/ListarAltasActivosFijos");
+
+                    ViewData["listaAFA"] = listaAFA;
+
+                    return View("AltaReporte", lista);
+                }
+                catch (Exception ex)
+                {
+
+                    throw;
+                }                
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                {
+                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                    Message = "Listando activos fijos que han estado en Alta",
+                    ExceptionTrace = ex,
+                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
+                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                    UserName = "Usuario APP webappth"
+                });
+                return BadRequest();
+            }
+        }
         #endregion
 
         #region Transferencias
@@ -1069,16 +1109,70 @@ namespace bd.webapprm.web.Controllers.MVC
             }
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> TransferirActivoFijo(RecepcionActivoFijoDetalle recepcionActivoFijoDetalle)
+        public async Task<IActionResult> TransferirActivoFijo(string id)
         {
             Response response = new Response();
             try
             {
+                RecepcionActivoFijoDetalle recepcionActivoFijoDetalle = new RecepcionActivoFijoDetalle();
+
+                var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddress),
+                                                                  "/api/RecepcionActivoFijo");
+
+
+                respuesta.Resultado = JsonConvert.DeserializeObject<RecepcionActivoFijoDetalle>(respuesta.Resultado.ToString());
+
+                if (respuesta.IsSuccess)
+                {
+                    recepcionActivoFijoDetalle = respuesta.Resultado as RecepcionActivoFijoDetalle;
+                }
+
                 var listaMotivoTransferencia = await apiServicio.Listar<MotivoTransferencia>(new Uri(WebApp.BaseAddress), "/api/MotivoTransferencia/ListarMotivoTransferencia");
-                                                               
-                return View(recepcionActivoFijoDetalle);
+
+                List<SelectListItem> listaMT = new List<SelectListItem>();
+
+                foreach (var item in listaMotivoTransferencia)
+                {
+                    SelectListItem _item = new SelectListItem();
+                    _item.Text = item.Motivo_Transferencia;
+                    _item.Value = item.IdMotivoTransferencia.ToString();
+
+                    listaMT.Add(_item);
+                }
+
+                ViewBag.listaMT = listaMT;
+
+                var listaPais = await apiServicio.Listar<Pais>(new Uri(WebApp.BaseAddress), "/api/Pais/ListarPaises");
+
+                List<SelectListItem> listaP = new List<SelectListItem>();
+
+                foreach (var item in listaPais)
+                {
+                    SelectListItem _item = new SelectListItem();
+                    _item.Text = item.Nombre;
+                    _item.Value = item.IdPais.ToString();
+
+                    listaP.Add(_item);
+                }
+
+                ViewBag.listaP = listaP;
+                                
+                ViewData["Pais"] = new SelectList(await apiServicio.Listar<Pais>(new Uri(WebApp.BaseAddress), "/api/Pais/ListarPaises"), "IdPais", "Nombre");
+                ViewData["Provincia"] = await ObtenerSelectListProvincia((ViewData["Pais"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Pais"] as SelectList).FirstOrDefault().Value) : -1);
+                ViewData["Ciudad"] = await ObtenerSelectListCiudad((ViewData["Provincia"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Provincia"] as SelectList).FirstOrDefault().Value) : -1);
+                ViewData["Sucursal"] = await ObtenerSelectListSucursal((ViewData["Ciudad"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Ciudad"] as SelectList).FirstOrDefault().Value) : -1);
+
+                ViewData["PaisO"] = new SelectList(await apiServicio.Listar<Pais>(new Uri(WebApp.BaseAddress), "/api/Pais/ListarPaises"), "IdPais", "Nombre");
+                ViewData["ProvinciaO"] = await ObtenerSelectListProvincia((ViewData["PaisO"] as SelectList).Where(x=>x.Value == recepcionActivoFijoDetalle.ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.IdPais.ToString()).FirstOrDefault() != null ? int.Parse((ViewData["PaisO"] as SelectList).Where(x => x.Value == recepcionActivoFijoDetalle.ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.IdPais.ToString()).FirstOrDefault().Value) : -1);
+                ViewData["CiudadO"] = await ObtenerSelectListCiudad((ViewData["ProvinciaO"] as SelectList).Where(x => x.Value == recepcionActivoFijoDetalle.ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.IdProvincia.ToString()).FirstOrDefault() != null ? int.Parse((ViewData["ProvinciaO"] as SelectList).Where(x => x.Value == recepcionActivoFijoDetalle.ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.IdProvincia.ToString()).FirstOrDefault().Value) : -1);
+                ViewData["SucursalO"] = await ObtenerSelectListSucursal((ViewData["CiudadO"] as SelectList).Where(x => x.Value == recepcionActivoFijoDetalle.ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.IdCiudad.ToString()).FirstOrDefault() != null ? int.Parse((ViewData["CiudadO"] as SelectList).Where(x => x.Value == recepcionActivoFijoDetalle.ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.IdCiudad.ToString()).FirstOrDefault().Value) : -1);
+
+
+                var listaEmpleado = await apiServicio.Listar<Empleado>(new Uri(WebApp.BaseAddress), "/api/Empleado/ListarEmpleados");
+                var tlistaEmpleado = listaEmpleado.Select(c => new { IdEmpleado = c.IdEmpleado, NombreApellidos = String.Format("{0} {1}", c.Persona.Nombres, c.Persona.Apellidos) });
+                ViewData["Empleado"] = new SelectList(tlistaEmpleado, "IdEmpleado", "NombreApellidos");
+                                
+                return View("TransferirActivoFijo", recepcionActivoFijoDetalle);
             }
             catch (Exception ex)
             {
@@ -1095,6 +1189,227 @@ namespace bd.webapprm.web.Controllers.MVC
                 return BadRequest();
             }
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> GuardarTransferencia()
+        {
+            Response response = new Response();
+
+            var lista = new List<RecepcionActivoFijoDetalle>();
+
+            try
+            {
+                int IdRecepcionActivoFijoDetalle = int.Parse(Request.Form["IdRecepcionActivoFijoDetalle"]);
+
+                RecepcionActivoFijoDetalle RecepcionActivoFijoDetalle = new RecepcionActivoFijoDetalle();
+
+                var respuesta = await apiServicio.SeleccionarAsync<Response>(IdRecepcionActivoFijoDetalle.ToString(), new Uri(WebApp.BaseAddress), "/api/RecepcionActivoFijo");
+
+                if (respuesta.IsSuccess)
+                {
+                    respuesta.Resultado = JsonConvert.DeserializeObject<RecepcionActivoFijoDetalle>(respuesta.Resultado.ToString());
+
+                    RecepcionActivoFijoDetalle = respuesta.Resultado as RecepcionActivoFijoDetalle;
+
+                    int motivoTransferencia = int.Parse(Request.Form["motivoTransferencia"].ToString());
+                    int empleadoEnvia = int.Parse(Request.Form["empleadoEnvia"].ToString());
+                    int empleadoRecibe = int.Parse(Request.Form["empleadoRecibe"].ToString());
+                    string origen = RecepcionActivoFijoDetalle.ActivoFijo.LibroActivoFijo.Sucursal.Nombre; //Request.Form["ActivoFijo.LibroActivoFijo.Sucursal.Nombre"].ToString();
+                    string observaciones = Request.Form["observaciones"].ToString();
+                    DateTime fechaTransferencia = DateTime.Now;
+
+                    int IdSucursalD = int.Parse(Request.Form["ActivoFijo.LibroActivoFijo.IdSucursal"].ToString());
+                    int IdCiudadD = int.Parse(Request.Form["ActivoFijo.LibroActivoFijo.Sucursal.IdCiudad"].ToString());
+                    int IdProvinciaD = int.Parse(Request.Form["ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.IdProvincia"].ToString());
+                    int IdPaisD = int.Parse(Request.Form["ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.IdPais"].ToString());
+
+                    try
+                    {
+                        Sucursal sucursal = new Sucursal();
+
+                        var otraRespuesta = await apiServicio.SeleccionarAsync<Response>(IdSucursalD.ToString(), new Uri(WebApp.BaseAddress), "/api/Sucursal");
+
+                        otraRespuesta.Resultado = JsonConvert.DeserializeObject<Sucursal>(otraRespuesta.Resultado.ToString());
+
+                        if (otraRespuesta.IsSuccess)
+                        {
+                            sucursal = otraRespuesta.Resultado as Sucursal;
+
+                            string destinoS = sucursal.Nombre;
+
+                            LibroActivoFijo libroAF = new LibroActivoFijo { IdLibroActivoFijo = RecepcionActivoFijoDetalle.ActivoFijo.LibroActivoFijo.IdLibroActivoFijo, IdSucursal = sucursal.IdSucursal };
+
+                            try
+                            {
+                                var respuestaActualizar = await apiServicio.EditarAsync<LibroActivoFijo>(libroAF.IdLibroActivoFijo.ToString(), libroAF, new Uri(WebApp.BaseAddress), "/api/LibroActivoFijo");
+
+                                if (respuestaActualizar.IsSuccess)
+                                {
+                                    TransferenciaActivoFijo TransferenciaActivoFijo = new TransferenciaActivoFijo();
+                                    TransferenciaActivoFijo.IdMotivoTransferencia = motivoTransferencia;
+                                    TransferenciaActivoFijo.IdEmpleado = empleadoEnvia;
+                                    TransferenciaActivoFijo.IdEmpleadoRecibo = empleadoRecibe;
+                                    TransferenciaActivoFijo.Origen = origen;
+                                    TransferenciaActivoFijo.Destino = destinoS;
+                                    TransferenciaActivoFijo.Observaciones = observaciones;
+                                    TransferenciaActivoFijo.FechaTransferencia = fechaTransferencia;
+
+                                    try
+                                    {
+                                        response = await apiServicio.InsertarAsync(TransferenciaActivoFijo,
+                                                                     new Uri(WebApp.BaseAddress),
+                                                                     "/api/TransferenciaActivoFijo/InsertarTransferenciaActivoFijo");
+
+                                        if (response.IsSuccess)
+                                        {
+                                            var responseLog = await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                                            {
+                                                ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                                                ExceptionTrace = null,
+                                                Message = "Se ha insertado una Transferencia de Activo Fijo",
+                                                UserName = "Usuario 1",
+                                                LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
+                                                LogLevelShortName = Convert.ToString(LogLevelParameter.ADV),
+                                                EntityID = string.Format("{0} {1}", "Transferencia de Activo Fijo:", TransferenciaActivoFijo.IdTransferenciaActivoFijo),
+                                            });
+
+                                            var respuestaTransfInsertada = await apiServicio.Listar<TransferenciaActivoFijo>(new Uri(WebApp.BaseAddress), "/api/TransferenciaActivoFijo/ListarTransferenciaActivoFijo");
+                                            
+                                            TransferenciaActivoFijoDetalle TransferenciaActivoFijoDetalle = new TransferenciaActivoFijoDetalle();
+                                            TransferenciaActivoFijoDetalle.IdTransferenciaActivoFijo = respuestaTransfInsertada.Where(x => x.FechaTransferencia == fechaTransferencia).Select(x => x).FirstOrDefault().IdTransferenciaActivoFijo;
+                                            TransferenciaActivoFijoDetalle.IdActivoFijo = RecepcionActivoFijoDetalle.IdActivoFijo;
+
+                                            var respuestaDetalle = await apiServicio.InsertarAsync(TransferenciaActivoFijoDetalle,
+                                                                         new Uri(WebApp.BaseAddress),
+                                                                         "/api/TransferenciaActivoFijoDetalle/InsertarTransferenciaActivoFijoDetalle");
+
+                                            if (respuestaDetalle.IsSuccess)
+                                            {
+                                                try
+                                                {
+                                                    lista = await apiServicio.Listar<RecepcionActivoFijoDetalle>(new Uri(WebApp.BaseAddress)
+                                                                                                        , "/api/RecepcionActivoFijo/ListarRecepcionActivoFijo");
+
+                                                    var listaActivosFijosRecepcionados = lista.Select(c => c).ToList();
+
+                                                    return View("ActivosFijosATransferir", listaActivosFijosRecepcionados);
+                                                }
+                                                catch (Exception ex)
+                                                {
+                                                    await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                                                    {
+                                                        ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                                                        Message = "Listando activos fijos",
+                                                        ExceptionTrace = ex,
+                                                        LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
+                                                        LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                                                        UserName = "Usuario APP webappth"
+                                                    });
+                                                    return BadRequest();
+                                                }
+                                            }
+                                            
+                                        }
+                                    }
+                                    catch (Exception ex)
+                                    {
+
+                                        throw;
+                                    }
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+
+                                throw;
+                            }                            
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                        {
+                            ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                            Message = "Seleccionando una Sucursal",
+                            ExceptionTrace = ex,
+                            LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
+                            LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                            UserName = "Usuario APP WebAppTh"
+                        });
+
+                        return BadRequest();
+                    }
+                }
+
+                //try
+                //{
+                //    response = await apiServicio.InsertarAsync(TransferenciaActivoFijo,
+                //                                                     new Uri(WebApp.BaseAddress),
+                //                                                     "/api/TransferenciaActivoFijo/InsertarTransferenciaActivoFijo");
+
+                //    if (response.IsSuccess)
+                //    {
+                //        var responseLog = await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                //        {
+                //            ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                //            ExceptionTrace = null,
+                //            Message = "Se ha insertado una Transferencia de Activo Fijo",
+                //            UserName = "Usuario 1",
+                //            LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
+                //            LogLevelShortName = Convert.ToString(LogLevelParameter.ADV),
+                //            EntityID = string.Format("{0} {1}", "Transferencia de Activo Fijo:", TransferenciaActivoFijo.IdTransferenciaActivoFijo),
+                //        });
+
+                //        try
+                //        {
+                //            lista = await apiServicio.Listar<RecepcionActivoFijoDetalle>(new Uri(WebApp.BaseAddress)
+                //                                                                , "/api/RecepcionActivoFijo/ListarRecepcionActivoFijo");
+
+                //            var listaActivosFijosRecepcionados = lista.Select(c => c).ToList();
+
+                //            return View("ActivosFijosATransferir", listaActivosFijosRecepcionados);
+                //        }
+                //        catch (Exception ex)
+                //        {
+                //            await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                //            {
+                //                ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                //                Message = "Listando activos fijos",
+                //                ExceptionTrace = ex,
+                //                LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
+                //                LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                //                UserName = "Usuario APP webappth"
+                //            });
+                //            return BadRequest();
+                //        }
+                //    }
+                //}
+                //catch (Exception ex)
+                //{
+                //    await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                //    {
+                //        ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                //        Message = "Insertando una Transferencia de Activo Fijo",
+                //        ExceptionTrace = ex,
+                //        LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
+                //        LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                //        UserName = "Usuario APP WebAppTh"
+                //    });
+
+                //    return BadRequest();
+                //}
+            }
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+                        
+            return View("ActivosFijosATransferir", lista);
+        }
+
         #endregion
 
         #region Depreciación

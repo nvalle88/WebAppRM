@@ -14,6 +14,8 @@ namespace bd.webapprm.entidades
 
         public int IdEmpleado { get; set; }
 
+        public int IdEmpleadoRecibo { get; set; }
+
         public int IdMotivoTransferencia { get; set; }
 
         public DateTime FechaTransferencia { get; set; }
