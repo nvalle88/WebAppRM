@@ -89,6 +89,12 @@
                     <li class="@Html.RouteIf("Nacionalidad", "active")">
                         <a href="@Url.Action("Index", "Nacionalidad")">Nacionalidad</a>
                     </li>
+                    <li class="@Html.RouteIf("Sexo", "active")">
+                        <a href="@Url.Action("Index", "Sexo")">Sexo</a>
+                    </li>
+                    <li class="@Html.RouteIf("TipoIdentificacion", "active")">
+                        <a href="@Url.Action("Index", "TipoIdentificacion")">Tipo de Identificaci&oacute;n</a>
+                    </li>
                 </ul>
             </li>
             <li class="@Html.RouteIf("activos_fijos", "active")">
@@ -154,8 +160,8 @@
                     <li class="@Html.RouteIf("reportes", "active")">
                         <a href="#"><i class="fa fa-file-text-o"></i> <span class="menu-item-parent">Reportes</span></a>
                         <ul>
-                            <li class="@Html.RouteIf("RegistroAltasReporte", "active")">
-                                <a href="@Url.Action("RegistroAltasReporte", "ActivoFijo")">Registro de Altas</a>
+                            <li class="@Html.RouteIf("AltaReporte", "active")">
+                                <a href="@Url.Action("ActivosFijosReporteAltas", "ActivoFijo")">Registro de Altas</a>
                             </li>
                             <li class="@Html.RouteIf("DetallesReporte", "active")">
                                 <a href="@Url.Action("DetallesReporte", "ActivoFijo")">Detalles con P&oacute;liza de Seguro</a>

@@ -44,7 +44,7 @@
                                         </th>
                                         <th>
                                             Fecha de Registro
-                                        </th>                                        
+                                        </th>
                                         <th>
                                             Opciones
                                         </th>
@@ -87,12 +87,12 @@
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.RecepcionActivoFijo.FechaRecepcion)
                                             </td>
-                                                
+
                                             <td>
-                                                @Html.ActionLink("Transferir", "ActivoFijoRealizarTransferencia", new { id = item.IdActivoFijo })
+                                                @Html.ActionLink("Transferir", "TransferirActivoFijo", new { id = item.IdRecepcionActivoFijoDetalle })
                                             </td>
                                         </tr>
-                                    }
+                                                    }
                                 </tbody>
                             </table>
                         </div>
@@ -105,7 +105,3 @@
 @section Scripts {
     <script src='~/js/datatables/init.js'></script>
 }
-
-
-
-
