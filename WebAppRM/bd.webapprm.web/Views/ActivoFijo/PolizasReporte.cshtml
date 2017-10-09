@@ -23,7 +23,7 @@
                             <div class="padding-10">
                                 <br>
                                 <div class="pull-left">
-                                    <h1 style="font-size:260% !important;"><i class="fa fa-file-text-o"></i> Pólizas a Activos Fijos Recepcionados</h1>
+                                    <h1 style="font-size:260% !important;"><i class="fa fa-file-text-o"></i> P&oacute;lizas a Activos Fijos Recepcionados</h1>
                                 </div>
                                 <div class="pull-right">
                                     <div class="row">
@@ -48,7 +48,7 @@
                                 </div>
                                 <div class="clearfix"></div>
 
-                                <table id="tbReporteMantenimientos" class="table table-striped table-bordered table-hover" style="width:100%;">
+                                <table id="tbReporte" class="table table-striped table-bordered table-hover" style="width:100%;">
                                     <thead>
                                         <tr>
                                             <th>
@@ -69,11 +69,8 @@
                                             <th>
                                                 Activo Fijo
                                             </th>
-                                                <th>
-                                                    N&uacute;mero de P&oacute;liza
-                                                </th>
                                             <th>
-                                                Opciones
+                                                N&uacute;mero de P&oacute;liza
                                             </th>
                                         </tr>
                                     </thead>
@@ -107,7 +104,7 @@
                                                     @Html.DisplayFor(modelItem => item.NumeroPoliza)
                                                 </td>
                                             </tr>
-                                        }
+                                                        }
                                     </tbody>
                                 </table>
 
@@ -132,5 +129,5 @@
 
 @section Scripts{
     <script src="~/lib/TableTools-master/src/dataTables.tableTools.js"></script>
-    <script src="~/js/activoFijo/reporteMantenimientos.js"></script>
+    <script src="~/js/activoFijo/reportePolizas.js"></script>
 }
