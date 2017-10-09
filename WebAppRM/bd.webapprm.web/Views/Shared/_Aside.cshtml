@@ -14,14 +14,29 @@
                     <li class="@Html.RouteIf("CatalogoCuenta", "active")">
                         <a href="@Url.Action("Index", "CatalogoCuenta")">Cat&aacute;logo de Cuenta</a>
                     </li>
+                    <li class="@Html.RouteIf("Ciudad", "active")">
+                        <a href="@Url.Action("Index", "Ciudad")">Ciudad</a>
+                    </li>
                     <li class="@Html.RouteIf("ClaseActivoFijo", "active")">
                         <a href="@Url.Action("Index", "ClaseActivoFijo")">Clase de Activo Fijo</a>
                     </li>
                     <li class="@Html.RouteIf("ClaseArticulo", "active")">
                         <a href="@Url.Action("Index", "ClaseArticulo")">Clase de Art&iacute;culo</a>
                     </li>
+                    <li class="@Html.RouteIf("Dependencia", "active")">
+                        <a href="@Url.Action("Index", "Dependencia")">Dependencia</a>
+                    </li>
+                    <li class="@Html.RouteIf("DetalleFactura", "active")">
+                        <a href="@Url.Action("Index", "DetalleFactura")">Detalle de Factura</a>
+                    </li>
+                    <li class="@Html.RouteIf("MaestroDetalleArticulo", "active")">
+                        <a href="@Url.Action("Index", "MaestroDetalleArticulo")">Detalle de Maestro Art&iacute;culo</a>
+                    </li>
                     <li class="@Html.RouteIf("Empleado", "active")">
                         <a href="@Url.Action("Index", "Empleado")">Empleado</a>
+                    </li>
+                    <li class="@Html.RouteIf("Estado", "active")">
+                        <a href="@Url.Action("Index", "Estado")">Estado</a>
                     </li>
                     <li class="@Html.RouteIf("EstadoCivil", "active")">
                         <a href="@Url.Action("Index", "EstadoCivil")">Estado Civil</a>
@@ -29,14 +44,11 @@
                     <li class="@Html.RouteIf("Etnia", "active")">
                         <a href="@Url.Action("Index", "Etnia")">Etnia</a>
                     </li>
-                    <li class="@Html.RouteIf("DetalleFactura", "active")">
-                        <a href="@Url.Action("Index", "DetalleFactura")">Detalle de Factura</a>
-                    </li>
                     <li class="@Html.RouteIf("FondoFinanciamiento", "active")">
                         <a href="@Url.Action("Index", "FondoFinanciamiento")">Fondo de Financiamiento</a>
                     </li>
-                    <li class="@Html.RouteIf("MaestroDetalleArticulo", "active")">
-                        <a href="@Url.Action("Index", "MaestroDetalleArticulo")">Detalle de Maestro Art&iacute;culo</a>
+                    <li class="@Html.RouteIf("Genero", "active")">
+                        <a href="@Url.Action("Index", "Genero")">Genero</a>
                     </li>
                     <li class="@Html.RouteIf("Marca", "active")">
                         <a href="@Url.Action("Index", "Marca")">Marca</a>
@@ -47,14 +59,29 @@
                     <li class="@Html.RouteIf("MotivoAsiento", "active")">
                         <a href="@Url.Action("Index", "MotivoAsiento")">Motivo de Asiento</a>
                     </li>
+                    <li class="@Html.RouteIf("ActivoFijoMotivoBaja", "active")">
+                        <a href="@Url.Action("Index", "ActivoFijoMotivoBaja")">Motivo de Baja</a>
+                    </li>
                     <li class="@Html.RouteIf("MotivoRecepcion", "active")">
                         <a href="@Url.Action("Index", "MotivoRecepcion")">Motivo de Recepción</a>
                     </li>
                     <li class="@Html.RouteIf("MotivoTransferencia", "active")">
                         <a href="@Url.Action("Index", "MotivoTransferencia")">Motivo de Transferencia</a>
                     </li>
+                    <li class="@Html.RouteIf("Nacionalidad", "active")">
+                        <a href="@Url.Action("Index", "Nacionalidad")">Nacionalidad</a>
+                    </li>
+                    <li class="@Html.RouteIf("Pais", "active")">
+                        <a href="@Url.Action("Index", "Pais")">Pa&iacute;s</a>
+                    </li>
                     <li class="@Html.RouteIf("Proveedor", "active")">
                         <a href="@Url.Action("Index", "Proveedor")">Proveedor</a>
+                    </li>
+                    <li class="@Html.RouteIf("Provincia", "active")">
+                        <a href="@Url.Action("Index", "Provincia")">Provincia</a>
+                    </li>
+                    <li class="@Html.RouteIf("Sexo", "active")">
+                        <a href="@Url.Action("Index", "Sexo")">Sexo</a>
                     </li>
                     <li class="@Html.RouteIf("SubClaseActivoFijo", "active")">
                         <a href="@Url.Action("Index", "SubClaseActivoFijo")">Sub Clase de Activo Fijo</a>
@@ -74,35 +101,15 @@
                     <li class="@Html.RouteIf("TipoArticulo", "active")">
                         <a href="@Url.Action("Index", "TipoArticulo")">Tipo de Art&iacute;culo</a>
                     </li>
-                    <li class="@Html.RouteIf("UnidadMedida", "active")">
-                        <a href="@Url.Action("Index", "UnidadMedida")">Unidad de Medida</a>
-                    </li>
-                    <li class="@Html.RouteIf("ActivoFijoMotivoBaja", "active")">
-                        <a href="@Url.Action("Index", "ActivoFijoMotivoBaja")">Motivo de Baja</a>
-                    </li>
-                    <li class="@Html.RouteIf("Estado", "active")">
-                        <a href="@Url.Action("Index", "Estado")">Estado</a>
-                    </li>
-                    <li class="@Html.RouteIf("Genero", "active")">
-                        <a href="@Url.Action("Index", "Genero")">Genero</a>
-                    </li>
-                    <li class="@Html.RouteIf("Nacionalidad", "active")">
-                        <a href="@Url.Action("Index", "Nacionalidad")">Nacionalidad</a>
-                    </li>
-                    <li class="@Html.RouteIf("Sexo", "active")">
-                        <a href="@Url.Action("Index", "Sexo")">Sexo</a>
-                    </li>
                     <li class="@Html.RouteIf("TipoIdentificacion", "active")">
                         <a href="@Url.Action("Index", "TipoIdentificacion")">Tipo de Identificaci&oacute;n</a>
-                    <li class="@Html.RouteIf("Pais", "active")">
-                        <a href="@Url.Action("Index", "Pais")">Pa&iacute;s</a>
                     </li>
-                    <li class="@Html.RouteIf("Provincia", "active")">
-                        <a href="@Url.Action("Index", "Provincia")">Provincia</a>
+                    <li class="@Html.RouteIf("TipoSangre", "active")">
+                        <a href="@Url.Action("Index", "TipoSangre")">Tipo de Sangre</a>
                     </li>
-                    <li class="@Html.RouteIf("Ciudad", "active")">
-                        <a href="@Url.Action("Index", "Ciudad")">Ciudad</a>
-                    </li>
+                    <li class="@Html.RouteIf("UnidadMedida", "active")">
+                        <a href="@Url.Action("Index", "UnidadMedida")">Unidad de Medida</a>
+                    </li>                                                         
                 </ul>
             </li>
             <li class="@Html.RouteIf("activos_fijos", "active")">
