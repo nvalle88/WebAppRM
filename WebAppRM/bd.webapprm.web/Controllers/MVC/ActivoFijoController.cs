@@ -1551,7 +1551,6 @@ namespace bd.webapprm.web.Controllers.MVC
         #endregion
 
         #region Mantenimiento de Activos
-
         public async Task<IActionResult> ListarMantenimientos()
         {
             var lista = new List<MantenimientoActivoFijo>();
@@ -1750,7 +1749,6 @@ namespace bd.webapprm.web.Controllers.MVC
                 return BadRequest();
             }
         }
-
         #endregion
 
         #region Reportes
@@ -1810,8 +1808,59 @@ namespace bd.webapprm.web.Controllers.MVC
                 return BadRequest();
             }
         }
+
+        public async Task<IActionResult> MantenimientosReporte()
+        {
+            var lista = new List<MantenimientoActivoFijo>();
+            try
+            {
+                lista = await apiServicio.Listar<MantenimientoActivoFijo>(new Uri(WebApp.BaseAddress)
+                                                                    , "/api/MantenimientoActivoFijo/ListarMantenimientosActivoFijo");                
+                return View(lista);
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                {
+                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                    Message = "Listando mantenimientos de activos fijos",
+                    ExceptionTrace = ex,
+                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
+                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                    UserName = "Usuario APP webappth"
+                });
+                return BadRequest();
+            }
+        }
+
+        public async Task<IActionResult> PolizasReporte()
+        {
+            var lista = new List<RecepcionActivoFijoDetalle>();
+            try
+            {
+                lista = await apiServicio.Listar<RecepcionActivoFijoDetalle>(new Uri(WebApp.BaseAddress)
+                                                                    , "/api/RecepcionActivoFijo/ListarRecepcionActivoFijo");
+
+                var listaActivosFijosRecepcionados = lista.Where(c => c.Estado.Nombre == "Recepcionado" && c.NumeroPoliza != "N/A").ToList();               
+                return View(listaActivosFijosRecepcionados);
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                {
+                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                    Message = "Listando activos fijos con estado Recepcionado con número de póliza asignado",
+                    ExceptionTrace = ex,
+                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
+                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                    UserName = "Usuario APP webappth"
+                });
+                return BadRequest();
+            }
+        }
+
         #endregion
-        
+
         #region AJAX_ClaseActivoFijo
         public async Task<SelectList> ObtenerSelectListClaseActivoFijo(int idTipoActivoFijo)
         {

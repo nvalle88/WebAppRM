@@ -94,6 +94,14 @@
                     </li>
                     <li class="@Html.RouteIf("TipoIdentificacion", "active")">
                         <a href="@Url.Action("Index", "TipoIdentificacion")">Tipo de Identificaci&oacute;n</a>
+                    <li class="@Html.RouteIf("Pais", "active")">
+                        <a href="@Url.Action("Index", "Pais")">Pa&iacute;s</a>
+                    </li>
+                    <li class="@Html.RouteIf("Provincia", "active")">
+                        <a href="@Url.Action("Index", "Provincia")">Provincia</a>
+                    </li>
+                    <li class="@Html.RouteIf("Ciudad", "active")">
+                        <a href="@Url.Action("Index", "Ciudad")">Ciudad</a>
                     </li>
                 </ul>
             </li>
@@ -163,8 +171,8 @@
                             <li class="@Html.RouteIf("AltaReporte", "active")">
                                 <a href="@Url.Action("ActivosFijosReporteAltas", "ActivoFijo")">Registro de Altas</a>
                             </li>
-                            <li class="@Html.RouteIf("DetallesReporte", "active")">
-                                <a href="@Url.Action("DetallesReporte", "ActivoFijo")">Detalles con P&oacute;liza de Seguro</a>
+                            <li class="@Html.RouteIf("PolizasReporte", "active")">
+                                <a href="@Url.Action("PolizasReporte", "ActivoFijo")">Detalles con P&oacute;liza de Seguro</a>
                             </li>
                             <li class="@Html.RouteIf("BienesReporte", "active")">
                                 <a href="@Url.Action("BienesReporte", "ActivoFijo")">Bienes por &aacute;rea usuaria</a>
@@ -172,8 +180,8 @@
                             <li class="@Html.RouteIf("HojaVidaReporte", "active")">
                                 <a href="@Url.Action("HojaVidaReporte", "ActivoFijo")">Hoja de vida</a>
                             </li>
-                            <li class="@Html.RouteIf("RegistroMantenimientoReporte", "active")">
-                                <a href="@Url.Action("RegistroMantenimientoReporte", "ActivoFijo")">Registros de Mantenimiento</a>
+                            <li class="@Html.RouteIf("MantenimientosReporte", "active")">
+                                <a href="@Url.Action("MantenimientosReporte", "ActivoFijo")">Registros de Mantenimiento</a>
                             </li>
                         </ul>
                     </li>
