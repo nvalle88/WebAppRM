@@ -159,7 +159,7 @@
                     </li>
 
                     <li class="@Html.RouteIf("bajas", "active")">
-                        <a href="#"><i class="fa fa-file-text-o"></i> <span class="menu-item-parent">Bajas</span></a>
+                        <a href="#"><span class="menu-item-parent">Bajas</span></a>
                         <ul>
                             <li class="@Html.RouteIf("ActivosFijosRecepcionadosBaja", "active")">
                                 <a href="@Url.Action("ActivosFijosRecepcionadosBaja", "ActivoFijo")">Dar Bajas</a>
@@ -194,7 +194,74 @@
                     </li>
                 </ul>
             </li>
-        </ul>
+            <li class="@Html.RouteIf("proveeduria", "active")">
+                <a href="#"><i class="fa fa-lg fa-fw fa-building"></i> <span class="menu-item-parent">Proveedur&iacute;a</span></a>
+                <ul>
+                    <li class="@Html.RouteIf("recepcion_proveeduria", "active")">
+                        <a href="#"><span class="menu-item-parent">Recepci&oacute;n</span></a>
+                        <ul>
+                            <li class="@Html.RouteIf("RecepcionProveeduria", "active")">
+                                <a href="@Url.Action("RecepcionProveeduria", "Proveeduria")">Recepcionar Proveedur&iacute;a</a>
+                            </li>
+                            <li class="@Html.RouteIf("ConfigurarMaestroArticulo", "active")">
+                                <a href="@Url.Action("ConfigurarMaestroArticulo", "MaestroArticulo")">Configurar Maestro de Art&iacute;culo</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="@Html.RouteIf("altas", "active")">
+                        <a href="#"><span class="menu-item-parent">Altas</span></a>
+                        <ul>
+                            <li class="@Html.RouteIf("ProveeduriaRecepcionados", "active")">
+                                <a href="@Url.Action("ProveeduriaRecepcionados", "Proveeduria")">Dar Altas</a>
+                            </li>
+                            <li class="@Html.RouteIf("ProveeduriaAltas", "active")">
+                                <a href="@Url.Action("ProveeduriaAltas", "Proveeduria")">Listado de Altas</a>
+                            </li>
+                            <li class="@Html.RouteIf("AddComponentes", "active")">
+                                <a href="@Url.Action("AddComponentes", "ActivoFijo")">Adicionar Componentes</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="@Html.RouteIf("bajas", "active")">
+                        <a href="#"><span class="menu-item-parent">Bajas</span></a>
+                        <ul>
+                            <li class="@Html.RouteIf("ProveeduriaRecepcionadosBaja", "active")">
+                                <a href="@Url.Action("ProveeduriaRecepcionadosBaja", "ActivoFijo")">Dar Bajas</a>
+                            </li>
+                            <li class="@Html.RouteIf("ProveeduriaBajas", "active")">
+                                <a href="@Url.Action("ProveeduriaBajas", "ActivoFijo")">Listado de Bajas</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="@Html.RouteIf("reportes", "active")">
+                        <a href="#"><i class="fa fa-file-text-o"></i> <span class="menu-item-parent">Reportes</span></a>
+                        <ul>
+                            <li class="@Html.RouteIf("AltaReporteProveeduria", "active")">
+                                <a href="@Url.Action("ProveeduriaReporteAltas", "Proveeduria")">Registro de Altas</a>
+                            </li>
+                            <li class="@Html.RouteIf("BajaReporteProveeduria", "active")">
+                                <a href="@Url.Action("ProveeduriaReporteBajas", "Proveeduria")">Registro de Bajas</a>
+                            </li>
+                            <li class="@Html.RouteIf("EstadisticasConsumoAreaReporte", "active")">
+                                <a href="@Url.Action("EstadisticasConsumoAreaReporte", "Proveeduria")">Reportes por &aacute;rea con estad&iacute;sticas de consumo</a>
+                            </li>
+                            <li class="@Html.RouteIf("AlertaVencimientoReporte", "active")">
+                                <a href="@Url.Action("AlertaVencimientoReporte", "Proveeduria")">Alertas de Vencimiento por cantidades m&iacute;nimas de los suministros</a>
+                            </li>
+                            <li class="@Html.RouteIf("ConsolidadoInventarioReporte", "active")">
+                                <a href="@Url.Action("ConsolidadoInventarioReporte", "Proveeduria")">Reporte consolidado de inventario para sucursales e individuales</a>
+                            </li>
+                            <li class="@Html.RouteIf("ConsolidadoSolicitudReporte", "active")">
+                                <a href="@Url.Action("ConsolidadoSolicitudReporte", "Proveeduria")">Reporte consolidado de solicitudes para sucursales e individuales</a>
+                            </li>
+                            <li class="@Html.RouteIf("MinMaxReporte", "active")">
+                                <a href="@Url.Action("MinMaxReporte", "ActivoFijo")">Registros de M&iacute;nimos y M&aacute;ximos</a>
+                            </li>
+                        </ul>
+                    </li>
+                    </ul>
+</li>
+</ul>
     </nav>
     <span class="minifyme" data-action="minifyMenu">
         <i class="fa fa-arrow-circle-left hit"></i>
