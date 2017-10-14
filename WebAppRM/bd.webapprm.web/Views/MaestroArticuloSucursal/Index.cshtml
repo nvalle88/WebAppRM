@@ -1,0 +1,88 @@
+@model List<bd.webapprm.entidades.MaestroArticuloSucursal>
+
+<div id="content">
+    <p>
+        <a asp-action="Create" class="btn btn-success">Nuevo Maestro Art&iacute;culo de Sucursal</a>
+    </p>
+
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                        <h2>Maestros Art&iacute;culos de Sucursales</h2>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox"></div>
+                        <div class="widget-body no-padding">
+                            <table id="dt_basic" class="table table-striped table-bordered table-hover" style="width:100%;">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            Pa&iacute;s
+                                        </th>
+                                        <th>
+                                            Provincia
+                                        </th>
+                                        <th>
+                                            Ciudad
+                                        </th>
+                                        <th>
+                                            Sucursal
+                                        </th>
+                                        <th>
+                                            M&iacute;nimo
+                                        </th>
+                                        <th>
+                                            M&aacute;ximo
+                                        </th>
+                                        <th>Opciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Sucursal.Ciudad.Provincia.Pais.Nombre)
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Sucursal.Ciudad.Provincia.Nombre)
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Sucursal.Ciudad.Nombre)
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Sucursal.Nombre)
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Minimo)
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Maximo)
+                                            </td>
+
+                                            <td>
+                                                @Html.ActionLink("Editar", "Edit", new { id = item.IdMaestroArticuloSucursal }) |
+                                                <a href="javascript:void(0);" id="@item.IdMaestroArticuloSucursal" onclick="abrirVentanaConfirmacion('@item.IdMaestroArticuloSucursal')" data-url="@Url.Action("Delete", values: new { id = item.IdMaestroArticuloSucursal })" data-titulo="Eliminar" data-descripcion="&#191;Desea eliminar el Maestro Art&iacute;culo de Sucursal... ?">Eliminar</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+@section Scripts {
+    <script src='~/js/datatables/init.js'></script>
+}

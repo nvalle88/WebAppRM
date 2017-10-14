@@ -29,14 +29,14 @@ namespace bd.webapprm.entidades
 
         //Propiedades Virtuales Referencias a otras clases
 
-        [Display(Name = "Árticulo:")]
+        [Display(Name = "Artículo:")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
         public int IdArticulo { get; set; }
         public virtual Articulo Articulo { get; set; }
 
         //Propiedades Virtuales Referencias a otras clases
 
-        [Display(Name = "Maestro de árticulo de la sucursal:")]
+        [Display(Name = "Maestro de artículo de la sucursal:")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
         public int IdMaestroArticuloSucursal { get; set; }
         public virtual MaestroArticuloSucursal MaestroArticuloSucursal { get; set; }
