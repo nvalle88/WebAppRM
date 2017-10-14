@@ -1,0 +1,7 @@
+@model bd.webapprm.entidades.RecepcionArticulos
+<section class="col col-8">
+    <label class="input">
+        <select asp-for="IdArticulo" class="form-control" asp-items="ViewBag.Articulo"></select>
+        <span asp-validation-for="IdArticulo" class="text-danger"></span>
+    </label>
+</section>

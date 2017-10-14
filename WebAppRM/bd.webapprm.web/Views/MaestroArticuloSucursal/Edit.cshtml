@@ -1,0 +1,110 @@
+@model bd.webapprm.entidades.MaestroArticuloSucursal
+<link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
+<link rel="stylesheet" href="~/lib/waitMe/waitMe.min.css" />
+<div id="content">
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-sm-12 col-md-12 col-lg-6">
+                <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+                        <h2>Maestros Art&iacute;culos de Sucursales</h2>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox"></div>
+                        <div class="widget-body no-padding">
+                            <form asp-action="Edit" id="checkout-form" class="smart-form" novalidate="novalidate">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <input type="hidden" asp-for="IdMaestroArticuloSucursal" />
+                                <fieldset>
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="Sucursal.Ciudad.Provincia.IdPais"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <select asp-for="Sucursal.Ciudad.Provincia.IdPais" class="form-control" asp-items="ViewBag.Pais"></select>
+                                                <span asp-validation-for="Sucursal.Ciudad.Provincia.IdPais" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="Sucursal.Ciudad.Provincia.Nombre"></label>
+                                        </section>
+
+                                        <div id="div_provincia">
+                                            @{ await Html.RenderPartialAsync("_ProvinciaSelect", Model); }
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="Sucursal.Ciudad.Nombre"></label>
+                                        </section>
+
+                                        <div id="div_ciudad">
+                                            @{ await Html.RenderPartialAsync("_CiudadSelect", Model); }
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="Sucursal.Nombre"></label>
+                                        </section>
+
+                                        <div id="div_sucursal">
+                                            @{ await Html.RenderPartialAsync("_SucursalSelect", Model); }
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="Minimo" class="col-md-2 control-label"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <input asp-for="Minimo" class="form-control" type="number" min="1" />
+                                                <span asp-validation-for="Minimo" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="Maximo" class="col-md-2 control-label"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <input asp-for="Maximo" class="form-control" type="number" min="1" />
+                                                <span asp-validation-for="Maximo" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+                                </fieldset>
+
+                                <footer>
+                                    <span class="text-danger">@ViewData["Error"]</span>
+                                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                                    <a asp-action="Index" class="btn btn-default">Cancelar</a>
+                                </footer>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+
+@section Scripts {
+    <script src='~/lib/select2/dist/js/select2.min.js'></script>
+    <script src='~/lib/select2/dist/js/i18n/es.js'></script>
+    <script src='~/js/site.js'></script>
+    <script src='~/lib/waitMe/waitMe.min.js'></script>
+    <script src='~/js/proveeduria/maestroArticuloSucursal.js'></script>
+}
