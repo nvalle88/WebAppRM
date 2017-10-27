@@ -1,6 +1,7 @@
 @model bd.webapprm.entidades.MaestroArticuloSucursal
 <link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
 <link rel="stylesheet" href="~/lib/waitMe/waitMe.min.css" />
+<link rel="stylesheet" href="~/lib/jquery.spinner-master/dist/css/bootstrap-spinner.min.css" />
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
@@ -66,10 +67,14 @@
                                         </section>
 
                                         <section class="col col-8">
-                                            <label class="input">
-                                                <input asp-for="Minimo" class="form-control" type="number" min="1" />
-                                                <span asp-validation-for="Minimo" class="text-danger"></span>
-                                            </label>
+                                            <div class="input-group spinner" data-trigger="spinner">
+                                                <input type="text" asp-for="Minimo" class="form-control" data-rule="quantity" style="padding-left:10px !important;" />
+                                                <div class="input-group-addon" style="padding-left:23px !important;">
+                                                    <a href="javascript:;" class="spin-up" data-spin="up"><i class="fa fa-caret-up"></i></a>
+                                                    <a href="javascript:;" class="spin-down" data-spin="down"><i class="fa fa-caret-down"></i></a>
+                                                </div>
+                                            </div>
+                                            <span asp-validation-for="Minimo" class="text-danger"></span>
                                         </section>
                                     </div>
 
@@ -79,10 +84,14 @@
                                         </section>
 
                                         <section class="col col-8">
-                                            <label class="input">
-                                                <input asp-for="Maximo" class="form-control" type="number" min="1" />
-                                                <span asp-validation-for="Maximo" class="text-danger"></span>
-                                            </label>
+                                            <div class="input-group spinner" data-trigger="spinner">
+                                                <input type="text" asp-for="Maximo" class="form-control" data-rule="quantity" style="padding-left:10px !important;" />
+                                                <div class="input-group-addon" style="padding-left:23px !important;">
+                                                    <a href="javascript:;" class="spin-up" data-spin="up"><i class="fa fa-caret-up"></i></a>
+                                                    <a href="javascript:;" class="spin-down" data-spin="down"><i class="fa fa-caret-down"></i></a>
+                                                </div>
+                                            </div>
+                                            <span asp-validation-for="Maximo" class="text-danger"></span>
                                         </section>
                                     </div>
                                 </fieldset>
@@ -106,5 +115,6 @@
     <script src='~/lib/select2/dist/js/i18n/es.js'></script>
     <script src='~/js/site.js'></script>
     <script src='~/lib/waitMe/waitMe.min.js'></script>
+    <script src='~/lib/jquery.spinner-master/dist/js/jquery.spinner.min.js'></script>
     <script src='~/js/proveeduria/maestroArticuloSucursal.js'></script>
 }
