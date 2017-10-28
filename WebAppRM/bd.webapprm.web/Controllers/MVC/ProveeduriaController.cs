@@ -215,6 +215,79 @@ namespace bd.webapprm.web.Controllers.MVC
         }
         #endregion
 
+        #region Reportes
+        public async Task<IActionResult> ProveeduriaReporteAltas()
+        {
+            var lista = new List<RecepcionArticulos>();
+            try
+            {
+                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddress)
+                                                                    , "/api/RecepcionArticulo/ListarRecepcionArticulos");
+
+                var listaAltas = lista.Where(c => c.Cantidad > 0).ToList();
+                return View(listaAltas);
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                {
+                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                    Message = "Listando Artículos recepcionados en Alta",
+                    ExceptionTrace = ex,
+                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
+                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                    UserName = "Usuario APP webappth"
+                });
+                return BadRequest();
+            }
+        }
+        public async Task<IActionResult> ProveeduriaReporteBajas()
+        {
+            var lista = new List<RecepcionArticulos>();
+            try
+            {
+                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddress)
+                                                                    , "/api/RecepcionArticulo/ListarRecepcionArticulos");
+
+                var listaBajas = lista.Where(c => c.Cantidad == 0).ToList();
+                return View(listaBajas);
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                {
+                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                    Message = "Listando Artículos recepcionados en Alta",
+                    ExceptionTrace = ex,
+                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
+                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                    UserName = "Usuario APP webappth"
+                });
+                return BadRequest();
+            }
+        }
+        public async Task<IActionResult> EstadisticasConsumoAreaReporte()
+        {
+            return View();
+        }
+        public async Task<IActionResult> AlertaVencimientoReporte()
+        {
+            return View();
+        }
+        public async Task<IActionResult> ConsolidadoInventarioReporte()
+        {
+            return View();
+        }
+        public async Task<IActionResult> ConsolidadoSolicitudReporte()
+        {
+            return View();
+        }
+        public async Task<IActionResult> MinMaxReporte()
+        {
+            return View();
+        }
+        #endregion
+
         #region AJAX_ClaseArticulo
         public async Task<SelectList> ObtenerSelectListClaseArticulo(int idTipoArticulo)
         {
