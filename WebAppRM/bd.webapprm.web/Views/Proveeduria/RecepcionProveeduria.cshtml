@@ -3,6 +3,7 @@
 <link rel="stylesheet" href="~/lib/waitMe/waitMe.min.css" />
 <link rel="stylesheet" href="~/css/site.css" />
 <link rel="stylesheet" href="~/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+<link rel="stylesheet" href="~/lib/jquery.spinner-master/dist/css/bootstrap-spinner.min.css" />
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
@@ -63,10 +64,14 @@
                                         </section>
 
                                         <section class="col col-8">
-                                            <label class="input">
-                                                <input asp-for="Cantidad" class="form-control" type="number" min="1" />
-                                                <span asp-validation-for="Cantidad" class="text-danger"></span>
-                                            </label>
+                                            <div class="input-group spinner" data-trigger="spinner">
+                                                <input type="text" asp-for="Cantidad" class="form-control" data-rule="quantity" style="padding-left:10px !important;" />
+                                                <div class="input-group-addon" style="padding-left:23px !important;">
+                                                    <a href="javascript:;" class="spin-up" data-spin="up"><i class="fa fa-caret-up"></i></a>
+                                                    <a href="javascript:;" class="spin-down" data-spin="down"><i class="fa fa-caret-down"></i></a>
+                                                </div>
+                                            </div>
+                                            <span asp-validation-for="Cantidad" class="text-danger"></span>
                                         </section>
                                     </div>
 
@@ -188,5 +193,6 @@
     <script src='~/lib/moment/min/moment.min.js'></script>
     <script src='~/lib/moment/locale/es.js'></script>
     <script src='~/lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'></script>
+    <script src='~/lib/jquery.spinner-master/dist/js/jquery.spinner.min.js'></script>
     <script src='~/js/proveeduria/recepcion.js'></script>
 }

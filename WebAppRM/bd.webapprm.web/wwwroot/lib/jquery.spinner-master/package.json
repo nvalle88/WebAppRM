@@ -1,0 +1,48 @@
+{
+  "private": true,
+  "name": "jquery.spinner",
+  "version": "0.2.1",
+  "description": "A Number-Spinner based-on jQuery, Support Keyboard operations and continuous changing",
+  "keywords": [
+    "spinner",
+    "number-steps",
+    "number-spinner",
+    "continuous"
+  ],
+  "homepage": "https://vsn4ik.github.io/jquery.spinner/",
+  "author": {
+    "name": "xixilive",
+    "email": "xixilive@gmail.com",
+    "url": "https://github.com/xixilive"
+  },
+  "contributors": [
+    {
+      "name": "Vasily A.",
+      "url": "https://github.com/vsn4ik"
+    }
+  ],
+  "repository": "vsn4ik/jquery.spinner",
+  "license": "MIT",
+  "files": [
+    "dist",
+    "js/*.js",
+    "less",
+    "LICENSE"
+  ],
+  "main": "dist/js/jquery.spinner.js",
+  "scripts": {
+    "test": "grunt qunit"
+  },
+  "devDependencies": {
+    "grunt": "~1.0.1",
+    "grunt-contrib-clean": "~1.1.0",
+    "grunt-contrib-compress": "~1.4.3",
+    "grunt-contrib-concat": "~1.0.1",
+    "grunt-contrib-cssmin": "~2.2.1",
+    "grunt-contrib-jshint": "~1.1.0",
+    "grunt-contrib-less": "~1.4.1",
+    "grunt-contrib-qunit": "~2.0.0",
+    "grunt-contrib-uglify": "~3.0.1",
+    "load-grunt-tasks": "~3.5.2"
+  }
+}
