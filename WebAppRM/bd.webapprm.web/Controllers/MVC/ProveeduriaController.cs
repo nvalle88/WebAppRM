@@ -268,23 +268,128 @@ namespace bd.webapprm.web.Controllers.MVC
         }
         public async Task<IActionResult> EstadisticasConsumoAreaReporte()
         {
-            return View();
+            var lista = new List<RecepcionArticulos>();
+            try
+            {
+                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddress)
+                                                                    , "/api/RecepcionArticulo/ListarRecepcionArticulos");
+
+                var listaBajas = lista.Where(c => c.Cantidad == 0).ToList();
+                return View(listaBajas);
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                {
+                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                    Message = "Listando Artículos recepcionados en Alta",
+                    ExceptionTrace = ex,
+                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
+                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                    UserName = "Usuario APP webappth"
+                });
+                return BadRequest();
+            }
         }
         public async Task<IActionResult> AlertaVencimientoReporte()
         {
-            return View();
+            var lista = new List<RecepcionArticulos>();
+            try
+            {
+                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddress)
+                                                                    , "/api/RecepcionArticulo/ListarRecepcionArticulos");
+
+                var listaBajas = lista.Where(c => c.Cantidad == 0).ToList();
+                return View(listaBajas);
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                {
+                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                    Message = "Listando Artículos recepcionados en Alta",
+                    ExceptionTrace = ex,
+                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
+                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                    UserName = "Usuario APP webappth"
+                });
+                return BadRequest();
+            }
         }
         public async Task<IActionResult> ConsolidadoInventarioReporte()
         {
-            return View();
+            var lista = new List<RecepcionArticulos>();
+            try
+            {
+                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddress)
+                                                                    , "/api/RecepcionArticulo/ListarRecepcionArticulos");
+
+                var listaBajas = lista.Where(c => c.Cantidad == 0).ToList();
+                return View(listaBajas);
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                {
+                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                    Message = "Listando Artículos recepcionados en Alta",
+                    ExceptionTrace = ex,
+                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
+                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                    UserName = "Usuario APP webappth"
+                });
+                return BadRequest();
+            }
         }
         public async Task<IActionResult> ConsolidadoSolicitudReporte()
         {
-            return View();
+            var lista = new List<RecepcionArticulos>();
+            try
+            {
+                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddress)
+                                                                    , "/api/RecepcionArticulo/ListarRecepcionArticulos");
+
+                var listaBajas = lista.Where(c => c.Cantidad == 0).ToList();
+                return View(listaBajas);
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                {
+                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                    Message = "Listando Artículos recepcionados en Alta",
+                    ExceptionTrace = ex,
+                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
+                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                    UserName = "Usuario APP webappth"
+                });
+                return BadRequest();
+            }
         }
         public async Task<IActionResult> MinMaxReporte()
         {
-            return View();
+            var lista = new List<RecepcionArticulos>();
+            try
+            {
+                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddress)
+                                                                    , "/api/RecepcionArticulo/ListarRecepcionArticulos");
+
+                var listaBajas = lista.Where(c => c.Cantidad == 0).ToList();
+                return View(listaBajas);
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                {
+                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                    Message = "Listando Artículos recepcionados en Alta",
+                    ExceptionTrace = ex,
+                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
+                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                    UserName = "Usuario APP webappth"
+                });
+                return BadRequest();
+            }
         }
         #endregion
 
