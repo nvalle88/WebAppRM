@@ -124,6 +124,9 @@
                             <li class="@Html.RouteIf("ActivoValidacionTecnica", "active")">
                                 <a href="@Url.Action("ActivoValidacionTecnica", "ActivoFijo")">Activos que requieren Validaci&oacute;n T&eacute;cnica</a>
                             </li>
+                            <li class="@Html.RouteIf("ActivosRecepcionados", "active")">
+                                <a href="@Url.Action("ActivosRecepcionados", "ActivoFijo")">Activos Recepcionados</a>
+                            </li>
                         </ul>
                     </li>
                     <li class="@Html.RouteIf("PolizaSeguro", "active")">

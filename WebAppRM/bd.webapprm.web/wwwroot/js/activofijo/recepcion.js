@@ -13,6 +13,7 @@
     $('#RecepcionActivoFijo_FechaRecepcion').datetimepicker({
         'format': 'D-M-Y hh:mm'
     });
+    mostrarOcultarDatosEspecificosCodificacion($("#RecepcionActivoFijo_ValidacionTecnica").prop('checked'));
 });
 
 function eventoValidacionTecnicaChange()
