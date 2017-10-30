@@ -48,7 +48,7 @@
                                                         return tab == "Datos Generales" ? codificacion ? "" : "active" : codificacion ? "active" : "";
                                                     };
 
-                                                    <li data-target="#step1" @claseCodificacion("Datos Generales")>
+                                                    <li data-target="#step1" @claseCodificacion("Datos Generales") id="li_datosGenerales">
                                                         <span class="badge badge-info" style="padding:3px 4px !important;">1</span>Datos Generales<span class="chevron"></span>
                                                     </li>
                                                     <li data-target="#step2" id="li_codificacion" @claseCodificacion("Codificación")>
@@ -353,7 +353,8 @@
                                 </fieldset>
                                 <footer>
                                     <span class="text-danger">@ViewData["Error"]</span>
-                                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                                    <input type="submit" value="Guardar" class="btn btn-primary" id="btn_guardar" />
+                                    <input type="button" value="Atr&aacute;s" class="btn btn-default hide" id="btn_atras" />
                                 </footer>
                             </form>
                         </div>
