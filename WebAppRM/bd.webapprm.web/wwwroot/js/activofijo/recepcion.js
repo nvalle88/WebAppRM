@@ -16,7 +16,67 @@
     });
     mostrarOcultarDatosEspecificosCodificacion($("#RecepcionActivoFijo_ValidacionTecnica").prop('checked'));
     gestionarTab();
+    gestionarInformacionAdicional();
+    configurarDropzone();
 });
+
+function configurarDropzone()
+{
+    var acceptedFiles = 'image/*,.pdf,.xlsx,.xls,.txt,.docx,.doc';
+    $("#spanExtensionesPermitidas").html(acceptedFiles);
+
+    Dropzone.autoDiscover = false;
+    $("#mydropzone").dropzone({
+        acceptedFiles: acceptedFiles,
+        addRemoveLinks: true,
+        uploadMultiple: true,
+        createImageThumbnails: true,
+        maxThumbnailFilesize: 10,
+        maxFilesize: 10,
+        dictDefaultMessage: '<span class="text-center"><span class="font-lg visible-xs-block visible-sm-block visible-lg-block"><span class="font-xs"><i class="fa fa-caret-right text-danger"></i> Guardar documentaci&oacute;n o fotograf&iacute;as </span><span>&nbsp&nbsp<h4 class="display-inline"> (Haga clic)</h4></span>',
+        dictResponseError: '¡Error subiendo archivo!',
+        dictRemoveFile: 'Eliminar archivo',
+        dictFileTooBig: 'El archivo es muy grande ({{filesize}} MB). Tamaño máximo permitido: {{maxFilesize}} MB.',
+        dictInvalidFileType: 'El archivo no está permitido.',
+        dictResponseError: 'Error {{statusCode}} al intentar subir el archivo.',
+        dictCancelUpload: 'Cancelar archivo',
+        dictCancelUploadConfirmation: '¿Desea cancelar la subida del archivo?',
+        dictMaxFilesExceeded: 'Ha excedido el número de archivos a subir ({{maxFiles}} ficheros).',
+        init: function () {
+            this.on("removedfile", function (file, data) {
+                $.ajax({
+                    url: "/ActivoFijo/EliminarArchivo",
+                    method: "POST",
+                    data: { fileName: file.name, dir: $("#dir").val() },
+                    error: function (errorMessage)
+                    {
+                        mostrarNotificacion("Error", "No se pudo eliminar o no se encontró el archivo " + file.name + ".", 2);
+                    }
+                });
+            });
+
+            this.on("success", function (file, data) {
+                $("#dir").val(data.Resultado);
+            });
+
+            this.on("error", function (file, data) {
+                this.removeFile(file);
+                mostrarNotificacion("Error", "El sistema no tiene permisos suficientes para guardar la información.", 2);
+            });
+        }
+    });
+}
+
+function gestionarInformacionAdicional()
+{
+    $("#btn_informacionAdicional").on("click", function (e) {
+        $("#divInformacionAdicional").removeClass("hide");
+    });
+
+    $("#btn_cancelarInformacionAdicional").on("click", function (e) {
+        $("#divInformacionAdicional").addClass("hide");
+    });
+}
 
 function gestionarTab()
 {
