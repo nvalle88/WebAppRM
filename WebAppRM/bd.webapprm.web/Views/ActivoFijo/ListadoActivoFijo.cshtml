@@ -87,8 +87,13 @@
                                                     }
                                                     else
                                                     {
+                                                        if (ViewBag.urlEditar != null)
+                                                        {
+                                                            @Html.ActionLink("Editar", ViewData["urlEditar"].ToString(), new { id = item.IdRecepcionActivoFijoDetalle })
+                                                            await ViewContext.Writer.WriteAsync(" | ");
+                                                        }
                                                         @Html.ActionLink(ViewData["textoColumna"].ToString(), ViewData["url"].ToString(), new { id = item.IdRecepcionActivoFijoDetalle })
-                                                    }                                                    
+                                                    }
                                                 }
 
                                             </td>

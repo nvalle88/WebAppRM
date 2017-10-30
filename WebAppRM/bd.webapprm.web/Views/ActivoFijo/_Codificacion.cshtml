@@ -50,10 +50,14 @@
         </section>
 
         <section class="col col-8">
-            <label class="input">
-                <input type="number" id="numeroConsecutivo" name="numeroConsecutivo" min="1" value="@numeroConsecutivo" class="form-control" />
-                <span class="text-danger">@ViewData["errorNumeroConsecutivo"]</span>
-            </label>
+            <div class="input-group spinner" data-trigger="spinner">
+                <input type="text" id="numeroConsecutivo" name="numeroConsecutivo" value="@numeroConsecutivo" class="form-control" data-rule="quantity" style="padding-left:10px !important;" />
+                <div class="input-group-addon" style="padding-left:23px !important;">
+                    <a href="javascript:;" class="spin-up" data-spin="up"><i class="fa fa-caret-up"></i></a>
+                    <a href="javascript:;" class="spin-down" data-spin="down"><i class="fa fa-caret-down"></i></a>
+                </div>
+            </div>
+            <span class="text-danger">@ViewData["errorNumeroConsecutivo"]</span>
         </section>
     </div>
 
