@@ -1140,7 +1140,7 @@ namespace bd.webapprm.web.Controllers.MVC
                     }                    
                 }
                 
-            } catch (Exception ex)
+            } catch (Exception)
             {
 
             }

@@ -25,7 +25,7 @@ function mostrarLoadingPanel(idElemento, texto)
 {
     $('#' + idElemento).waitMe({
         effect: 'roundBounce',
-        text: texto != null ? texto : 'Procesando datos, por favor espere...',
+        text: texto,
         bg: 'rgba(255, 255, 255, 0.7)',
         color: '#ef4c0c',
         fontSize: '15px'
@@ -38,4 +38,13 @@ function Asignar_Codigo_Barras(idElemento, valor) {
         displayValue: true,
         fontSize: 20
     });
+}
+
+function obtenerIdAjax(id)
+{
+    try {
+        return parseInt(id);
+    } catch (e) {
+        return -1;
+    }
 }
