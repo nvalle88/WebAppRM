@@ -32,6 +32,22 @@ function mostrarLoadingPanel(idElemento, texto)
     });
 }
 
+function mostrarNotificacion(titulo, texto, color)
+{
+    switch (color) {
+        case 1: color = "#3276B1"; break;
+        case 2: color = "#C46A69"; break;
+    }
+
+    $.smallBox({
+        title: titulo,
+        content: texto,
+        color: color,
+        icon: "fa fa-warning shake animated",
+        timeout: 6000
+    });
+}
+
 function Asignar_Codigo_Barras(idElemento, valor) {
     JsBarcode("#" + idElemento, valor, {
         format: "CODE128",

@@ -13,16 +13,20 @@ using bd.webapprm.entidades;
 using bbd.webapprm.servicios.Enumeradores;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Http;
+using System.IO;
+using Microsoft.AspNetCore.Hosting;
 
 namespace bd.webapprm.web.Controllers.MVC
 {
     public class ActivoFijoController : Controller
     {
         private readonly IApiServicio apiServicio;
+        private IHostingEnvironment _hostingEnvironment;
 
-        public ActivoFijoController(IApiServicio apiServicio)
+        public ActivoFijoController(IApiServicio apiServicio, IHostingEnvironment environment)
         {
             this.apiServicio = apiServicio;
+            this._hostingEnvironment = environment;
         }
 
         #region Recepción de Activos
@@ -528,6 +532,58 @@ namespace bd.webapprm.web.Controllers.MVC
                     UserName = "Usuario APP webappth"
                 });
                 return BadRequest();
+            }
+        }
+
+        private string ObtenerDireccionCarpetaTemporal()
+        {
+            string filePath = "";
+            do
+            {
+                filePath = String.Format("{0}\\wwwroot\\images\\ActivoFijo\\{1}", _hostingEnvironment.ContentRootPath, Guid.NewGuid().ToString());
+            } while (Directory.Exists(filePath));
+            return filePath;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SubirArchivos()
+        {
+            var dir = Request.Form["dir"].ToString();
+            var filePath = dir != null && dir != "" ? String.Format("{0}\\wwwroot\\images\\ActivoFijo\\{1}", _hostingEnvironment.ContentRootPath, dir) : ObtenerDireccionCarpetaTemporal();
+
+            if (!Directory.Exists(filePath))
+                Directory.CreateDirectory(filePath);
+
+            foreach (var formFile in Request.Form.Files)
+            {
+                try
+                {
+                    if (formFile.Length > 0)
+                    {
+                        var stream = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                        await formFile.CopyToAsync(stream);
+                    }
+                }
+                catch (Exception)
+                {
+                    return StatusCode(500);
+                }
+            }
+            return StatusCode(200);
+        }
+
+        [HttpPost]
+        public IActionResult EliminarArchivo(string fileName, string dir)
+        {
+            try
+            {
+                string filePath = String.Format("{0}\\{1}", dir, fileName);
+                System.IO.File.Delete(filePath);
+                return StatusCode(200);
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
             }
         }
         #endregion
