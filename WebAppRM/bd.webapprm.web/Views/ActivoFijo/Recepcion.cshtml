@@ -25,6 +25,7 @@
                                     int valor_tab = !codificacion ? 1 : 2;
                                 }
                                 <input type="hidden" id="tab" name="tab" value="@valor_tab" />
+                                <input type="hidden" id="nombreCarpeta" name="nombreCarpeta" value="@ViewBag.nombreCarpeta" />
                                 <fieldset>
                                     <div class="widget-body fuelux">
                                         <div class="wizard">
@@ -376,7 +377,7 @@
                                     <input type="hidden" id="dir" name="dir" />
                                 </form>
                                 <footer>
-                                    <input type="button" value="Cancelar" class="btn btn-default" id="btn_cancelarInformacionAdicional" />
+                                    <input type="button" value="Cerrar" class="btn btn-default" id="btn_cancelarInformacionAdicional" />
                                 </footer>
                             </div>
                         </div>
