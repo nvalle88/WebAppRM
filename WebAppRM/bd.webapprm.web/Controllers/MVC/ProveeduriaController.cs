@@ -27,10 +27,34 @@ namespace bd.webapprm.web.Controllers.MVC
         #region Recepción de Proveeduría
         public IActionResult Index()
         {
-            return RedirectToAction("RecepcionProveeduria");
+            return RedirectToAction("ListadoRecepcion");
         }
 
-        public async Task<IActionResult> RecepcionProveeduria()
+        public async Task<IActionResult> ListadoRecepcion()
+        {
+            var lista = new List<RecepcionArticulos>();
+            try
+            {
+                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddress)
+                                                                    , "/api/RecepcionArticulo/ListarRecepcionArticulos");
+                return View(lista);
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                {
+                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                    Message = "Listando artículos recepcionados",
+                    ExceptionTrace = ex,
+                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
+                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                    UserName = "Usuario APP webappth"
+                });
+                return BadRequest();
+            }
+        }
+
+        public async Task<IActionResult> Recepcion()
         {
             ViewData["TipoArticulo"] = new SelectList(await apiServicio.Listar<TipoArticulo>(new Uri(WebApp.BaseAddress), "/api/TipoArticulo/ListarTipoArticulo"), "IdTipoArticulo", "Nombre");
             ViewData["ClaseArticulo"] = await ObtenerSelectListClaseArticulo((ViewData["TipoArticulo"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["TipoArticulo"] as SelectList).FirstOrDefault().Value) : -1);
@@ -53,9 +77,58 @@ namespace bd.webapprm.web.Controllers.MVC
             return View();
         }
 
+        public async Task<IActionResult> EditarRecepcion(string id)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(id))
+                {
+                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddress),
+                                                                  "/api/RecepcionArticulo");
+
+                    respuesta.Resultado = JsonConvert.DeserializeObject<RecepcionArticulos>(respuesta.Resultado.ToString());
+                    var recepcionArticulos = respuesta.Resultado as RecepcionArticulos;
+                    if (respuesta.IsSuccess)
+                    {
+                        ViewData["TipoArticulo"] = new SelectList(await apiServicio.Listar<TipoArticulo>(new Uri(WebApp.BaseAddress), "/api/TipoArticulo/ListarTipoArticulo"), "IdTipoArticulo", "Nombre");
+                        ViewData["ClaseArticulo"] = await ObtenerSelectListClaseArticulo(recepcionArticulos?.Articulo?.SubClaseArticulo?.ClaseArticulo?.TipoArticulo?.IdTipoArticulo ?? -1);
+                        ViewData["SubClaseArticulo"] = await ObtenerSelectListSubClaseArticulo(recepcionArticulos?.Articulo?.SubClaseArticulo?.ClaseArticulo?.IdClaseArticulo ?? -1);
+                        ViewData["Articulo"] = await ObtenerSelectListArticulo(recepcionArticulos?.Articulo?.SubClaseArticulo?.IdSubClaseArticulo ?? -1);
+
+                        ViewData["Pais"] = new SelectList(await apiServicio.Listar<Pais>(new Uri(WebApp.BaseAddress), "/api/Pais/ListarPaises"), "IdPais", "Nombre");
+                        ViewData["Provincia"] = await ObtenerSelectListProvincia(recepcionArticulos?.MaestroArticuloSucursal?.Sucursal?.Ciudad?.Provincia?.Pais?.IdPais ?? -1);
+                        ViewData["Ciudad"] = await ObtenerSelectListCiudad(recepcionArticulos?.MaestroArticuloSucursal?.Sucursal?.Ciudad?.Provincia?.IdProvincia ?? -1);
+                        ViewData["Sucursal"] = await ObtenerSelectListSucursal(recepcionArticulos?.MaestroArticuloSucursal?.Sucursal?.Ciudad?.IdCiudad ?? -1);
+                        ViewData["MaestroArticuloSucursal"] = await ObtenerSelectListMaestroArticuloSucursal(recepcionArticulos?.MaestroArticuloSucursal?.Sucursal?.IdSucursal ?? -1);
+
+                        var listaProveedor = await apiServicio.Listar<Proveedor>(new Uri(WebApp.BaseAddress), "/api/Proveedor/ListarProveedores");
+                        var tlistaProveedor = listaProveedor.Select(c => new { IdProveedor = c.IdProveedor, NombreApellidos = String.Format("{0} {1}", c.Nombre, c.Apellidos) });
+                        ViewData["Proveedor"] = new SelectList(tlistaProveedor, "IdProveedor", "NombreApellidos");
+
+                        var listaEmpleado = await apiServicio.Listar<Empleado>(new Uri(WebApp.BaseAddress), "/api/Empleado/ListarEmpleados");
+                        var tlistaEmpleado = listaEmpleado.Select(c => new { IdEmpleado = c.IdEmpleado, NombreApellidos = String.Format("{0} {1}", c.Persona.Nombres, c.Persona.Apellidos) });
+                        ViewData["Empleado"] = new SelectList(tlistaEmpleado, "IdEmpleado", "NombreApellidos");
+
+                        return View(recepcionArticulos);
+                    }
+                }
+                return BadRequest();
+            }
+            catch (Exception)
+            {
+                return BadRequest();
+            }
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> RecepcionProveeduria(RecepcionArticulos recepcionArticulo)
+        public async Task<IActionResult> Recepcion(RecepcionArticulos recepcionArticulo) => await GestionarRecepcionArticulos(recepcionArticulo);
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditarRecepcion(RecepcionArticulos recepcionArticulo) => await GestionarRecepcionArticulos(recepcionArticulo);
+
+        private async Task<IActionResult> GestionarRecepcionArticulos(RecepcionArticulos recepcionArticulo)
         {
             Response response = new Response();
             try
@@ -158,9 +231,10 @@ namespace bd.webapprm.web.Controllers.MVC
                 }
                 TryValidateModel(recepcionArticulo);
 
-                response = await apiServicio.InsertarAsync(recepcionArticulo,
-                                                             new Uri(WebApp.BaseAddress),
-                                                             "/api/RecepcionArticulo/InsertarRecepcionArticulo");
+                if (recepcionArticulo.IdRecepcionArticulos == 0)
+                    response = await apiServicio.InsertarAsync(recepcionArticulo, new Uri(WebApp.BaseAddress), "/api/RecepcionArticulo/InsertarRecepcionArticulo");
+                else
+                    response = await apiServicio.EditarAsync<RecepcionArticulos>(recepcionArticulo.IdRecepcionArticulos.ToString(), recepcionArticulo, new Uri(WebApp.BaseAddress), "/api/RecepcionArticulo");
 
                 if (response.IsSuccess)
                 {
@@ -168,13 +242,13 @@ namespace bd.webapprm.web.Controllers.MVC
                     {
                         ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                         ExceptionTrace = null,
-                        Message = "Se ha recepcionado un artículo",
+                        Message = recepcionArticulo.IdRecepcionArticulos == 0 ? "Se ha recepcionado un artículo" : "Se ha editado la recepción de un artículo",
                         UserName = "Usuario 1",
                         LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
                         LogLevelShortName = Convert.ToString(LogLevelParameter.ADV),
                         EntityID = string.Format("{0} {1}", "Artículo:", recepcionArticulo.IdArticulo),
                     });
-                    return RedirectToAction("ProveeduriaRecepcionados");
+                    return RedirectToAction("ListadoRecepcion");
                 }
 
                 ViewData["TipoArticulo"] = new SelectList(await apiServicio.Listar<TipoArticulo>(new Uri(WebApp.BaseAddress), "/api/TipoArticulo/ListarTipoArticulo"), "IdTipoArticulo", "Nombre");
