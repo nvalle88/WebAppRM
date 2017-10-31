@@ -205,25 +205,25 @@
                             </li>
                             <li class="@Html.RouteIf("MaestroArticuloSucursal", "active")">
                                 <a href="@Url.Action("Index", "MaestroArticuloSucursal")">Configurar Maestro de Art&iacute;culo</a>
-                            </li>
+                            </li>                            
                         </ul>
+                    </li>
+                    <li class="@Html.RouteIf("Proveeduria", "active")">
+                        <a href="@Url.Action("IngresarFacturas", "Proveeduria")">Ingresar Facturas</a>
                     </li>
                     <li class="@Html.RouteIf("altas", "active")">
                         <a href="#"><span class="menu-item-parent">Altas</span></a>
                         <ul>
-                            <li class="@Html.RouteIf("ProveeduriaRecepcionados", "active")">
-                                <a href="@Url.Action("ProveeduriaRecepcionados", "Proveeduria")">Dar Altas</a>
-                            </li>
-                            <li class="@Html.RouteIf("AddComponentes", "active")">
-                                <a href="@Url.Action("AddComponentes", "ActivoFijo")">Adicionar Componentes</a>
+                            <li class="@Html.RouteIf("ArticulosADarAlta", "active")">
+                                <a href="@Url.Action("ArticulosADarAlta", "Proveeduria")">Dar Altas</a>
                             </li>
                         </ul>
                     </li>
                     <li class="@Html.RouteIf("bajas", "active")">
                         <a href="#"><span class="menu-item-parent">Bajas</span></a>
                         <ul>
-                            <li class="@Html.RouteIf("ProveeduriaRecepcionadosBaja", "active")">
-                                <a href="@Url.Action("ProveeduriaRecepcionadosBaja", "ActivoFijo")">Dar Bajas</a>
+                            <li class="@Html.RouteIf("ArticulosADarBaja", "active")">
+                                <a href="@Url.Action("ArticulosADarBaja", "Proveeduria")">Dar Bajas</a>
                             </li>
                         </ul>
                     </li>

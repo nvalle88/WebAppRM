@@ -1,0 +1,239 @@
+@model bd.webapprm.entidades.RecepcionArticulos
+
+@{
+    ViewData["Title"] = "Formulario para Alta de Artículos de Proveedurías";
+
+    //List<bd.webapprm.entidades.Factura> listadoTablaFacturas = new List<bd.webapprm.entidades.Factura>();
+    //listadoTablaFacturas = ViewBag.tablaFacturas;
+
+    //List<bd.webapprm.entidades.Factura> listadoTablaFacturasSeleccionadas = new List<bd.webapprm.entidades.Factura>();
+    //listadoTablaFacturasSeleccionadas = ViewBag.ListadoFacturasSeleccionadas;
+}
+
+<link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
+
+
+<div id="content">
+
+    <!-- widget grid -->
+    <section id="widget-grid" class="">
+
+        <!-- START ROW -->
+        <div class="row">
+            <!-- NEW COL START -->
+            <article class="col-sm-12 col-md-12 col-lg-7">
+                <!-- Widget ID (each widget will need unique ID)-->
+                <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+                        <h2>Formulario de Altas a Art&iacute;culos de Proveedur&iacute;as</h2>
+                    </header>
+                    <!-- widget div-->
+                    <div>
+
+                        <!-- widget edit box -->
+                        <div class="jarviswidget-editbox">
+                            <!-- This area used as dropdown edit box -->
+
+                        </div>
+                        <!-- end widget edit box -->
+                        <!-- widget content -->
+                        <div class="widget-body no-padding">
+
+                            <form asp-action="AprobarAltaArticulo" controller="Proveeduria" id="checkout-form" class="smart-form" novalidate="novalidate">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <fieldset>
+                                    <input type="hidden" asp-for="IdArticulo" />
+                                    <input type="hidden" asp-for="IdProveedor" />
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="Articulo.Nombre">Art&iacute;culo</label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <input maxlength="32" asp-for="Articulo.Nombre" class="form-control" disabled />
+                                                <span asp-validation-for="Articulo.Nombre" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="Proveedor.Nombre">Nombre (Proveedor)</label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <input maxlength="32" asp-for="Proveedor.Nombre" class="form-control" disabled />
+                                                <span asp-validation-for="Proveedor.Nombre" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="Proveedor.Apellidos">Apellidos (Proveedor)</label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <input maxlength="32" asp-for="Proveedor.Apellidos" class="form-control" disabled />
+                                                <span asp-validation-for="Proveedor.Apellidos" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label class="label">Acreditar por</label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <select id="acreditacion" name="acreditacion" asp-items="ViewBag.Acreditacion" class="form-control"></select>
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    <div id="camposFactura">
+                                        <div class="row">
+                                            <section class="col col-4">
+                                                <label class="label">Seleccionar Facturas</label>
+                                            </section>
+
+                                            <section class="col col-8" id="facturasExluidas">
+                                                @*@Html.Partial("_FacturasExcluidas")*@
+                                            </section>
+                                        </div>
+
+                                        <div class="row">
+                                            <section class="col col-4">
+                                                <label class="label">Facturas incluidas en el Alta</label>
+                                            </section>
+
+                                            <section class="col col-8" id="facturasIncluidas">
+                                                @*@Html.Partial("_FacturasIncluidas")*@
+                                            </section>
+                                        </div>
+                                        
+                                    </div>
+
+                                    <div class="row hide" id="divDocumentos">
+                                        <section class="col col-4">
+                                            <label class="label">Documentos de Acreditaci&oacute;n</label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <div class="input input-file">
+                                                <span class="button"><input type="file" id="file" name="file" onchange="this.parentNode.nextSibling.value = this.value">Seleccionar</span><input type="text" placeholder="Seleccionar alg&uacute;n fichero" readonly="">
+                                            </div>
+                                        </section>
+                                    </div>
+
+
+                                </fieldset>
+
+                                <footer>
+                                    <span class="text-danger">@ViewData["Error"]</span>
+                                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                                    <a asp-action="Index" class="btn btn-default">Cancelar</a>
+
+                                </footer>
+
+                            </form>
+                        </div>
+                        <!-- end widget content -->
+                    </div>
+                    <!-- end widget div -->
+                </div>
+                <!-- end widget -->
+
+            </article>
+
+        </div>
+        <!-- END ROW -->
+    </section>
+    <!-- end widget grid -->
+    <!-- Modal -->
+</div>
+@section Scripts{
+    <script src='~/lib/select2/dist/js/select2.min.js'></script>
+    <script src='~/lib/select2/dist/js/i18n/es.js'></script>
+    <script src='~/js/site.js'></script>
+    <script>
+        jQuery(document).ready(function () {
+            Init_Select2();
+            
+            var ID = '@Model.IdRecepcionArticulos';
+
+            $.ajax({
+                url: '/Proveeduria/CargarTablaFacturasExcluidas',
+                //type: 'json',
+                data: { ID: ID },
+                success: function (data) {
+                    $('#facturasExluidas').html(data);
+                }
+            });
+
+            $.ajax({
+                url: '/Proveeduria/CargarTablaFacturasIncluidas',
+                //type: 'json',
+                data: { ID: ID },
+                success: function (data) {
+                    $('#facturasIncluidas').html(data);
+                }
+            });
+            
+            $("#acreditacion").on("change", function (e) {
+                var valor = $("#acreditacion").val();
+                if (valor == "Facturas") {
+                    $("#divDocumentos").addClass("hide");
+                    $("#camposFactura").removeClass("hide");                                        
+                }
+                else {
+                    $("#camposFactura").addClass("hide");
+                    $("#divDocumentos").removeClass("hide");
+                }
+            });
+        });
+
+        function IncluirFacturas(idFactura) {
+            var idFact = idFactura;
+
+            $.ajax({
+                url: '/Proveeduria/RefrescarTablaExcluidos',
+                data: { idFactura: idFact },
+                success: function (data) {
+                    $('#facturasExluidas').html(data);
+                }
+            });
+
+            $.ajax({
+                url: '/Proveeduria/IncluirFacturasEnAlta',
+                data: { idFactura: idFact },
+                success: function (data) {
+                    $('#facturasIncluidas').html(data);
+                }
+            });
+        };
+
+        function ExcluirFacturas(idFactura) {
+            var idFact = idFactura;
+
+            $.ajax({
+                url: '/Proveeduria/RefrescarTablaIncluidos',
+                data: { idFactura: idFact },
+                success: function (data) {
+                    $('#facturasIncluidas').html(data);
+                }
+            });
+
+            $.ajax({
+                url: '/Proveeduria/ExcluirFacturasEnAlta',
+                data: { idFactura: idFact },
+                success: function (data) {
+                    $('#facturasExluidas').html(data);
+                }
+            });
+        };
+    </script>
+}

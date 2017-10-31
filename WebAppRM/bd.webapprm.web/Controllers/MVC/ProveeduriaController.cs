@@ -19,6 +19,10 @@ namespace bd.webapprm.web.Controllers.MVC
     {
         private readonly IApiServicio apiServicio;
 
+        public static List<Factura> ListadoFacturasSeleccionadas = new List<Factura>();
+
+        public static List<Factura> ListadoFacturas = new List<Factura>();
+
         public ProveeduriaController(IApiServicio apiServicio)
         {
             this.apiServicio = apiServicio;
@@ -214,6 +218,760 @@ namespace bd.webapprm.web.Controllers.MVC
             }
         }
         #endregion
+
+        #region Alta de Proveeduría
+        public async Task<IActionResult> ArticulosADarAlta()
+        {
+            var lista = new List<RecepcionArticulos>();
+            try
+            {
+                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddress)
+                                                                    , "/api/RecepcionArticulo/ListarRecepcionArticulos");
+
+                var listaArticulosRecepcionados = lista.Select(c=>c).ToList();
+
+                return View("ArticulosAlta", listaArticulosRecepcionados);
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                {
+                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                    Message = "Listando articulos recepcionados",
+                    ExceptionTrace = ex,
+                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
+                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                    UserName = "Usuario APP webappth"
+                });
+                return BadRequest();
+            }
+        }
+
+        public async Task<IActionResult> FormularioAltaArticulo(int ID)
+        {
+            try
+            {
+                var respuesta = await apiServicio.SeleccionarAsync<Response>(ID.ToString(), new Uri(WebApp.BaseAddress), "/api/RecepcionArticulo");
+
+                respuesta.Resultado = JsonConvert.DeserializeObject<RecepcionArticulos>(respuesta.Resultado.ToString());
+
+                RecepcionArticulos RecepcionArticulos = respuesta.Resultado as RecepcionArticulos;
+
+                ViewBag.Acreditacion = new SelectList(new List<string> { "Facturas", "Documentos" });
+                
+                if (respuesta.IsSuccess)
+                {
+                    try
+                    {
+                        return View("FormularioAltaArticulo", RecepcionArticulos);
+                    }
+                    catch (Exception ex)
+                    {
+                        await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                        {
+                            ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                            Message = "Listando facturas",
+                            ExceptionTrace = ex,
+                            LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
+                            LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                            UserName = "Usuario APP WebAppTh"
+                        });
+
+                        return BadRequest();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                {
+                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                    Message = "Listando un objeto de RecepcionArticulos",
+                    ExceptionTrace = ex,
+                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
+                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                    UserName = "Usuario APP WebAppTh"
+                });
+
+                return BadRequest();
+            }
+
+            return View();            
+        }
+
+        public async Task<IActionResult> CargarTablaFacturasExcluidas(int ID)
+        {
+            try
+            {
+                var respuesta = await apiServicio.SeleccionarAsync<Response>(ID.ToString(), new Uri(WebApp.BaseAddress), "/api/RecepcionArticulo");
+
+                respuesta.Resultado = JsonConvert.DeserializeObject<RecepcionArticulos>(respuesta.Resultado.ToString());
+
+                RecepcionArticulos RecepcionArticulos = respuesta.Resultado as RecepcionArticulos;
+
+                if (respuesta.IsSuccess)
+                {
+                    try
+                    {
+                        List<DetalleFactura> listaDetalleFactura = RecepcionArticulos.Articulo.DetalleFactura.ToList();
+
+                        foreach (var item in listaDetalleFactura)
+                        {
+                            respuesta = await apiServicio.SeleccionarAsync<Response>(item.IdFactura.ToString(), new Uri(WebApp.BaseAddress), "/api/Factura");
+
+                            respuesta.Resultado = JsonConvert.DeserializeObject<Factura>(respuesta.Resultado.ToString());
+
+                            Factura factura = respuesta.Resultado as Factura;
+
+                            var respuestaOtra = await apiServicio.SeleccionarAsync<Response>(factura.Numero.ToString(), new Uri(WebApp.BaseAddress), "/api/FacturasPorAltaProveeduria");
+
+                            if ((respuestaOtra == null) && (respuesta.IsSuccess))
+                            {
+                                bool siEsta = false;
+
+                                foreach (var _item in ListadoFacturas)
+                                {
+                                    if (_item.IdFactura == factura.IdFactura)
+                                    {
+                                        siEsta = true;
+                                        break;
+                                    }
+                                }
+
+                                if (siEsta)
+                                {
+
+                                } else
+                                {
+                                    ListadoFacturas.Add(factura);
+                                }                                
+                            }
+                        }
+
+                        ViewBag.data = ListadoFacturas;
+
+                        return PartialView("_FacturasExcluidas"); //return PartialView("_FacturasExcluidas", ListadoFacturas);
+                    }
+                    catch (Exception ex)
+                    {
+                        await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                        {
+                            ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                            Message = "Listando facturas",
+                            ExceptionTrace = ex,
+                            LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
+                            LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                            UserName = "Usuario APP WebAppTh"
+                        });
+
+                        return BadRequest();
+                    }
+                }
+
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                {
+                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                    Message = "Listando un objeto de RecepcionArticulos",
+                    ExceptionTrace = ex,
+                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
+                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                    UserName = "Usuario APP WebAppTh"
+                });
+
+                return BadRequest();
+            }
+        }
+
+        public async Task<IActionResult> CargarTablaFacturasIncluidas(int ID)
+        {
+            try
+            {
+                var respuesta = await apiServicio.SeleccionarAsync<Response>(ID.ToString(), new Uri(WebApp.BaseAddress), "/api/RecepcionArticulo");
+
+                respuesta.Resultado = JsonConvert.DeserializeObject<RecepcionArticulos>(respuesta.Resultado.ToString());
+
+                RecepcionArticulos RecepcionArticulos = respuesta.Resultado as RecepcionArticulos;
+
+                if (respuesta.IsSuccess)
+                {
+                    try
+                    {
+                        List<DetalleFactura> listaDetalleFactura = RecepcionArticulos.Articulo.DetalleFactura.ToList();
+
+                        foreach (var item in listaDetalleFactura)
+                        {
+                            respuesta = await apiServicio.SeleccionarAsync<Response>(item.IdFactura.ToString(), new Uri(WebApp.BaseAddress), "/api/Factura");
+
+                            respuesta.Resultado = JsonConvert.DeserializeObject<Factura>(respuesta.Resultado.ToString());
+
+                            Factura factura = respuesta.Resultado as Factura;
+
+                            var respuestaOtra = await apiServicio.SeleccionarAsync<Response>(factura.Numero.ToString(), new Uri(WebApp.BaseAddress), "/api/FacturasPorAltaProveeduria");
+
+                            if (respuestaOtra != null)
+                            {
+                                bool siEsta = false;
+
+                                foreach (var _item in ListadoFacturasSeleccionadas)
+                                {
+                                    if (_item.IdFactura == factura.IdFactura)
+                                    {
+                                        siEsta = true;
+                                        break;
+                                    }
+                                }
+
+                                if (siEsta)
+                                {
+
+                                } else
+                                {
+                                    ListadoFacturasSeleccionadas.Add(factura);
+                                }                                
+                            }
+                        }
+
+                        ViewBag.data = ListadoFacturasSeleccionadas;
+
+                        return PartialView("_FacturasIncluidas"); //return PartialView("_FacturasExcluidas", ListadoFacturas);
+                    }
+                    catch (Exception ex)
+                    {
+                        await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                        {
+                            ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                            Message = "Listando facturas",
+                            ExceptionTrace = ex,
+                            LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
+                            LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                            UserName = "Usuario APP WebAppTh"
+                        });
+
+                        return BadRequest();
+                    }
+                }
+
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                {
+                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                    Message = "Listando un objeto de RecepcionArticulos",
+                    ExceptionTrace = ex,
+                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
+                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                    UserName = "Usuario APP WebAppTh"
+                });
+
+                return BadRequest();
+            }
+        }
+
+        public async Task<IActionResult> IncluirFacturasEnAlta(int idFactura)
+        {
+            try
+            {
+                var respuesta = await apiServicio.SeleccionarAsync<Response>(idFactura.ToString(), new Uri(WebApp.BaseAddress), "/api/Factura");
+
+                if (respuesta.IsSuccess)
+                {
+                    respuesta.Resultado = JsonConvert.DeserializeObject<Factura>(respuesta.Resultado.ToString());
+
+                    Factura factura = respuesta.Resultado as Factura;
+                    
+                    ListadoFacturasSeleccionadas.Add(factura);
+
+                    ViewBag.data = ListadoFacturasSeleccionadas;
+
+                    return PartialView("_FacturasIncluidas");
+                }
+
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                {
+                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                    Message = "Incluyendo una factura a un objeto de Alta",
+                    ExceptionTrace = ex,
+                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
+                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                    UserName = "Usuario APP WebAppTh"
+                });
+
+                return BadRequest();
+            }
+        }
+
+        public async Task<IActionResult> RefrescarTablaExcluidos(int idFactura)
+        {
+            var respuesta = await apiServicio.SeleccionarAsync<Response>(idFactura.ToString(), new Uri(WebApp.BaseAddress), "/api/Factura");
+
+            if (respuesta.IsSuccess)
+            {
+                respuesta.Resultado = JsonConvert.DeserializeObject<Factura>(respuesta.Resultado.ToString());
+
+                Factura factura = respuesta.Resultado as Factura;
+
+                List<Factura> temporal = new List<Factura>();
+
+                foreach (var item in ListadoFacturas)
+                {
+                    if (item.IdFactura != factura.IdFactura)
+                    {
+                        temporal.Add(item);
+                    }
+                }
+
+                ListadoFacturas = temporal;
+
+                ViewBag.data = ListadoFacturas;
+
+                return PartialView("_FacturasExcluidas");
+            }
+
+            return BadRequest();
+        }
+
+        public async Task<IActionResult> ExcluirFacturasEnAlta(int idFactura)
+        {
+            try
+            {
+                var respuesta = await apiServicio.SeleccionarAsync<Response>(idFactura.ToString(), new Uri(WebApp.BaseAddress), "/api/Factura");
+
+                if (respuesta.IsSuccess)
+                {
+                    respuesta.Resultado = JsonConvert.DeserializeObject<Factura>(respuesta.Resultado.ToString());
+
+                    Factura factura = respuesta.Resultado as Factura;
+
+                    ListadoFacturas.Add(factura);
+
+                    ViewBag.data = ListadoFacturas;
+
+                    return PartialView("_FacturasExcluidas");
+                }
+
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                {
+                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                    Message = "Excluyendo una factura a un objeto de Alta",
+                    ExceptionTrace = ex,
+                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
+                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                    UserName = "Usuario APP WebAppTh"
+                });
+
+                return BadRequest();
+            }
+        }
+
+        public async Task<IActionResult> RefrescarTablaIncluidos(int idFactura)
+        {
+            var respuesta = await apiServicio.SeleccionarAsync<Response>(idFactura.ToString(), new Uri(WebApp.BaseAddress), "/api/Factura");
+
+            if (respuesta.IsSuccess)
+            {
+                respuesta.Resultado = JsonConvert.DeserializeObject<Factura>(respuesta.Resultado.ToString());
+
+                Factura factura = respuesta.Resultado as Factura;
+
+                List<Factura> temporal = new List<Factura>();
+
+                foreach (var item in ListadoFacturasSeleccionadas)
+                {
+                    if (item.IdFactura != factura.IdFactura)
+                    {
+                        temporal.Add(item);
+                    }
+                }
+
+                ListadoFacturasSeleccionadas = temporal;
+
+                ViewBag.data = ListadoFacturasSeleccionadas;
+
+                return PartialView("_FacturasIncluidas");
+            }
+
+            return BadRequest();
+        }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public async Task<IActionResult> AprobarAltaArticulo(RecepcionArticulos recepcionArticulos)
+        {
+            try
+            { 
+                int idRecepcionArticulo = recepcionArticulos.IdRecepcionArticulos;
+                int idArticulo = recepcionArticulos.IdArticulo;
+                int idProveedor = recepcionArticulos.IdProveedor;
+
+                DateTime fechaAlta = DateTime.Now;
+
+                AltaProveeduria alta = new AltaProveeduria { IdArticulo = idArticulo, IdProveedor = idProveedor, Acreditacion = null, FechaAlta = fechaAlta };
+
+                Response response = new Response();
+
+                response = await apiServicio.InsertarAsync(alta,
+                                                                 new Uri(WebApp.BaseAddress),
+                                                                 "/api/AltaProveeduria/InsertarAltaProveeduria");
+
+                if (response.IsSuccess)
+                {
+                    List<AltaProveeduria> listaAltaProveeduria = await apiServicio.Listar<AltaProveeduria>(new Uri(WebApp.BaseAddress), "/api/AltaProveeduria/ListarAltasProveeduria");
+
+                    var idAlta = listaAltaProveeduria.Where(c => c.IdArticulo == idArticulo && c.FechaAlta == fechaAlta).SingleOrDefault().IdAlta;
+
+                    foreach (var item in ListadoFacturasSeleccionadas)
+                    {
+                        FacturasPorAltaProveeduria facturasPorAltaProveeduria = new FacturasPorAltaProveeduria { IdAlta = idAlta, NumeroFactura = item.Numero };
+
+                        try
+                        {
+                            response = await apiServicio.InsertarAsync(facturasPorAltaProveeduria, new Uri(WebApp.BaseAddress), "/api/FacturaPorAltaProveeduria/InsertarFacturasPorAltaProveeduria");
+
+                            if (response.IsSuccess)
+                            {
+                                
+                            } else
+                            {
+                                try
+                                {
+                                    var eliminar = await apiServicio.EliminarAsync(idAlta.ToString(), new Uri(WebApp.BaseAddress), "/api/AltaProveeduria");
+
+                                    if (eliminar.IsSuccess)
+                                    {
+                                        break;
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                                    {
+                                        ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                                        Message = "Eliminando un objeto de AltaProveeduria",
+                                        ExceptionTrace = ex,
+                                        LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
+                                        LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                                        UserName = "Usuario APP WebAppTh"
+                                    });
+
+                                    return BadRequest();
+                                }                                
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                            {
+                                ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                                Message = "Insertando un objeto de FacturasPorAltaProveeduria",
+                                ExceptionTrace = ex,
+                                LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
+                                LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                                UserName = "Usuario APP WebAppTh"
+                            });
+
+                            return BadRequest();
+                        }
+                    }
+
+                    return View("FormularioAltaArticulo");
+                }
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                {
+                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                    Message = "Listando un objeto de RecepcionArticulos",
+                    ExceptionTrace = ex,
+                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
+                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                    UserName = "Usuario APP WebAppTh"
+                });
+
+                return BadRequest();
+            }
+
+            return View();
+        }
+
+        public async Task<IActionResult> IngresarFacturas()
+        {
+            var lista = new List<MaestroArticuloSucursal>();
+            try
+            {
+                lista = await apiServicio.Listar<MaestroArticuloSucursal>(new Uri(WebApp.BaseAddress)
+                                                                    , "/api/MaestroArticuloSucursal/ListarMaestroArticuloSucursal");
+                return View("IngresarFacturas", lista);
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                {
+                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                    Message = "Listando maestros de artículos de sucursal",
+                    ExceptionTrace = ex,
+                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
+                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                    UserName = "Usuario APP webappth"
+                });
+                return BadRequest();
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> GuardarFacturas(DetalleFactura detalleFactura)
+        {
+            int idMAS = detalleFactura.Factura.IdMaestroArticuloSucursal;
+            int idProveedor = detalleFactura.Factura.IdProveedor;
+            string numero = detalleFactura.Factura.Numero;
+
+            int cantidad = detalleFactura.Cantidad;
+
+            decimal ? precio = decimal.Parse(Request.Form["Precio"].ToString().Replace('.', ','));
+
+            try
+            {
+                Factura factura = new Factura();
+                factura.IdMaestroArticuloSucursal = idMAS;
+                factura.IdProveedor = idProveedor;
+                factura.Numero = numero;
+
+                Response response = new Response();
+
+                response = await apiServicio.InsertarAsync(factura, new Uri(WebApp.BaseAddress)
+                                                                    , "/api/Factura/InsertarFactura");
+
+                if (response.IsSuccess)
+                {
+                    try
+                    {
+                        var respuesta = await apiServicio.SeleccionarAsync<Response>(numero, new Uri(WebApp.BaseAddress),
+                                                                                        "/api/Factura/FacturaPorNumero");
+
+                        respuesta.Resultado = JsonConvert.DeserializeObject<Factura>(respuesta.Resultado.ToString());
+
+                        Factura respuestaFactura = respuesta.Resultado as Factura;
+
+                        try
+                        {
+                            //detalleFactura.Factura = respuestaFactura;
+                            detalleFactura.IdFactura = respuestaFactura.IdFactura;
+                            detalleFactura.Precio = precio;
+
+                            response = await apiServicio.InsertarAsync(detalleFactura, new Uri(WebApp.BaseAddress)
+                                                                    , "/api/DetalleFactura/InsertarDetalleFactura");
+
+                            if (response.IsSuccess)
+                            {
+                                return RedirectToAction("IngresarFacturas");
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                            {
+                                ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                                Message = "Insertando Detalle de una Factura",
+                                ExceptionTrace = ex,
+                                LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
+                                LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                                UserName = "Usuario APP webappth"
+                            });
+                            return BadRequest();
+                        }
+                        
+                    }
+                    catch (Exception ex)
+                    {
+                        await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                        {
+                            ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                            Message = "Obteniendo factura por Numero",
+                            ExceptionTrace = ex,
+                            LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
+                            LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                            UserName = "Usuario APP webappth"
+                        });
+                        return BadRequest();
+                    }
+                    
+                }
+
+                return RedirectToAction("FormularioAltaArticulo", idMAS);
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                {
+                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                    Message = "Insertando una Factura",
+                    ExceptionTrace = ex,
+                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
+                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                    UserName = "Usuario APP webappth"
+                });
+                return BadRequest();
+            }
+        }
+
+        public async Task<IActionResult> DetallesFactura(int ID)
+        {
+            var detalleFactura = new DetalleFactura();
+            try
+            {
+                var listaProveedor = await apiServicio.Listar<Proveedor>(new Uri(WebApp.BaseAddress), "/api/Proveedor/ListarProveedores");
+                var tlistaProveedor = listaProveedor.Select(c => new { IdProveedor = c.IdProveedor, NombreApellidos = String.Format("{0} {1}", c.Nombre, c.Apellidos) });
+                ViewData["listaProveedor"] = new SelectList(tlistaProveedor, "IdProveedor", "NombreApellidos");
+                
+                try
+                {
+                    var listaArticulos = new SelectList(await apiServicio.Listar<Articulo>(new Uri(WebApp.BaseAddress)
+                                                                        , "/api/Articulo/ListarArticulos"), "IdArticulo", "Nombre");
+                    ViewBag.listaArticulos = listaArticulos;
+                    ViewBag.ID = ID;
+
+                    return View("DetallesFactura", detalleFactura);
+                }
+                catch (Exception ex)
+                {
+                    await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                    {
+                        ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                        Message = "Listando artículos en el ingreso de una factura",
+                        ExceptionTrace = ex,
+                        LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
+                        LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                        UserName = "Usuario APP webappth"
+                    });
+                    return BadRequest();
+                }               
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                {
+                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                    Message = "Listando proveedores en el ingreso de una factura",
+                    ExceptionTrace = ex,
+                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
+                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                    UserName = "Usuario APP webappth"
+                });
+                return BadRequest();
+            }
+        }
+        #endregion
+
+        #region Baja de Proveeduría
+
+        public async Task<IActionResult> ArticulosADarBaja()
+        {
+            var lista = new List<RecepcionArticulos>();
+            try
+            {
+                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddress)
+                                                                    , "/api/RecepcionArticulo/ListarRecepcionArticulos");
+
+                var listaArticulosRecepcionados = lista.Select(c => c).ToList();
+
+                return View("ArticulosBaja", listaArticulosRecepcionados);
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                {
+                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                    Message = "Listando articulos recepcionados",
+                    ExceptionTrace = ex,
+                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
+                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                    UserName = "Usuario APP webappth"
+                });
+                return BadRequest();
+            }
+        }
+
+        public async Task<IActionResult> FormularioBajaArticulo(int ID)
+        {
+            try
+            {
+                var respuesta = await apiServicio.SeleccionarAsync<Response>(ID.ToString(), new Uri(WebApp.BaseAddress), "/api/RecepcionArticulo");
+
+                respuesta.Resultado = JsonConvert.DeserializeObject<RecepcionArticulos>(respuesta.Resultado.ToString());
+
+                RecepcionArticulos RecepcionArticulos = respuesta.Resultado as RecepcionArticulos;
+
+                //ViewBag.Acreditacion = new SelectList(new List<string> { "Facturas", "Documentos" });
+
+                if (respuesta.IsSuccess)
+                {
+                    return View("FormularioBajaArticulo", RecepcionArticulos);
+                }
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                {
+                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                    Message = "Listando un objeto de RecepcionArticulos",
+                    ExceptionTrace = ex,
+                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
+                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                    UserName = "Usuario APP WebAppTh"
+                });
+
+                return BadRequest();
+            }
+
+            return View();
+
+        }
+
+        public async Task<IActionResult> AprobarBajaArticulo(int idRecepcionArticulo, int idProveedor, string archivo)
+        {
+            try
+            {
+                var respuesta = await apiServicio.SeleccionarAsync<Response>(idRecepcionArticulo.ToString(), new Uri(WebApp.BaseAddress), "/api/RecepcionArticulo");
+
+                if (respuesta.IsSuccess)
+                {
+                    return View("FormularioBajaArticulo");
+                }
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                {
+                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                    Message = "Listando un objeto de RecepcionArticulos",
+                    ExceptionTrace = ex,
+                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
+                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                    UserName = "Usuario APP WebAppTh"
+                });
+
+                return BadRequest();
+            }
+
+            return View();
+        }
+        #endregion
+
 
         #region AJAX_ClaseArticulo
         public async Task<SelectList> ObtenerSelectListClaseArticulo(int idTipoArticulo)
