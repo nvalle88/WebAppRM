@@ -222,10 +222,8 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddress)
-                                                                    , "/api/RecepcionArticulo/ListarRecepcionArticulos");
-
-                var listaAltas = lista.Where(c => c.Cantidad > 0).ToList();
-                return View(listaAltas);
+                                                                    , "/api/AltaProveeduria/ListarAltasProveeduria");
+                return View(lista);
             }
             catch (Exception ex)
             {
@@ -247,10 +245,8 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddress)
-                                                                    , "/api/RecepcionArticulo/ListarRecepcionArticulos");
-
-                var listaBajas = lista.Where(c => c.Cantidad == 0).ToList();
-                return View(listaBajas);
+                                                                    , "/api/BajaProveeduria/ListarBajasProveeduria");
+                return View(lista);
             }
             catch (Exception ex)
             {
