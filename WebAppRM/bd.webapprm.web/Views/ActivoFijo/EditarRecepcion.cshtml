@@ -5,6 +5,7 @@
 <link rel="stylesheet" href="~/css/site.css" />
 <link rel="stylesheet" href="~/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
 <link rel="stylesheet" href="~/lib/jquery.spinner-master/dist/css/bootstrap-spinner.min.css" />
+<link rel="stylesheet" href="~/lib/dropzone/min/dropzone.min.css" />
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
@@ -48,7 +49,7 @@
                                                         return tab == "Datos Generales" ? codificacion ? "" : "active" : codificacion ? "active" : "";
                                                     };
 
-                                                    <li data-target="#step1" @claseCodificacion("Datos Generales")>
+                                                    <li data-target="#step1" @claseCodificacion("Datos Generales") id="li_datosGenerales">
                                                         <span class="badge badge-info" style="padding:3px 4px !important;">1</span>Datos Generales<span class="chevron"></span>
                                                     </li>
                                                     <li data-target="#step2" id="li_codificacion" @claseCodificacion("Codificación")>
@@ -353,9 +354,42 @@
                                 </fieldset>
                                 <footer>
                                     <span class="text-danger">@ViewData["Error"]</span>
-                                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                                    <input type="submit" value="Guardar" class="btn btn-primary" id="btn_guardar" />
+                                    <input type="button" class="btn btn-danger" value="Informaci&oacute;n Adicional" id="btn_informacionAdicional" />
+                                    <input type="button" value="Atr&aacute;s" class="btn btn-default hide" id="btn_atras" />
                                 </footer>
                             </form>
+                        </div>
+                    </div>
+                </div>
+            </article>
+            <article id="divInformacionAdicional" class="col-sm-12 col-md-12 col-lg-8 hide">
+                <div class="jarviswidget" id="wid-id-2" data-widget-editbutton="false" data-widget-custombutton="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-cloud-upload"></i> </span>
+                        <h2>Informaci&oacute;n adicional de Activo Fijo</h2>
+                    </header>
+
+                    <div>
+                        <div class="jarviswidget-editbox"></div>
+                        <div class="widget-body no-padding">
+                            <div class="smart-form">
+                                <fieldset>
+                                    <div class="row" style="padding-left:15px !important;padding-right:15px !important;">
+                                        <div class="alert alert-info alert-block" style="border-left-width:5px !important;">
+                                            <h4 class="alert-heading">Informaci&oacute;n</h4>
+                                            Adicione documentaci&oacute;n o archivos referentes y fotograf&iacute;as de los bienes.<br />
+                                            Extensiones de archivos permitidas: <span style="color:#a90329;" id="spanExtensionesPermitidas"></span>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <form asp-action="SubirArchivos" id="mydropzone" class="dropzone" novalidate="novalidate" style="margin-left:15px !important;margin-right:15px !important;border:1px dashed;">
+                                    <input type="hidden" id="dir" name="dir" value="@Model.IdRecepcionActivoFijoDetalle" />
+                                </form>
+                                <footer>
+                                    <input type="button" value="Cancelar" class="btn btn-default" id="btn_cancelarInformacionAdicional" />
+                                </footer>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -368,7 +402,6 @@
     <script src='~/lib/select2/dist/js/i18n/es.js'></script>
     <script src='~/js/site.js'></script>
     <script src='~/lib/waitMe/waitMe.min.js'></script>
-    <script src='~/js/activoFijo/recepcion.js'></script>
     <script src="~/lib//bootstrap-wizard/jquery.bootstrap.wizard.min.js"></script>
     <script src="~/lib/fuelux/wizard/wizard.min.js"></script>
     <script src='~/lib/bootstrap-touchspin-master/src/jquery.bootstrap-touchspin.js'></script>
@@ -376,5 +409,7 @@
     <script src='~/lib/moment/locale/es.js'></script>
     <script src='~/lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'></script>
     <script src='~/lib/jquery.spinner-master/dist/js/jquery.spinner.min.js'></script>
+    <script src='~/lib/dropzone/min/dropzone.min.js'></script>
+    <script src='~/js/activoFijo/recepcion.js'></script>
     <script src='~/js/activoFijo/codificacion.js'></script>
 }
