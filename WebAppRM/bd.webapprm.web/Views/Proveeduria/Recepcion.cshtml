@@ -16,7 +16,7 @@
                     <div>
                         <div class="jarviswidget-editbox"></div>
                         <div class="widget-body no-padding">
-                            <form asp-action="RecepcionProveeduria" id="checkout-form" class="smart-form" novalidate="novalidate">
+                            <form asp-action="Recepcion" id="checkout-form" class="smart-form" novalidate="novalidate">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <fieldset>
                                     <div class="row">
@@ -174,7 +174,7 @@
                                 <footer>
                                     <span class="text-danger">@ViewData["Error"]</span>
                                     <input type="submit" value="Guardar" class="btn btn-primary" />
-                                    <a asp-action="Index" class="btn btn-default">Cancelar</a>
+                                    <a asp-action="ListadoRecepcion" class="btn btn-default">Cancelar</a>
                                 </footer>
                             </form>
                         </div>
