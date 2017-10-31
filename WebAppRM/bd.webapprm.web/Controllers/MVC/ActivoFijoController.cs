@@ -115,7 +115,7 @@ namespace bd.webapprm.web.Controllers.MVC
             }
         }
 
-        public async Task<Response> InsertarRecepcionActivoFijoDetalle(RecepcionActivoFijoDetalle recepcionActivoFijoDetalle)
+        public async Task<Response> InsertarRecepcionActivoFijoDetalle(RecepcionActivoFijoDetalle recepcionActivoFijoDetalle, string nombreCarpeta)
         {
             Response response = new Response();
             try
@@ -155,6 +155,9 @@ namespace bd.webapprm.web.Controllers.MVC
                             EntityID = string.Format("{0} {1}", "Empleado de Activo Fijo:", recepcionActivoFijoDetalle.RecepcionActivoFijo.IdEmpleado),
                         });
                     }
+
+                    DirectoryInfo dInfo = new DirectoryInfo(String.Format("{0}\\wwwroot\\images\\ActivoFijo\\{1}", _hostingEnvironment.ContentRootPath, nombreCarpeta));
+                    dInfo.MoveTo(String.Format("{0}\\wwwroot\\images\\ActivoFijo\\{1}", _hostingEnvironment.ContentRootPath, recepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle.ToString()));
                 }
             }
             catch (Exception)
@@ -212,11 +215,12 @@ namespace bd.webapprm.web.Controllers.MVC
             return response;
         }
 
-        public async Task<IActionResult> GestionRecepcionActivoFijoDetalle(RecepcionActivoFijoDetalle recepcionActivoFijoDetalle, int valor_tab)
+        public async Task<IActionResult> GestionRecepcionActivoFijoDetalle(RecepcionActivoFijoDetalle recepcionActivoFijoDetalle, int valor_tab, string nombreCarpeta)
         {
             Response response = new Response();
             try
             {
+                ViewBag.nombreCarpeta = nombreCarpeta;
                 var listaTipoActivoFijo = await apiServicio.Listar<TipoActivoFijo>(new Uri(WebApp.BaseAddress), "/api/TipoActivoFijo/ListarTipoActivoFijos");
                 var listaMarca = await apiServicio.Listar<Marca>(new Uri(WebApp.BaseAddress), "/api/Marca/ListarMarca");
 
@@ -394,7 +398,7 @@ namespace bd.webapprm.web.Controllers.MVC
                         }
 
                         if (recepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle == 0)
-                            response = await InsertarRecepcionActivoFijoDetalle(recepcionActivoFijoDetalle);
+                            response = await InsertarRecepcionActivoFijoDetalle(recepcionActivoFijoDetalle, Request.Form["nombreCarpeta"].ToString());
                         else
                         {
                             recepcionActivoFijoDetalle.ActivoFijo.CodigoActivoFijo.Codigosecuencial = "N/A";
@@ -422,7 +426,7 @@ namespace bd.webapprm.web.Controllers.MVC
                                 recepcionActivoFijoDetalle.ActivoFijo.CodigoActivoFijo.Codigosecuencial = codigoSecuencial;
 
                                 if (recepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle == 0)
-                                    response = await InsertarRecepcionActivoFijoDetalle(recepcionActivoFijoDetalle);
+                                    response = await InsertarRecepcionActivoFijoDetalle(recepcionActivoFijoDetalle, Request.Form["nombreCarpeta"].ToString());
                                 else
                                     response = await EditarRecepcionActivoFijoDetalle(recepcionActivoFijoDetalle);
 
@@ -470,11 +474,11 @@ namespace bd.webapprm.web.Controllers.MVC
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Recepcion(RecepcionActivoFijoDetalle recepcionActivoFijoDetalle) => await GestionRecepcionActivoFijoDetalle(recepcionActivoFijoDetalle, int.Parse(Request.Form["tab"].ToString()));
+        public async Task<IActionResult> Recepcion(RecepcionActivoFijoDetalle recepcionActivoFijoDetalle) => await GestionRecepcionActivoFijoDetalle(recepcionActivoFijoDetalle, int.Parse(Request.Form["tab"].ToString()), Request.Form["nombreCarpeta"].ToString());
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> EditarRecepcion(RecepcionActivoFijoDetalle recepcionActivoFijoDetalle) => await GestionRecepcionActivoFijoDetalle(recepcionActivoFijoDetalle, int.Parse(Request.Form["tab"].ToString()));
+        public async Task<IActionResult> EditarRecepcion(RecepcionActivoFijoDetalle recepcionActivoFijoDetalle) => await GestionRecepcionActivoFijoDetalle(recepcionActivoFijoDetalle, int.Parse(Request.Form["tab"].ToString()), Request.Form["nombreCarpeta"].ToString());
 
         public async Task<IActionResult> ObtenerRecepcionActivoFijo(string id, string estado)
         {
@@ -538,21 +542,27 @@ namespace bd.webapprm.web.Controllers.MVC
         private string ObtenerDireccionCarpetaTemporal()
         {
             string filePath = "";
+            Guid guid;
             do
             {
-                filePath = String.Format("{0}\\wwwroot\\images\\ActivoFijo\\{1}", _hostingEnvironment.ContentRootPath, Guid.NewGuid().ToString());
+                guid = Guid.NewGuid();
+                filePath = String.Format("{0}\\wwwroot\\images\\ActivoFijo\\{1}", _hostingEnvironment.ContentRootPath, guid.ToString());
             } while (Directory.Exists(filePath));
-            return filePath;
+            return guid.ToString();
         }
 
         [HttpPost]
         public async Task<IActionResult> SubirArchivos()
         {
-            var dir = Request.Form["dir"].ToString();
-            var filePath = dir != null && dir != "" ? String.Format("{0}\\wwwroot\\images\\ActivoFijo\\{1}", _hostingEnvironment.ContentRootPath, dir) : ObtenerDireccionCarpetaTemporal();
+            if (!Directory.Exists(String.Format("{0}\\wwwroot\\images\\ActivoFijo", _hostingEnvironment.ContentRootPath)))
+                Directory.CreateDirectory(String.Format("{0}\\wwwroot\\images\\ActivoFijo", _hostingEnvironment.ContentRootPath));
 
-            if (!Directory.Exists(filePath))
-                Directory.CreateDirectory(filePath);
+            var dir = Request.Form["dir"].ToString();
+            var nombreCarpeta = dir != null && dir != "" ? dir : ObtenerDireccionCarpetaTemporal();
+            var folderPath = String.Format("{0}\\wwwroot\\images\\ActivoFijo\\{1}", _hostingEnvironment.ContentRootPath, nombreCarpeta);
+
+            if (!Directory.Exists(folderPath))
+                Directory.CreateDirectory(folderPath);
 
             foreach (var formFile in Request.Form.Files)
             {
@@ -560,8 +570,10 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     if (formFile.Length > 0)
                     {
-                        var stream = new FileStream(filePath, FileMode.OpenOrCreate, FileAccess.ReadWrite);
-                        await formFile.CopyToAsync(stream);
+                        using (Stream stream = new FileStream(String.Format("{0}\\{1}", folderPath, formFile.FileName), FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                        {
+                            await formFile.CopyToAsync(stream);
+                        }
                     }
                 }
                 catch (Exception)
@@ -569,7 +581,7 @@ namespace bd.webapprm.web.Controllers.MVC
                     return StatusCode(500);
                 }
             }
-            return StatusCode(200);
+            return StatusCode(200, new JsonResult(nombreCarpeta));
         }
 
         [HttpPost]
@@ -577,7 +589,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                string filePath = String.Format("{0}\\{1}", dir, fileName);
+                string filePath = String.Format("{0}\\wwwroot\\images\\ActivoFijo\\{1}\\{2}", _hostingEnvironment.ContentRootPath, dir, fileName);
                 System.IO.File.Delete(filePath);
                 return StatusCode(200);
             }

@@ -56,7 +56,8 @@ function configurarDropzone()
             });
 
             this.on("success", function (file, data) {
-                $("#dir").val(data.Resultado);
+                $("#dir").val(data.value);
+                $("#nombreCarpeta").val(data.value);
             });
 
             this.on("error", function (file, data) {
