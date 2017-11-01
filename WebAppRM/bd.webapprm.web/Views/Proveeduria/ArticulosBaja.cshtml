@@ -1,0 +1,103 @@
+@model List<bd.webapprm.entidades.RecepcionArticulos>
+
+<div id="content">
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                        <h2>@ViewData["titulo"]</h2>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox"></div>
+                        <div class="widget-body no-padding">
+                            <table id="dt_basic" class="table table-striped table-bordered table-hover" style="width:100%;">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            Art&iacute;culo
+                                        </th>
+                                        <th>
+                                            Modelo
+                                        </th>
+                                        <th>
+                                            Clase
+                                        </th>
+                                        <th>
+                                            Sub Clase
+                                        </th>
+                                        <th>
+                                            Fecha de Recepci&oacute;n
+                                        </th>
+                                        <th>
+                                            Proveedor
+                                        </th>
+                                        <th>
+                                            Empleado
+                                        </th>
+                                        <th>
+                                            Cantidad
+                                        </th>
+                                        <th>
+                                            Opciones
+                                        </th>
+                                        <th hidden>
+                                            ID_RecepcionArticulo
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Articulo.Nombre)
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Articulo.Modelo.Nombre)
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Articulo.SubClaseArticulo.ClaseArticulo.Nombre)
+                                            </td>
+                                            
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Articulo.SubClaseArticulo.Nombre)
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Fecha)
+                                            </td>
+
+                                            <td>
+                                                @{ await ViewContext.Writer.WriteAsync(String.Format("{0} {1}", item.Proveedor.Nombre, item.Proveedor.Apellidos));}
+                                            </td>
+
+                                            <td>
+                                                @{ await ViewContext.Writer.WriteAsync(String.Format("{0} {1}", item.Empleado.Persona.Nombres, item.Empleado.Persona.Apellidos));}
+                                            </td>                                            
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Cantidad)        
+                                            </td>
+                                            <td>
+                                                <a href="#" >@Html.ActionLink("Solicitar Baja", "FormularioBajaArticulo", "Proveeduria", new { ID = item.IdRecepcionArticulos})</a>
+                                            </td>
+                                            <td hidden>
+                                                @item.IdRecepcionArticulos
+                                            </td>
+                                        </tr>
+                                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+@section Scripts {
+    <script src='~/js/datatables/init.js'></script>
+}
