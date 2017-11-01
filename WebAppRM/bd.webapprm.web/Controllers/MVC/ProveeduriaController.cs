@@ -343,16 +343,14 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddress)
                                                                     , "/api/RecepcionArticulo/ListarRecepcionArticulos");
-
-                var listaBajas = lista.Where(c => c.Cantidad == 0).ToList();
-                return View(listaBajas);
+                return View(lista);
             }
             catch (Exception ex)
             {
                 await GuardarLogService.SaveLogEntry(new LogEntryTranfer
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Listando Artículos recepcionados en Alta",
+                    Message = "Listando Artículos Recepcionados",
                     ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
