@@ -1,7 +1,7 @@
-@model List<bd.webapprm.entidades.RecepcionArticulos>
+@model List<bd.webapprm.entidades.SolicitudProveduriaDetalle>
 
 @{
-    ViewData["Title"] = "ReporteArticulosBajas";
+    ViewData["Title"] = "MinimosMaximos";
 }
 
 <link rel="stylesheet" href="~/css/site.css" />
@@ -23,7 +23,7 @@
                             <div class="padding-10">
                                 <br>
                                 <div class="pull-left">
-                                    <h1 style="font-size:260% !important;"><i class="fa fa-file-text-o"></i> Artículos en Baja</h1>
+                                    <h1 style="font-size:260% !important;"><i class="fa fa-file-text-o"></i> M&iacute;nimos y M&aacute;ximos</h1>
                                 </div>
                                 <div class="pull-right">
                                     <div class="row">
@@ -52,16 +52,31 @@
                                     <thead>
                                         <tr>
                                             <th>
+                                                Sucursal
+                                            </th>
+                                            <th>
                                                 Art&iacute;culo
                                             </th>
                                             <th>
-                                                Cantidad
+                                                Cantidad aprobada
                                             </th>
                                             <th>
-                                                Fecha de recepci&oacute;n
+                                                Cantidad solicitada
                                             </th>
                                             <th>
-                                                Proveedor
+                                                Estado
+                                            </th>
+                                            <th>
+                                                Fecha de aprobada
+                                            </th>
+                                            <th>
+                                                Fecha de solicitud
+                                            </th>
+                                            <th>
+                                                M&iacute;nimo
+                                            </th>
+                                            <th>
+                                                M&aacute;ximo
                                             </th>
                                         </tr>
                                     </thead>
@@ -70,22 +85,34 @@
                                         {
                                             <tr>
                                                 <td>
+                                                    @Html.DisplayFor(modelIteam => item.MaestroArticuloSucursal.Sucursal)
+                                                </td>
+                                                <td>
                                                     @Html.DisplayFor(modelItem => item.Articulo.Nombre)
                                                 </td>
-
                                                 <td>
-                                                    @Html.DisplayFor(modelItem => item.Cantidad)
+                                                    @Html.DisplayFor(modelItem => item.CantidadAprobada)
                                                 </td>
-
                                                 <td>
-                                                    @Html.DisplayFor(modelItem => item.Fecha)
+                                                    @Html.DisplayFor(modelItem => item.CantidadSolicitada)
                                                 </td>
-
                                                 <td>
-                                                    @{ await ViewContext.Writer.WriteAsync(String.Format("{0} {1}", item.Proveedor.Nombre, item.Proveedor.Apellidos)); }
+                                                    @Html.DisplayFor(modelItem => item.Estado.Nombre)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.FechaAprobada)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.FechaSolicitud)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelIteam => item.MaestroArticuloSucursal.Minimo)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelIteam => item.MaestroArticuloSucursal.Maximo)
                                                 </td>
                                             </tr>
-                                                        }
+                                        }
                                     </tbody>
                                 </table>
 
@@ -110,5 +137,5 @@
 
 @section Scripts{
     <script src="~/lib/TableTools-master/src/dataTables.tableTools.js"></script>
-    <script src="~/js/activoFijo/reportePolizas.js"></script>
+    <script src="~/js/proveeduria/reporteConsumo.js"></script>
 }

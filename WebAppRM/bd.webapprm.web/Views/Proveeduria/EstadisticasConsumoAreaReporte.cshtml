@@ -1,7 +1,7 @@
-@model List<bd.webapprm.entidades.RecepcionArticulos>
+@model List<bd.webapprm.entidades.SolicitudProveduriaDetalle>
 
 @{
-    ViewData["Title"] = "ReporteArticulosConsumoArea";
+    ViewData["Title"] = "EstadisticasConsumoArea";
 }
 
 <link rel="stylesheet" href="~/css/site.css" />
@@ -58,13 +58,25 @@
                                                 Art&iacute;culo
                                             </th>
                                             <th>
-                                                Consumo
+                                                Cantidad aprobada
                                             </th>
                                             <th>
-                                                Fecha de recepci&oacute;n
+                                                Cantidad solicitada
                                             </th>
                                             <th>
-                                                Proveedor
+                                                Estado
+                                            </th>
+                                            <th>
+                                                Fecha de aprobada
+                                            </th>
+                                            <th>
+                                                Fecha de solicitud
+                                            </th>                                            
+                                            <th>
+                                                M&iacute;nimo
+                                            </th>
+                                            <th>
+                                                M&aacute;ximo
                                             </th>
                                         </tr>
                                     </thead>
@@ -73,22 +85,34 @@
                                         {
                                             <tr>
                                                 <td>
-                                                    @Html.DisplayFor(modelItem => item.MaestroArticuloSucursal.Sucursal.Nombre)
+                                                    @Html.DisplayFor(modelIteam => item.MaestroArticuloSucursal.Sucursal)
                                                 </td>
                                                 <td>
                                                     @Html.DisplayFor(modelItem => item.Articulo.Nombre)
                                                 </td>
                                                 <td>
-                                                    @Html.DisplayFor(modelItem => item.Cantidad)
+                                                    @Html.DisplayFor(modelItem => item.CantidadAprobada)
                                                 </td>
                                                 <td>
-                                                    @Html.DisplayFor(modelItem => item.Fecha)
+                                                    @Html.DisplayFor(modelItem => item.CantidadSolicitada)
                                                 </td>
                                                 <td>
-                                                    @{ await ViewContext.Writer.WriteAsync(String.Format("{0} {1}", item.Proveedor.Nombre, item.Proveedor.Apellidos)); }
+                                                    @Html.DisplayFor(modelItem => item.Estado.Nombre)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.FechaAprobada)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.FechaSolicitud)
+                                                </td>                                                
+                                                <td>
+                                                    @Html.DisplayFor(modelIteam => item.MaestroArticuloSucursal.Minimo)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelIteam => item.MaestroArticuloSucursal.Maximo)
                                                 </td>
                                             </tr>
-                                                        }
+                                        }
                                     </tbody>
                                 </table>
 
