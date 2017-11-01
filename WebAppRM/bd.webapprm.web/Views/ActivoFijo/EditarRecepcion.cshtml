@@ -18,9 +18,18 @@
                     <div>
                         <div class="jarviswidget-editbox"></div>
                         <div class="widget-body no-padding">
-                            <form asp-action="Recepcion" id="checkout-form" class="smart-form" novalidate="novalidate">
+                            <form asp-action="EditarRecepcion" id="checkout-form" class="smart-form" novalidate="novalidate">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                                @{ 
+                                <input type="hidden" asp-for="IdRecepcionActivoFijoDetalle" />
+                                <input type="hidden" asp-for="IdRecepcionActivoFijo" />
+                                <input type="hidden" asp-for="IdActivoFijo" />
+                                <input type="hidden" asp-for="IdEstado" />
+                                <input type="hidden" asp-for="RecepcionActivoFijo.IdRecepcionActivoFijo" />
+                                <input type="hidden" asp-for="ActivoFijo.IdActivoFijo" />
+                                <input type="hidden" asp-for="ActivoFijo.IdCodigoActivoFijo" />
+                                <input type="hidden" asp-for="Estado.IdEstado" />
+
+                                @{
                                     bool codificacion = ViewBag.Codificacion ?? false;
                                     int valor_tab = !codificacion ? 1 : 2;
                                 }
@@ -31,18 +40,20 @@
                                         <div class="wizard">
                                             <ul class="steps">
                                                 @{
-                                                    Func<string, string> claseCodificacion = (tipo_li) => {
+                                                    Func<string, string> claseCodificacion = (tipo_li) =>
+                                                    {
                                                         return tipo_li == "Datos Generales" ? codificacion ? "" : " class=active" : codificacion ? " class=active" : "";
                                                     };
 
-                                                    Func<string, string> claseActive = (tab) => {
+                                                    Func<string, string> claseActive = (tab) =>
+                                                    {
                                                         return tab == "Datos Generales" ? codificacion ? "" : "active" : codificacion ? "active" : "";
                                                     };
 
-                                                    <li data-target="#step1"@claseCodificacion("Datos Generales") id="li_datosGenerales">
+                                                    <li data-target="#step1" @claseCodificacion("Datos Generales") id="li_datosGenerales">
                                                         <span class="badge badge-info" style="padding:3px 4px !important;">1</span>Datos Generales<span class="chevron"></span>
                                                     </li>
-                                                    <li data-target="#step2" id="li_codificacion"@claseCodificacion("Codificación")>
+                                                    <li data-target="#step2" id="li_codificacion" @claseCodificacion("Codificación")>
                                                         <span class="badge" style="padding:3px 4px !important;">2</span>Codificaci&oacute;n<span class="chevron"></span>
                                                     </li>
                                                 }
@@ -359,7 +370,7 @@
                         <span class="widget-icon"> <i class="fa fa-cloud-upload"></i> </span>
                         <h2>Informaci&oacute;n adicional de Activo Fijo</h2>
                     </header>
-                    
+
                     <div>
                         <div class="jarviswidget-editbox"></div>
                         <div class="widget-body no-padding">
@@ -374,7 +385,7 @@
                                     </div>
                                 </fieldset>
                                 <form asp-action="SubirArchivos" id="mydropzone" class="dropzone" novalidate="novalidate" style="margin-left:15px !important;margin-right:15px !important;border:1px dashed;">
-                                    <input type="hidden" id="dir" name="dir" />
+                                    <input type="hidden" id="dir" name="dir" value="@Model.IdRecepcionActivoFijoDetalle" />
                                 </form>
                                 <footer>
                                     <input type="button" value="Cerrar" class="btn btn-default" id="btn_cancelarInformacionAdicional" />

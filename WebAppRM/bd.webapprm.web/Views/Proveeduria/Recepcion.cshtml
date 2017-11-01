@@ -3,6 +3,7 @@
 <link rel="stylesheet" href="~/lib/waitMe/waitMe.min.css" />
 <link rel="stylesheet" href="~/css/site.css" />
 <link rel="stylesheet" href="~/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+<link rel="stylesheet" href="~/lib/jquery.spinner-master/dist/css/bootstrap-spinner.min.css" />
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
@@ -15,7 +16,7 @@
                     <div>
                         <div class="jarviswidget-editbox"></div>
                         <div class="widget-body no-padding">
-                            <form asp-action="RecepcionProveeduria" id="checkout-form" class="smart-form" novalidate="novalidate">
+                            <form asp-action="Recepcion" id="checkout-form" class="smart-form" novalidate="novalidate">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <fieldset>
                                     <div class="row">
@@ -63,10 +64,14 @@
                                         </section>
 
                                         <section class="col col-8">
-                                            <label class="input">
-                                                <input asp-for="Cantidad" class="form-control" type="number" min="1" />
-                                                <span asp-validation-for="Cantidad" class="text-danger"></span>
-                                            </label>
+                                            <div class="input-group spinner" data-trigger="spinner">
+                                                <input type="text" asp-for="Cantidad" class="form-control" data-rule="quantity" style="padding-left:10px !important;" />
+                                                <div class="input-group-addon" style="padding-left:23px !important;">
+                                                    <a href="javascript:;" class="spin-up" data-spin="up"><i class="fa fa-caret-up"></i></a>
+                                                    <a href="javascript:;" class="spin-down" data-spin="down"><i class="fa fa-caret-down"></i></a>
+                                                </div>
+                                            </div>
+                                            <span asp-validation-for="Cantidad" class="text-danger"></span>
                                         </section>
                                     </div>
 
@@ -169,7 +174,7 @@
                                 <footer>
                                     <span class="text-danger">@ViewData["Error"]</span>
                                     <input type="submit" value="Guardar" class="btn btn-primary" />
-                                    <a asp-action="Index" class="btn btn-default">Cancelar</a>
+                                    <a asp-action="ListadoRecepcion" class="btn btn-default">Cancelar</a>
                                 </footer>
                             </form>
                         </div>
@@ -188,5 +193,6 @@
     <script src='~/lib/moment/min/moment.min.js'></script>
     <script src='~/lib/moment/locale/es.js'></script>
     <script src='~/lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'></script>
+    <script src='~/lib/jquery.spinner-master/dist/js/jquery.spinner.min.js'></script>
     <script src='~/js/proveeduria/recepcion.js'></script>
 }

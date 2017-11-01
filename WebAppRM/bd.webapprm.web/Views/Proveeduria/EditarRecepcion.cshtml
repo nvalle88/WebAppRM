@@ -1,0 +1,199 @@
+@model bd.webapprm.entidades.RecepcionArticulos
+<link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
+<link rel="stylesheet" href="~/lib/waitMe/waitMe.min.css" />
+<link rel="stylesheet" href="~/css/site.css" />
+<link rel="stylesheet" href="~/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+<link rel="stylesheet" href="~/lib/jquery.spinner-master/dist/css/bootstrap-spinner.min.css" />
+<div id="content">
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-sm-12 col-md-12 col-lg-6">
+                <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+                        <h2>Recepci&oacute;n de Proveedur&iacute;a</h2>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox"></div>
+                        <div class="widget-body no-padding">
+                            <form asp-action="Recepcion" id="checkout-form" class="smart-form" novalidate="novalidate">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <input type="hidden" asp-for="IdRecepcionArticulos" />
+                                <fieldset>
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="Fecha"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <input asp-for="Fecha" class="form-control" />
+                                                <span asp-validation-for="Fecha" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="IdProveedor"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <select asp-for="IdProveedor" class="form-control" asp-items="ViewBag.Proveedor"></select>
+                                                <span asp-validation-for="IdProveedor" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="IdEmpleado"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <select asp-for="IdEmpleado" class="form-control" asp-items="ViewBag.Empleado"></select>
+                                                <span asp-validation-for="IdEmpleado" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="Cantidad"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <div class="input-group spinner" data-trigger="spinner">
+                                                <input type="text" asp-for="Cantidad" class="form-control" data-rule="quantity" style="padding-left:10px !important;" />
+                                                <div class="input-group-addon" style="padding-left:23px !important;">
+                                                    <a href="javascript:;" class="spin-up" data-spin="up"><i class="fa fa-caret-up"></i></a>
+                                                    <a href="javascript:;" class="spin-down" data-spin="down"><i class="fa fa-caret-down"></i></a>
+                                                </div>
+                                            </div>
+                                            <span asp-validation-for="Cantidad" class="text-danger"></span>
+                                        </section>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="Articulo.SubClaseArticulo.ClaseArticulo.IdTipoArticulo"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <select asp-for="Articulo.SubClaseArticulo.ClaseArticulo.IdTipoArticulo" class="form-control" asp-items="ViewBag.TipoArticulo"></select>
+                                                <span asp-validation-for="Articulo.SubClaseArticulo.ClaseArticulo.IdTipoArticulo" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="Articulo.SubClaseArticulo.IdClaseArticulo"></label>
+                                        </section>
+
+                                        <div id="div_claseArticulo">
+                                            @{ await Html.RenderPartialAsync("_ClaseArticuloSelect", Model); }
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="Articulo.IdSubClaseArticulo"></label>
+                                        </section>
+
+                                        <div id="div_subClaseArticulo">
+                                            @{ await Html.RenderPartialAsync("_SubClaseArticuloSelect", Model); }
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="IdArticulo"></label>
+                                        </section>
+
+                                        <div id="div_Articulo">
+                                            @{ await Html.RenderPartialAsync("_ArticuloSelect", Model); }
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="MaestroArticuloSucursal.Sucursal.Ciudad.Provincia.IdPais"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <select asp-for="MaestroArticuloSucursal.Sucursal.Ciudad.Provincia.IdPais" class="form-control" asp-items="ViewBag.Pais"></select>
+                                                <span asp-validation-for="MaestroArticuloSucursal.Sucursal.Ciudad.Provincia.IdPais" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="MaestroArticuloSucursal.Sucursal.Ciudad.Provincia.Nombre"></label>
+                                        </section>
+
+                                        <div id="div_provincia">
+                                            @{ await Html.RenderPartialAsync("_ProvinciaSelect", Model); }
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="MaestroArticuloSucursal.Sucursal.Ciudad.Nombre"></label>
+                                        </section>
+
+                                        <div id="div_ciudad">
+                                            @{ await Html.RenderPartialAsync("_CiudadSelect", Model); }
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="MaestroArticuloSucursal.Sucursal.Nombre"></label>
+                                        </section>
+
+                                        <div id="div_sucursal">
+                                            @{ await Html.RenderPartialAsync("_SucursalSelect", Model); }
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="IdMaestroArticuloSucursal"></label>
+                                        </section>
+
+                                        <div id="div_maestroArticuloSucursal">
+                                            @{ await Html.RenderPartialAsync("_MaestroArticuloSucursalSelect", Model); }
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <footer>
+                                    <span class="text-danger">@ViewData["Error"]</span>
+                                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                                    <a asp-action="ListadoRecepcion" class="btn btn-default">Cancelar</a>
+                                </footer>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+
+@section Scripts {
+    <script src='~/lib/select2/dist/js/select2.min.js'></script>
+    <script src='~/lib/select2/dist/js/i18n/es.js'></script>
+    <script src='~/js/site.js'></script>
+    <script src='~/lib/waitMe/waitMe.min.js'></script>
+    <script src='~/lib/moment/min/moment.min.js'></script>
+    <script src='~/lib/moment/locale/es.js'></script>
+    <script src='~/lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'></script>
+    <script src='~/lib/jquery.spinner-master/dist/js/jquery.spinner.min.js'></script>
+    <script src='~/js/proveeduria/recepcion.js'></script>
+}

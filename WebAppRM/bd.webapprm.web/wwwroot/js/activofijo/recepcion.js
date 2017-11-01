@@ -9,11 +9,104 @@
     eventoCiudad();
     eventoSucursal();
     eventoValidacionTecnicaChange();
+    eventoBtnAtras();
     var wizard = $('.wizard').wizard();
     $('#RecepcionActivoFijo_FechaRecepcion').datetimepicker({
         'format': 'D-M-Y hh:mm'
     });
+    mostrarOcultarDatosEspecificosCodificacion($("#RecepcionActivoFijo_ValidacionTecnica").prop('checked'));
+    gestionarTab();
+    gestionarInformacionAdicional();
+    configurarDropzone();
 });
+
+function configurarDropzone()
+{
+    var acceptedFiles = 'image/*,.pdf,.xlsx,.xls,.txt,.docx,.doc';
+    $("#spanExtensionesPermitidas").html(acceptedFiles);
+
+    Dropzone.autoDiscover = false;
+    $("#mydropzone").dropzone({
+        acceptedFiles: acceptedFiles,
+        addRemoveLinks: true,
+        uploadMultiple: true,
+        createImageThumbnails: true,
+        maxThumbnailFilesize: 10,
+        maxFilesize: 10,
+        dictDefaultMessage: '<span class="text-center"><span class="font-lg visible-xs-block visible-sm-block visible-lg-block"><span class="font-xs"><i class="fa fa-caret-right text-danger"></i> Guardar documentaci&oacute;n o fotograf&iacute;as </span><span>&nbsp&nbsp<h4 class="display-inline"> (Haga clic)</h4></span>',
+        dictResponseError: '¡Error subiendo archivo!',
+        dictRemoveFile: 'Eliminar archivo',
+        dictFileTooBig: 'El archivo es muy grande ({{filesize}} MB). Tamaño máximo permitido: {{maxFilesize}} MB.',
+        dictInvalidFileType: 'El archivo no está permitido.',
+        dictResponseError: 'Error {{statusCode}} al intentar subir el archivo.',
+        dictCancelUpload: 'Cancelar archivo',
+        dictCancelUploadConfirmation: '¿Desea cancelar la subida del archivo?',
+        dictMaxFilesExceeded: 'Ha excedido el número de archivos a subir ({{maxFiles}} ficheros).',
+        init: function () {
+            this.on("removedfile", function (file, data) {
+                $.ajax({
+                    url: "/ActivoFijo/EliminarArchivo",
+                    method: "POST",
+                    data: { fileName: file.name, dir: $("#dir").val() },
+                    error: function (errorMessage)
+                    {
+                        mostrarNotificacion("Error", "No se pudo eliminar o no se encontró el archivo " + file.name + ".", 2);
+                    }
+                });
+            });
+
+            this.on("success", function (file, data) {
+                $("#dir").val(data.value);
+                $("#nombreCarpeta").val(data.value);
+            });
+
+            this.on("error", function (file, data) {
+                this.removeFile(file);
+                mostrarNotificacion("Error", "El sistema no tiene permisos suficientes para guardar la información.", 2);
+            });
+        }
+    });
+}
+
+function gestionarInformacionAdicional()
+{
+    $("#btn_informacionAdicional").on("click", function (e) {
+        $("#divInformacionAdicional").removeClass("hide");
+    });
+
+    $("#btn_cancelarInformacionAdicional").on("click", function (e) {
+        $("#divInformacionAdicional").addClass("hide");
+    });
+}
+
+function gestionarTab()
+{
+    var valor_tab = parseInt($("#tab").val());
+    if (valor_tab === 1) {
+        $("#btn_guardar").attr("value", "Siguiente");
+        $("#btn_atras").addClass("hide");
+    }
+    else {
+        $("#btn_guardar").attr("value", "Guardar");
+        $("#btn_atras").removeClass("hide");
+    }
+}
+
+function eventoBtnAtras()
+{
+    $("#btn_atras").on("click", function (e) {
+        $("#tab").val(1);
+
+        $("#li_codificacion").removeClass("active");
+        $("#li_datosGenerales").addClass("active");
+
+        $("#step2").removeClass("active");
+        $("#step1").addClass("active");
+
+        $("#btn_guardar").attr("value", "Siguiente");
+        $("#btn_atras").addClass("hide");
+    });
+}
 
 function eventoValidacionTecnicaChange()
 {
@@ -24,10 +117,15 @@ function eventoValidacionTecnicaChange()
 
 function mostrarOcultarDatosEspecificosCodificacion(mostrarOcultar)
 {
-    if (mostrarOcultar)
+    if (mostrarOcultar) {
         $("#li_codificacion").hide();
+        $("#btn_guardar").attr("value", "Guardar");
+    }
     else
+    {
         $("#li_codificacion").show();
+        $("#btn_guardar").attr("value", "Siguiente");
+    }
 }
 
 function eventoTipoActivoFijo() {
@@ -89,10 +187,11 @@ function eventoSucursal() {
 
 function partialViewProvincia(idPais) {
     mostrarLoadingPanel("checkout-form", "Cargando provincias...");
+    
     $.ajax({
         url: "/ActivoFijo/Provincia_SelectResult",
         method: "POST",
-        data: { idPais: idPais != null ? idPais : -1 },
+        data: { idPais: obtenerIdAjax(idPais) },
         success: function (data) {
             $("#div_provincia").html(data);
             Init_Select2();
@@ -112,7 +211,7 @@ function partialViewCiudad(idProvincia) {
     $.ajax({
         url: "/ActivoFijo/Ciudad_SelectResult",
         method: "POST",
-        data: { idProvincia: idProvincia != null ? idProvincia : -1 },
+        data: { idProvincia: obtenerIdAjax(idProvincia) },
         success: function (data) {
             $("#div_ciudad").html(data);
             Init_Select2();
@@ -131,7 +230,7 @@ function partialViewSucursal(idCiudad) {
     $.ajax({
         url: "/ActivoFijo/Sucursal_SelectResult",
         method: "POST",
-        data: { idCiudad: idCiudad != null ? idCiudad : -1 },
+        data: { idCiudad: obtenerIdAjax(idCiudad) },
         success: function (data) {
             $("#div_sucursal").html(data);
             Init_Select2();
@@ -150,7 +249,7 @@ function partialViewLibroActivoFijo(idSucursal) {
     $.ajax({
         url: "/ActivoFijo/LibroActivoFijo_SelectResult",
         method: "POST",
-        data: { idSucursal: idSucursal != null ? idSucursal : -1 },
+        data: { idSucursal: obtenerIdAjax(idSucursal) },
         success: function (data) {
             $("#div_libroActivoFijo").html(data);
             Init_Select2();
@@ -169,7 +268,7 @@ function partialViewTipoActivoFijo(idTipoActivoFijo) {
     $.ajax({
         url: "/ActivoFijo/ClaseActivoFijo_SelectResult",
         method: "POST",
-        data: { idTipoActivoFijo: idTipoActivoFijo != null ? idTipoActivoFijo : -1 },
+        data: { idTipoActivoFijo: obtenerIdAjax(idTipoActivoFijo) },
         success: function (data) {
             $("#div_claseActivoFijo").html(data);
             Init_Select2();
@@ -190,7 +289,7 @@ function partialViewClaseActivoFijo(idClaseActivoFijo) {
     $.ajax({
         url: "/ActivoFijo/SubClaseActivoFijo_SelectResult",
         method: "POST",
-        data: { idClaseActivoFijo: idClaseActivoFijo != null ? idClaseActivoFijo : -1 },
+        data: { idClaseActivoFijo: obtenerIdAjax(idClaseActivoFijo) },
         success: function (data) {
             $("#div_subClaseActivoFijo").html(data);
             Init_Select2();
