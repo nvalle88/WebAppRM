@@ -1,7 +1,7 @@
 @model List<bd.webapprm.entidades.SolicitudProveduriaDetalle>
 
     @{
-        ViewData["Title"] = "ReporteArticulosBajas";
+    ViewData["Title"] = "ReporteArticulosBajas";
     }
 
     <link rel="stylesheet" href="~/css/site.css" />
@@ -83,36 +83,36 @@
                                         <tbody>
                                             @foreach (var item in Model)
                                             {
-                                                <tr>
-                                                    <td>
-                                                        @Html.DisplayFor(modelItem => item.Articulo.Nombre)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(modelItem => item.CantidadAprobada)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(modelItem => item.CantidadSolicitada)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(modelItem => item.Estado.Nombre)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(modelItem => item.FechaAprobada)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(modelItem => item.FechaSolicitud)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(modelIteam => item.MaestroArticuloSucursal.Sucursal)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(modelIteam => item.MaestroArticuloSucursal.Minimo)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(modelIteam => item.MaestroArticuloSucursal.Maximo)
-                                                    </td>
-                                                </tr>
-                                                            }
+                                            <tr>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Articulo.Nombre)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.CantidadAprobada)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.CantidadSolicitada)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.Estado.Nombre)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.FechaAprobada)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => item.FechaSolicitud)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelIteam => item.MaestroArticuloSucursal.Sucursal)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelIteam => item.MaestroArticuloSucursal.Minimo)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelIteam => item.MaestroArticuloSucursal.Maximo)
+                                                </td>
+                                            </tr>
+                                            }
                                         </tbody>
                                     </table>
 
@@ -136,6 +136,6 @@
     </div>
 
     @section Scripts{
-        <script src="~/lib/TableTools-master/src/dataTables.tableTools.js"></script>
-        <script src="~/js/proveeduria/reportesAltasBajas.js"></script>
+    <script src="~/lib/TableTools-master/src/dataTables.tableTools.js"></script>
+    <script src="~/js/proveeduria/reportesAltasBajas.js"></script>
     }
