@@ -323,9 +323,9 @@ namespace bd.webapprm.web.Controllers.MVC
 
                             Factura factura = respuesta.Resultado as Factura;
 
-                            var respuestaOtra = await apiServicio.SeleccionarAsync<Response>(factura.Numero.ToString(), new Uri(WebApp.BaseAddress), "/api/FacturasPorAltaProveeduria");
+                            var respuestaOtra = await apiServicio.SeleccionarAsync<Response>(factura.Numero.ToString(), new Uri(WebApp.BaseAddress), "/api/FacturaPorAltaProveeduria");
 
-                            if ((respuestaOtra == null) && (respuesta.IsSuccess))
+                            if ((respuestaOtra.Resultado == null) && (respuesta.IsSuccess))
                             {
                                 bool siEsta = false;
 
@@ -412,7 +412,7 @@ namespace bd.webapprm.web.Controllers.MVC
 
                             var respuestaOtra = await apiServicio.SeleccionarAsync<Response>(factura.Numero.ToString(), new Uri(WebApp.BaseAddress), "/api/FacturasPorAltaProveeduria");
 
-                            if (respuestaOtra != null)
+                            if (respuestaOtra.Resultado != null)
                             {
                                 bool siEsta = false;
 
@@ -617,7 +617,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 int idArticulo = recepcionArticulos.IdArticulo;
                 int idProveedor = recepcionArticulos.IdProveedor;
 
-                DateTime fechaAlta = DateTime.Now;
+                var fechaAlta = DateTime.Now;
 
                 AltaProveeduria alta = new AltaProveeduria { IdArticulo = idArticulo, IdProveedor = idProveedor, Acreditacion = null, FechaAlta = fechaAlta };
 
@@ -629,13 +629,13 @@ namespace bd.webapprm.web.Controllers.MVC
 
                 if (response.IsSuccess)
                 {
-                    List<AltaProveeduria> listaAltaProveeduria = await apiServicio.Listar<AltaProveeduria>(new Uri(WebApp.BaseAddress), "/api/AltaProveeduria/ListarAltasProveeduria");
+                    response.Resultado = JsonConvert.DeserializeObject<AltaProveeduria>(response.Resultado.ToString());
 
-                    var idAlta = listaAltaProveeduria.Where(c => c.IdArticulo == idArticulo && c.FechaAlta == fechaAlta).SingleOrDefault().IdAlta;
-
+                    AltaProveeduria altaProv = response.Resultado as AltaProveeduria;
+                    
                     foreach (var item in ListadoFacturasSeleccionadas)
                     {
-                        FacturasPorAltaProveeduria facturasPorAltaProveeduria = new FacturasPorAltaProveeduria { IdAlta = idAlta, NumeroFactura = item.Numero };
+                        FacturasPorAltaProveeduria facturasPorAltaProveeduria = new FacturasPorAltaProveeduria { IdAlta = altaProv.IdAlta, NumeroFactura = item.Numero };
 
                         try
                         {
@@ -648,7 +648,7 @@ namespace bd.webapprm.web.Controllers.MVC
                             {
                                 try
                                 {
-                                    var eliminar = await apiServicio.EliminarAsync(idAlta.ToString(), new Uri(WebApp.BaseAddress), "/api/AltaProveeduria");
+                                    var eliminar = await apiServicio.EliminarAsync(altaProv.IdAlta.ToString(), new Uri(WebApp.BaseAddress), "/api/AltaProveeduria");
 
                                     if (eliminar.IsSuccess)
                                     {
@@ -687,8 +687,10 @@ namespace bd.webapprm.web.Controllers.MVC
                         }
                     }
 
-                    return View("FormularioAltaArticulo");
+                    return RedirectToAction("ArticulosADarAlta");
                 }
+
+                return BadRequest();
             }
             catch (Exception ex)
             {
@@ -703,9 +705,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 });
 
                 return BadRequest();
-            }
-
-            return View();
+            }           
         }
 
         public async Task<IActionResult> IngresarFacturas()
@@ -916,8 +916,6 @@ namespace bd.webapprm.web.Controllers.MVC
 
                 RecepcionArticulos RecepcionArticulos = respuesta.Resultado as RecepcionArticulos;
 
-                //ViewBag.Acreditacion = new SelectList(new List<string> { "Facturas", "Documentos" });
-
                 if (respuesta.IsSuccess)
                 {
                     return View("FormularioBajaArticulo", RecepcionArticulos);
@@ -942,15 +940,57 @@ namespace bd.webapprm.web.Controllers.MVC
 
         }
 
-        public async Task<IActionResult> AprobarBajaArticulo(int idRecepcionArticulo, int idProveedor, string archivo)
+        public async Task<IActionResult> ListarSolicitudesDeBaja()
         {
             try
             {
-                var respuesta = await apiServicio.SeleccionarAsync<Response>(idRecepcionArticulo.ToString(), new Uri(WebApp.BaseAddress), "/api/RecepcionArticulo");
+                List<SolicitudProveduriaDetalle> respuesta = await apiServicio.Listar<SolicitudProveduriaDetalle>(new Uri(WebApp.BaseAddress), "/api/SolicitudDetalleProveeduria/ListarSolicitudProveeduriasDetalle");
+
+                return View("SolicitudesDeBaja", respuesta);
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                {
+                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                    Message = "Listando un objeto de RecepcionArticulos",
+                    ExceptionTrace = ex,
+                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
+                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                    UserName = "Usuario APP WebAppTh"
+                });
+
+                return BadRequest();
+            }
+
+            return View();
+        }
+
+        public async Task<IActionResult> AprobarBajaArticulo(int ID)
+        {
+            try
+            {
+                var respuesta = await apiServicio.SeleccionarAsync<Response>(ID.ToString(), new Uri(WebApp.BaseAddress), "/api/SolicitudDetalleProveeduria");
+
+                respuesta.Resultado = JsonConvert.DeserializeObject<SolicitudProveduriaDetalle>(respuesta.Resultado.ToString());
+
+                SolicitudProveduriaDetalle solProvDet = respuesta.Resultado as SolicitudProveduriaDetalle;
 
                 if (respuesta.IsSuccess)
                 {
-                    return View("FormularioBajaArticulo");
+                    solProvDet.CantidadAprobada = solProvDet.CantidadSolicitada;
+                    solProvDet.FechaAprobada = DateTime.Now;
+                    solProvDet.IdEstado = 9;
+
+                    respuesta = await apiServicio.EditarAsync(ID.ToString(), solProvDet,
+                                                            new Uri(WebApp.BaseAddress), "/api/SolicitudDetalleProveeduria");
+
+                    if (respuesta.IsSuccess)
+                    {
+                        return RedirectToAction("ListarSolicitudesDeBaja");
+                    }
+
+                    return BadRequest();                    
                 }
             }
             catch (Exception ex)
@@ -969,6 +1009,60 @@ namespace bd.webapprm.web.Controllers.MVC
             }
 
             return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> GuardarSolicitudBajaArticulo(RecepcionArticulos recepcionArticulos)
+        {
+            try
+            {
+                SolicitudProveduria solProv = new SolicitudProveduria { IdEmpleado = int.Parse(Request.Form["Empleado.IdEmpleado"].ToString()) };
+
+                var respuesta = await apiServicio.InsertarAsync(solProv, new Uri(WebApp.BaseAddress), "/api/SolicitudProveeduria/InsertarSolicitudProveeduria");
+                                
+                if (respuesta.IsSuccess)
+                {
+                    respuesta.Resultado = JsonConvert.DeserializeObject<SolicitudProveduria>(respuesta.Resultado.ToString());
+
+                    solProv = respuesta.Resultado as SolicitudProveduria;
+
+                    SolicitudProveduriaDetalle solProvDetalle = new SolicitudProveduriaDetalle();
+
+                    DateTime ahora = DateTime.Now;
+                    
+                    solProvDetalle.CantidadAprobada = 1;
+                    solProvDetalle.FechaAprobada = ahora;
+                    solProvDetalle.CantidadSolicitada = int.Parse(Request.Form["Cantidad"].ToString());
+                    solProvDetalle.IdEstado = 8; //hacer consulta a servicio que devuelva el id en base a un nombre de estado
+                    solProvDetalle.FechaSolicitud = ahora;
+                    solProvDetalle.IdArticulo = int.Parse(Request.Form["IdArticulo"].ToString());
+                    solProvDetalle.IdMaestroArticuloSucursal = int.Parse(Request.Form["IdMaestroArticuloSucursal"].ToString());
+                    solProvDetalle.IdSolicitudProveduria = solProv.IdSolicitudProveduria;
+                    
+                    respuesta = await apiServicio.InsertarAsync(solProvDetalle, new Uri(WebApp.BaseAddress), "/api/SolicitudDetalleProveeduria/InsertarSolicitudProveeduriaDetalle");
+
+                    //debe ir if (respuesta.IsSucces)
+
+                    return RedirectToAction("ArticulosADarBaja");
+                }
+
+                return BadRequest();
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                {
+                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                    Message = "Listando un objeto de RecepcionArticulos",
+                    ExceptionTrace = ex,
+                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
+                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                    UserName = "Usuario APP WebAppTh"
+                });
+
+                return BadRequest();
+            }
         }
         #endregion
 

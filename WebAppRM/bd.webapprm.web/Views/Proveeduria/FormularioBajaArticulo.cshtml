@@ -1,0 +1,117 @@
+@model bd.webapprm.entidades.RecepcionArticulos
+
+@{
+    ViewData["Title"] = "Formulario para Baja de Artículos de Proveedurías";
+}
+
+<link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
+
+
+<div id="content">
+
+    <!-- widget grid -->
+    <section id="widget-grid" class="">
+
+        <!-- START ROW -->
+        <div class="row">
+            <!-- NEW COL START -->
+            <article class="col-sm-12 col-md-12 col-lg-6">
+                <!-- Widget ID (each widget will need unique ID)-->
+                <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+                        <h2>Formulario de Bajas a Art&iacute;culos de Proveedur&iacute;as</h2>
+                    </header>
+                    <!-- widget div-->
+                    <div>
+
+                        <!-- widget edit box -->
+                        <div class="jarviswidget-editbox">
+                            <!-- This area used as dropdown edit box -->
+
+                        </div>
+                        <!-- end widget edit box -->
+                        <!-- widget content -->
+                        <div class="widget-body no-padding">
+
+                            <form asp-action="GuardarSolicitudBajaArticulo" controller="Proveeduria" id="checkout-form" class="smart-form" novalidate="novalidate">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <fieldset>
+                                    <input type="hidden" asp-for="IdArticulo" />
+                                    <input type="hidden" asp-for="Empleado.IdEmpleado" />
+                                    <input type="hidden" asp-for="IdMaestroArticuloSucursal" />
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="Articulo.Nombre">Art&iacute;culo</label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <input maxlength="32" asp-for="Articulo.Nombre" class="form-control" disabled />
+                                                <span asp-validation-for="Articulo.Nombre" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="Empleado.Persona.Nombres">Nombre (Empleado)</label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <input maxlength="32" asp-for="Empleado.Persona.Nombres" class="form-control" disabled />
+                                                <span asp-validation-for="Empleado.Persona.Nombres" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="Empleado.Persona.Apellidos">Apellidos (Empleado)</label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <input maxlength="32" asp-for="Empleado.Persona.Apellidos" class="form-control" disabled />
+                                                <span asp-validation-for="Empleado.Persona.Apellidos" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label >Cantidad Solicitada</label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <input type="number" name="Cantidad" id="Cantidad" class="form-control" />
+                                            </label>
+                                        </section>
+                                    </div>
+                                    
+                                </fieldset>
+
+                                <footer>
+                                    <span class="text-danger">@ViewData["Error"]</span>
+                                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                                    <a asp-action="ArticulosADarBaja" controller="Proveeduria" class="btn btn-default">Cancelar</a>
+
+                                </footer>
+
+                            </form>
+                        </div>
+                        <!-- end widget content -->
+                    </div>
+                    <!-- end widget div -->
+                </div>
+                <!-- end widget -->
+
+            </article>
+
+        </div>
+        <!-- END ROW -->
+    </section>
+    <!-- end widget grid -->
+    <!-- Modal -->
+</div>

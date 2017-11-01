@@ -225,6 +225,9 @@
                             <li class="@Html.RouteIf("ArticulosADarBaja", "active")">
                                 <a href="@Url.Action("ArticulosADarBaja", "Proveeduria")">Dar Bajas</a>
                             </li>
+                            <li class="@Html.RouteIf("ListarSolicitudesDeBaja", "active")">
+                                <a href="@Url.Action("ListarSolicitudesDeBaja", "Proveeduria")">Aprobar Solicitudes</a>
+                            </li>
                         </ul>
                     </li>
                     <li class="@Html.RouteIf("reportes", "active")">
