@@ -28,7 +28,7 @@ namespace bd.webapprm.web.Controllers.MVC
             var lista = new List<MotivoAsiento>();
             try
             {
-                lista = await apiServicio.Listar<MotivoAsiento>(new Uri(WebApp.BaseAddress)
+                lista = await apiServicio.Listar<MotivoAsiento>(new Uri(WebApp.BaseAddressRM)
                                                                     , "/api/MotivoAsiento/ListarMotivoAsiento");
                 return View(lista);
             }
@@ -49,7 +49,7 @@ namespace bd.webapprm.web.Controllers.MVC
 
         public async Task<IActionResult> Create()
         {
-            ViewData["IdConfiguracionContabilidad"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<MotivoAsiento>(new Uri(WebApp.BaseAddress), "/api/ConfiguracionContabilidad/ListarConfiguracionContabilidad"), "IdConfiguracionContabilidad", "IdConfiguracionContabilidad");
+            ViewData["IdConfiguracionContabilidad"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<MotivoAsiento>(new Uri(WebApp.BaseAddressRM), "/api/ConfiguracionContabilidad/ListarConfiguracionContabilidad"), "IdConfiguracionContabilidad", "IdConfiguracionContabilidad");
             
             return View();
         }
@@ -62,7 +62,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 response = await apiServicio.InsertarAsync(motivoAsiento,
-                                                             new Uri(WebApp.BaseAddress),
+                                                             new Uri(WebApp.BaseAddressRM),
                                                              "/api/MotivoAsiento/InsertarMotivoAsiento");
                 if (response.IsSuccess)
                 {
@@ -107,12 +107,12 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddress),
+                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddressRM),
                                                                   "/api/MotivoAsiento");
 
 
                     respuesta.Resultado = JsonConvert.DeserializeObject<MotivoAsiento>(respuesta.Resultado.ToString());
-                    ViewData["IdConfiguracionContabilidad"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<MotivoAsiento>(new Uri(WebApp.BaseAddress), "/api/ConfiguracionContabilidad/ListarConfiguracionContabilidad"), "IdConfiguracionContabilidad", "IdConfiguracionContabilidad");
+                    ViewData["IdConfiguracionContabilidad"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<MotivoAsiento>(new Uri(WebApp.BaseAddressRM), "/api/ConfiguracionContabilidad/ListarConfiguracionContabilidad"), "IdConfiguracionContabilidad", "IdConfiguracionContabilidad");
 
                     if (respuesta.IsSuccess)
                     {
@@ -138,7 +138,7 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    response = await apiServicio.EditarAsync(id, motivoAsiento, new Uri(WebApp.BaseAddress),
+                    response = await apiServicio.EditarAsync(id, motivoAsiento, new Uri(WebApp.BaseAddressRM),
                                                                  "/api/MotivoAsiento");
 
                     if (response.IsSuccess)
@@ -180,7 +180,7 @@ namespace bd.webapprm.web.Controllers.MVC
 
             try
             {
-                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddress)
+                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddressRM)
                                                                , "/api/MotivoAsiento");
                 if (response.IsSuccess)
                 {

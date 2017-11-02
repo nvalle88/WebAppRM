@@ -37,7 +37,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 response = await apiServicio.InsertarAsync(ActivoFijoMotivoBaja,
-                                                             new Uri(WebApp.BaseAddress),
+                                                             new Uri(WebApp.BaseAddressRM),
                                                              "/api/ActivoFijoMotivoBaja/InsertarActivoFijoMotivoBaja");
                 if (response.IsSuccess)
                 {
@@ -82,7 +82,7 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddress),
+                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddressRM),
                                                                   "/api/ActivoFijoMotivoBaja");
 
 
@@ -111,7 +111,7 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    response = await apiServicio.EditarAsync(id, ActivoFijoMotivoBaja, new Uri(WebApp.BaseAddress),
+                    response = await apiServicio.EditarAsync(id, ActivoFijoMotivoBaja, new Uri(WebApp.BaseAddressRM),
                                                                  "/api/ActivoFijoMotivoBaja");
 
                     if (response.IsSuccess)
@@ -153,7 +153,7 @@ namespace bd.webapprm.web.Controllers.MVC
             var lista = new List<ActivoFijoMotivoBaja>();
             try
             {
-                lista = await apiServicio.Listar<ActivoFijoMotivoBaja>(new Uri(WebApp.BaseAddress)
+                lista = await apiServicio.Listar<ActivoFijoMotivoBaja>(new Uri(WebApp.BaseAddressRM)
                                                                     , "/api/ActivoFijoMotivoBaja/ListarActivoFijoMotivoBaja");
                 return View(lista);
             }
@@ -177,7 +177,7 @@ namespace bd.webapprm.web.Controllers.MVC
 
             try
             {
-                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddress)
+                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddressRM)
                                                                , "/api/ActivoFijoMotivoBaja");
                 if (response.IsSuccess)
                 {

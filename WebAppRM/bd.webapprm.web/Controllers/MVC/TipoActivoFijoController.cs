@@ -37,7 +37,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 response = await apiServicio.InsertarAsync(tipoActivoFijo,
-                                                             new Uri(WebApp.BaseAddress),
+                                                             new Uri(WebApp.BaseAddressRM),
                                                              "/api/TipoActivoFijo/InsertarTipoActivoFijo");
                 if (response.IsSuccess)
                 {
@@ -82,7 +82,7 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddress),
+                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddressRM),
                                                                   "/api/TipoActivoFijo");
 
 
@@ -111,7 +111,7 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    response = await apiServicio.EditarAsync(id, tipoActivoFijo, new Uri(WebApp.BaseAddress),
+                    response = await apiServicio.EditarAsync(id, tipoActivoFijo, new Uri(WebApp.BaseAddressRM),
                                                                  "/api/TipoActivoFijo");
 
                     if (response.IsSuccess)
@@ -153,7 +153,7 @@ namespace bd.webapprm.web.Controllers.MVC
             var lista = new List<TipoActivoFijo>();
             try
             {
-                lista = await apiServicio.Listar<TipoActivoFijo>(new Uri(WebApp.BaseAddress)
+                lista = await apiServicio.Listar<TipoActivoFijo>(new Uri(WebApp.BaseAddressRM)
                                                                     , "/api/TipoActivoFijo/ListarTipoActivoFijos");
                 return View(lista);
             }
@@ -177,7 +177,7 @@ namespace bd.webapprm.web.Controllers.MVC
 
             try
             {
-                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddress)
+                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddressRM)
                                                                , "/api/TipoActivoFijo");
                 if (response.IsSuccess)
                 {

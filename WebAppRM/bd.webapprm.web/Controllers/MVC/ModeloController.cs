@@ -26,7 +26,7 @@ namespace bd.webapprm.web.Controllers.MVC
 
         public async Task<IActionResult> Create()
         {
-            ViewData["IdMarca"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<Marca>(new Uri(WebApp.BaseAddress), "/api/Marca/ListarMarca"), "IdMarca", "Nombre");
+            ViewData["IdMarca"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<Marca>(new Uri(WebApp.BaseAddressRM), "/api/Marca/ListarMarca"), "IdMarca", "Nombre");
 
             return View();
         }
@@ -39,7 +39,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 response = await apiServicio.InsertarAsync(modelo,
-                                                             new Uri(WebApp.BaseAddress),
+                                                             new Uri(WebApp.BaseAddressRM),
                                                              "/api/Modelo/InsertarModelo");
                 if (response.IsSuccess)
                 {
@@ -80,13 +80,13 @@ namespace bd.webapprm.web.Controllers.MVC
 
         public async Task<IActionResult> Edit(string id)
         {
-            ViewData["IdMarca"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<Marca>(new Uri(WebApp.BaseAddress), "/api/Marca/ListarMarca"), "IdMarca", "Nombre");
+            ViewData["IdMarca"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<Marca>(new Uri(WebApp.BaseAddressRM), "/api/Marca/ListarMarca"), "IdMarca", "Nombre");
 
             try
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddress),
+                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddressRM),
                                                                   "/api/Modelo");
 
 
@@ -115,7 +115,7 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    response = await apiServicio.EditarAsync(id, modelo, new Uri(WebApp.BaseAddress),
+                    response = await apiServicio.EditarAsync(id, modelo, new Uri(WebApp.BaseAddressRM),
                                                                  "/api/Modelo");
 
                     if (!response.IsSuccess)
@@ -160,7 +160,7 @@ namespace bd.webapprm.web.Controllers.MVC
             var lista = new List<Modelo>();
             try
             {
-                lista = await apiServicio.Listar<Modelo>(new Uri(WebApp.BaseAddress)
+                lista = await apiServicio.Listar<Modelo>(new Uri(WebApp.BaseAddressRM)
                                                                     , "/api/Modelo/ListarModelos");
                 return View(lista);
             }
@@ -184,7 +184,7 @@ namespace bd.webapprm.web.Controllers.MVC
 
             try
             {
-                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddress)
+                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddressRM)
                                                                , "/api/Modelo");
                 if (response.IsSuccess)
                 {

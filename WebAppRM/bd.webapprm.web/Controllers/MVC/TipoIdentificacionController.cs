@@ -36,7 +36,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 response = await apiServicio.InsertarAsync(TipoIdentificacion,
-                                                             new Uri(WebApp.BaseAddress),
+                                                             new Uri(WebApp.BaseAddressRM),
                                                              "/api/TipoIdentificacion/InsertarTipoIdentificacion");
                 if (response.IsSuccess)
                 {
@@ -81,7 +81,7 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddress),
+                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddressRM),
                                                                   "/api/TipoIdentificacion");
 
 
@@ -110,7 +110,7 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    response = await apiServicio.EditarAsync(id, TipoIdentificacion, new Uri(WebApp.BaseAddress),
+                    response = await apiServicio.EditarAsync(id, TipoIdentificacion, new Uri(WebApp.BaseAddressRM),
                                                                  "/api/TipoIdentificacion");
 
                     if (response.IsSuccess)
@@ -152,7 +152,7 @@ namespace bd.webapprm.web.Controllers.MVC
             var lista = new List<TipoIdentificacion>();
             try
             {
-                lista = await apiServicio.Listar<TipoIdentificacion>(new Uri(WebApp.BaseAddress)
+                lista = await apiServicio.Listar<TipoIdentificacion>(new Uri(WebApp.BaseAddressRM)
                                                                     , "/api/TipoIdentificacion/ListarTiposIdentificacion");
                 return View(lista);
             }
@@ -176,7 +176,7 @@ namespace bd.webapprm.web.Controllers.MVC
 
             try
             {
-                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddress)
+                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddressRM)
                                                                , "/api/TipoIdentificacion");
                 if (response.IsSuccess)
                 {

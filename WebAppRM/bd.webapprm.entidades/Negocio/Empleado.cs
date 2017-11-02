@@ -23,12 +23,10 @@ namespace bd.webapprm.entidades
         public DateTime? FechaIngresoSectorPublico { get; set; }
 
         [Required(ErrorMessage = "Debe introducir {0}")]
-        [Display(Name = "¿Trabajó en la Superintendencia de Instituciones Financieras?")]
+        [Display(Name = "¿Trabajó en la Superintendencia de InstitucionesFinancieras?")]
         public bool TrabajoSuperintendenciaBanco { get; set; }
 
-        [Required(ErrorMessage = "Debe introducir {0}")]
-        [Display(Name = "Nepotismo:")]
-        public bool Nepotismo { get; set; }
+        public bool FondosReservas { get; set; }
 
         [Required(ErrorMessage = "Debe introducir {0}")]
         [Display(Name = "¿Declaración jurada?")]
@@ -72,9 +70,6 @@ namespace bd.webapprm.entidades
         public virtual Dependencia Dependencia { get; set; }
 
 
-
-
-
         public virtual ICollection<RolPagos> RolPagos { get; set; }
 
         public virtual ICollection<AccionPersonal> AccionPersonal { get; set; }
@@ -95,7 +90,7 @@ namespace bd.webapprm.entidades
 
         public virtual ICollection<DeclaracionPatrimonioPersonal> DeclaracionPatrimonioPersonal { get; set; }
 
-       
+
 
         public virtual ICollection<DocumentosParentescodos> DocumentosParentescodos { get; set; }
 
@@ -109,15 +104,11 @@ namespace bd.webapprm.entidades
 
         public virtual ICollection<SolicitudViatico> SolicitudViatico { get; set; }
 
-       
+
 
         public virtual ICollection<EmpleadoImpuestoRenta> EmpleadoImpuestoRenta { get; set; }
 
-        public virtual ICollection<EmpleadoActivoFijo> EmpleadoActivoFijo { get; set; }
 
-        public virtual ICollection<MantenimientoActivoFijo> MantenimientoActivoFijo { get; set; }
-
-        public virtual ICollection<SolicitudProveduria> SolicitudProveduria { get; set; }
 
         public virtual ICollection<SolicitudCertificadoPersonal> SolicitudCertificadoPersonal { get; set; }
 
@@ -133,9 +124,6 @@ namespace bd.webapprm.entidades
 
         public virtual ICollection<SolicitudLiquidacionHaberes> SolicitudLiquidacionHaberes { get; set; }
 
-        public virtual ICollection<RecepcionActivoFijo> RecepcionActivoFijo { get; set; }
-
-        public virtual ICollection<TransferenciaActivoFijo> TransferenciaActivoFijo { get; set; }
 
         //public virtual ICollection<TransferenciaActivoFijo> TransferenciaActivoFijo1 { get; set; }
 
@@ -149,11 +137,7 @@ namespace bd.webapprm.entidades
 
         public virtual ICollection<EmpleadoFamiliar> EmpleadoFamiliar { get; set; }
 
-        public virtual ICollection<RecepcionArticulos> RecepcionArticulos { get; set; }
 
-        public virtual ICollection<TranferenciaArticulo> TranferenciaArticulo { get; set; }
-
-        public virtual ICollection<TranferenciaArticulo> TranferenciaArticulo1 { get; set; }
 
         public virtual ICollection<Evaluador> Evaluador { get; set; }
 
@@ -201,7 +185,7 @@ namespace bd.webapprm.entidades
 
         public virtual ICollection<Provisiones> Provisiones { get; set; }
 
-       // public virtual ICollection<PlanificacionHE> PlanificacionHE1 { get; set; }
+        // public virtual ICollection<PlanificacionHE> PlanificacionHE1 { get; set; }
 
         public virtual ICollection<Liquidacion> Liquidacion { get; set; }
 

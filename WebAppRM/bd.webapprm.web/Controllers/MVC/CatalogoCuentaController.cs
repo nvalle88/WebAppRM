@@ -28,7 +28,7 @@ namespace bd.webapprm.web.Controllers.MVC
             var lista = new List<CatalogoCuenta>();
             try
             {
-                lista = await apiServicio.Listar<CatalogoCuenta>(new Uri(WebApp.BaseAddress)
+                lista = await apiServicio.Listar<CatalogoCuenta>(new Uri(WebApp.BaseAddressRM)
                                                                     , "/api/CatalogoCuenta/ListarCatalogosCuenta");
                 foreach (var item in lista)
                 {
@@ -59,7 +59,7 @@ namespace bd.webapprm.web.Controllers.MVC
 
         public async Task<IActionResult> Create()
         {
-            var lista_catalogos_cuenta = await apiServicio.Listar<CatalogoCuenta>(new Uri(WebApp.BaseAddress), "/api/CatalogoCuenta/ListarCatalogosCuenta");
+            var lista_catalogos_cuenta = await apiServicio.Listar<CatalogoCuenta>(new Uri(WebApp.BaseAddressRM), "/api/CatalogoCuenta/ListarCatalogosCuenta");
             ViewData["IdCatalogoCuentaHijoVisible"] = lista_catalogos_cuenta.Count > 0;
             ViewData["IdCatalogoCuentaHijo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(lista_catalogos_cuenta, "IdCatalogoCuenta", "Codigo");
             return View();
@@ -72,9 +72,9 @@ namespace bd.webapprm.web.Controllers.MVC
             Response response = new Response();
             try
             {
-                var lista_catalogos_cuenta = await apiServicio.Listar<CatalogoCuenta>(new Uri(WebApp.BaseAddress), "/api/CatalogoCuenta/ListarCatalogosCuenta");
+                var lista_catalogos_cuenta = await apiServicio.Listar<CatalogoCuenta>(new Uri(WebApp.BaseAddressRM), "/api/CatalogoCuenta/ListarCatalogosCuenta");
                 response = await apiServicio.InsertarAsync(catalogoCuenta,
-                                                             new Uri(WebApp.BaseAddress),
+                                                             new Uri(WebApp.BaseAddressRM),
                                                              "/api/CatalogoCuenta/InsertarCatalogoCuenta");
                 if (response.IsSuccess)
                 {
@@ -121,12 +121,12 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddress),
+                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddressRM),
                                                                   "/api/CatalogoCuenta");
 
 
                     respuesta.Resultado = JsonConvert.DeserializeObject<CatalogoCuenta>(respuesta.Resultado.ToString());
-                    ViewData["IdCatalogoCuentaHijo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<CatalogoCuenta>(new Uri(WebApp.BaseAddress), "/api/CatalogoCuenta/ListarCatalogosCuenta"), "IdCatalogoCuenta", "Codigo");
+                    ViewData["IdCatalogoCuentaHijo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<CatalogoCuenta>(new Uri(WebApp.BaseAddressRM), "/api/CatalogoCuenta/ListarCatalogosCuenta"), "IdCatalogoCuenta", "Codigo");
                     if (respuesta.IsSuccess)
                     {
                         return View(respuesta.Resultado);
@@ -151,7 +151,7 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    response = await apiServicio.EditarAsync(id, catalogoCuenta, new Uri(WebApp.BaseAddress),
+                    response = await apiServicio.EditarAsync(id, catalogoCuenta, new Uri(WebApp.BaseAddressRM),
                                                                  "/api/CatalogoCuenta");
 
                     if (response.IsSuccess)
@@ -171,7 +171,7 @@ namespace bd.webapprm.web.Controllers.MVC
 
                 }
                 ViewData["Error"] = response.Message;
-                ViewData["IdCatalogoCuentaHijo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<CatalogoCuenta>(new Uri(WebApp.BaseAddress), "/api/CatalogoCuenta/ListarCatalogosCuenta"), "IdCatalogoCuenta", "Codigo");
+                ViewData["IdCatalogoCuentaHijo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<CatalogoCuenta>(new Uri(WebApp.BaseAddressRM), "/api/CatalogoCuenta/ListarCatalogosCuenta"), "IdCatalogoCuenta", "Codigo");
                 return View(catalogoCuenta);
             }
             catch (Exception ex)
@@ -195,7 +195,7 @@ namespace bd.webapprm.web.Controllers.MVC
 
             try
             {
-                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddress)
+                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddressRM)
                                                                , "/api/CatalogoCuenta");
                 if (response.IsSuccess)
                 {

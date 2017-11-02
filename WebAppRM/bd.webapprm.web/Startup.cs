@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using System;
 
 namespace bd.webapprm.web
 {
@@ -29,8 +30,8 @@ namespace bd.webapprm.web
             // Add framework services.
             services.AddMvc();
             services.AddSingleton<IApiServicio, ApiServicio>();
-            InicializarWebApp.Inicializar("WebAppRM");
-           
+            await InicializarWebApp.InicializarWebRecursosMateriales("SwRecursosMateriales");
+            await InicializarWebApp.InicializarWebTalentoHumano("SwTalentoHumano");
 
         }
 
