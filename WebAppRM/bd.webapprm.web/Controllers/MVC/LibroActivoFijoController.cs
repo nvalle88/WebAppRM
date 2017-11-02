@@ -37,7 +37,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 response = await apiServicio.InsertarAsync(LibroActivoFijo,
-                                                             new Uri(WebApp.BaseAddress),
+                                                             new Uri(WebApp.BaseAddressRM),
                                                              "/api/LibroActivoFijo/InsertarLibroActivoFijo");
                 if (response.IsSuccess)
                 {
@@ -82,7 +82,7 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddress),
+                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddressRM),
                                                                   "/api/LibroActivoFijo");
 
 
@@ -111,7 +111,7 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    response = await apiServicio.EditarAsync(id, LibroActivoFijo, new Uri(WebApp.BaseAddress),
+                    response = await apiServicio.EditarAsync(id, LibroActivoFijo, new Uri(WebApp.BaseAddressRM),
                                                                  "/api/LibroActivoFijo");
 
                     if (!response.IsSuccess)
@@ -156,7 +156,7 @@ namespace bd.webapprm.web.Controllers.MVC
             var lista = new List<LibroActivoFijo>();
             try
             {
-                lista = await apiServicio.Listar<LibroActivoFijo>(new Uri(WebApp.BaseAddress)
+                lista = await apiServicio.Listar<LibroActivoFijo>(new Uri(WebApp.BaseAddressRM)
                                                                     , "/api/LibroActivoFijo/ListarLibrosActivoFijo");
                 return View(lista);
             }
@@ -180,7 +180,7 @@ namespace bd.webapprm.web.Controllers.MVC
 
             try
             {
-                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddress)
+                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddressRM)
                                                                , "/api/LibroActivoFijo");
                 if (response.IsSuccess)
                 {

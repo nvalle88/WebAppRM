@@ -37,7 +37,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 response = await apiServicio.InsertarAsync(Proveedor,
-                                                             new Uri(WebApp.BaseAddress),
+                                                             new Uri(WebApp.BaseAddressRM),
                                                              "/api/Proveedor/InsertarProveedor");
                 if (response.IsSuccess)
                 {
@@ -82,7 +82,7 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddress),
+                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddressRM),
                                                                   "/api/Proveedor");
 
 
@@ -111,7 +111,7 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    response = await apiServicio.EditarAsync(id, Proveedor, new Uri(WebApp.BaseAddress),
+                    response = await apiServicio.EditarAsync(id, Proveedor, new Uri(WebApp.BaseAddressRM),
                                                                  "/api/Proveedor");
 
                     if (response.IsSuccess)
@@ -153,7 +153,7 @@ namespace bd.webapprm.web.Controllers.MVC
             var lista = new List<Proveedor>();
             try
             {
-                lista = await apiServicio.Listar<Proveedor>(new Uri(WebApp.BaseAddress)
+                lista = await apiServicio.Listar<Proveedor>(new Uri(WebApp.BaseAddressRM)
                                                                     , "/api/Proveedor/ListarProveedores");
                 return View(lista);
             }
@@ -177,7 +177,7 @@ namespace bd.webapprm.web.Controllers.MVC
 
             try
             {
-                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddress)
+                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddressRM)
                                                                , "/api/Proveedor");
                 if (response.IsSuccess)
                 {

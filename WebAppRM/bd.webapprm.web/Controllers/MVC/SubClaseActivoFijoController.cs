@@ -29,7 +29,7 @@ namespace bd.webapprm.web.Controllers.MVC
             var lista = new List<SubClaseActivoFijo>();
             try
             {
-                lista = await apiServicio.Listar<SubClaseActivoFijo>(new Uri(WebApp.BaseAddress)
+                lista = await apiServicio.Listar<SubClaseActivoFijo>(new Uri(WebApp.BaseAddressRM)
                                                                     , "/api/SubClaseActivoFijo/ListarSubClasesActivoFijo");
                 return View(lista);
             }
@@ -50,7 +50,7 @@ namespace bd.webapprm.web.Controllers.MVC
 
         public async Task<IActionResult> Create()
         {
-            ViewData["TipoActivoFijo"] = new SelectList(await apiServicio.Listar<TipoActivoFijo>(new Uri(WebApp.BaseAddress), "/api/TipoActivoFijo/ListarTipoActivoFijos"), "IdTipoActivoFijo", "Nombre");
+            ViewData["TipoActivoFijo"] = new SelectList(await apiServicio.Listar<TipoActivoFijo>(new Uri(WebApp.BaseAddressRM), "/api/TipoActivoFijo/ListarTipoActivoFijos"), "IdTipoActivoFijo", "Nombre");
             ViewData["ClaseActivoFijo"] = await ObtenerSelectListClaseActivoFijo((ViewData["TipoActivoFijo"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["TipoActivoFijo"] as SelectList).FirstOrDefault().Value) : -1);
             return View();
         }
@@ -62,10 +62,10 @@ namespace bd.webapprm.web.Controllers.MVC
             Response response = new Response();
             try
             {
-                var listaClaseActivoFijo = await apiServicio.Listar<ClaseActivoFijo>(new Uri(WebApp.BaseAddress), "/api/ClaseActivoFijo/ListarClaseActivoFijo");
+                var listaClaseActivoFijo = await apiServicio.Listar<ClaseActivoFijo>(new Uri(WebApp.BaseAddressRM), "/api/ClaseActivoFijo/ListarClaseActivoFijo");
                 subClaseActivoFijo.ClaseActivoFijo = listaClaseActivoFijo.SingleOrDefault(c => c.IdClaseActivoFijo == subClaseActivoFijo.IdClaseActivoFijo);
                 response = await apiServicio.InsertarAsync(subClaseActivoFijo,
-                                                             new Uri(WebApp.BaseAddress),
+                                                             new Uri(WebApp.BaseAddressRM),
                                                              "/api/SubClaseActivoFijo/InsertarSubClaseActivoFijo");
                 if (response.IsSuccess)
                 {
@@ -85,7 +85,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 }
 
                 ViewData["Error"] = response.Message;
-                ViewData["TipoActivoFijo"] = new SelectList(await apiServicio.Listar<TipoActivoFijo>(new Uri(WebApp.BaseAddress), "/api/TipoActivoFijo/ListarTipoActivoFijos"), "IdTipoActivoFijo", "Nombre");
+                ViewData["TipoActivoFijo"] = new SelectList(await apiServicio.Listar<TipoActivoFijo>(new Uri(WebApp.BaseAddressRM), "/api/TipoActivoFijo/ListarTipoActivoFijos"), "IdTipoActivoFijo", "Nombre");
                 ViewData["ClaseActivoFijo"] = await ObtenerSelectListClaseActivoFijo(subClaseActivoFijo?.ClaseActivoFijo?.TipoActivoFijo?.IdTipoActivoFijo ?? -1);
                 return View(subClaseActivoFijo);
 
@@ -112,12 +112,12 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddress),
+                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddressRM),
                                                                   "/api/SubClaseActivoFijo");
 
 
                     respuesta.Resultado = JsonConvert.DeserializeObject<SubClaseActivoFijo>(respuesta.Resultado.ToString());
-                    ViewData["TipoActivoFijo"] = new SelectList(await apiServicio.Listar<TipoActivoFijo>(new Uri(WebApp.BaseAddress), "/api/TipoActivoFijo/ListarTipoActivoFijos"), "IdTipoActivoFijo", "Nombre");
+                    ViewData["TipoActivoFijo"] = new SelectList(await apiServicio.Listar<TipoActivoFijo>(new Uri(WebApp.BaseAddressRM), "/api/TipoActivoFijo/ListarTipoActivoFijos"), "IdTipoActivoFijo", "Nombre");
                     ViewData["ClaseActivoFijo"] = await ObtenerSelectListClaseActivoFijo((respuesta.Resultado as SubClaseActivoFijo).ClaseActivoFijo.IdTipoActivoFijo);
                     if (respuesta.IsSuccess)
                     {
@@ -143,9 +143,9 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    var listaClaseActivoFijo = await apiServicio.Listar<ClaseActivoFijo>(new Uri(WebApp.BaseAddress), "/api/ClaseActivoFijo/ListarClaseActivoFijo");
+                    var listaClaseActivoFijo = await apiServicio.Listar<ClaseActivoFijo>(new Uri(WebApp.BaseAddressRM), "/api/ClaseActivoFijo/ListarClaseActivoFijo");
                     subClaseActivoFijo.ClaseActivoFijo = listaClaseActivoFijo.SingleOrDefault(c => c.IdClaseActivoFijo == subClaseActivoFijo.IdClaseActivoFijo);
-                    response = await apiServicio.EditarAsync(id, subClaseActivoFijo, new Uri(WebApp.BaseAddress),
+                    response = await apiServicio.EditarAsync(id, subClaseActivoFijo, new Uri(WebApp.BaseAddressRM),
                                                                  "/api/SubClaseActivoFijo");
 
                     if (response.IsSuccess)
@@ -164,7 +164,7 @@ namespace bd.webapprm.web.Controllers.MVC
                     }
                 }
                 ViewData["Error"] = response.Message;
-                ViewData["TipoActivoFijo"] = new SelectList(await apiServicio.Listar<TipoActivoFijo>(new Uri(WebApp.BaseAddress), "/api/TipoActivoFijo/ListarTipoActivoFijos"), "IdTipoActivoFijo", "Nombre");
+                ViewData["TipoActivoFijo"] = new SelectList(await apiServicio.Listar<TipoActivoFijo>(new Uri(WebApp.BaseAddressRM), "/api/TipoActivoFijo/ListarTipoActivoFijos"), "IdTipoActivoFijo", "Nombre");
                 ViewData["ClaseActivoFijo"] = await ObtenerSelectListClaseActivoFijo(subClaseActivoFijo?.ClaseActivoFijo?.TipoActivoFijo?.IdTipoActivoFijo ?? -1);
                 return View(subClaseActivoFijo);
             }
@@ -189,7 +189,7 @@ namespace bd.webapprm.web.Controllers.MVC
 
             try
             {
-                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddress)
+                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddressRM)
                                                                , "/api/SubClaseActivoFijo");
                 if (response.IsSuccess)
                 {
@@ -226,7 +226,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var listaClaseActivoFijo = await apiServicio.Listar<ClaseActivoFijo>(new Uri(WebApp.BaseAddress), "/api/ClaseActivoFijo/ListarClaseActivoFijo");
+                var listaClaseActivoFijo = await apiServicio.Listar<ClaseActivoFijo>(new Uri(WebApp.BaseAddressRM), "/api/ClaseActivoFijo/ListarClaseActivoFijo");
                 listaClaseActivoFijo = idTipoActivoFijo != -1 ? listaClaseActivoFijo.Where(c => c.IdTipoActivoFijo == idTipoActivoFijo).ToList() : new List<ClaseActivoFijo>();
                 return new SelectList(listaClaseActivoFijo, "IdClaseActivoFijo", "Nombre");
             }

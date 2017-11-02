@@ -28,7 +28,7 @@ namespace bd.webapprm.web.Controllers.MVC
             var lista = new List<FondoFinanciamiento>();
             try
             {
-                lista = await apiServicio.Listar<FondoFinanciamiento>(new Uri(WebApp.BaseAddress)
+                lista = await apiServicio.Listar<FondoFinanciamiento>(new Uri(WebApp.BaseAddressRM)
                                                                     , "/api/FondoFinanciamiento/ListarFondoFinanciamiento");
                 return View(lista);
             }
@@ -60,7 +60,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 response = await apiServicio.InsertarAsync(fondoFinanciamiento,
-                                                             new Uri(WebApp.BaseAddress),
+                                                             new Uri(WebApp.BaseAddressRM),
                                                              "/api/FondoFinanciamiento/InsertarFondoFinanciamiento");
                 if (response.IsSuccess)
                 {
@@ -105,7 +105,7 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddress),
+                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddressRM),
                                                                   "/api/FondoFinanciamiento");
 
 
@@ -134,7 +134,7 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    response = await apiServicio.EditarAsync(id, fondoFinanciamiento, new Uri(WebApp.BaseAddress),
+                    response = await apiServicio.EditarAsync(id, fondoFinanciamiento, new Uri(WebApp.BaseAddressRM),
                                                                  "/api/FondoFinanciamiento");
 
                     if (response.IsSuccess)
@@ -176,7 +176,7 @@ namespace bd.webapprm.web.Controllers.MVC
 
             try
             {
-                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddress)
+                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddressRM)
                                                                , "/api/FondoFinanciamiento");
                 if (response.IsSuccess)
                 {

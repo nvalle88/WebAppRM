@@ -37,7 +37,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 response = await apiServicio.InsertarAsync(Factura,
-                                                             new Uri(WebApp.BaseAddress),
+                                                             new Uri(WebApp.BaseAddressRM),
                                                              "/api/Factura/InsertarFactura");
                 if (response.IsSuccess)
                 {
@@ -82,7 +82,7 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddress),
+                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddressRM),
                                                                   "/api/Factura");
 
 
@@ -111,7 +111,7 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    response = await apiServicio.EditarAsync(id, Factura, new Uri(WebApp.BaseAddress),
+                    response = await apiServicio.EditarAsync(id, Factura, new Uri(WebApp.BaseAddressRM),
                                                                  "/api/Factura");
 
                     if (!response.IsSuccess)
@@ -156,7 +156,7 @@ namespace bd.webapprm.web.Controllers.MVC
             var lista = new List<Factura>();
             try
             {
-                lista = await apiServicio.Listar<Factura>(new Uri(WebApp.BaseAddress)
+                lista = await apiServicio.Listar<Factura>(new Uri(WebApp.BaseAddressRM)
                                                                     , "/api/Factura/ListarFacturas");
                 return View(lista);
             }
@@ -180,7 +180,7 @@ namespace bd.webapprm.web.Controllers.MVC
 
             try
             {
-                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddress)
+                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddressRM)
                                                                , "/api/Factura");
                 if (response.IsSuccess)
                 {
