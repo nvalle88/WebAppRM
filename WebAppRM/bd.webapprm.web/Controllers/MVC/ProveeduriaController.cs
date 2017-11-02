@@ -18,8 +18,6 @@ namespace bd.webapprm.web.Controllers.MVC
     public class ProveeduriaController : Controller
     {
         private readonly IApiServicio apiServicio;
-        public static List<Factura> ListadoFacturasSeleccionadas = new List<Factura>();
-        public static List<Factura> ListadoFacturas = new List<Factura>();
 
         public ProveeduriaController(IApiServicio apiServicio)
         {
@@ -297,7 +295,7 @@ namespace bd.webapprm.web.Controllers.MVC
             var lista = new List<RecepcionArticulos>();
             try
             {
-                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
+                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddress)
                                                                     , "/api/RecepcionArticulo/ListarRecepcionArticulos");
 
                 var listaAltas = lista.Where(c => c.Cantidad > 0).ToList();
@@ -322,7 +320,7 @@ namespace bd.webapprm.web.Controllers.MVC
             var lista = new List<RecepcionArticulos>();
             try
             {
-                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
+                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddress)
                                                                     , "/api/RecepcionArticulo/ListarRecepcionArticulos");
 
                 var listaBajas = lista.Where(c => c.Cantidad == 0).ToList();
@@ -347,7 +345,7 @@ namespace bd.webapprm.web.Controllers.MVC
             var lista = new List<RecepcionArticulos>();
             try
             {
-                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
+                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddress)
                                                                     , "/api/RecepcionArticulo/ListarRecepcionArticulos");
 
                 var listaBajas = lista.Where(c => c.Cantidad == 0).ToList();
@@ -372,7 +370,7 @@ namespace bd.webapprm.web.Controllers.MVC
             var lista = new List<RecepcionArticulos>();
             try
             {
-                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
+                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddress)
                                                                     , "/api/RecepcionArticulo/ListarRecepcionArticulos");
 
                 var listaBajas = lista.Where(c => c.Cantidad == 0).ToList();
@@ -397,7 +395,7 @@ namespace bd.webapprm.web.Controllers.MVC
             var lista = new List<RecepcionArticulos>();
             try
             {
-                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
+                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddress)
                                                                     , "/api/RecepcionArticulo/ListarRecepcionArticulos");
 
                 var listaBajas = lista.Where(c => c.Cantidad == 0).ToList();
@@ -422,7 +420,7 @@ namespace bd.webapprm.web.Controllers.MVC
             var lista = new List<RecepcionArticulos>();
             try
             {
-                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
+                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddress)
                                                                     , "/api/RecepcionArticulo/ListarRecepcionArticulos");
 
                 var listaBajas = lista.Where(c => c.Cantidad == 0).ToList();
@@ -447,7 +445,7 @@ namespace bd.webapprm.web.Controllers.MVC
             var lista = new List<RecepcionArticulos>();
             try
             {
-                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
+                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddress)
                                                                     , "/api/RecepcionArticulo/ListarRecepcionArticulos");
 
                 var listaBajas = lista.Where(c => c.Cantidad == 0).ToList();
@@ -629,15 +627,14 @@ namespace bd.webapprm.web.Controllers.MVC
             ViewBag.MaestroArticuloSucursal = await ObtenerSelectListMaestroArticuloSucursal(idSucursal);
             return PartialView("_MaestroArticuloSucursalSelect", new RecepcionArticulos());
         }
-        #endregion
-
-        #region Alta de Proveeduría
+        
+        #endregion#region Alta de Proveeduría
         public async Task<IActionResult> ArticulosADarAlta()
         {
             var lista = new List<RecepcionArticulos>();
             try
             {
-                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
+                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddress)
                                                                     , "/api/RecepcionArticulo/ListarRecepcionArticulos");
 
                 var listaArticulosRecepcionados = lista.Select(c => c).ToList();
@@ -663,7 +660,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var respuesta = await apiServicio.SeleccionarAsync<Response>(ID.ToString(), new Uri(WebApp.BaseAddressRM), "/api/RecepcionArticulo");
+                var respuesta = await apiServicio.SeleccionarAsync<Response>(ID.ToString(), new Uri(WebApp.BaseAddress), "/api/RecepcionArticulo");
 
                 respuesta.Resultado = JsonConvert.DeserializeObject<RecepcionArticulos>(respuesta.Resultado.ToString());
 
@@ -715,7 +712,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var respuesta = await apiServicio.SeleccionarAsync<Response>(ID.ToString(), new Uri(WebApp.BaseAddressRM), "/api/RecepcionArticulo");
+                var respuesta = await apiServicio.SeleccionarAsync<Response>(ID.ToString(), new Uri(WebApp.BaseAddress), "/api/RecepcionArticulo");
 
                 respuesta.Resultado = JsonConvert.DeserializeObject<RecepcionArticulos>(respuesta.Resultado.ToString());
 
@@ -729,13 +726,13 @@ namespace bd.webapprm.web.Controllers.MVC
 
                         foreach (var item in listaDetalleFactura)
                         {
-                            respuesta = await apiServicio.SeleccionarAsync<Response>(item.IdFactura.ToString(), new Uri(WebApp.BaseAddressRM), "/api/Factura");
+                            respuesta = await apiServicio.SeleccionarAsync<Response>(item.IdFactura.ToString(), new Uri(WebApp.BaseAddress), "/api/Factura");
 
                             respuesta.Resultado = JsonConvert.DeserializeObject<Factura>(respuesta.Resultado.ToString());
 
                             Factura factura = respuesta.Resultado as Factura;
 
-                            var respuestaOtra = await apiServicio.SeleccionarAsync<Response>(factura.Numero.ToString(), new Uri(WebApp.BaseAddressRM), "/api/FacturaPorAltaProveeduria");
+                            var respuestaOtra = await apiServicio.SeleccionarAsync<Response>(factura.Numero.ToString(), new Uri(WebApp.BaseAddress), "/api/FacturaPorAltaProveeduria");
 
                             if ((respuestaOtra.Resultado == null) && (respuesta.IsSuccess))
                             {
@@ -803,7 +800,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var respuesta = await apiServicio.SeleccionarAsync<Response>(ID.ToString(), new Uri(WebApp.BaseAddressRM), "/api/RecepcionArticulo");
+                var respuesta = await apiServicio.SeleccionarAsync<Response>(ID.ToString(), new Uri(WebApp.BaseAddress), "/api/RecepcionArticulo");
 
                 respuesta.Resultado = JsonConvert.DeserializeObject<RecepcionArticulos>(respuesta.Resultado.ToString());
 
@@ -817,13 +814,13 @@ namespace bd.webapprm.web.Controllers.MVC
 
                         foreach (var item in listaDetalleFactura)
                         {
-                            respuesta = await apiServicio.SeleccionarAsync<Response>(item.IdFactura.ToString(), new Uri(WebApp.BaseAddressRM), "/api/Factura");
+                            respuesta = await apiServicio.SeleccionarAsync<Response>(item.IdFactura.ToString(), new Uri(WebApp.BaseAddress), "/api/Factura");
 
                             respuesta.Resultado = JsonConvert.DeserializeObject<Factura>(respuesta.Resultado.ToString());
 
                             Factura factura = respuesta.Resultado as Factura;
 
-                            var respuestaOtra = await apiServicio.SeleccionarAsync<Response>(factura.Numero.ToString(), new Uri(WebApp.BaseAddressRM), "/api/FacturasPorAltaProveeduria");
+                            var respuestaOtra = await apiServicio.SeleccionarAsync<Response>(factura.Numero.ToString(), new Uri(WebApp.BaseAddress), "/api/FacturasPorAltaProveeduria");
 
                             if (respuestaOtra.Resultado != null)
                             {
@@ -891,7 +888,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var respuesta = await apiServicio.SeleccionarAsync<Response>(idFactura.ToString(), new Uri(WebApp.BaseAddressRM), "/api/Factura");
+                var respuesta = await apiServicio.SeleccionarAsync<Response>(idFactura.ToString(), new Uri(WebApp.BaseAddress), "/api/Factura");
 
                 if (respuesta.IsSuccess)
                 {
@@ -926,7 +923,7 @@ namespace bd.webapprm.web.Controllers.MVC
 
         public async Task<IActionResult> RefrescarTablaExcluidos(int idFactura)
         {
-            var respuesta = await apiServicio.SeleccionarAsync<Response>(idFactura.ToString(), new Uri(WebApp.BaseAddressRM), "/api/Factura");
+            var respuesta = await apiServicio.SeleccionarAsync<Response>(idFactura.ToString(), new Uri(WebApp.BaseAddress), "/api/Factura");
 
             if (respuesta.IsSuccess)
             {
@@ -958,7 +955,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var respuesta = await apiServicio.SeleccionarAsync<Response>(idFactura.ToString(), new Uri(WebApp.BaseAddressRM), "/api/Factura");
+                var respuesta = await apiServicio.SeleccionarAsync<Response>(idFactura.ToString(), new Uri(WebApp.BaseAddress), "/api/Factura");
 
                 if (respuesta.IsSuccess)
                 {
@@ -993,7 +990,7 @@ namespace bd.webapprm.web.Controllers.MVC
 
         public async Task<IActionResult> RefrescarTablaIncluidos(int idFactura)
         {
-            var respuesta = await apiServicio.SeleccionarAsync<Response>(idFactura.ToString(), new Uri(WebApp.BaseAddressRM), "/api/Factura");
+            var respuesta = await apiServicio.SeleccionarAsync<Response>(idFactura.ToString(), new Uri(WebApp.BaseAddress), "/api/Factura");
 
             if (respuesta.IsSuccess)
             {
@@ -1038,7 +1035,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 Response response = new Response();
 
                 response = await apiServicio.InsertarAsync(alta,
-                                                                 new Uri(WebApp.BaseAddressRM),
+                                                                 new Uri(WebApp.BaseAddress),
                                                                  "/api/AltaProveeduria/InsertarAltaProveeduria");
 
                 if (response.IsSuccess)
@@ -1053,7 +1050,7 @@ namespace bd.webapprm.web.Controllers.MVC
 
                         try
                         {
-                            response = await apiServicio.InsertarAsync(facturasPorAltaProveeduria, new Uri(WebApp.BaseAddressRM), "/api/FacturaPorAltaProveeduria/InsertarFacturasPorAltaProveeduria");
+                            response = await apiServicio.InsertarAsync(facturasPorAltaProveeduria, new Uri(WebApp.BaseAddress), "/api/FacturaPorAltaProveeduria/InsertarFacturasPorAltaProveeduria");
 
                             if (response.IsSuccess)
                             {
@@ -1063,7 +1060,7 @@ namespace bd.webapprm.web.Controllers.MVC
                             {
                                 try
                                 {
-                                    var eliminar = await apiServicio.EliminarAsync(altaProv.IdAlta.ToString(), new Uri(WebApp.BaseAddressRM), "/api/AltaProveeduria");
+                                    var eliminar = await apiServicio.EliminarAsync(altaProv.IdAlta.ToString(), new Uri(WebApp.BaseAddress), "/api/AltaProveeduria");
 
                                     if (eliminar.IsSuccess)
                                     {
@@ -1128,7 +1125,7 @@ namespace bd.webapprm.web.Controllers.MVC
             var lista = new List<MaestroArticuloSucursal>();
             try
             {
-                lista = await apiServicio.Listar<MaestroArticuloSucursal>(new Uri(WebApp.BaseAddressRM)
+                lista = await apiServicio.Listar<MaestroArticuloSucursal>(new Uri(WebApp.BaseAddress)
                                                                     , "/api/MaestroArticuloSucursal/ListarMaestroArticuloSucursal");
                 return View("IngresarFacturas", lista);
             }
@@ -1168,14 +1165,14 @@ namespace bd.webapprm.web.Controllers.MVC
 
                 Response response = new Response();
 
-                response = await apiServicio.InsertarAsync(factura, new Uri(WebApp.BaseAddressRM)
+                response = await apiServicio.InsertarAsync(factura, new Uri(WebApp.BaseAddress)
                                                                     , "/api/Factura/InsertarFactura");
 
                 if (response.IsSuccess)
                 {
                     try
                     {
-                        var respuesta = await apiServicio.SeleccionarAsync<Response>(numero, new Uri(WebApp.BaseAddressRM),
+                        var respuesta = await apiServicio.SeleccionarAsync<Response>(numero, new Uri(WebApp.BaseAddress),
                                                                                         "/api/Factura/FacturaPorNumero");
 
                         respuesta.Resultado = JsonConvert.DeserializeObject<Factura>(respuesta.Resultado.ToString());
@@ -1188,7 +1185,7 @@ namespace bd.webapprm.web.Controllers.MVC
                             detalleFactura.IdFactura = respuestaFactura.IdFactura;
                             detalleFactura.Precio = precio;
 
-                            response = await apiServicio.InsertarAsync(detalleFactura, new Uri(WebApp.BaseAddressRM)
+                            response = await apiServicio.InsertarAsync(detalleFactura, new Uri(WebApp.BaseAddress)
                                                                     , "/api/DetalleFactura/InsertarDetalleFactura");
 
                             if (response.IsSuccess)
@@ -1249,13 +1246,13 @@ namespace bd.webapprm.web.Controllers.MVC
             var detalleFactura = new DetalleFactura();
             try
             {
-                var listaProveedor = await apiServicio.Listar<Proveedor>(new Uri(WebApp.BaseAddressRM), "/api/Proveedor/ListarProveedores");
+                var listaProveedor = await apiServicio.Listar<Proveedor>(new Uri(WebApp.BaseAddress), "/api/Proveedor/ListarProveedores");
                 var tlistaProveedor = listaProveedor.Select(c => new { IdProveedor = c.IdProveedor, NombreApellidos = String.Format("{0} {1}", c.Nombre, c.Apellidos) });
                 ViewData["listaProveedor"] = new SelectList(tlistaProveedor, "IdProveedor", "NombreApellidos");
 
                 try
                 {
-                    var listaArticulos = new SelectList(await apiServicio.Listar<Articulo>(new Uri(WebApp.BaseAddressRM)
+                    var listaArticulos = new SelectList(await apiServicio.Listar<Articulo>(new Uri(WebApp.BaseAddress)
                                                                         , "/api/Articulo/ListarArticulos"), "IdArticulo", "Nombre");
                     ViewBag.listaArticulos = listaArticulos;
                     ViewBag.ID = ID;
@@ -1299,7 +1296,7 @@ namespace bd.webapprm.web.Controllers.MVC
             var lista = new List<RecepcionArticulos>();
             try
             {
-                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
+                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddress)
                                                                     , "/api/RecepcionArticulo/ListarRecepcionArticulos");
 
                 var listaArticulosRecepcionados = lista.Select(c => c).ToList();
@@ -1325,7 +1322,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var respuesta = await apiServicio.SeleccionarAsync<Response>(ID.ToString(), new Uri(WebApp.BaseAddressRM), "/api/RecepcionArticulo");
+                var respuesta = await apiServicio.SeleccionarAsync<Response>(ID.ToString(), new Uri(WebApp.BaseAddress), "/api/RecepcionArticulo");
 
                 respuesta.Resultado = JsonConvert.DeserializeObject<RecepcionArticulos>(respuesta.Resultado.ToString());
 
@@ -1359,7 +1356,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                List<SolicitudProveduriaDetalle> respuesta = await apiServicio.Listar<SolicitudProveduriaDetalle>(new Uri(WebApp.BaseAddressRM), "/api/SolicitudDetalleProveeduria/ListarSolicitudProveeduriasDetalle");
+                List<SolicitudProveduriaDetalle> respuesta = await apiServicio.Listar<SolicitudProveduriaDetalle>(new Uri(WebApp.BaseAddress), "/api/SolicitudDetalleProveeduria/ListarSolicitudProveeduriasDetalle");
 
                 return View("SolicitudesDeBaja", respuesta);
             }
@@ -1377,13 +1374,15 @@ namespace bd.webapprm.web.Controllers.MVC
 
                 return BadRequest();
             }
+
+            return View();
         }
 
         public async Task<IActionResult> AprobarBajaArticulo(int ID)
         {
             try
             {
-                var respuesta = await apiServicio.SeleccionarAsync<Response>(ID.ToString(), new Uri(WebApp.BaseAddressRM), "/api/SolicitudDetalleProveeduria");
+                var respuesta = await apiServicio.SeleccionarAsync<Response>(ID.ToString(), new Uri(WebApp.BaseAddress), "/api/SolicitudDetalleProveeduria");
 
                 respuesta.Resultado = JsonConvert.DeserializeObject<SolicitudProveduriaDetalle>(respuesta.Resultado.ToString());
 
@@ -1396,7 +1395,7 @@ namespace bd.webapprm.web.Controllers.MVC
                     solProvDet.IdEstado = 9;
 
                     respuesta = await apiServicio.EditarAsync(ID.ToString(), solProvDet,
-                                                            new Uri(WebApp.BaseAddressRM), "/api/SolicitudDetalleProveeduria");
+                                                            new Uri(WebApp.BaseAddress), "/api/SolicitudDetalleProveeduria");
 
                     if (respuesta.IsSuccess)
                     {
@@ -1432,7 +1431,7 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 SolicitudProveduria solProv = new SolicitudProveduria { IdEmpleado = int.Parse(Request.Form["Empleado.IdEmpleado"].ToString()) };
 
-                var respuesta = await apiServicio.InsertarAsync(solProv, new Uri(WebApp.BaseAddressRM), "/api/SolicitudProveeduria/InsertarSolicitudProveeduria");
+                var respuesta = await apiServicio.InsertarAsync(solProv, new Uri(WebApp.BaseAddress), "/api/SolicitudProveeduria/InsertarSolicitudProveeduria");
 
                 if (respuesta.IsSuccess)
                 {
@@ -1453,7 +1452,7 @@ namespace bd.webapprm.web.Controllers.MVC
                     solProvDetalle.IdMaestroArticuloSucursal = int.Parse(Request.Form["IdMaestroArticuloSucursal"].ToString());
                     solProvDetalle.IdSolicitudProveduria = solProv.IdSolicitudProveduria;
 
-                    respuesta = await apiServicio.InsertarAsync(solProvDetalle, new Uri(WebApp.BaseAddressRM), "/api/SolicitudDetalleProveeduria/InsertarSolicitudProveeduriaDetalle");
+                    respuesta = await apiServicio.InsertarAsync(solProvDetalle, new Uri(WebApp.BaseAddress), "/api/SolicitudDetalleProveeduria/InsertarSolicitudProveeduriaDetalle");
 
                     //debe ir if (respuesta.IsSucces)
 
