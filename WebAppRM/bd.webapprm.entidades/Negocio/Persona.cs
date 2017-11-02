@@ -3,8 +3,8 @@ namespace bd.webapprm.entidades
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-     
-     
+
+
 
     public partial class Persona
     {
@@ -46,13 +46,19 @@ namespace bd.webapprm.entidades
 
         [Required(ErrorMessage = "Debe introducir {0}")]
         [Display(Name = "Correo electrónico privado:")]
-        [DataType(DataType.EmailAddress,ErrorMessage ="El {0} no cumple con el formáto establecido")]
+        [DataType(DataType.EmailAddress, ErrorMessage = "El {0} no cumple con el formáto establecido")]
         public string CorreoPrivado { get; set; }
 
         [Required(ErrorMessage = "Debe introducir {0}")]
         [Display(Name = "Lugar de trabajo:")]
         [StringLength(500, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
         public string LugarTrabajo { get; set; }
+
+        public string CallePrincipal { get; set; }
+        public string CalleSecundaria { get; set; }
+        public string Referencia { get; set; }
+        public string Numero { get; set; }
+        public string Ocupacion { get; set; }
 
 
         //Propiedades Virtuales Referencias a otras clases
@@ -62,9 +68,15 @@ namespace bd.webapprm.entidades
         public int? IdSexo { get; set; }
         public virtual Sexo Sexo { get; set; }
 
+        public int? IdNacionalidadIndigena { get; set; }
+        public virtual NacionalidadIndigena NacionalidadIndigena { get; set; }
+
+        public int? IdParroquia { get; set; }
+        public virtual Parroquia Parroquia { get; set; }
+
         [Display(Name = "Género:")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
-        public int? IdGenero { get; set; }
+        public int IdGenero { get; set; }
         public virtual Genero Genero { get; set; }
 
         [Display(Name = "Tipo de sangre:")]
@@ -76,11 +88,6 @@ namespace bd.webapprm.entidades
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
         public int? IdEtnia { get; set; }
         public virtual Etnia Etnia { get; set; }
-
-        [Display(Name = "Candidato:")]
-        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
-        public int? IdCanditato { get; set; }
-        public virtual Canditato Canditato { get; set; }
 
         [Display(Name = "Estado civil:")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]

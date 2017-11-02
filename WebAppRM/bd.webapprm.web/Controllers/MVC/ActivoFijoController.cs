@@ -156,8 +156,13 @@ namespace bd.webapprm.web.Controllers.MVC
                         });
                     }
 
-                    DirectoryInfo dInfo = new DirectoryInfo(String.Format("{0}\\wwwroot\\images\\ActivoFijo\\{1}", _hostingEnvironment.ContentRootPath, nombreCarpeta));
-                    dInfo.MoveTo(String.Format("{0}\\wwwroot\\images\\ActivoFijo\\{1}", _hostingEnvironment.ContentRootPath, recepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle.ToString()));
+                    try
+                    {
+                        DirectoryInfo dInfo = new DirectoryInfo(String.Format("{0}\\wwwroot\\images\\ActivoFijo\\{1}", _hostingEnvironment.ContentRootPath, nombreCarpeta));
+                        dInfo.MoveTo(String.Format("{0}\\wwwroot\\images\\ActivoFijo\\{1}", _hostingEnvironment.ContentRootPath, recepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle.ToString()));
+                    }
+                    catch (Exception)
+                    { }
                 }
             }
             catch (Exception)
@@ -419,9 +424,9 @@ namespace bd.webapprm.web.Controllers.MVC
                         ViewBag.numeroConsecutivo = numeroConsecutivo;
 
                         var listaCodigoActivoFijo = await apiServicio.Listar<CodigoActivoFijo>(new Uri(WebApp.BaseAddressRM), "/api/CodigoActivoFijo/ListarCodigosActivoFijo");
-                        if (listaCodigoActivoFijo.Count(c => c.Codigosecuencial == codigoSecuencial) == 0)
+                        if (listaCodigoActivoFijo.Count(c => c.Codigosecuencial == codigoSecuencial && c.IdCodigoActivoFijo != recepcionActivoFijoDetalle.ActivoFijo.CodigoActivoFijo.IdCodigoActivoFijo) == 0)
                         {
-                            if (listaCodigoActivoFijo.Count(c => c.CodigoBarras == recepcionActivoFijoDetalle.ActivoFijo.CodigoActivoFijo.CodigoBarras) == 0)
+                            if (listaCodigoActivoFijo.Count(c => c.CodigoBarras == recepcionActivoFijoDetalle.ActivoFijo.CodigoActivoFijo.CodigoBarras && c.IdCodigoActivoFijo != recepcionActivoFijoDetalle.ActivoFijo.CodigoActivoFijo.IdCodigoActivoFijo) == 0)
                             {
                                 recepcionActivoFijoDetalle.ActivoFijo.CodigoActivoFijo.Codigosecuencial = codigoSecuencial;
 
@@ -432,6 +437,12 @@ namespace bd.webapprm.web.Controllers.MVC
 
                                 if (response.IsSuccess)
                                     return RedirectToAction("ActivosRecepcionados");
+                                else
+                                {
+                                    ViewBag.Codificacion = true;
+                                    ViewData["ErrorCodificacion"] = "Modelo inválido";
+                                    ViewData["errorNumeroConsecutivo"] = "El Código Secuencial no puede tener más de 20 y menos de 2 caracteres";
+                                }
                             }
                             else
                             {
@@ -673,9 +684,9 @@ namespace bd.webapprm.web.Controllers.MVC
                 ViewBag.numeroConsecutivo = numeroConsecutivo;
 
                 var listaCodigoActivoFijo = await apiServicio.Listar<CodigoActivoFijo>(new Uri(WebApp.BaseAddressRM), "/api/CodigoActivoFijo/ListarCodigosActivoFijo");
-                if (listaCodigoActivoFijo.Count(c => c.Codigosecuencial == codigoSecuencial) == 0)
+                if (listaCodigoActivoFijo.Count(c => c.Codigosecuencial == codigoSecuencial && c.IdCodigoActivoFijo != recepcionActivoFijoDetalle.ActivoFijo.CodigoActivoFijo.IdCodigoActivoFijo) == 0)
                 {
-                    if (listaCodigoActivoFijo.Count(c => c.CodigoBarras == recepcionActivoFijoDetalle.ActivoFijo.CodigoActivoFijo.CodigoBarras) == 0)
+                    if (listaCodigoActivoFijo.Count(c => c.CodigoBarras == recepcionActivoFijoDetalle.ActivoFijo.CodigoActivoFijo.CodigoBarras && c.IdCodigoActivoFijo != recepcionActivoFijoDetalle.ActivoFijo.CodigoActivoFijo.IdCodigoActivoFijo) == 0)
                     {
                         recepcionActivoFijoDetalle.ActivoFijo.CodigoActivoFijo.Codigosecuencial = codigoSecuencial;
                         Response response = new Response();
@@ -698,23 +709,25 @@ namespace bd.webapprm.web.Controllers.MVC
                                         Message = "Se ha actualizado un registro clase de código de activo fijo",
                                         UserName = "Usuario 1"
                                     });
-                                }
 
-                                recepcionActivoFijoDetalle.Estado = new Estado { Nombre = "Recepcionado" };
-                                response = await apiServicio.EditarAsync(recepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle.ToString(), recepcionActivoFijoDetalle, new Uri(WebApp.BaseAddressRM), "/api/RecepcionActivoFijo/EstadoActivoFijo");
-                                if (response.IsSuccess)
-                                {
-                                    await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                                    recepcionActivoFijoDetalle.Estado = new Estado { Nombre = "Recepcionado" };
+                                    response = await apiServicio.EditarAsync(recepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle.ToString(), recepcionActivoFijoDetalle, new Uri(WebApp.BaseAddressRM), "/api/RecepcionActivoFijo/EstadoActivoFijo");
+                                    if (response.IsSuccess)
                                     {
-                                        ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                                        EntityID = string.Format("{0} : {1}", "Estado de Activo Fijo", id),
-                                        LogCategoryParametre = Convert.ToString(LogCategoryParameter.Edit),
-                                        LogLevelShortName = Convert.ToString(LogLevelParameter.ADV),
-                                        Message = "Se ha actualizado un registro estado de activo fijo",
-                                        UserName = "Usuario 1"
-                                    });
-                                    return RedirectToAction("ActivosFijosRecepcionados");
+                                        await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                                        {
+                                            ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                                            EntityID = string.Format("{0} : {1}", "Estado de Activo Fijo", id),
+                                            LogCategoryParametre = Convert.ToString(LogCategoryParameter.Edit),
+                                            LogLevelShortName = Convert.ToString(LogLevelParameter.ADV),
+                                            Message = "Se ha actualizado un registro estado de activo fijo",
+                                            UserName = "Usuario 1"
+                                        });
+                                        return RedirectToAction("ActivosFijosRecepcionados");
+                                    }
                                 }
+                                else
+                                    response.Message = "El Código Secuencial no puede tener más de 20 y menos de 2 caracteres";
                             }
                             ViewData["Error"] = response.Message;
                             return View(recepcionActivoFijoDetalle);
