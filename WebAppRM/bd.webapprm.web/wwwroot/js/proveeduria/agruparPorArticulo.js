@@ -1,7 +1,7 @@
 ﻿jQuery(document).ready(function () {
     var table = $('#tbReporte').DataTable({
         "columnDefs": [
-            { "visible": true, "targets": [0] }
+            { "visible": false, "targets": [0] }
         ],
         "order": [[0, 'asc']],
         "displayLength": 25,
@@ -11,7 +11,7 @@
             var last = null;
             var groupadmin = [];
 
-            crearGrupo(api, rows, last, groupadmin, 0, "Articulo", 0);
+            crearGrupo(api, rows, last, groupadmin, 0, "Art&iacute;culo", 0);
         }
     });
 

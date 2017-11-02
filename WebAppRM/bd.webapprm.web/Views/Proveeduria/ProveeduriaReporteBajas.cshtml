@@ -1,7 +1,7 @@
-@model List<bd.webapprm.entidades.SolicitudProveduriaDetalle>
+@model List<bd.webapprm.entidades.RecepcionArticulos>
 
     @{
-    ViewData["Title"] = "ReporteArticulosBajas";
+        ViewData["Title"] = "ReporteArticulosBajas";
     }
 
     <link rel="stylesheet" href="~/css/site.css" />
@@ -55,64 +55,64 @@
                                                     Art&iacute;culo
                                                 </th>
                                                 <th>
-                                                    Cantidad aprobada
+                                                    Modelo
                                                 </th>
                                                 <th>
-                                                    Cantidad solicitada
+                                                    Clase
                                                 </th>
                                                 <th>
-                                                    Estado
+                                                    Sub Clase
                                                 </th>
                                                 <th>
-                                                    Fecha de aprobada
+                                                    Fecha de Recepci&oacute;n
                                                 </th>
                                                 <th>
-                                                    Fecha de solicitud
+                                                    Proveedor
                                                 </th>
                                                 <th>
-                                                    Sucursal
+                                                    Empleado
                                                 </th>
                                                 <th>
-                                                    M&iacute;nimo
-                                                </th>
-                                                <th>
-                                                    M&aacute;ximo
+                                                    Cantidad
                                                 </th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @foreach (var item in Model)
                                             {
-                                            <tr>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.Articulo.Nombre)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.CantidadAprobada)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.CantidadSolicitada)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.Estado.Nombre)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.FechaAprobada)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelItem => item.FechaSolicitud)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelIteam => item.MaestroArticuloSucursal.Sucursal)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelIteam => item.MaestroArticuloSucursal.Minimo)
-                                                </td>
-                                                <td>
-                                                    @Html.DisplayFor(modelIteam => item.MaestroArticuloSucursal.Maximo)
-                                                </td>
-                                            </tr>
-                                            }
+                                                <tr>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Articulo.Nombre)
+                                                    </td>
+
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Articulo.Modelo.Nombre)
+                                                    </td>
+
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Articulo.SubClaseArticulo.ClaseArticulo.Nombre)
+                                                    </td>
+
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Articulo.SubClaseArticulo.Nombre)
+                                                    </td>
+
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Fecha)
+                                                    </td>
+
+                                                    <td>
+                                                        @{ await ViewContext.Writer.WriteAsync(String.Format("{0} {1}", item.Proveedor.Nombre, item.Proveedor.Apellidos));}
+                                                    </td>
+
+                                                    <td>
+                                                        @{ await ViewContext.Writer.WriteAsync(String.Format("{0} {1}", item.Empleado.Persona.Nombres, item.Empleado.Persona.Apellidos));}
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Cantidad)
+                                                    </td>
+                                                </tr>
+                                                            }
                                         </tbody>
                                     </table>
 
@@ -136,6 +136,6 @@
     </div>
 
     @section Scripts{
-    <script src="~/lib/TableTools-master/src/dataTables.tableTools.js"></script>
-    <script src="~/js/proveeduria/reportesAltasBajas.js"></script>
+        <script src="~/lib/TableTools-master/src/dataTables.tableTools.js"></script>
+        <script src="~/js/proveeduria/agruparPorArticulo.js"></script>
     }
