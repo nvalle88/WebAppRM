@@ -337,14 +337,14 @@ namespace bd.webapprm.web.Controllers.MVC
                 recepcionActivoFijoDetalle.NumeroPoliza = "N/A";
 
                 await apiServicio.InsertarAsync(new Estado { Nombre = "Recepcionado" },
-                                                             new Uri(WebApp.BaseAddressRM),
+                                                             new Uri(WebApp.BaseAddressTH),
                                                              "/api/Estados/InsertarEstado");
 
                 await apiServicio.InsertarAsync(new Estado { Nombre = "Validación Técnica" },
-                                                             new Uri(WebApp.BaseAddressRM),
+                                                             new Uri(WebApp.BaseAddressTH),
                                                              "/api/Estados/InsertarEstado");
 
-                var listaEstado = await apiServicio.Listar<Estado>(new Uri(WebApp.BaseAddressRM), "/api/Estados/ListarEstados");
+                var listaEstado = await apiServicio.Listar<Estado>(new Uri(WebApp.BaseAddressTH), "/api/Estados/ListarEstados");
                 var nombreEstado = !recepcionActivoFijoDetalle.RecepcionActivoFijo.ValidacionTecnica ? "Recepcionado" : "Validación Técnica";
                 var estado = listaEstado.SingleOrDefault(c => c.Nombre == nombreEstado);
                 recepcionActivoFijoDetalle.Estado = estado;
@@ -637,7 +637,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 await apiServicio.InsertarAsync(new Estado { Nombre = "Desaprobado" },
-                                                             new Uri(WebApp.BaseAddressRM),
+                                                             new Uri(WebApp.BaseAddressTH),
                                                              "/api/Estados/InsertarEstado");
 
                 response = await apiServicio.InsertarAsync(int.Parse(id),
@@ -1658,7 +1658,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 }
 
                 await apiServicio.InsertarAsync(new Estado { Nombre = "Baja" },
-                                                             new Uri(WebApp.BaseAddressRM),
+                                                             new Uri(WebApp.BaseAddressTH),
                                                              "/api/Estados/InsertarEstado");
 
                 recepcionActivoFijoDetalle.Estado = new Estado { Nombre = "Baja" };
