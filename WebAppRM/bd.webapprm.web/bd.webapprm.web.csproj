@@ -27,6 +27,9 @@
     <Content Include="wwwroot\js\activofijo\reporteMantenimientos.js" />
     <Content Include="wwwroot\js\datatables\init.js" />
     <Content Include="wwwroot\js\empleado\empleado.js" />
+    <Content Include="wwwroot\js\proveeduria\agruparPorArticulo.js" />
+    <Content Include="wwwroot\js\proveeduria\agruparPorCantidad.js" />
+    <Content Include="wwwroot\js\proveeduria\agruparPorSucursal.js" />
     <Content Include="wwwroot\js\proveeduria\maestroArticuloSucursal.js" />
     <Content Include="wwwroot\js\proveeduria\recepcion.js" />
     <Content Include="wwwroot\js\subClaseActivoFijo\subClaseActivoFijo.js" />
