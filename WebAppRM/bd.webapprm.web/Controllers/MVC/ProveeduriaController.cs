@@ -294,21 +294,34 @@ namespace bd.webapprm.web.Controllers.MVC
         #region Reportes
         public async Task<IActionResult> ProveeduriaReporteAltas()
         {
-            var lista = new List<RecepcionArticulos>();
+            var articulos = new List<RecepcionArticulos>();
+            var altas = new List<AltaProveeduria>();
             try
             {
-                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "/api/RecepcionArticulo/ListarRecepcionArticulos");
+                articulos = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
+                                                                    , "/api/RecepcionArticulos/ListarRecepcionArticulos");
+                altas = await apiServicio.Listar<AltaProveeduria>(new Uri(WebApp.BaseAddressRM)
+                                                                    , "/api/AltaProveeduria/ListarAltasProveeduria");
+                var lista = new List<RecepcionArticulos>();
 
-                var listaAltas = lista.Where(c => c.Cantidad > 0).ToList();
-                return View(listaAltas);
+                foreach (var articulo in articulos)
+                {
+                    foreach (var alta in altas)
+                    {
+                        if (articulo.IdArticulo == alta.IdArticulo)
+                        {
+                            lista.Add(articulo);
+                        }
+                    }
+                }
+                return View(lista);
             }
             catch (Exception ex)
             {
                 await GuardarLogService.SaveLogEntry(new LogEntryTranfer
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Listando Artículos recepcionados en Alta",
+                    Message = "Listando Artículos en Alta",
                     ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
@@ -319,21 +332,35 @@ namespace bd.webapprm.web.Controllers.MVC
         }
         public async Task<IActionResult> ProveeduriaReporteBajas()
         {
-            var lista = new List<RecepcionArticulos>();
+            var articulos = new List<RecepcionArticulos>();
+            var bajas = new List<AltaProveeduria>();
             try
             {
-                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "/api/RecepcionArticulo/ListarRecepcionArticulos");
+                articulos = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
+                                                                    , "/api/RecepcionArticulos/ListarRecepcionArticulos");
+                bajas = await apiServicio.Listar<AltaProveeduria>(new Uri(WebApp.BaseAddressRM)
+                                                                    , "/api/BajaProveeduria/ListarBajasProveeduria");
+                var lista = new List<RecepcionArticulos>();
 
-                var listaBajas = lista.Where(c => c.Cantidad == 0).ToList();
-                return View(listaBajas);
+                foreach (var articulo in articulos)
+                {
+                    foreach (var baja in bajas)
+                    {
+                        if (articulo.IdArticulo == baja.IdArticulo)
+                        {
+                            lista.Add(articulo);
+                        }
+                    }
+                }
+
+                return View(lista);
             }
             catch (Exception ex)
             {
                 await GuardarLogService.SaveLogEntry(new LogEntryTranfer
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Listando Artículos recepcionados en Alta",
+                    Message = "Listando Artículos en Baja",
                     ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
@@ -344,21 +371,19 @@ namespace bd.webapprm.web.Controllers.MVC
         }
         public async Task<IActionResult> EstadisticasConsumoAreaReporte()
         {
-            var lista = new List<RecepcionArticulos>();
+            var lista = new List<SolicitudProveduriaDetalle>();
             try
             {
-                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "/api/RecepcionArticulo/ListarRecepcionArticulos");
-
-                var listaBajas = lista.Where(c => c.Cantidad == 0).ToList();
-                return View(listaBajas);
+                lista = await apiServicio.Listar<SolicitudProveduriaDetalle>(new Uri(WebApp.BaseAddressRM)
+                                                                    , "/api/SolicitudProveduriaDetalle/ListarSolicitudProveeduriasDetalle");
+                return View(lista);
             }
             catch (Exception ex)
             {
                 await GuardarLogService.SaveLogEntry(new LogEntryTranfer
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Listando Artículos recepcionados en Alta",
+                    Message = "Listando Artículos Recepcionados",
                     ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
@@ -369,21 +394,22 @@ namespace bd.webapprm.web.Controllers.MVC
         }
         public async Task<IActionResult> AlertaVencimientoReporte()
         {
-            var lista = new List<RecepcionArticulos>();
+            var lista = new List<SolicitudProveduriaDetalle>();
             try
             {
-                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "/api/RecepcionArticulo/ListarRecepcionArticulos");
+                lista = await apiServicio.Listar<SolicitudProveduriaDetalle>(new Uri(WebApp.BaseAddressRM)
+                                                                    , "/api/SolicitudProveduriaDetalle/ListarSolicitudProveeduriasDetalle");
 
-                var listaBajas = lista.Where(c => c.Cantidad == 0).ToList();
-                return View(listaBajas);
+                var listaMinimos = lista.Where(c => c.CantidadAprobada <= c.MaestroArticuloSucursal.Minimo).ToList();
+
+                return View(listaMinimos);
             }
             catch (Exception ex)
             {
                 await GuardarLogService.SaveLogEntry(new LogEntryTranfer
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Listando Artículos recepcionados en Alta",
+                    Message = "Listando Artículos en alerta de vencimiento",
                     ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
@@ -394,14 +420,12 @@ namespace bd.webapprm.web.Controllers.MVC
         }
         public async Task<IActionResult> ConsolidadoInventarioReporte()
         {
-            var lista = new List<RecepcionArticulos>();
+            var lista = new List<SolicitudProveduriaDetalle>();
             try
             {
-                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "/api/RecepcionArticulo/ListarRecepcionArticulos");
-
-                var listaBajas = lista.Where(c => c.Cantidad == 0).ToList();
-                return View(listaBajas);
+                lista = await apiServicio.Listar<SolicitudProveduriaDetalle>(new Uri(WebApp.BaseAddressRM)
+                                                                    , "/api/SolicitudProveduriaDetalle/ListarSolicitudProveeduriasDetalle");
+                return View(lista);
             }
             catch (Exception ex)
             {
@@ -419,14 +443,12 @@ namespace bd.webapprm.web.Controllers.MVC
         }
         public async Task<IActionResult> ConsolidadoSolicitudReporte()
         {
-            var lista = new List<RecepcionArticulos>();
+            var lista = new List<SolicitudProveduriaDetalle>();
             try
             {
-                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "/api/RecepcionArticulo/ListarRecepcionArticulos");
-
-                var listaBajas = lista.Where(c => c.Cantidad == 0).ToList();
-                return View(listaBajas);
+                lista = await apiServicio.Listar<SolicitudProveduriaDetalle>(new Uri(WebApp.BaseAddressRM)
+                                                                    , "/api/SolicitudProveduriaDetalle/ListarSolicitudProveeduriasDetalle");
+                return View(lista);
             }
             catch (Exception ex)
             {
@@ -444,21 +466,38 @@ namespace bd.webapprm.web.Controllers.MVC
         }
         public async Task<IActionResult> MinMaxReporte()
         {
-            var lista = new List<RecepcionArticulos>();
+            var articulos = new List<RecepcionArticulos>();
+            var solic = new List<SolicitudProveduriaDetalle>();
             try
             {
-                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "/api/RecepcionArticulo/ListarRecepcionArticulos");
+                articulos = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
+                                                                    , "/api/RecepcionArticulos/ListarRecepcionArticulos");
+                solic = await apiServicio.Listar<SolicitudProveduriaDetalle>(new Uri(WebApp.BaseAddressRM)
+                                                                    , "/api/SolicitudProveduriaDetalle/ListarSolicitudProveeduriasDetalle");
+                var solicitudes = solic.Where(c => c.CantidadAprobada <= c.MaestroArticuloSucursal.Minimo).ToList().Union(
+                                  solic.Where(c => c.CantidadAprobada >= c.MaestroArticuloSucursal.Maximo).ToList());
 
-                var listaBajas = lista.Where(c => c.Cantidad == 0).ToList();
-                return View(listaBajas);
+                var lista = new List<RecepcionArticulos>();
+
+                foreach (var articulo in articulos)
+                {
+                    foreach (var solicitud in solicitudes)
+                    {
+                        if (articulo.IdArticulo == solicitud.IdArticulo)
+                        {
+                            lista.Add(articulo);
+                        }
+                    }
+                }
+
+                return View(lista);
             }
             catch (Exception ex)
             {
                 await GuardarLogService.SaveLogEntry(new LogEntryTranfer
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Listando Artículos recepcionados en Alta",
+                    Message = "Listando Artículos Mínimos y Máximos",
                     ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
