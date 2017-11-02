@@ -83,7 +83,11 @@ function gestionarTab()
 {
     var valor_tab = parseInt($("#tab").val());
     if (valor_tab === 1) {
-        $("#btn_guardar").attr("value", "Siguiente");
+        if ($("#RecepcionActivoFijo_ValidacionTecnica").prop("checked"))
+            $("#btn_guardar").attr("value", "Guardar");
+        else
+            $("#btn_guardar").attr("value", "Siguiente");
+
         $("#btn_atras").addClass("hide");
     }
     else {
