@@ -301,7 +301,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 articulos = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
                                                                     , "api/RecepcionArticulos/ListarRecepcionArticulos");
                 altas = await apiServicio.Listar<AltaProveeduria>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "api/AltaProveeduria/ListarAltasProveeduria");
+                                                                    , "api/AltaProveeduria/ListarAltasProveeduria");                  
                 var lista = new List<RecepcionArticulos>();
 
                 foreach (var articulo in articulos)
@@ -314,6 +314,7 @@ namespace bd.webapprm.web.Controllers.MVC
                         }
                     }
                 }
+                lista = lista.Where(c => c.IdArticulo != c.MaestroArticuloSucursal.SolicitudProveduriaDetalle.First(x => x.IdArticulo == c.IdArticulo).IdArticulo).ToList();
                 return View(lista);
             }
             catch (Exception ex)
@@ -332,27 +333,15 @@ namespace bd.webapprm.web.Controllers.MVC
         }
         public async Task<IActionResult> ProveeduriaReporteBajas()
         {
-            var articulos = new List<RecepcionArticulos>();
-            var bajas = new List<AltaProveeduria>();
+            var lista = new List<RecepcionArticulos>();
             try
             {
-                articulos = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "api/RecepcionArticulos/ListarRecepcionArticulos");
-                bajas = await apiServicio.Listar<AltaProveeduria>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "api/BajaProveeduria/ListarBajasProveeduria");
-                var lista = new List<RecepcionArticulos>();
-
-                foreach (var articulo in articulos)
-                {
-                    foreach (var baja in bajas)
-                    {
-                        if (articulo.IdArticulo == baja.IdArticulo)
-                        {
-                            lista.Add(articulo);
-                        }
-                    }
-                }
-
+                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
+                                                                    , "api/RecepcionArticulos/ListarRecepcionArticulos");                
+                lista = lista
+                    .Where(c => c.IdArticulo == c.MaestroArticuloSucursal.SolicitudProveduriaDetalle.First(x => x.IdArticulo == c.IdArticulo).IdArticulo)
+                    .Where(x => x.MaestroArticuloSucursal.SolicitudProveduriaDetalle.First(z => z.IdArticulo == x.IdArticulo).Estado.Nombre == "Aprobada")
+                    .ToList();
                 return View(lista);
             }
             catch (Exception ex)
