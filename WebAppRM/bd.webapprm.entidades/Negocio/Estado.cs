@@ -34,7 +34,7 @@ namespace bd.webapprm.entidades
 
         public virtual ICollection<SolicitudCertificadoPersonal> SolicitudCertificadoPersonal { get; set; }
 
-        public virtual ICollection<SolicitudProveduriaDetalle> SolicitudProveduriaDetalle { get; set; }
+        public virtual ICollection<SolicitudProveeduriaDetalle> SolicitudProveeduriaDetalle { get; set; }
 
         public virtual ICollection<SolicitudPlanificacionVacaciones> SolicitudPlanificacionVacaciones { get; set; }
 

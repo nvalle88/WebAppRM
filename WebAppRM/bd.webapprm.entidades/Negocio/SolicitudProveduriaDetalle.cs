@@ -3,10 +3,10 @@ namespace bd.webapprm.entidades
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-    public partial class SolicitudProveduriaDetalle
+    public partial class SolicitudProveeduriaDetalle
     {
         [Key]
-        public int IdSolicitudProveduriaDetalle { get; set; }
+        public int IdSolicitudProveeduriaDetalle { get; set; }
 
         [Required(ErrorMessage = "Debe introducir {0}")]
         [Display(Name = "Fecha de la solicitud:")]
@@ -34,8 +34,8 @@ namespace bd.webapprm.entidades
 
         [Display(Name = "Solicitud de Proveeduría:")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
-        public int IdSolicitudProveduria { get; set; }
-        public virtual SolicitudProveduria SolicitudProveduria { get; set; }
+        public int IdSolicitudProveeduria { get; set; }
+        public virtual SolicitudProveeduria SolicitudProveeduria { get; set; }
 
         //Propiedades Virtuales Referencias a otras clases
 
