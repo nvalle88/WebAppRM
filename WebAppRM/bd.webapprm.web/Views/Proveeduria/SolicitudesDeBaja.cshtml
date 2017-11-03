@@ -1,4 +1,4 @@
-@model List<bd.webapprm.entidades.SolicitudProveduriaDetalle>
+@model List<bd.webapprm.entidades.SolicitudProveeduriaDetalle>
 
 <div id="content">
     <section id="widget-grid" class="">
@@ -45,14 +45,14 @@
                                             </td>
 
                                             <td>
-                                                @{ await ViewContext.Writer.WriteAsync(String.Format("{0} {1}", item.SolicitudProveduria.Empleado.Persona.Nombres, item.SolicitudProveduria.Empleado.Persona.Apellidos));}
+                                                @{ await ViewContext.Writer.WriteAsync(String.Format("{0} {1}", item.SolicitudProveeduria.Empleado.Persona.Nombres, item.SolicitudProveeduria.Empleado.Persona.Apellidos));}
                                             </td>
 
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.CantidadSolicitada)
                                             </td>
                                             <td>
-                                                <a href="#">@Html.ActionLink("Aprobar Baja", "AprobarBajaArticulo", "Proveeduria", new { ID = item.IdSolicitudProveduriaDetalle })</a>
+                                                <a href="#">@Html.ActionLink("Aprobar Baja", "AprobarBajaArticulo", "Proveeduria", new { ID = item.IdSolicitudProveeduriaDetalle })</a>
                                             </td>                                            
                                         </tr>
                                    }

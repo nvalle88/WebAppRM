@@ -360,11 +360,11 @@ namespace bd.webapprm.web.Controllers.MVC
         }
         public async Task<IActionResult> EstadisticasConsumoAreaReporte()
         {
-            var lista = new List<SolicitudProveduriaDetalle>();
+            var lista = new List<SolicitudProveeduriaDetalle>();
             try
             {
-                lista = await apiServicio.Listar<SolicitudProveduriaDetalle>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "api/SolicitudProveduriaDetalle/ListarSolicitudProveeduriasDetalle");
+                lista = await apiServicio.Listar<SolicitudProveeduriaDetalle>(new Uri(WebApp.BaseAddressRM)
+                                                                    , "api/SolicitudProveeduriaDetalle/ListarSolicitudProveeduriasDetalle");
                 return View(lista);
             }
             catch (Exception ex)
@@ -383,11 +383,11 @@ namespace bd.webapprm.web.Controllers.MVC
         }
         public async Task<IActionResult> AlertaVencimientoReporte()
         {
-            var lista = new List<SolicitudProveduriaDetalle>();
+            var lista = new List<SolicitudProveeduriaDetalle>();
             try
             {
-                lista = await apiServicio.Listar<SolicitudProveduriaDetalle>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "api/SolicitudProveduriaDetalle/ListarSolicitudProveeduriasDetalle");
+                lista = await apiServicio.Listar<SolicitudProveeduriaDetalle>(new Uri(WebApp.BaseAddressRM)
+                                                                    , "api/SolicitudProveeduriaDetalle/ListarSolicitudProveeduriasDetalle");
 
                 var listaMinimos = lista.Where(c => c.CantidadAprobada <= c.MaestroArticuloSucursal.Minimo).ToList();
 
@@ -409,11 +409,11 @@ namespace bd.webapprm.web.Controllers.MVC
         }
         public async Task<IActionResult> ConsolidadoInventarioReporte()
         {
-            var lista = new List<SolicitudProveduriaDetalle>();
+            var lista = new List<SolicitudProveeduriaDetalle>();
             try
             {
-                lista = await apiServicio.Listar<SolicitudProveduriaDetalle>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "api/SolicitudProveduriaDetalle/ListarSolicitudProveeduriasDetalle");
+                lista = await apiServicio.Listar<SolicitudProveeduriaDetalle>(new Uri(WebApp.BaseAddressRM)
+                                                                    , "api/SolicitudProveeduriaDetalle/ListarSolicitudProveeduriasDetalle");
                 return View(lista);
             }
             catch (Exception ex)
@@ -432,11 +432,11 @@ namespace bd.webapprm.web.Controllers.MVC
         }
         public async Task<IActionResult> ConsolidadoSolicitudReporte()
         {
-            var lista = new List<SolicitudProveduriaDetalle>();
+            var lista = new List<SolicitudProveeduriaDetalle>();
             try
             {
-                lista = await apiServicio.Listar<SolicitudProveduriaDetalle>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "api/SolicitudProveduriaDetalle/ListarSolicitudProveeduriasDetalle");
+                lista = await apiServicio.Listar<SolicitudProveeduriaDetalle>(new Uri(WebApp.BaseAddressRM)
+                                                                    , "api/SolicitudProveeduriaDetalle/ListarSolicitudProveeduriasDetalle");
                 return View(lista);
             }
             catch (Exception ex)
@@ -456,13 +456,13 @@ namespace bd.webapprm.web.Controllers.MVC
         public async Task<IActionResult> MinMaxReporte()
         {
             var articulos = new List<RecepcionArticulos>();
-            var solic = new List<SolicitudProveduriaDetalle>();
+            var solic = new List<SolicitudProveeduriaDetalle>();
             try
             {
                 articulos = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
                                                                     , "api/RecepcionArticulos/ListarRecepcionArticulos");
-                solic = await apiServicio.Listar<SolicitudProveduriaDetalle>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "api/SolicitudProveduriaDetalle/ListarSolicitudProveeduriasDetalle");
+                solic = await apiServicio.Listar<SolicitudProveeduriaDetalle>(new Uri(WebApp.BaseAddressRM)
+                                                                    , "api/SolicitudProveeduriaDetalle/ListarSolicitudProveeduriasDetalle");
                 var solicitudes = solic.Where(c => c.CantidadAprobada <= c.MaestroArticuloSucursal.Minimo).ToList().Union(
                                   solic.Where(c => c.CantidadAprobada >= c.MaestroArticuloSucursal.Maximo).ToList());
 
@@ -1388,7 +1388,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                List<SolicitudProveduriaDetalle> respuesta = await apiServicio.Listar<SolicitudProveduriaDetalle>(new Uri(WebApp.BaseAddressRM), "api/SolicitudDetalleProveeduria/ListarSolicitudProveeduriasDetalle");
+                List<SolicitudProveeduriaDetalle> respuesta = await apiServicio.Listar<SolicitudProveeduriaDetalle>(new Uri(WebApp.BaseAddressRM), "api/SolicitudDetalleProveeduria/ListarSolicitudProveeduriasDetalle");
 
                 return View("SolicitudesDeBaja", respuesta);
             }
@@ -1406,27 +1406,30 @@ namespace bd.webapprm.web.Controllers.MVC
 
                 return BadRequest();
             }
-
-            return View();
         }
 
-        public async Task<IActionResult> AprobarBajaArticulo(int ID)
+        public async Task<IActionResult> AprobarBajaArticulo(int id)
         {
             try
             {
-                var respuesta = await apiServicio.SeleccionarAsync<Response>(ID.ToString(), new Uri(WebApp.BaseAddressRM), "api/SolicitudDetalleProveeduria");
+                await apiServicio.InsertarAsync(new Estado { Nombre = "Baja Aprobada" },
+                                                             new Uri(WebApp.BaseAddressTH),
+                                                             "api/Estados/InsertarEstado");
+                var listaEstado = await apiServicio.Listar<Estado>(new Uri(WebApp.BaseAddressTH), "api/Estados/ListarEstados");
 
-                respuesta.Resultado = JsonConvert.DeserializeObject<SolicitudProveduriaDetalle>(respuesta.Resultado.ToString());
+                var respuesta = await apiServicio.SeleccionarAsync<Response>(id.ToString(), new Uri(WebApp.BaseAddressRM), "api/SolicitudDetalleProveeduria");
 
-                SolicitudProveduriaDetalle solProvDet = respuesta.Resultado as SolicitudProveduriaDetalle;
+                respuesta.Resultado = JsonConvert.DeserializeObject<SolicitudProveeduriaDetalle>(respuesta.Resultado.ToString());
+
+                SolicitudProveeduriaDetalle solProvDet = respuesta.Resultado as SolicitudProveeduriaDetalle;
 
                 if (respuesta.IsSuccess)
                 {
                     solProvDet.CantidadAprobada = solProvDet.CantidadSolicitada;
                     solProvDet.FechaAprobada = DateTime.Now;
-                    solProvDet.IdEstado = 9;
+                    solProvDet.IdEstado = listaEstado.SingleOrDefault(c => c.Nombre == "Baja Aprobada").IdEstado;
 
-                    respuesta = await apiServicio.EditarAsync(ID.ToString(), solProvDet,
+                    respuesta = await apiServicio.EditarAsync(id.ToString(), solProvDet,
                                                             new Uri(WebApp.BaseAddressRM), "api/SolicitudDetalleProveeduria");
 
                     if (respuesta.IsSuccess)
@@ -1461,28 +1464,33 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                SolicitudProveduria solProv = new SolicitudProveduria { IdEmpleado = int.Parse(Request.Form["Empleado.IdEmpleado"].ToString()) };
+                await apiServicio.InsertarAsync(new Estado { Nombre = "Baja Solicitada" },
+                                                             new Uri(WebApp.BaseAddressTH),
+                                                             "api/Estados/InsertarEstado");
+                var listaEstado = await apiServicio.Listar<Estado>(new Uri(WebApp.BaseAddressTH), "api/Estados/ListarEstados");
+
+                SolicitudProveeduria solProv = new SolicitudProveeduria { IdEmpleado = int.Parse(Request.Form["Empleado.IdEmpleado"].ToString()) };
 
                 var respuesta = await apiServicio.InsertarAsync(solProv, new Uri(WebApp.BaseAddressRM), "api/SolicitudProveeduria/InsertarSolicitudProveeduria");
 
                 if (respuesta.IsSuccess)
                 {
-                    respuesta.Resultado = JsonConvert.DeserializeObject<SolicitudProveduria>(respuesta.Resultado.ToString());
+                    respuesta.Resultado = JsonConvert.DeserializeObject<SolicitudProveeduria>(respuesta.Resultado.ToString());
 
-                    solProv = respuesta.Resultado as SolicitudProveduria;
+                    solProv = respuesta.Resultado as SolicitudProveeduria;
 
-                    SolicitudProveduriaDetalle solProvDetalle = new SolicitudProveduriaDetalle();
+                    SolicitudProveeduriaDetalle solProvDetalle = new SolicitudProveeduriaDetalle();
 
                     DateTime ahora = DateTime.Now;
 
                     solProvDetalle.CantidadAprobada = 1;
                     solProvDetalle.FechaAprobada = ahora;
                     solProvDetalle.CantidadSolicitada = int.Parse(Request.Form["Cantidad"].ToString());
-                    solProvDetalle.IdEstado = 8; //hacer consulta a servicio que devuelva el id en base a un nombre de estado
+                    solProvDetalle.IdEstado = listaEstado.SingleOrDefault(c => c.Nombre == "Baja Solicitada").IdEstado;
                     solProvDetalle.FechaSolicitud = ahora;
                     solProvDetalle.IdArticulo = int.Parse(Request.Form["IdArticulo"].ToString());
                     solProvDetalle.IdMaestroArticuloSucursal = int.Parse(Request.Form["IdMaestroArticuloSucursal"].ToString());
-                    solProvDetalle.IdSolicitudProveduria = solProv.IdSolicitudProveduria;
+                    solProvDetalle.IdSolicitudProveeduria = solProv.IdSolicitudProveeduria;
 
                     respuesta = await apiServicio.InsertarAsync(solProvDetalle, new Uri(WebApp.BaseAddressRM), "api/SolicitudDetalleProveeduria/InsertarSolicitudProveeduriaDetalle");
 

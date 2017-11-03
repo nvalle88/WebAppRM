@@ -36,7 +36,7 @@ namespace bd.webapprm.entidades
 
         public virtual ICollection<RecepcionArticulos> RecepcionArticulos { get; set; }
 
-        public virtual ICollection<SolicitudProveduriaDetalle> SolicitudProveduriaDetalle { get; set; }
+        public virtual ICollection<SolicitudProveeduriaDetalle> SolicitudProveeduriaDetalle { get; set; }
 
         public virtual ICollection<DetalleFactura> DetalleFactura { get; set; }
 
