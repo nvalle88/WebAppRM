@@ -38,7 +38,7 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 response = await apiServicio.InsertarAsync(tablaDepreciacion,
                                                              new Uri(WebApp.BaseAddressRM),
-                                                             "/api/TablaDepreciacion/InsertarTablaDepreciacion");
+                                                             "api/TablaDepreciacion/InsertarTablaDepreciacion");
                 if (response.IsSuccess)
                 {
 
@@ -83,7 +83,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 if (!string.IsNullOrEmpty(id))
                 {
                     var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddressRM),
-                                                                  "/api/TablaDepreciacion");
+                                                                  "api/TablaDepreciacion");
 
 
                     respuesta.Resultado = JsonConvert.DeserializeObject<TablaDepreciacion>(respuesta.Resultado.ToString());
@@ -112,7 +112,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 if (!string.IsNullOrEmpty(id))
                 {
                     response = await apiServicio.EditarAsync(id, tablaDepreciacion, new Uri(WebApp.BaseAddressRM),
-                                                                 "/api/TablaDepreciacion");
+                                                                 "api/TablaDepreciacion");
 
                     if (response.IsSuccess)
                     {
@@ -154,7 +154,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 lista = await apiServicio.Listar<TablaDepreciacion>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "/api/TablaDepreciacion/ListarTablaDepreciacion");
+                                                                    , "api/TablaDepreciacion/ListarTablaDepreciacion");
                 return View(lista);
             }
             catch (Exception ex)
@@ -178,7 +178,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddressRM)
-                                                               , "/api/TablaDepreciacion");
+                                                               , "api/TablaDepreciacion");
                 if (response.IsSuccess)
                 {
                     await GuardarLogService.SaveLogEntry(new LogEntryTranfer

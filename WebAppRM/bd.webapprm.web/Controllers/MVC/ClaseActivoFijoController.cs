@@ -29,7 +29,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 lista = await apiServicio.Listar<ClaseActivoFijo>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "/api/ClaseActivoFijo/ListarClaseActivoFijo");
+                                                                    , "api/ClaseActivoFijo/ListarClaseActivoFijo");
                 return View(lista);
             }
             catch (Exception ex)
@@ -49,8 +49,8 @@ namespace bd.webapprm.web.Controllers.MVC
 
         public async Task<IActionResult> Create()
         {
-            ViewData["IdTipoActivoFijo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<TipoActivoFijo>(new Uri(WebApp.BaseAddressRM), "/api/TipoActivoFijo/ListarTipoActivoFijos"), "IdTipoActivoFijo", "Nombre");
-            ViewData["IdTablaDepreciacion"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<TablaDepreciacion>(new Uri(WebApp.BaseAddressRM), "/api/TablaDepreciacion/ListarTablaDepreciacion"), "IdTablaDepreciacion", "IndiceDepreciacion");
+            ViewData["IdTipoActivoFijo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<TipoActivoFijo>(new Uri(WebApp.BaseAddressRM), "api/TipoActivoFijo/ListarTipoActivoFijos"), "IdTipoActivoFijo", "Nombre");
+            ViewData["IdTablaDepreciacion"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<TablaDepreciacion>(new Uri(WebApp.BaseAddressRM), "api/TablaDepreciacion/ListarTablaDepreciacion"), "IdTablaDepreciacion", "IndiceDepreciacion");
             return View();
         }
 
@@ -63,7 +63,7 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 response = await apiServicio.InsertarAsync(claseActivoFijo,
                                                              new Uri(WebApp.BaseAddressRM),
-                                                             "/api/ClaseActivoFijo/InsertarClaseActivoFijo");
+                                                             "api/ClaseActivoFijo/InsertarClaseActivoFijo");
                 if (response.IsSuccess)
                 {
 
@@ -82,8 +82,8 @@ namespace bd.webapprm.web.Controllers.MVC
                 }
 
                 ViewData["Error"] = response.Message;
-                ViewData["IdTipoActivoFijo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<TipoActivoFijo>(new Uri(WebApp.BaseAddressRM), "/api/TipoActivoFijo/ListarTipoActivoFijos"), "IdTipoActivoFijo", "Nombre");
-                ViewData["IdTablaDepreciacion"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<TablaDepreciacion>(new Uri(WebApp.BaseAddressRM), "/api/TablaDepreciacion/ListarTablaDepreciacion"), "IdTablaDepreciacion", "IndiceDepreciacion");
+                ViewData["IdTipoActivoFijo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<TipoActivoFijo>(new Uri(WebApp.BaseAddressRM), "api/TipoActivoFijo/ListarTipoActivoFijos"), "IdTipoActivoFijo", "Nombre");
+                ViewData["IdTablaDepreciacion"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<TablaDepreciacion>(new Uri(WebApp.BaseAddressRM), "api/TablaDepreciacion/ListarTablaDepreciacion"), "IdTablaDepreciacion", "IndiceDepreciacion");
                 return View(claseActivoFijo);
 
             }
@@ -110,12 +110,12 @@ namespace bd.webapprm.web.Controllers.MVC
                 if (!string.IsNullOrEmpty(id))
                 {
                     var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddressRM),
-                                                                  "/api/ClaseActivoFijo");
+                                                                  "api/ClaseActivoFijo");
 
 
                     respuesta.Resultado = JsonConvert.DeserializeObject<ClaseActivoFijo>(respuesta.Resultado.ToString());
-                    ViewData["IdTipoActivoFijo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<TipoActivoFijo>(new Uri(WebApp.BaseAddressRM), "/api/TipoActivoFijo/ListarTipoActivoFijos"), "IdTipoActivoFijo", "Nombre");
-                    ViewData["IdTablaDepreciacion"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<TablaDepreciacion>(new Uri(WebApp.BaseAddressRM), "/api/TablaDepreciacion/ListarTablaDepreciacion"), "IdTablaDepreciacion", "IndiceDepreciacion");
+                    ViewData["IdTipoActivoFijo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<TipoActivoFijo>(new Uri(WebApp.BaseAddressRM), "api/TipoActivoFijo/ListarTipoActivoFijos"), "IdTipoActivoFijo", "Nombre");
+                    ViewData["IdTablaDepreciacion"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<TablaDepreciacion>(new Uri(WebApp.BaseAddressRM), "api/TablaDepreciacion/ListarTablaDepreciacion"), "IdTablaDepreciacion", "IndiceDepreciacion");
                     if (respuesta.IsSuccess)
                     {
                         return View(respuesta.Resultado);
@@ -141,7 +141,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 if (!string.IsNullOrEmpty(id))
                 {
                     response = await apiServicio.EditarAsync(id, claseActivoFijo, new Uri(WebApp.BaseAddressRM),
-                                                                 "/api/ClaseActivoFijo");
+                                                                 "api/ClaseActivoFijo");
 
                     if (response.IsSuccess)
                     {
@@ -160,8 +160,8 @@ namespace bd.webapprm.web.Controllers.MVC
 
                 }
                 ViewData["Error"] = response.Message;
-                ViewData["IdTipoActivoFijo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<TipoActivoFijo>(new Uri(WebApp.BaseAddressRM), "/api/TipoActivoFijo/ListarTipoActivoFijos"), "IdTipoActivoFijo", "Nombre");
-                ViewData["IdTablaDepreciacion"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<TablaDepreciacion>(new Uri(WebApp.BaseAddressRM), "/api/TablaDepreciacion/ListarTablaDepreciacion"), "IdTablaDepreciacion", "IndiceDepreciacion");
+                ViewData["IdTipoActivoFijo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<TipoActivoFijo>(new Uri(WebApp.BaseAddressRM), "api/TipoActivoFijo/ListarTipoActivoFijos"), "IdTipoActivoFijo", "Nombre");
+                ViewData["IdTablaDepreciacion"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<TablaDepreciacion>(new Uri(WebApp.BaseAddressRM), "api/TablaDepreciacion/ListarTablaDepreciacion"), "IdTablaDepreciacion", "IndiceDepreciacion");
                 return View(claseActivoFijo);
             }
             catch (Exception ex)
@@ -186,7 +186,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddressRM)
-                                                               , "/api/ClaseActivoFijo");
+                                                               , "api/ClaseActivoFijo");
                 if (response.IsSuccess)
                 {
                     await GuardarLogService.SaveLogEntry(new LogEntryTranfer

@@ -37,7 +37,7 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 response = await apiServicio.InsertarAsync(motivoRecepcion,
                                                              new Uri(WebApp.BaseAddressRM),
-                                                             "/api/MotivoRecepcion/InsertarMotivoRecepcion");
+                                                             "api/MotivoRecepcion/InsertarMotivoRecepcion");
                 if (response.IsSuccess)
                 {
 
@@ -82,7 +82,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 if (!string.IsNullOrEmpty(id))
                 {
                     var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddressRM),
-                                                                  "/api/MotivoRecepcion");
+                                                                  "api/MotivoRecepcion");
 
 
                     respuesta.Resultado = JsonConvert.DeserializeObject<MotivoRecepcion>(respuesta.Resultado.ToString());
@@ -111,7 +111,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 if (!string.IsNullOrEmpty(id))
                 {
                     response = await apiServicio.EditarAsync(id, motivoRecepcion, new Uri(WebApp.BaseAddressRM),
-                                                                 "/api/MotivoRecepcion");
+                                                                 "api/MotivoRecepcion");
 
                     if (!response.IsSuccess)
                     {
@@ -156,7 +156,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 lista = await apiServicio.Listar<MotivoRecepcion>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "/api/MotivoRecepcion/ListarMotivoRecepcion");
+                                                                    , "api/MotivoRecepcion/ListarMotivoRecepcion");
                 return View(lista);
             }
             catch (Exception ex)
@@ -180,7 +180,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddressRM)
-                                                               , "/api/MotivoRecepcion");
+                                                               , "api/MotivoRecepcion");
                 if (response.IsSuccess)
                 {
                     await GuardarLogService.SaveLogEntry(new LogEntryTranfer
