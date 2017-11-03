@@ -29,7 +29,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 lista = await apiServicio.Listar<FondoFinanciamiento>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "/api/FondoFinanciamiento/ListarFondoFinanciamiento");
+                                                                    , "api/FondoFinanciamiento/ListarFondoFinanciamiento");
                 return View(lista);
             }
             catch (Exception ex)
@@ -61,7 +61,7 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 response = await apiServicio.InsertarAsync(fondoFinanciamiento,
                                                              new Uri(WebApp.BaseAddressRM),
-                                                             "/api/FondoFinanciamiento/InsertarFondoFinanciamiento");
+                                                             "api/FondoFinanciamiento/InsertarFondoFinanciamiento");
                 if (response.IsSuccess)
                 {
 
@@ -106,7 +106,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 if (!string.IsNullOrEmpty(id))
                 {
                     var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddressRM),
-                                                                  "/api/FondoFinanciamiento");
+                                                                  "api/FondoFinanciamiento");
 
 
                     respuesta.Resultado = JsonConvert.DeserializeObject<FondoFinanciamiento>(respuesta.Resultado.ToString());
@@ -135,7 +135,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 if (!string.IsNullOrEmpty(id))
                 {
                     response = await apiServicio.EditarAsync(id, fondoFinanciamiento, new Uri(WebApp.BaseAddressRM),
-                                                                 "/api/FondoFinanciamiento");
+                                                                 "api/FondoFinanciamiento");
 
                     if (response.IsSuccess)
                     {
@@ -177,7 +177,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddressRM)
-                                                               , "/api/FondoFinanciamiento");
+                                                               , "api/FondoFinanciamiento");
                 if (response.IsSuccess)
                 {
                     await GuardarLogService.SaveLogEntry(new LogEntryTranfer

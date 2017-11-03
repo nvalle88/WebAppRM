@@ -29,7 +29,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 lista = await apiServicio.Listar<UnidadMedida>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "/api/UnidadMedida/ListarUnidadMedida");
+                                                                    , "api/UnidadMedida/ListarUnidadMedida");
                 return View(lista);
             }
             catch (Exception ex)
@@ -61,7 +61,7 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 response = await apiServicio.InsertarAsync(unidadMedida,
                                                              new Uri(WebApp.BaseAddressRM),
-                                                             "/api/UnidadMedida/InsertarUnidadMedida");
+                                                             "api/UnidadMedida/InsertarUnidadMedida");
                 if (response.IsSuccess)
                 {
 
@@ -106,7 +106,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 if (!string.IsNullOrEmpty(id))
                 {
                     var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddressRM),
-                                                                  "/api/UnidadMedida");
+                                                                  "api/UnidadMedida");
 
 
                     respuesta.Resultado = JsonConvert.DeserializeObject<UnidadMedida>(respuesta.Resultado.ToString());
@@ -135,7 +135,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 if (!string.IsNullOrEmpty(id))
                 {
                     response = await apiServicio.EditarAsync(id, unidadMedida, new Uri(WebApp.BaseAddressRM),
-                                                                 "/api/UnidadMedida");
+                                                                 "api/UnidadMedida");
 
                     if (response.IsSuccess)
                     {
@@ -178,7 +178,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddressRM)
-                                                               , "/api/UnidadMedida");
+                                                               , "api/UnidadMedida");
                 if (response.IsSuccess)
                 {
                     await GuardarLogService.SaveLogEntry(new LogEntryTranfer

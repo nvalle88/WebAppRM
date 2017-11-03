@@ -14,7 +14,7 @@ namespace bd.webapprm.servicios.Servicios
             using (HttpClient client = new HttpClient())
             {
                 client.BaseAddress = baseAddreess;
-                var url = string.Format("{0}/{1}", "/api/Adscsists", id);
+                var url = string.Format("{0}/{1}", "api/Adscsists", id);
                 var respuesta = await client.GetAsync(url);
 
                 var resultado = await respuesta.Content.ReadAsStringAsync();
@@ -28,7 +28,7 @@ namespace bd.webapprm.servicios.Servicios
         {
             try
             {
-                var sistema = await ObtenerHostSistema(id, new Uri("http://localhost:53317"));
+                var sistema = await ObtenerHostSistema(id, new Uri("http://carlos/swSeguridad/"));
                 WebApp.BaseAddressRM = sistema.AdstHost;
             }
             catch (Exception)
@@ -39,7 +39,7 @@ namespace bd.webapprm.servicios.Servicios
         {
             try
             {
-                var sistema = await ObtenerHostSistema(id, new Uri("http://localhost:53317"));
+                var sistema = await ObtenerHostSistema(id, new Uri("http://carlos/swSeguridad/"));
                 WebApp.BaseAddressTH = sistema.AdstHost;
             }
             catch (Exception)

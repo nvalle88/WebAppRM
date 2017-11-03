@@ -38,7 +38,7 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 response = await apiServicio.InsertarAsync(Factura,
                                                              new Uri(WebApp.BaseAddressRM),
-                                                             "/api/Factura/InsertarFactura");
+                                                             "api/Factura/InsertarFactura");
                 if (response.IsSuccess)
                 {
 
@@ -83,7 +83,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 if (!string.IsNullOrEmpty(id))
                 {
                     var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddressRM),
-                                                                  "/api/Factura");
+                                                                  "api/Factura");
 
 
                     respuesta.Resultado = JsonConvert.DeserializeObject<Factura>(respuesta.Resultado.ToString());
@@ -112,7 +112,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 if (!string.IsNullOrEmpty(id))
                 {
                     response = await apiServicio.EditarAsync(id, Factura, new Uri(WebApp.BaseAddressRM),
-                                                                 "/api/Factura");
+                                                                 "api/Factura");
 
                     if (!response.IsSuccess)
                     {
@@ -157,7 +157,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 lista = await apiServicio.Listar<Factura>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "/api/Factura/ListarFacturas");
+                                                                    , "api/Factura/ListarFacturas");
                 return View(lista);
             }
             catch (Exception ex)
@@ -181,7 +181,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddressRM)
-                                                               , "/api/Factura");
+                                                               , "api/Factura");
                 if (response.IsSuccess)
                 {
                     await GuardarLogService.SaveLogEntry(new LogEntryTranfer

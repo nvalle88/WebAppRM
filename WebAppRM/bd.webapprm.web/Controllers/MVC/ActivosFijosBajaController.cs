@@ -38,7 +38,7 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 response = await apiServicio.InsertarAsync(ActivosFijosBaja,
                                                              new Uri(WebApp.BaseAddressRM),
-                                                             "/api/ActivosFijosBaja/InsertarActivosFijosBaja");
+                                                             "api/ActivosFijosBaja/InsertarActivosFijosBaja");
                 if (response.IsSuccess)
                 {
 
@@ -83,7 +83,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 if (!string.IsNullOrEmpty(id))
                 {
                     var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddressRM),
-                                                                  "/api/ActivosFijosBaja");
+                                                                  "api/ActivosFijosBaja");
 
 
                     respuesta.Resultado = JsonConvert.DeserializeObject<ActivosFijosBaja>(respuesta.Resultado.ToString());
@@ -112,7 +112,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 if (!string.IsNullOrEmpty(id))
                 {
                     response = await apiServicio.EditarAsync(id, ActivosFijosBaja, new Uri(WebApp.BaseAddressRM),
-                                                                 "/api/ActivosFijosBaja");
+                                                                 "api/ActivosFijosBaja");
 
                     if (response.IsSuccess)
                     {
@@ -154,7 +154,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 lista = await apiServicio.Listar<ActivosFijosBaja>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "/api/ActivosFijosBaja/ListarActivosFijosBaja");
+                                                                    , "api/ActivosFijosBaja/ListarActivosFijosBaja");
                 return View(lista);
             }
             catch (Exception ex)
@@ -178,7 +178,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddressRM)
-                                                               , "/api/ActivosFijosBaja");
+                                                               , "api/ActivosFijosBaja");
                 if (response.IsSuccess)
                 {
                     await GuardarLogService.SaveLogEntry(new LogEntryTranfer

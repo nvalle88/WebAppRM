@@ -37,7 +37,7 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 response = await apiServicio.InsertarAsync(TransferenciaActivoFijoDetalle,
                                                              new Uri(WebApp.BaseAddressRM),
-                                                             "/api/TransferenciaActivoFijoDetalle/InsertarTransferenciaActivoFijoDetalle");
+                                                             "api/TransferenciaActivoFijoDetalle/InsertarTransferenciaActivoFijoDetalle");
                 if (response.IsSuccess)
                 {
 
@@ -82,7 +82,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 if (!string.IsNullOrEmpty(id))
                 {
                     var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddressRM),
-                                                                  "/api/TransferenciaActivoFijoDetalle");
+                                                                  "api/TransferenciaActivoFijoDetalle");
 
 
                     respuesta.Resultado = JsonConvert.DeserializeObject<TransferenciaActivoFijoDetalle>(respuesta.Resultado.ToString());
@@ -111,7 +111,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 if (!string.IsNullOrEmpty(id))
                 {
                     response = await apiServicio.EditarAsync(id, TransferenciaActivoFijoDetalle, new Uri(WebApp.BaseAddressRM),
-                                                                 "/api/TransferenciaActivoFijoDetalle");
+                                                                 "api/TransferenciaActivoFijoDetalle");
 
                     if (!response.IsSuccess)
                     {
@@ -155,7 +155,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 lista = await apiServicio.Listar<TransferenciaActivoFijoDetalle>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "/api/TransferenciaActivoFijoDetalle/ListarTransferenciaActivoFijoDetalle");
+                                                                    , "api/TransferenciaActivoFijoDetalle/ListarTransferenciaActivoFijoDetalle");
                 return View(lista);
             }
             catch (Exception ex)
@@ -179,7 +179,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddressRM)
-                                                               , "/api/TransferenciaActivoFijoDetalle");
+                                                               , "api/TransferenciaActivoFijoDetalle");
                 if (response.IsSuccess)
                 {
                     await GuardarLogService.SaveLogEntry(new LogEntryTranfer

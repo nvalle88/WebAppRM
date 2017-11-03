@@ -38,7 +38,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "/api/RecepcionArticulo/ListarRecepcionArticulos");
+                                                                    , "api/RecepcionArticulo/ListarRecepcionArticulos");
                 return View(lista);
             }
             catch (Exception ex)
@@ -58,22 +58,22 @@ namespace bd.webapprm.web.Controllers.MVC
 
         public async Task<IActionResult> Recepcion()
         {
-            ViewData["TipoArticulo"] = new SelectList(await apiServicio.Listar<TipoArticulo>(new Uri(WebApp.BaseAddressRM), "/api/TipoArticulo/ListarTipoArticulo"), "IdTipoArticulo", "Nombre");
+            ViewData["TipoArticulo"] = new SelectList(await apiServicio.Listar<TipoArticulo>(new Uri(WebApp.BaseAddressRM), "api/TipoArticulo/ListarTipoArticulo"), "IdTipoArticulo", "Nombre");
             ViewData["ClaseArticulo"] = await ObtenerSelectListClaseArticulo((ViewData["TipoArticulo"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["TipoArticulo"] as SelectList).FirstOrDefault().Value) : -1);
             ViewData["SubClaseArticulo"] = await ObtenerSelectListSubClaseArticulo((ViewData["ClaseArticulo"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["ClaseArticulo"] as SelectList).FirstOrDefault().Value) : -1);
             ViewData["Articulo"] = await ObtenerSelectListArticulo((ViewData["SubClaseArticulo"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["SubClaseArticulo"] as SelectList).FirstOrDefault().Value) : -1);
 
-            ViewData["Pais"] = new SelectList(await apiServicio.Listar<Pais>(new Uri(WebApp.BaseAddressTH), "/api/Pais/ListarPais"), "IdPais", "Nombre");
+            ViewData["Pais"] = new SelectList(await apiServicio.Listar<Pais>(new Uri(WebApp.BaseAddressTH), "api/Pais/ListarPais"), "IdPais", "Nombre");
             ViewData["Provincia"] = await ObtenerSelectListProvincia((ViewData["Pais"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Pais"] as SelectList).FirstOrDefault().Value) : -1);
             ViewData["Ciudad"] = await ObtenerSelectListCiudad((ViewData["Provincia"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Provincia"] as SelectList).FirstOrDefault().Value) : -1);
             ViewData["Sucursal"] = await ObtenerSelectListSucursal((ViewData["Ciudad"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Ciudad"] as SelectList).FirstOrDefault().Value) : -1);
             ViewData["MaestroArticuloSucursal"] = await ObtenerSelectListMaestroArticuloSucursal((ViewData["Sucursal"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Sucursal"] as SelectList).FirstOrDefault().Value) : -1);
 
-            var listaProveedor = await apiServicio.Listar<Proveedor>(new Uri(WebApp.BaseAddressRM), "/api/Proveedor/ListarProveedores");
+            var listaProveedor = await apiServicio.Listar<Proveedor>(new Uri(WebApp.BaseAddressRM), "api/Proveedor/ListarProveedores");
             var tlistaProveedor = listaProveedor.Select(c => new { IdProveedor = c.IdProveedor, NombreApellidos = String.Format("{0} {1}", c.Nombre, c.Apellidos) });
             ViewData["Proveedor"] = new SelectList(tlistaProveedor, "IdProveedor", "NombreApellidos");
 
-            var listaEmpleado = await apiServicio.Listar<Empleado>(new Uri(WebApp.BaseAddressTH), "/api/Empleados/ListarEmpleados");
+            var listaEmpleado = await apiServicio.Listar<Empleado>(new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleados");
             var tlistaEmpleado = listaEmpleado.Select(c => new { IdEmpleado = c.IdEmpleado, NombreApellidos = String.Format("{0} {1}", c.Persona.Nombres, c.Persona.Apellidos) });
             ViewData["Empleado"] = new SelectList(tlistaEmpleado, "IdEmpleado", "NombreApellidos");
             return View();
@@ -86,28 +86,28 @@ namespace bd.webapprm.web.Controllers.MVC
                 if (!string.IsNullOrEmpty(id))
                 {
                     var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddressRM),
-                                                                  "/api/RecepcionArticulo");
+                                                                  "api/RecepcionArticulo");
 
                     respuesta.Resultado = JsonConvert.DeserializeObject<RecepcionArticulos>(respuesta.Resultado.ToString());
                     var recepcionArticulos = respuesta.Resultado as RecepcionArticulos;
                     if (respuesta.IsSuccess)
                     {
-                        ViewData["TipoArticulo"] = new SelectList(await apiServicio.Listar<TipoArticulo>(new Uri(WebApp.BaseAddressRM), "/api/TipoArticulo/ListarTipoArticulo"), "IdTipoArticulo", "Nombre");
+                        ViewData["TipoArticulo"] = new SelectList(await apiServicio.Listar<TipoArticulo>(new Uri(WebApp.BaseAddressRM), "api/TipoArticulo/ListarTipoArticulo"), "IdTipoArticulo", "Nombre");
                         ViewData["ClaseArticulo"] = await ObtenerSelectListClaseArticulo(recepcionArticulos?.Articulo?.SubClaseArticulo?.ClaseArticulo?.TipoArticulo?.IdTipoArticulo ?? -1);
                         ViewData["SubClaseArticulo"] = await ObtenerSelectListSubClaseArticulo(recepcionArticulos?.Articulo?.SubClaseArticulo?.ClaseArticulo?.IdClaseArticulo ?? -1);
                         ViewData["Articulo"] = await ObtenerSelectListArticulo(recepcionArticulos?.Articulo?.SubClaseArticulo?.IdSubClaseArticulo ?? -1);
 
-                        ViewData["Pais"] = new SelectList(await apiServicio.Listar<Pais>(new Uri(WebApp.BaseAddressTH), "/api/Pais/ListarPais"), "IdPais", "Nombre");
+                        ViewData["Pais"] = new SelectList(await apiServicio.Listar<Pais>(new Uri(WebApp.BaseAddressTH), "api/Pais/ListarPais"), "IdPais", "Nombre");
                         ViewData["Provincia"] = await ObtenerSelectListProvincia(recepcionArticulos?.MaestroArticuloSucursal?.Sucursal?.Ciudad?.Provincia?.Pais?.IdPais ?? -1);
                         ViewData["Ciudad"] = await ObtenerSelectListCiudad(recepcionArticulos?.MaestroArticuloSucursal?.Sucursal?.Ciudad?.Provincia?.IdProvincia ?? -1);
                         ViewData["Sucursal"] = await ObtenerSelectListSucursal(recepcionArticulos?.MaestroArticuloSucursal?.Sucursal?.Ciudad?.IdCiudad ?? -1);
                         ViewData["MaestroArticuloSucursal"] = await ObtenerSelectListMaestroArticuloSucursal(recepcionArticulos?.MaestroArticuloSucursal?.Sucursal?.IdSucursal ?? -1);
 
-                        var listaProveedor = await apiServicio.Listar<Proveedor>(new Uri(WebApp.BaseAddressRM), "/api/Proveedor/ListarProveedores");
+                        var listaProveedor = await apiServicio.Listar<Proveedor>(new Uri(WebApp.BaseAddressRM), "api/Proveedor/ListarProveedores");
                         var tlistaProveedor = listaProveedor.Select(c => new { IdProveedor = c.IdProveedor, NombreApellidos = String.Format("{0} {1}", c.Nombre, c.Apellidos) });
                         ViewData["Proveedor"] = new SelectList(tlistaProveedor, "IdProveedor", "NombreApellidos");
 
-                        var listaEmpleado = await apiServicio.Listar<Empleado>(new Uri(WebApp.BaseAddressTH), "/api/Empleados/ListarEmpleados");
+                        var listaEmpleado = await apiServicio.Listar<Empleado>(new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleados");
                         var tlistaEmpleado = listaEmpleado.Select(c => new { IdEmpleado = c.IdEmpleado, NombreApellidos = String.Format("{0} {1}", c.Persona.Nombres, c.Persona.Apellidos) });
                         ViewData["Empleado"] = new SelectList(tlistaEmpleado, "IdEmpleado", "NombreApellidos");
 
@@ -141,7 +141,7 @@ namespace bd.webapprm.web.Controllers.MVC
                     {
                         recepcionArticulo.Articulo = new Articulo();
                         int IdSubClaseArticulo = int.Parse(Request.Form["Articulo.IdSubClaseArticulo"].ToString());
-                        var listaSubClaseArticulo = await apiServicio.Listar<SubClaseArticulo>(new Uri(WebApp.BaseAddressRM), "/api/SubClaseArticulo/ListarSubClaseArticulos");
+                        var listaSubClaseArticulo = await apiServicio.Listar<SubClaseArticulo>(new Uri(WebApp.BaseAddressRM), "api/SubClaseArticulo/ListarSubClaseArticulos");
                         recepcionArticulo.Articulo.SubClaseArticulo = listaSubClaseArticulo.SingleOrDefault(c => c.IdSubClaseArticulo == IdSubClaseArticulo);
                         recepcionArticulo.Articulo.IdSubClaseArticulo = IdSubClaseArticulo;
                     }
@@ -151,7 +151,7 @@ namespace bd.webapprm.web.Controllers.MVC
                         {
                             recepcionArticulo.Articulo.SubClaseArticulo = new SubClaseArticulo();
                             int IdClaseArticulo = int.Parse(Request.Form["Articulo.SubClaseArticulo.IdClaseArticulo"].ToString());
-                            var listaClaseArticulo = await apiServicio.Listar<ClaseArticulo>(new Uri(WebApp.BaseAddressRM), "/api/ClaseArticulo/ListarClaseArticulo");
+                            var listaClaseArticulo = await apiServicio.Listar<ClaseArticulo>(new Uri(WebApp.BaseAddressRM), "api/ClaseArticulo/ListarClaseArticulo");
                             recepcionArticulo.Articulo.SubClaseArticulo.ClaseArticulo = listaClaseArticulo.SingleOrDefault(c => c.IdClaseArticulo == IdClaseArticulo);
                             recepcionArticulo.Articulo.SubClaseArticulo.IdClaseArticulo = IdClaseArticulo;
                         }
@@ -161,7 +161,7 @@ namespace bd.webapprm.web.Controllers.MVC
                             {
                                 recepcionArticulo.Articulo.SubClaseArticulo.ClaseArticulo = new ClaseArticulo();
                                 int IdTipoArticulo = int.Parse(Request.Form["Articulo.SubClaseArticulo.ClaseArticulo.IdTipoArticulo"].ToString());
-                                var listaTipoArticulo = await apiServicio.Listar<TipoArticulo>(new Uri(WebApp.BaseAddressRM), "/api/TipoArticulo/ListarTipoArticulo");
+                                var listaTipoArticulo = await apiServicio.Listar<TipoArticulo>(new Uri(WebApp.BaseAddressRM), "api/TipoArticulo/ListarTipoArticulo");
                                 recepcionArticulo.Articulo.SubClaseArticulo.ClaseArticulo.TipoArticulo = listaTipoArticulo.SingleOrDefault(c => c.IdTipoArticulo == IdTipoArticulo);
                                 recepcionArticulo.Articulo.SubClaseArticulo.ClaseArticulo.IdTipoArticulo = IdTipoArticulo;
                             }
@@ -172,7 +172,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 }
                 else
                 {
-                    var listaArticulo = await apiServicio.Listar<Articulo>(new Uri(WebApp.BaseAddressRM), "/api/Articulo/ListarArticulos");
+                    var listaArticulo = await apiServicio.Listar<Articulo>(new Uri(WebApp.BaseAddressRM), "api/Articulo/ListarArticulos");
                     recepcionArticulo.Articulo = listaArticulo.SingleOrDefault(c => c.IdArticulo == recepcionArticulo.IdArticulo);
                 }
 
@@ -183,7 +183,7 @@ namespace bd.webapprm.web.Controllers.MVC
                         recepcionArticulo.MaestroArticuloSucursal = new MaestroArticuloSucursal();
                         int IdSucursal = int.Parse(Request.Form["MaestroArticuloSucursal.IdSucursal"].ToString());
 
-                        var listaSucursal = await apiServicio.Listar<Sucursal>(new Uri(WebApp.BaseAddressTH), "/api/Sucursal/ListarSucursal");
+                        var listaSucursal = await apiServicio.Listar<Sucursal>(new Uri(WebApp.BaseAddressTH), "api/Sucursal/ListarSucursal");
                         recepcionArticulo.MaestroArticuloSucursal.Sucursal = listaSucursal.SingleOrDefault(c => c.IdSucursal == IdSucursal);
                         recepcionArticulo.MaestroArticuloSucursal.IdSucursal = IdSucursal;
                     }
@@ -194,7 +194,7 @@ namespace bd.webapprm.web.Controllers.MVC
                             recepcionArticulo.MaestroArticuloSucursal.Sucursal = new Sucursal();
                             int IdCiudad = int.Parse(Request.Form["MaestroArticuloSucursal.Sucursal.IdCiudad"].ToString());
 
-                            var listaCiudad = await apiServicio.Listar<Ciudad>(new Uri(WebApp.BaseAddressTH), "/api/Ciudad/ListarCiudad");
+                            var listaCiudad = await apiServicio.Listar<Ciudad>(new Uri(WebApp.BaseAddressTH), "api/Ciudad/ListarCiudad");
                             recepcionArticulo.MaestroArticuloSucursal.Sucursal.Ciudad = listaCiudad.SingleOrDefault(c => c.IdCiudad == IdCiudad);
                             recepcionArticulo.MaestroArticuloSucursal.Sucursal.IdCiudad = IdCiudad;
                         }
@@ -205,7 +205,7 @@ namespace bd.webapprm.web.Controllers.MVC
                                 recepcionArticulo.MaestroArticuloSucursal.Sucursal.Ciudad = new Ciudad();
                                 int IdProvincia = int.Parse(Request.Form["MaestroArticuloSucursal.Sucursal.Ciudad.IdProvincia"].ToString());
 
-                                var listaProvincia = await apiServicio.Listar<Provincia>(new Uri(WebApp.BaseAddressTH), "/api/Provincia/ListarProvincia");
+                                var listaProvincia = await apiServicio.Listar<Provincia>(new Uri(WebApp.BaseAddressTH), "api/Provincia/ListarProvincia");
                                 recepcionArticulo.MaestroArticuloSucursal.Sucursal.Ciudad.Provincia = listaProvincia.SingleOrDefault(c => c.IdProvincia == IdProvincia);
                                 recepcionArticulo.MaestroArticuloSucursal.Sucursal.Ciudad.IdProvincia = IdProvincia;
                             }
@@ -216,7 +216,7 @@ namespace bd.webapprm.web.Controllers.MVC
                                     recepcionArticulo.MaestroArticuloSucursal.Sucursal.Ciudad.Provincia = new Provincia();
                                     int IdPais = int.Parse(Request.Form["MaestroArticuloSucursal.Sucursal.Ciudad.Provincia.IdPais"].ToString());
 
-                                    var listaPais = await apiServicio.Listar<Pais>(new Uri(WebApp.BaseAddressTH), "/api/Pais/ListarPais");
+                                    var listaPais = await apiServicio.Listar<Pais>(new Uri(WebApp.BaseAddressTH), "api/Pais/ListarPais");
                                     recepcionArticulo.MaestroArticuloSucursal.Sucursal.Ciudad.Provincia.Pais = listaPais.SingleOrDefault(c => c.IdPais == IdPais);
                                     recepcionArticulo.MaestroArticuloSucursal.Sucursal.Ciudad.Provincia.IdPais = IdPais;
                                 }
@@ -228,15 +228,15 @@ namespace bd.webapprm.web.Controllers.MVC
                 }
                 else
                 {
-                    var listaMaestroSucursal = await apiServicio.Listar<MaestroArticuloSucursal>(new Uri(WebApp.BaseAddressRM), "/api/MaestroArticuloSucursal/ListarMaestroArticuloSucursal");
+                    var listaMaestroSucursal = await apiServicio.Listar<MaestroArticuloSucursal>(new Uri(WebApp.BaseAddressRM), "api/MaestroArticuloSucursal/ListarMaestroArticuloSucursal");
                     recepcionArticulo.MaestroArticuloSucursal = listaMaestroSucursal.SingleOrDefault(c => c.IdMaestroArticuloSucursal == recepcionArticulo.IdMaestroArticuloSucursal);
                 }
                 TryValidateModel(recepcionArticulo);
 
                 if (recepcionArticulo.IdRecepcionArticulos == 0)
-                    response = await apiServicio.InsertarAsync(recepcionArticulo, new Uri(WebApp.BaseAddressRM), "/api/RecepcionArticulo/InsertarRecepcionArticulo");
+                    response = await apiServicio.InsertarAsync(recepcionArticulo, new Uri(WebApp.BaseAddressRM), "api/RecepcionArticulo/InsertarRecepcionArticulo");
                 else
-                    response = await apiServicio.EditarAsync<RecepcionArticulos>(recepcionArticulo.IdRecepcionArticulos.ToString(), recepcionArticulo, new Uri(WebApp.BaseAddressRM), "/api/RecepcionArticulo");
+                    response = await apiServicio.EditarAsync<RecepcionArticulos>(recepcionArticulo.IdRecepcionArticulos.ToString(), recepcionArticulo, new Uri(WebApp.BaseAddressRM), "api/RecepcionArticulo");
 
                 if (response.IsSuccess)
                 {
@@ -253,22 +253,22 @@ namespace bd.webapprm.web.Controllers.MVC
                     return RedirectToAction("ListadoRecepcion");
                 }
 
-                ViewData["TipoArticulo"] = new SelectList(await apiServicio.Listar<TipoArticulo>(new Uri(WebApp.BaseAddressRM), "/api/TipoArticulo/ListarTipoArticulo"), "IdTipoArticulo", "Nombre");
+                ViewData["TipoArticulo"] = new SelectList(await apiServicio.Listar<TipoArticulo>(new Uri(WebApp.BaseAddressRM), "api/TipoArticulo/ListarTipoArticulo"), "IdTipoArticulo", "Nombre");
                 ViewData["ClaseArticulo"] = await ObtenerSelectListClaseArticulo(recepcionArticulo?.Articulo?.SubClaseArticulo?.ClaseArticulo?.IdTipoArticulo ?? -1);
                 ViewData["SubClaseArticulo"] = await ObtenerSelectListSubClaseArticulo(recepcionArticulo?.Articulo?.SubClaseArticulo?.ClaseArticulo?.IdClaseArticulo ?? -1);
                 ViewData["Articulo"] = await ObtenerSelectListArticulo(recepcionArticulo?.Articulo?.SubClaseArticulo?.IdSubClaseArticulo ?? -1);
 
-                ViewData["Pais"] = new SelectList(await apiServicio.Listar<Pais>(new Uri(WebApp.BaseAddressTH), "/api/Pais/ListarPais"), "IdPais", "Nombre");
+                ViewData["Pais"] = new SelectList(await apiServicio.Listar<Pais>(new Uri(WebApp.BaseAddressTH), "api/Pais/ListarPais"), "IdPais", "Nombre");
                 ViewData["Provincia"] = await ObtenerSelectListProvincia(recepcionArticulo?.MaestroArticuloSucursal?.Sucursal?.Ciudad?.Provincia?.Pais?.IdPais ?? -1);
                 ViewData["Ciudad"] = await ObtenerSelectListCiudad(recepcionArticulo?.MaestroArticuloSucursal?.Sucursal?.Ciudad?.Provincia?.IdProvincia ?? -1);
                 ViewData["Sucursal"] = await ObtenerSelectListSucursal(recepcionArticulo?.MaestroArticuloSucursal?.Sucursal?.Ciudad?.IdCiudad ?? -1);
                 ViewData["MaestroArticuloSucursal"] = await ObtenerSelectListMaestroArticuloSucursal(recepcionArticulo?.MaestroArticuloSucursal?.Sucursal?.IdSucursal ?? -1);
 
-                var listaProveedor = await apiServicio.Listar<Proveedor>(new Uri(WebApp.BaseAddressRM), "/api/Proveedor/ListarProveedores");
+                var listaProveedor = await apiServicio.Listar<Proveedor>(new Uri(WebApp.BaseAddressRM), "api/Proveedor/ListarProveedores");
                 var tlistaProveedor = listaProveedor.Select(c => new { IdProveedor = c.IdProveedor, NombreApellidos = String.Format("{0} {1}", c.Nombre, c.Apellidos) });
                 ViewData["Proveedor"] = new SelectList(tlistaProveedor, "IdProveedor", "NombreApellidos");
 
-                var listaEmpleado = await apiServicio.Listar<Empleado>(new Uri(WebApp.BaseAddressTH), "/api/Empleados/ListarEmpleados");
+                var listaEmpleado = await apiServicio.Listar<Empleado>(new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleados");
                 var tlistaEmpleado = listaEmpleado.Select(c => new { IdEmpleado = c.IdEmpleado, NombreApellidos = String.Format("{0} {1}", c.Persona.Nombres, c.Persona.Apellidos) });
                 ViewData["Empleado"] = new SelectList(tlistaEmpleado, "IdEmpleado", "NombreApellidos");
 
@@ -299,9 +299,9 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 articulos = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "/api/RecepcionArticulos/ListarRecepcionArticulos");
+                                                                    , "api/RecepcionArticulos/ListarRecepcionArticulos");
                 altas = await apiServicio.Listar<AltaProveeduria>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "/api/AltaProveeduria/ListarAltasProveeduria");
+                                                                    , "api/AltaProveeduria/ListarAltasProveeduria");
                 var lista = new List<RecepcionArticulos>();
 
                 foreach (var articulo in articulos)
@@ -337,9 +337,9 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 articulos = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "/api/RecepcionArticulos/ListarRecepcionArticulos");
+                                                                    , "api/RecepcionArticulos/ListarRecepcionArticulos");
                 bajas = await apiServicio.Listar<AltaProveeduria>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "/api/BajaProveeduria/ListarBajasProveeduria");
+                                                                    , "api/BajaProveeduria/ListarBajasProveeduria");
                 var lista = new List<RecepcionArticulos>();
 
                 foreach (var articulo in articulos)
@@ -375,7 +375,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 lista = await apiServicio.Listar<SolicitudProveduriaDetalle>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "/api/SolicitudProveduriaDetalle/ListarSolicitudProveeduriasDetalle");
+                                                                    , "api/SolicitudProveduriaDetalle/ListarSolicitudProveeduriasDetalle");
                 return View(lista);
             }
             catch (Exception ex)
@@ -398,7 +398,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 lista = await apiServicio.Listar<SolicitudProveduriaDetalle>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "/api/SolicitudProveduriaDetalle/ListarSolicitudProveeduriasDetalle");
+                                                                    , "api/SolicitudProveduriaDetalle/ListarSolicitudProveeduriasDetalle");
 
                 var listaMinimos = lista.Where(c => c.CantidadAprobada <= c.MaestroArticuloSucursal.Minimo).ToList();
 
@@ -424,7 +424,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 lista = await apiServicio.Listar<SolicitudProveduriaDetalle>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "/api/SolicitudProveduriaDetalle/ListarSolicitudProveeduriasDetalle");
+                                                                    , "api/SolicitudProveduriaDetalle/ListarSolicitudProveeduriasDetalle");
                 return View(lista);
             }
             catch (Exception ex)
@@ -447,7 +447,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 lista = await apiServicio.Listar<SolicitudProveduriaDetalle>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "/api/SolicitudProveduriaDetalle/ListarSolicitudProveeduriasDetalle");
+                                                                    , "api/SolicitudProveduriaDetalle/ListarSolicitudProveeduriasDetalle");
                 return View(lista);
             }
             catch (Exception ex)
@@ -471,9 +471,9 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 articulos = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "/api/RecepcionArticulos/ListarRecepcionArticulos");
+                                                                    , "api/RecepcionArticulos/ListarRecepcionArticulos");
                 solic = await apiServicio.Listar<SolicitudProveduriaDetalle>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "/api/SolicitudProveduriaDetalle/ListarSolicitudProveeduriasDetalle");
+                                                                    , "api/SolicitudProveduriaDetalle/ListarSolicitudProveeduriasDetalle");
                 var solicitudes = solic.Where(c => c.CantidadAprobada <= c.MaestroArticuloSucursal.Minimo).ToList().Union(
                                   solic.Where(c => c.CantidadAprobada >= c.MaestroArticuloSucursal.Maximo).ToList());
 
@@ -513,7 +513,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var listaClaseArticulo = await apiServicio.Listar<ClaseArticulo>(new Uri(WebApp.BaseAddressRM), "/api/ClaseArticulo/ListarClaseArticulo");
+                var listaClaseArticulo = await apiServicio.Listar<ClaseArticulo>(new Uri(WebApp.BaseAddressRM), "api/ClaseArticulo/ListarClaseArticulo");
                 listaClaseArticulo = idTipoArticulo != -1 ? listaClaseArticulo.Where(c => c.IdTipoArticulo == idTipoArticulo).ToList() : new List<ClaseArticulo>();
                 return new SelectList(listaClaseArticulo, "IdClaseArticulo", "Nombre");
             }
@@ -536,7 +536,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var listaSubClaseArticulo = await apiServicio.Listar<SubClaseArticulo>(new Uri(WebApp.BaseAddressRM), "/api/SubClaseArticulo/ListarSubClaseArticulos");
+                var listaSubClaseArticulo = await apiServicio.Listar<SubClaseArticulo>(new Uri(WebApp.BaseAddressRM), "api/SubClaseArticulo/ListarSubClaseArticulos");
                 listaSubClaseArticulo = idClaseArticulo != -1 ? listaSubClaseArticulo.Where(c => c.IdClaseArticulo == idClaseArticulo).ToList() : new List<SubClaseArticulo>();
                 return new SelectList(listaSubClaseArticulo, "IdSubClaseArticulo", "Nombre");
             }
@@ -559,7 +559,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var listaArticulo = await apiServicio.Listar<Articulo>(new Uri(WebApp.BaseAddressRM), "/api/Articulo/ListarArticulos");
+                var listaArticulo = await apiServicio.Listar<Articulo>(new Uri(WebApp.BaseAddressRM), "api/Articulo/ListarArticulos");
                 listaArticulo = idSubClaseArticulo != -1 ? listaArticulo.Where(c => c.IdSubClaseArticulo == idSubClaseArticulo).ToList() : new List<Articulo>();
                 return new SelectList(listaArticulo, "IdArticulo", "Nombre");
             }
@@ -582,7 +582,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var listaProvincia = await apiServicio.Listar<Provincia>(new Uri(WebApp.BaseAddressTH), "/api/Provincia/ListarProvincia");
+                var listaProvincia = await apiServicio.Listar<Provincia>(new Uri(WebApp.BaseAddressTH), "api/Provincia/ListarProvincia");
                 listaProvincia = idPais != -1 ? listaProvincia.Where(c => c.IdPais == idPais).ToList() : new List<Provincia>();
                 return new SelectList(listaProvincia, "IdProvincia", "Nombre");
             }
@@ -605,7 +605,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var listaCiudad = await apiServicio.Listar<Ciudad>(new Uri(WebApp.BaseAddressTH), "/api/Ciudad/ListarCiudad");
+                var listaCiudad = await apiServicio.Listar<Ciudad>(new Uri(WebApp.BaseAddressTH), "api/Ciudad/ListarCiudad");
                 listaCiudad = idProvincia != -1 ? listaCiudad.Where(c => c.IdProvincia == idProvincia).ToList() : new List<Ciudad>();
                 return new SelectList(listaCiudad, "IdCiudad", "Nombre");
             }
@@ -628,7 +628,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var listaSucursal = await apiServicio.Listar<Sucursal>(new Uri(WebApp.BaseAddressTH), "/api/Sucursal/ListarSucursal");
+                var listaSucursal = await apiServicio.Listar<Sucursal>(new Uri(WebApp.BaseAddressTH), "api/Sucursal/ListarSucursal");
                 listaSucursal = idCiudad != -1 ? listaSucursal.Where(c => c.IdCiudad == idCiudad).ToList() : new List<Sucursal>();
                 return new SelectList(listaSucursal, "IdSucursal", "Nombre");
             }
@@ -651,7 +651,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var listaMaestroArticuloSucursal = await apiServicio.Listar<MaestroArticuloSucursal>(new Uri(WebApp.BaseAddressRM), "/api/MaestroArticuloSucursal/ListarMaestroArticuloSucursal");
+                var listaMaestroArticuloSucursal = await apiServicio.Listar<MaestroArticuloSucursal>(new Uri(WebApp.BaseAddressRM), "api/MaestroArticuloSucursal/ListarMaestroArticuloSucursal");
                 listaMaestroArticuloSucursal = idSucursal != -1 ? listaMaestroArticuloSucursal.Where(c => c.IdSucursal == idSucursal).ToList() : new List<MaestroArticuloSucursal>();
                 var tlistaMaestroArticuloSucursal = listaMaestroArticuloSucursal.Select(c => new { IdMaestroArticuloSucursal = c.IdMaestroArticuloSucursal, Maestro = String.Format("Mínimo: {0} - Máximo: {1}", c.Minimo, c.Maximo) });
                 return new SelectList(tlistaMaestroArticuloSucursal, "IdMaestroArticuloSucursal", "Maestro");
@@ -678,7 +678,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "/api/RecepcionArticulo/ListarRecepcionArticulos");
+                                                                    , "api/RecepcionArticulo/ListarRecepcionArticulos");
 
                 var listaArticulosRecepcionados = lista.Select(c => c).ToList();
 
@@ -703,7 +703,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var respuesta = await apiServicio.SeleccionarAsync<Response>(ID.ToString(), new Uri(WebApp.BaseAddressRM), "/api/RecepcionArticulo");
+                var respuesta = await apiServicio.SeleccionarAsync<Response>(ID.ToString(), new Uri(WebApp.BaseAddressRM), "api/RecepcionArticulo");
 
                 respuesta.Resultado = JsonConvert.DeserializeObject<RecepcionArticulos>(respuesta.Resultado.ToString());
 
@@ -755,7 +755,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var respuesta = await apiServicio.SeleccionarAsync<Response>(ID.ToString(), new Uri(WebApp.BaseAddressRM), "/api/RecepcionArticulo");
+                var respuesta = await apiServicio.SeleccionarAsync<Response>(ID.ToString(), new Uri(WebApp.BaseAddressRM), "api/RecepcionArticulo");
 
                 respuesta.Resultado = JsonConvert.DeserializeObject<RecepcionArticulos>(respuesta.Resultado.ToString());
 
@@ -769,13 +769,13 @@ namespace bd.webapprm.web.Controllers.MVC
 
                         foreach (var item in listaDetalleFactura)
                         {
-                            respuesta = await apiServicio.SeleccionarAsync<Response>(item.IdFactura.ToString(), new Uri(WebApp.BaseAddressRM), "/api/Factura");
+                            respuesta = await apiServicio.SeleccionarAsync<Response>(item.IdFactura.ToString(), new Uri(WebApp.BaseAddressRM), "api/Factura");
 
                             respuesta.Resultado = JsonConvert.DeserializeObject<Factura>(respuesta.Resultado.ToString());
 
                             Factura factura = respuesta.Resultado as Factura;
 
-                            var respuestaOtra = await apiServicio.SeleccionarAsync<Response>(factura.Numero.ToString(), new Uri(WebApp.BaseAddressRM), "/api/FacturaPorAltaProveeduria");
+                            var respuestaOtra = await apiServicio.SeleccionarAsync<Response>(factura.Numero.ToString(), new Uri(WebApp.BaseAddressRM), "api/FacturaPorAltaProveeduria");
 
                             if ((respuestaOtra.Resultado == null) && (respuesta.IsSuccess))
                             {
@@ -843,7 +843,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var respuesta = await apiServicio.SeleccionarAsync<Response>(ID.ToString(), new Uri(WebApp.BaseAddressRM), "/api/RecepcionArticulo");
+                var respuesta = await apiServicio.SeleccionarAsync<Response>(ID.ToString(), new Uri(WebApp.BaseAddressRM), "api/RecepcionArticulo");
 
                 respuesta.Resultado = JsonConvert.DeserializeObject<RecepcionArticulos>(respuesta.Resultado.ToString());
 
@@ -857,13 +857,13 @@ namespace bd.webapprm.web.Controllers.MVC
 
                         foreach (var item in listaDetalleFactura)
                         {
-                            respuesta = await apiServicio.SeleccionarAsync<Response>(item.IdFactura.ToString(), new Uri(WebApp.BaseAddressRM), "/api/Factura");
+                            respuesta = await apiServicio.SeleccionarAsync<Response>(item.IdFactura.ToString(), new Uri(WebApp.BaseAddressRM), "api/Factura");
 
                             respuesta.Resultado = JsonConvert.DeserializeObject<Factura>(respuesta.Resultado.ToString());
 
                             Factura factura = respuesta.Resultado as Factura;
 
-                            var respuestaOtra = await apiServicio.SeleccionarAsync<Response>(factura.Numero.ToString(), new Uri(WebApp.BaseAddressRM), "/api/FacturasPorAltaProveeduria");
+                            var respuestaOtra = await apiServicio.SeleccionarAsync<Response>(factura.Numero.ToString(), new Uri(WebApp.BaseAddressRM), "api/FacturasPorAltaProveeduria");
 
                             if (respuestaOtra.Resultado != null)
                             {
@@ -931,7 +931,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var respuesta = await apiServicio.SeleccionarAsync<Response>(idFactura.ToString(), new Uri(WebApp.BaseAddressRM), "/api/Factura");
+                var respuesta = await apiServicio.SeleccionarAsync<Response>(idFactura.ToString(), new Uri(WebApp.BaseAddressRM), "api/Factura");
 
                 if (respuesta.IsSuccess)
                 {
@@ -966,7 +966,7 @@ namespace bd.webapprm.web.Controllers.MVC
 
         public async Task<IActionResult> RefrescarTablaExcluidos(int idFactura)
         {
-            var respuesta = await apiServicio.SeleccionarAsync<Response>(idFactura.ToString(), new Uri(WebApp.BaseAddressRM), "/api/Factura");
+            var respuesta = await apiServicio.SeleccionarAsync<Response>(idFactura.ToString(), new Uri(WebApp.BaseAddressRM), "api/Factura");
 
             if (respuesta.IsSuccess)
             {
@@ -998,7 +998,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var respuesta = await apiServicio.SeleccionarAsync<Response>(idFactura.ToString(), new Uri(WebApp.BaseAddressRM), "/api/Factura");
+                var respuesta = await apiServicio.SeleccionarAsync<Response>(idFactura.ToString(), new Uri(WebApp.BaseAddressRM), "api/Factura");
 
                 if (respuesta.IsSuccess)
                 {
@@ -1033,7 +1033,7 @@ namespace bd.webapprm.web.Controllers.MVC
 
         public async Task<IActionResult> RefrescarTablaIncluidos(int idFactura)
         {
-            var respuesta = await apiServicio.SeleccionarAsync<Response>(idFactura.ToString(), new Uri(WebApp.BaseAddressRM), "/api/Factura");
+            var respuesta = await apiServicio.SeleccionarAsync<Response>(idFactura.ToString(), new Uri(WebApp.BaseAddressRM), "api/Factura");
 
             if (respuesta.IsSuccess)
             {
@@ -1079,7 +1079,7 @@ namespace bd.webapprm.web.Controllers.MVC
 
                 response = await apiServicio.InsertarAsync(alta,
                                                                  new Uri(WebApp.BaseAddressRM),
-                                                                 "/api/AltaProveeduria/InsertarAltaProveeduria");
+                                                                 "api/AltaProveeduria/InsertarAltaProveeduria");
 
                 if (response.IsSuccess)
                 {
@@ -1093,7 +1093,7 @@ namespace bd.webapprm.web.Controllers.MVC
 
                         try
                         {
-                            response = await apiServicio.InsertarAsync(facturasPorAltaProveeduria, new Uri(WebApp.BaseAddressRM), "/api/FacturaPorAltaProveeduria/InsertarFacturasPorAltaProveeduria");
+                            response = await apiServicio.InsertarAsync(facturasPorAltaProveeduria, new Uri(WebApp.BaseAddressRM), "api/FacturaPorAltaProveeduria/InsertarFacturasPorAltaProveeduria");
 
                             if (response.IsSuccess)
                             {
@@ -1103,7 +1103,7 @@ namespace bd.webapprm.web.Controllers.MVC
                             {
                                 try
                                 {
-                                    var eliminar = await apiServicio.EliminarAsync(altaProv.IdAlta.ToString(), new Uri(WebApp.BaseAddressRM), "/api/AltaProveeduria");
+                                    var eliminar = await apiServicio.EliminarAsync(altaProv.IdAlta.ToString(), new Uri(WebApp.BaseAddressRM), "api/AltaProveeduria");
 
                                     if (eliminar.IsSuccess)
                                     {
@@ -1169,7 +1169,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 lista = await apiServicio.Listar<MaestroArticuloSucursal>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "/api/MaestroArticuloSucursal/ListarMaestroArticuloSucursal");
+                                                                    , "api/MaestroArticuloSucursal/ListarMaestroArticuloSucursal");
                 return View("IngresarFacturas", lista);
             }
             catch (Exception ex)
@@ -1209,14 +1209,14 @@ namespace bd.webapprm.web.Controllers.MVC
                 Response response = new Response();
 
                 response = await apiServicio.InsertarAsync(factura, new Uri(WebApp.BaseAddressRM)
-                                                                    , "/api/Factura/InsertarFactura");
+                                                                    , "api/Factura/InsertarFactura");
 
                 if (response.IsSuccess)
                 {
                     try
                     {
                         var respuesta = await apiServicio.SeleccionarAsync<Response>(numero, new Uri(WebApp.BaseAddressRM),
-                                                                                        "/api/Factura/FacturaPorNumero");
+                                                                                        "api/Factura/FacturaPorNumero");
 
                         respuesta.Resultado = JsonConvert.DeserializeObject<Factura>(respuesta.Resultado.ToString());
 
@@ -1229,7 +1229,7 @@ namespace bd.webapprm.web.Controllers.MVC
                             detalleFactura.Precio = precio;
 
                             response = await apiServicio.InsertarAsync(detalleFactura, new Uri(WebApp.BaseAddressRM)
-                                                                    , "/api/DetalleFactura/InsertarDetalleFactura");
+                                                                    , "api/DetalleFactura/InsertarDetalleFactura");
 
                             if (response.IsSuccess)
                             {
@@ -1289,14 +1289,14 @@ namespace bd.webapprm.web.Controllers.MVC
             var detalleFactura = new DetalleFactura();
             try
             {
-                var listaProveedor = await apiServicio.Listar<Proveedor>(new Uri(WebApp.BaseAddressRM), "/api/Proveedor/ListarProveedores");
+                var listaProveedor = await apiServicio.Listar<Proveedor>(new Uri(WebApp.BaseAddressRM), "api/Proveedor/ListarProveedores");
                 var tlistaProveedor = listaProveedor.Select(c => new { IdProveedor = c.IdProveedor, NombreApellidos = String.Format("{0} {1}", c.Nombre, c.Apellidos) });
                 ViewData["listaProveedor"] = new SelectList(tlistaProveedor, "IdProveedor", "NombreApellidos");
 
                 try
                 {
                     var listaArticulos = new SelectList(await apiServicio.Listar<Articulo>(new Uri(WebApp.BaseAddressRM)
-                                                                        , "/api/Articulo/ListarArticulos"), "IdArticulo", "Nombre");
+                                                                        , "api/Articulo/ListarArticulos"), "IdArticulo", "Nombre");
                     ViewBag.listaArticulos = listaArticulos;
                     ViewBag.ID = ID;
 
@@ -1340,7 +1340,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "/api/RecepcionArticulo/ListarRecepcionArticulos");
+                                                                    , "api/RecepcionArticulo/ListarRecepcionArticulos");
 
                 var listaArticulosRecepcionados = lista.Select(c => c).ToList();
 
@@ -1365,7 +1365,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var respuesta = await apiServicio.SeleccionarAsync<Response>(ID.ToString(), new Uri(WebApp.BaseAddressRM), "/api/RecepcionArticulo");
+                var respuesta = await apiServicio.SeleccionarAsync<Response>(ID.ToString(), new Uri(WebApp.BaseAddressRM), "api/RecepcionArticulo");
 
                 respuesta.Resultado = JsonConvert.DeserializeObject<RecepcionArticulos>(respuesta.Resultado.ToString());
 
@@ -1399,7 +1399,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                List<SolicitudProveduriaDetalle> respuesta = await apiServicio.Listar<SolicitudProveduriaDetalle>(new Uri(WebApp.BaseAddressRM), "/api/SolicitudDetalleProveeduria/ListarSolicitudProveeduriasDetalle");
+                List<SolicitudProveduriaDetalle> respuesta = await apiServicio.Listar<SolicitudProveduriaDetalle>(new Uri(WebApp.BaseAddressRM), "api/SolicitudDetalleProveeduria/ListarSolicitudProveeduriasDetalle");
 
                 return View("SolicitudesDeBaja", respuesta);
             }
@@ -1425,7 +1425,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var respuesta = await apiServicio.SeleccionarAsync<Response>(ID.ToString(), new Uri(WebApp.BaseAddressRM), "/api/SolicitudDetalleProveeduria");
+                var respuesta = await apiServicio.SeleccionarAsync<Response>(ID.ToString(), new Uri(WebApp.BaseAddressRM), "api/SolicitudDetalleProveeduria");
 
                 respuesta.Resultado = JsonConvert.DeserializeObject<SolicitudProveduriaDetalle>(respuesta.Resultado.ToString());
 
@@ -1438,7 +1438,7 @@ namespace bd.webapprm.web.Controllers.MVC
                     solProvDet.IdEstado = 9;
 
                     respuesta = await apiServicio.EditarAsync(ID.ToString(), solProvDet,
-                                                            new Uri(WebApp.BaseAddressRM), "/api/SolicitudDetalleProveeduria");
+                                                            new Uri(WebApp.BaseAddressRM), "api/SolicitudDetalleProveeduria");
 
                     if (respuesta.IsSuccess)
                     {
@@ -1474,7 +1474,7 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 SolicitudProveduria solProv = new SolicitudProveduria { IdEmpleado = int.Parse(Request.Form["Empleado.IdEmpleado"].ToString()) };
 
-                var respuesta = await apiServicio.InsertarAsync(solProv, new Uri(WebApp.BaseAddressRM), "/api/SolicitudProveeduria/InsertarSolicitudProveeduria");
+                var respuesta = await apiServicio.InsertarAsync(solProv, new Uri(WebApp.BaseAddressRM), "api/SolicitudProveeduria/InsertarSolicitudProveeduria");
 
                 if (respuesta.IsSuccess)
                 {
@@ -1495,7 +1495,7 @@ namespace bd.webapprm.web.Controllers.MVC
                     solProvDetalle.IdMaestroArticuloSucursal = int.Parse(Request.Form["IdMaestroArticuloSucursal"].ToString());
                     solProvDetalle.IdSolicitudProveduria = solProv.IdSolicitudProveduria;
 
-                    respuesta = await apiServicio.InsertarAsync(solProvDetalle, new Uri(WebApp.BaseAddressRM), "/api/SolicitudDetalleProveeduria/InsertarSolicitudProveeduriaDetalle");
+                    respuesta = await apiServicio.InsertarAsync(solProvDetalle, new Uri(WebApp.BaseAddressRM), "api/SolicitudDetalleProveeduria/InsertarSolicitudProveeduriaDetalle");
 
                     //debe ir if (respuesta.IsSucces)
 

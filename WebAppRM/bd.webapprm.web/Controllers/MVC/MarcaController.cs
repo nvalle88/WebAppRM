@@ -38,7 +38,7 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 response = await apiServicio.InsertarAsync(marca,
                                                              new Uri(WebApp.BaseAddressRM),
-                                                             "/api/Marca/InsertarMarca");
+                                                             "api/Marca/InsertarMarca");
                 if (response.IsSuccess)
                 {
 
@@ -83,7 +83,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 if (!string.IsNullOrEmpty(id))
                 {
                     var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddressRM),
-                                                                  "/api/Marca");
+                                                                  "api/Marca");
 
 
                     respuesta.Resultado = JsonConvert.DeserializeObject<Marca>(respuesta.Resultado.ToString());
@@ -112,7 +112,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 if (!string.IsNullOrEmpty(id))
                 {
                     response = await apiServicio.EditarAsync(id, marca, new Uri(WebApp.BaseAddressRM),
-                                                                 "/api/Marca");
+                                                                 "api/Marca");
 
                     if (!response.IsSuccess)
                     {
@@ -157,7 +157,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 lista = await apiServicio.Listar<Marca>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "/api/Marca/ListarMarca");
+                                                                    , "api/Marca/ListarMarca");
                 return View(lista);
             }
             catch (Exception ex)
@@ -181,7 +181,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddressRM)
-                                                               , "/api/Marca");
+                                                               , "api/Marca");
                 if (response.IsSuccess)
                 {
                     await GuardarLogService.SaveLogEntry(new LogEntryTranfer

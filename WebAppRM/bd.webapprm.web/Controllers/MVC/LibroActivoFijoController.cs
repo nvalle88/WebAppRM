@@ -38,7 +38,7 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 response = await apiServicio.InsertarAsync(LibroActivoFijo,
                                                              new Uri(WebApp.BaseAddressRM),
-                                                             "/api/LibroActivoFijo/InsertarLibroActivoFijo");
+                                                             "api/LibroActivoFijo/InsertarLibroActivoFijo");
                 if (response.IsSuccess)
                 {
 
@@ -83,7 +83,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 if (!string.IsNullOrEmpty(id))
                 {
                     var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddressRM),
-                                                                  "/api/LibroActivoFijo");
+                                                                  "api/LibroActivoFijo");
 
 
                     respuesta.Resultado = JsonConvert.DeserializeObject<LibroActivoFijo>(respuesta.Resultado.ToString());
@@ -112,7 +112,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 if (!string.IsNullOrEmpty(id))
                 {
                     response = await apiServicio.EditarAsync(id, LibroActivoFijo, new Uri(WebApp.BaseAddressRM),
-                                                                 "/api/LibroActivoFijo");
+                                                                 "api/LibroActivoFijo");
 
                     if (!response.IsSuccess)
                     {
@@ -157,7 +157,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 lista = await apiServicio.Listar<LibroActivoFijo>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "/api/LibroActivoFijo/ListarLibrosActivoFijo");
+                                                                    , "api/LibroActivoFijo/ListarLibrosActivoFijo");
                 return View(lista);
             }
             catch (Exception ex)
@@ -181,7 +181,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddressRM)
-                                                               , "/api/LibroActivoFijo");
+                                                               , "api/LibroActivoFijo");
                 if (response.IsSuccess)
                 {
                     await GuardarLogService.SaveLogEntry(new LogEntryTranfer
