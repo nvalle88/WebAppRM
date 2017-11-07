@@ -294,27 +294,11 @@ namespace bd.webapprm.web.Controllers.MVC
         #region Reportes
         public async Task<IActionResult> ProveeduriaReporteAltas()
         {
-            var articulos = new List<RecepcionArticulos>();
-            var altas = new List<AltaProveeduria>();
+            var lista = new List<RecepcionArticulos>();
             try
             {
-                articulos = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "api/RecepcionArticulos/ListarRecepcionArticulos");
-                altas = await apiServicio.Listar<AltaProveeduria>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "api/AltaProveeduria/ListarAltasProveeduria");                  
-                var lista = new List<RecepcionArticulos>();
-
-                foreach (var articulo in articulos)
-                {
-                    foreach (var alta in altas)
-                    {
-                        if (articulo.IdArticulo == alta.IdArticulo)
-                        {
-                            lista.Add(articulo);
-                        }
-                    }
-                }
-                lista = lista.Where(c => c.IdArticulo != c.MaestroArticuloSucursal.SolicitudProveduriaDetalle.First(x => x.IdArticulo == c.IdArticulo).IdArticulo).ToList();
+                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
+                                                                    , "api/RecepcionArticulos/ListarRecepcionAltas");
                 return View(lista);
             }
             catch (Exception ex)
@@ -337,11 +321,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "api/RecepcionArticulos/ListarRecepcionArticulos");                
-                lista = lista
-                    .Where(c => c.IdArticulo == c.MaestroArticuloSucursal.SolicitudProveduriaDetalle.First(x => x.IdArticulo == c.IdArticulo).IdArticulo)
-                    .Where(x => x.MaestroArticuloSucursal.SolicitudProveduriaDetalle.First(z => z.IdArticulo == x.IdArticulo).Estado.Nombre == "Aprobada")
-                    .ToList();
+                                                                    , "api/RecepcionArticulos/ListarRecepcionBajas");
                 return View(lista);
             }
             catch (Exception ex)
