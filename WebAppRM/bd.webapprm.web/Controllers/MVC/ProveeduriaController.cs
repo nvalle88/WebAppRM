@@ -298,7 +298,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "api/RecepcionArticulos/ListarRecepcionAltas");
+                                                                    , "api/RecepcionArticulo/ListarRecepcionAltas");
                 return View(lista);
             }
             catch (Exception ex)
@@ -321,7 +321,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "api/RecepcionArticulos/ListarRecepcionBajas");
+                                                                    , "api/RecepcionArticulo/ListarRecepcionBajas");
                 return View(lista);
             }
             catch (Exception ex)
