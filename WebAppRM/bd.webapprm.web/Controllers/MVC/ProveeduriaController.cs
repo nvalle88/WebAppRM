@@ -1330,20 +1330,16 @@ namespace bd.webapprm.web.Controllers.MVC
             }
         }
 
-        public async Task<IActionResult> FormularioBajaArticulo(int ID)
+        public async Task<IActionResult> FormularioBajaArticulo(int id)
         {
             try
             {
-                var respuesta = await apiServicio.SeleccionarAsync<Response>(ID.ToString(), new Uri(WebApp.BaseAddressRM), "api/RecepcionArticulo");
-
+                var respuesta = await apiServicio.SeleccionarAsync<Response>(id.ToString(), new Uri(WebApp.BaseAddressRM), "api/RecepcionArticulo");
                 respuesta.Resultado = JsonConvert.DeserializeObject<RecepcionArticulos>(respuesta.Resultado.ToString());
-
                 RecepcionArticulos RecepcionArticulos = respuesta.Resultado as RecepcionArticulos;
 
                 if (respuesta.IsSuccess)
-                {
                     return View("FormularioBajaArticulo", RecepcionArticulos);
-                }
             }
             catch (Exception ex)
             {
@@ -1356,12 +1352,34 @@ namespace bd.webapprm.web.Controllers.MVC
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP WebAppTh"
                 });
-
-                return BadRequest();
             }
+            return BadRequest();
+        }
 
-            return View();
+        public async Task<IActionResult> FormularioBajaArticuloDirecto(int id)
+        {
+            try
+            {
+                var respuesta = await apiServicio.SeleccionarAsync<Response>(id.ToString(), new Uri(WebApp.BaseAddressRM), "api/RecepcionArticulo");
+                respuesta.Resultado = JsonConvert.DeserializeObject<RecepcionArticulos>(respuesta.Resultado.ToString());
+                RecepcionArticulos RecepcionArticulos = respuesta.Resultado as RecepcionArticulos;
 
+                if (respuesta.IsSuccess)
+                    return View(RecepcionArticulos);
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                {
+                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                    Message = "Listando un objeto de RecepcionArticulos",
+                    ExceptionTrace = ex,
+                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
+                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                    UserName = "Usuario APP WebAppTh"
+                });
+            }
+            return BadRequest();
         }
 
         public async Task<IActionResult> ListarSolicitudesDeBaja()
@@ -1486,7 +1504,31 @@ namespace bd.webapprm.web.Controllers.MVC
                 await GuardarLogService.SaveLogEntry(new LogEntryTranfer
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Listando un objeto de RecepcionArticulos",
+                    Message = "Dando baja a un Artículo",
+                    ExceptionTrace = ex,
+                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
+                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                    UserName = "Usuario APP WebAppTh"
+                });
+
+                return BadRequest();
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> GuardarSolicitudBajaArticuloDirecto(RecepcionArticulos recepcionArticulos)
+        {
+            try
+            {
+                return View();
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                {
+                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                    Message = "Dando baja a un Artículo",
                     ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),

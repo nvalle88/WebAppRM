@@ -42,5 +42,7 @@ namespace bd.webapprm.entidades
 
         public virtual ICollection<TranferenciaArticulo> TranferenciaArticulo { get; set; }
 
+        public virtual ExistenciaArticuloProveeduria ExistenciaArticuloProveeduria { get; set; }
+
     }
 }

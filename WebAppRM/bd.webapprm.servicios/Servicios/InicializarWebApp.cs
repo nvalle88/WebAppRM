@@ -28,8 +28,9 @@ namespace bd.webapprm.servicios.Servicios
         {
             try
             {
-                var sistema = await ObtenerHostSistema(id, new Uri("http://carlos/swSeguridad/"));
-                WebApp.BaseAddressRM = sistema.AdstHost;
+                //var sistema = await ObtenerHostSistema(id, new Uri("http://carlos/swSeguridad/"));
+                //WebApp.BaseAddressRM = sistema.AdstHost;
+                WebApp.BaseAddressRM = "http://localhost:5000";
             }
             catch (Exception)
             { }
