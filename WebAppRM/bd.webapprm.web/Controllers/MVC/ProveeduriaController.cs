@@ -298,7 +298,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "api/RecepcionArticulo/ListarRecepcionAltas");
+                                                                    , "api/ProveeduriaReportes/ProveeduriaAltasReporte");
                 return View(lista);
             }
             catch (Exception ex)
@@ -321,7 +321,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "api/RecepcionArticulo/ListarRecepcionBajas");
+                                                                    , "api/ProveeduriaReportes/ProveeduriaBajasReporte");
                 return View(lista);
             }
             catch (Exception ex)
@@ -340,11 +340,11 @@ namespace bd.webapprm.web.Controllers.MVC
         }
         public async Task<IActionResult> EstadisticasConsumoAreaReporte()
         {
-            var lista = new List<SolicitudProveeduriaDetalle>();
+            var lista = new List<RecepcionArticulos>();
             try
             {
-                lista = await apiServicio.Listar<SolicitudProveeduriaDetalle>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "api/SolicitudProveeduriaDetalle/ListarSolicitudProveeduriasDetalle");
+                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
+                                                                    , "api/ProveeduriaReportes/EstadisticasConsumoAreaReporte");
                 return View(lista);
             }
             catch (Exception ex)
@@ -363,13 +363,13 @@ namespace bd.webapprm.web.Controllers.MVC
         }
         public async Task<IActionResult> AlertaVencimientoReporte()
         {
-            var lista = new List<SolicitudProveeduriaDetalle>();
+            var lista = new List<RecepcionArticulos>();
             try
             {
-                lista = await apiServicio.Listar<SolicitudProveeduriaDetalle>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "api/SolicitudProveeduriaDetalle/ListarSolicitudProveeduriasDetalle");
+                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
+                                                                    , "api/ProveeduriaReportes/AlertaVencimientoReporte");
 
-                var listaMinimos = lista.Where(c => c.CantidadAprobada <= c.MaestroArticuloSucursal.Minimo).ToList();
+                var listaMinimos = lista.Where(c => c.Cantidad <= c.MaestroArticuloSucursal.Minimo).ToList();
 
                 return View(listaMinimos);
             }
@@ -393,7 +393,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 lista = await apiServicio.Listar<SolicitudProveeduriaDetalle>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "api/SolicitudProveeduriaDetalle/ListarSolicitudProveeduriasDetalle");
+                                                                    , "api/ProveeduriaReportes/ConsolidadoInventarioReporte");
                 return View(lista);
             }
             catch (Exception ex)
@@ -416,7 +416,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 lista = await apiServicio.Listar<SolicitudProveeduriaDetalle>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "api/SolicitudProveeduriaDetalle/ListarSolicitudProveeduriasDetalle");
+                                                                    , "api/ProveeduriaReportes/ConsolidadoSolicitudReporte");
                 return View(lista);
             }
             catch (Exception ex)
@@ -435,29 +435,11 @@ namespace bd.webapprm.web.Controllers.MVC
         }
         public async Task<IActionResult> MinMaxReporte()
         {
-            var articulos = new List<RecepcionArticulos>();
-            var solic = new List<SolicitudProveeduriaDetalle>();
+            var lista = new List<RecepcionArticulos>();
             try
             {
-                articulos = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "api/RecepcionArticulos/ListarRecepcionArticulos");
-                solic = await apiServicio.Listar<SolicitudProveeduriaDetalle>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "api/SolicitudProveeduriaDetalle/ListarSolicitudProveeduriasDetalle");
-                var solicitudes = solic.Where(c => c.CantidadAprobada <= c.MaestroArticuloSucursal.Minimo).ToList().Union(
-                                  solic.Where(c => c.CantidadAprobada >= c.MaestroArticuloSucursal.Maximo).ToList());
-
-                var lista = new List<RecepcionArticulos>();
-
-                foreach (var articulo in articulos)
-                {
-                    foreach (var solicitud in solicitudes)
-                    {
-                        if (articulo.IdArticulo == solicitud.IdArticulo)
-                        {
-                            lista.Add(articulo);
-                        }
-                    }
-                }
+                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
+                                                                    , "api/ProveeduriaReportes/ProveeduriaMinMaxReporte");
 
                 return View(lista);
             }
@@ -466,7 +448,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 await GuardarLogService.SaveLogEntry(new LogEntryTranfer
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Listando Artículos Mínimos y Máximos",
+                    Message = "Listando Artículos Mínimos",
                     ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
@@ -475,6 +457,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 return BadRequest();
             }
         }
+        
         #endregion
 
         #region AJAX_ClaseArticulo
