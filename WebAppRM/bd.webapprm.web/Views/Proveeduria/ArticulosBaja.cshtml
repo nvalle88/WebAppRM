@@ -82,13 +82,14 @@
                                                 @Html.DisplayFor(modelItem => item.Cantidad)        
                                             </td>
                                             <td>
-                                                <a href="#" >@Html.ActionLink("Solicitar Baja", "FormularioBajaArticulo", "Proveeduria", new { ID = item.IdRecepcionArticulos})</a>
+                                                @Html.ActionLink("Solicitar", "FormularioBajaArticulo", "Proveeduria", new { ID = item.IdRecepcionArticulos }) |
+                                                @Html.ActionLink("Dar Baja", "FormularioBajaArticuloDirecto", routeValues: new { ID = item.IdRecepcionArticulos })
                                             </td>
                                             <td hidden>
                                                 @item.IdRecepcionArticulos
                                             </td>
                                         </tr>
-                                                    }
+                                    }
                                 </tbody>
                             </table>
                         </div>
