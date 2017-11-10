@@ -48,8 +48,8 @@ namespace bd.webapprm.entidades
         public int IdProveedor { get; set; }
         public virtual Proveedor Proveedor { get; set; }
 
-        
 
+        public virtual ICollection<AltaProveeduria> AltaProveeduria { get; set; }
 
 
     }
