@@ -340,10 +340,10 @@ namespace bd.webapprm.web.Controllers.MVC
         }
         public async Task<IActionResult> EstadisticasConsumoAreaReporte()
         {
-            var lista = new List<RecepcionArticulos>();
+            var lista = new List<SolicitudProveeduriaDetalle>();
             try
             {
-                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
+                lista = await apiServicio.Listar<SolicitudProveeduriaDetalle>(new Uri(WebApp.BaseAddressRM)
                                                                     , "api/ProveeduriaReportes/EstadisticasConsumoAreaReporte");
                 return View(lista);
             }
@@ -368,10 +368,7 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
                                                                     , "api/ProveeduriaReportes/AlertaVencimientoReporte");
-
-                var listaMinimos = lista.Where(c => c.Cantidad <= c.MaestroArticuloSucursal.Minimo).ToList();
-
-                return View(listaMinimos);
+                return View(lista);
             }
             catch (Exception ex)
             {
@@ -440,7 +437,6 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
                                                                     , "api/ProveeduriaReportes/ProveeduriaMinMaxReporte");
-
                 return View(lista);
             }
             catch (Exception ex)
