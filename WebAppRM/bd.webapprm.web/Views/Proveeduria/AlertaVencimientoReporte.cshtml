@@ -1,4 +1,4 @@
-@model List<bd.webapprm.entidades.SolicitudProveeduriaDetalle>
+@model List<bd.webapprm.entidades.RecepcionArticulos>
 
 @{
     ViewData["Title"] = "AlertaVencimiento";
@@ -98,18 +98,18 @@
                                                 </td>
 
                                                 <td>
-                                                    @Html.DisplayFor(modelItem => item.Articulo.RecepcionArticulos.FirstOrDefault(c => c.IdArticulo == item.IdArticulo).Fecha)
+                                                    @Html.DisplayFor(modelItem => item.Fecha)
                                                 </td>
 
                                                 <td>
-                                                    @{ await ViewContext.Writer.WriteAsync(String.Format("{0} {1}", item.Articulo.RecepcionArticulos.FirstOrDefault(c => c.IdArticulo == item.IdArticulo).Proveedor.Nombre, item.Articulo.RecepcionArticulos.FirstOrDefault(c => c.IdArticulo == item.IdArticulo).Proveedor.Apellidos));}
+                                                    @{ await ViewContext.Writer.WriteAsync(String.Format("{0} {1}", item.Proveedor.Nombre, item.Proveedor.Apellidos));}
                                                 </td>
 
                                                 <td>
-                                                    @{ await ViewContext.Writer.WriteAsync(String.Format("{0} {1}", item.Articulo.RecepcionArticulos.FirstOrDefault(c => c.IdArticulo == item.IdArticulo).Empleado.Persona.Nombres, item.Articulo.RecepcionArticulos.FirstOrDefault(c => c.IdArticulo == item.IdArticulo).Empleado.Persona.Apellidos));}
+                                                    @{ await ViewContext.Writer.WriteAsync(String.Format("{0} {1}", item.Empleado.Persona.Nombres, item.Empleado.Persona.Apellidos));}
                                                 </td>
                                                 <td>
-                                                    @Html.DisplayFor(modelItem => item.Articulo.RecepcionArticulos.FirstOrDefault(c => c.IdArticulo == item.IdArticulo).Cantidad)
+                                                    @Html.DisplayFor(modelItem => item.Cantidad)
                                                 </td>
                                             </tr>
                                                         }
