@@ -1288,11 +1288,9 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "api/RecepcionArticulo/ListarRecepcionArticulos");
+                                                                    , "api/RecepcionArticulo/ListarArticulosAlta");
 
-                var listaArticulosRecepcionados = lista.Select(c => c).ToList();
-
-                return View("ArticulosBaja", listaArticulosRecepcionados);
+                return View("ArticulosBaja", lista);
             }
             catch (Exception ex)
             {
@@ -1343,6 +1341,15 @@ namespace bd.webapprm.web.Controllers.MVC
                 respuesta.Resultado = JsonConvert.DeserializeObject<RecepcionArticulos>(respuesta.Resultado.ToString());
                 RecepcionArticulos RecepcionArticulos = respuesta.Resultado as RecepcionArticulos;
 
+                var response = await apiServicio.SeleccionarAsync<Response>(RecepcionArticulos.IdArticulo.ToString(), new Uri(WebApp.BaseAddressRM), "api/ExistenciaArticuloProveeduria");
+                if (response.IsSuccess)
+                {
+                    var existenciaArticuloProveeduria = JsonConvert.DeserializeObject<ExistenciaArticuloProveeduria>(response.Resultado.ToString());
+                    ViewBag.CantidadMaxima = existenciaArticuloProveeduria.Existencia;
+                }
+                else
+                    return BadRequest();
+                
                 if (respuesta.IsSuccess)
                     return View(RecepcionArticulos);
             }
@@ -1500,7 +1507,15 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                return View();
+                var response = await apiServicio.SeleccionarAsync<Response>(recepcionArticulos.IdArticulo.ToString(), new Uri(WebApp.BaseAddressRM), "api/ExistenciaArticuloProveeduria");
+                if (response.IsSuccess)
+                {
+                    var existenciaArticuloProveeduria = JsonConvert.DeserializeObject<ExistenciaArticuloProveeduria>(response.Resultado.ToString());
+                    existenciaArticuloProveeduria.Existencia -= recepcionArticulos.Cantidad;
+                    await apiServicio.EditarAsync<ExistenciaArticuloProveeduria>(recepcionArticulos.IdArticulo.ToString(), existenciaArticuloProveeduria, new Uri(WebApp.BaseAddressRM), "api/ExistenciaArticuloProveeduria");
+                    return RedirectToAction("ArticulosADarBaja");
+                }
+                return View(recepcionArticulos);
             }
             catch (Exception ex)
             {
@@ -1513,7 +1528,6 @@ namespace bd.webapprm.web.Controllers.MVC
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP WebAppTh"
                 });
-
                 return BadRequest();
             }
         }

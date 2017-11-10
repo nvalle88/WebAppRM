@@ -28,16 +28,7 @@
                                             Sub Clase
                                         </th>
                                         <th>
-                                            Fecha de Recepci&oacute;n
-                                        </th>
-                                        <th>
-                                            Proveedor
-                                        </th>
-                                        <th>
-                                            Empleado
-                                        </th>
-                                        <th>
-                                            Cantidad
+                                            Existencia
                                         </th>
                                         <th>
                                             Opciones
@@ -65,21 +56,9 @@
                                             
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.Articulo.SubClaseArticulo.Nombre)
-                                            </td>
-
+                                            </td>                                       
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.Fecha)
-                                            </td>
-
-                                            <td>
-                                                @{ await ViewContext.Writer.WriteAsync(String.Format("{0} {1}", item.Proveedor.Nombre, item.Proveedor.Apellidos));}
-                                            </td>
-
-                                            <td>
-                                                @{ await ViewContext.Writer.WriteAsync(String.Format("{0} {1}", item.Empleado.Persona.Nombres, item.Empleado.Persona.Apellidos));}
-                                            </td>                                            
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Cantidad)        
+                                                @Html.DisplayFor(modelItem => item.Cantidad)
                                             </td>
                                             <td>
                                                 @Html.ActionLink("Solicitar", "FormularioBajaArticulo", "Proveeduria", new { ID = item.IdRecepcionArticulos }) |
