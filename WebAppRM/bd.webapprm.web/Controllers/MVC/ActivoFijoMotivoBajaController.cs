@@ -37,8 +37,8 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 response = await apiServicio.InsertarAsync(ActivoFijoMotivoBaja,
-                                                             new Uri(WebApp.BaseAddress),
-                                                             "/api/ActivoFijoMotivoBaja/InsertarActivoFijoMotivoBaja");
+                                                             new Uri(WebApp.BaseAddressRM),
+                                                             "api/ActivoFijoMotivoBaja/InsertarActivoFijoMotivoBaja");
                 if (response.IsSuccess)
                 {
 
@@ -82,8 +82,8 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddress),
-                                                                  "/api/ActivoFijoMotivoBaja");
+                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddressRM),
+                                                                  "api/ActivoFijoMotivoBaja");
 
 
                     respuesta.Resultado = JsonConvert.DeserializeObject<ActivoFijoMotivoBaja>(respuesta.Resultado.ToString());
@@ -111,8 +111,8 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    response = await apiServicio.EditarAsync(id, ActivoFijoMotivoBaja, new Uri(WebApp.BaseAddress),
-                                                                 "/api/ActivoFijoMotivoBaja");
+                    response = await apiServicio.EditarAsync(id, ActivoFijoMotivoBaja, new Uri(WebApp.BaseAddressRM),
+                                                                 "api/ActivoFijoMotivoBaja");
 
                     if (response.IsSuccess)
                     {
@@ -153,8 +153,8 @@ namespace bd.webapprm.web.Controllers.MVC
             var lista = new List<ActivoFijoMotivoBaja>();
             try
             {
-                lista = await apiServicio.Listar<ActivoFijoMotivoBaja>(new Uri(WebApp.BaseAddress)
-                                                                    , "/api/ActivoFijoMotivoBaja/ListarActivoFijoMotivoBaja");
+                lista = await apiServicio.Listar<ActivoFijoMotivoBaja>(new Uri(WebApp.BaseAddressRM)
+                                                                    , "api/ActivoFijoMotivoBaja/ListarActivoFijoMotivoBaja");
                 return View(lista);
             }
             catch (Exception ex)
@@ -177,8 +177,8 @@ namespace bd.webapprm.web.Controllers.MVC
 
             try
             {
-                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddress)
-                                                               , "/api/ActivoFijoMotivoBaja");
+                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddressRM)
+                                                               , "api/ActivoFijoMotivoBaja");
                 if (response.IsSuccess)
                 {
                     await GuardarLogService.SaveLogEntry(new LogEntryTranfer

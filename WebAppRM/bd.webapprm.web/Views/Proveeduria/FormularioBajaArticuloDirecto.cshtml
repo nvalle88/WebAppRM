@@ -1,0 +1,64 @@
+﻿@model bd.webapprm.entidades.RecepcionArticulos
+<link rel="stylesheet" href="~/lib/jquery.spinner-master/dist/css/bootstrap-spinner.min.css" />
+<div id="content">
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-sm-12 col-md-12 col-lg-6">
+                <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+                        <h2>Formulario de Bajas a Art&iacute;culos de Proveedur&iacute;as</h2>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox">
+                        </div>
+                        <div class="widget-body no-padding">
+                            <form asp-action="GuardarSolicitudBajaArticuloDirecto" controller="Proveeduria" id="checkout-form" class="smart-form" novalidate="novalidate">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <fieldset>
+                                    <input type="hidden" asp-for="IdArticulo" />
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="Articulo.Nombre">Art&iacute;culo</label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <input maxlength="32" asp-for="Articulo.Nombre" class="form-control" disabled="disabled" />
+                                                <span asp-validation-for="Articulo.Nombre" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label>Cantidad Solicitada</label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <div class="input-group spinner" data-trigger="spinner">
+                                                <input type="text" asp-for="Cantidad" class="form-control" data-rule="quantity" style="padding-left:10px !important;" data-max="@ViewBag.CantidadMaxima" />
+                                                <div class="input-group-addon" style="padding-left:23px !important;">
+                                                    <a href="javascript:;" class="spin-up" data-spin="up"><i class="fa fa-caret-up"></i></a>
+                                                    <a href="javascript:;" class="spin-down" data-spin="down"><i class="fa fa-caret-down"></i></a>
+                                                </div>
+                                            </div>
+                                            <span asp-validation-for="Cantidad" class="text-danger"></span>
+                                        </section>
+                                    </div>
+                                </fieldset>
+                                <footer>
+                                    <span class="text-danger">@ViewData["Error"]</span>
+                                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                                    <a asp-action="ArticulosADarBaja" controller="Proveeduria" class="btn btn-default">Cancelar</a>
+                                </footer>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+@section Scripts{
+    <script src='~/lib/jquery.spinner-master/dist/js/jquery.spinner.min.js'></script>
+}

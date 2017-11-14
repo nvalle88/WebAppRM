@@ -37,8 +37,8 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 response = await apiServicio.InsertarAsync(motivoTransferencia,
-                                                             new Uri(WebApp.BaseAddress),
-                                                             "/api/MotivoTransferencia/InsertarMotivoTransferencia");
+                                                             new Uri(WebApp.BaseAddressRM),
+                                                             "api/MotivoTransferencia/InsertarMotivoTransferencia");
                 if (response.IsSuccess)
                 {
 
@@ -82,8 +82,8 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddress),
-                                                                  "/api/MotivoTransferencia");
+                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddressRM),
+                                                                  "api/MotivoTransferencia");
 
 
                     respuesta.Resultado = JsonConvert.DeserializeObject<MotivoTransferencia>(respuesta.Resultado.ToString());
@@ -111,8 +111,8 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    response = await apiServicio.EditarAsync(id, motivoTransferencia, new Uri(WebApp.BaseAddress),
-                                                                 "/api/MotivoTransferencia");
+                    response = await apiServicio.EditarAsync(id, motivoTransferencia, new Uri(WebApp.BaseAddressRM),
+                                                                 "api/MotivoTransferencia");
 
                     if (!response.IsSuccess)
                     {
@@ -156,8 +156,8 @@ namespace bd.webapprm.web.Controllers.MVC
             var lista = new List<MotivoTransferencia>();
             try
             {
-                lista = await apiServicio.Listar<MotivoTransferencia>(new Uri(WebApp.BaseAddress)
-                                                                    , "/api/MotivoTransferencia/ListarMotivoTransferencia");
+                lista = await apiServicio.Listar<MotivoTransferencia>(new Uri(WebApp.BaseAddressRM)
+                                                                    , "api/MotivoTransferencia/ListarMotivoTransferencia");
                 return View(lista);
             }
             catch (Exception ex)
@@ -180,8 +180,8 @@ namespace bd.webapprm.web.Controllers.MVC
 
             try
             {
-                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddress)
-                                                               , "/api/MotivoTransferencia");
+                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddressRM)
+                                                               , "api/MotivoTransferencia");
                 if (response.IsSuccess)
                 {
                     await GuardarLogService.SaveLogEntry(new LogEntryTranfer

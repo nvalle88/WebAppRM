@@ -23,7 +23,7 @@
                                 <div class="padding-10">
                                     <br>
                                     <div class="pull-left">
-                                        <h1 style="font-size:260% !important;"><i class="fa fa-file-text-o"></i> Artículos en Baja</h1>
+                                        <h1 style="font-size:260% !important;"><i class="fa fa-file-text-o"></i> Art&iacute;culos en Baja</h1>
                                     </div>
                                     <div class="pull-right">
                                         <div class="row">
@@ -55,13 +55,25 @@
                                                     Art&iacute;culo
                                                 </th>
                                                 <th>
-                                                    Cantidad
+                                                    Modelo
                                                 </th>
                                                 <th>
-                                                    Fecha de recepci&oacute;n
+                                                    Clase
+                                                </th>
+                                                <th>
+                                                    Sub Clase
+                                                </th>
+                                                <th>
+                                                    Fecha de Recepci&oacute;n
                                                 </th>
                                                 <th>
                                                     Proveedor
+                                                </th>
+                                                <th>
+                                                    Empleado
+                                                </th>
+                                                <th>
+                                                    Cantidad
                                                 </th>
                                             </tr>
                                         </thead>
@@ -74,7 +86,15 @@
                                                     </td>
 
                                                     <td>
-                                                        @Html.DisplayFor(modelItem => item.Cantidad)
+                                                        @Html.DisplayFor(modelItem => item.Articulo.Modelo.Nombre)
+                                                    </td>
+
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Articulo.SubClaseArticulo.ClaseArticulo.Nombre)
+                                                    </td>
+
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Articulo.SubClaseArticulo.Nombre)
                                                     </td>
 
                                                     <td>
@@ -82,7 +102,14 @@
                                                     </td>
 
                                                     <td>
-                                                        @{ await ViewContext.Writer.WriteAsync(String.Format("{0} {1}", item.Proveedor.Nombre, item.Proveedor.Apellidos)); }
+                                                        @{ await ViewContext.Writer.WriteAsync(String.Format("{0} {1}", item.Proveedor.Nombre, item.Proveedor.Apellidos));}
+                                                    </td>
+
+                                                    <td>
+                                                        @{ await ViewContext.Writer.WriteAsync(String.Format("{0} {1}", item.Empleado.Persona.Nombres, item.Empleado.Persona.Apellidos));}
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.Cantidad)
                                                     </td>
                                                 </tr>
                                                             }
@@ -110,5 +137,5 @@
 
     @section Scripts{
         <script src="~/lib/TableTools-master/src/dataTables.tableTools.js"></script>
-        <script src="~/js/activoFijo/reportePolizas.js"></script>
+        <script src="~/js/proveeduria/agruparPorArticulo.js"></script>
     }

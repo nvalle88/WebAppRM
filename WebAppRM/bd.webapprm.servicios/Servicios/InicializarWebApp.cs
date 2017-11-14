@@ -9,32 +9,43 @@ namespace bd.webapprm.servicios.Servicios
     public class InicializarWebApp
     {
         #region Methods
+        private static async Task<Adscsist> ObtenerHostSistema(string id, Uri baseAddreess)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                client.BaseAddress = baseAddreess;
+                var url = string.Format("{0}/{1}", "api/Adscsists", id);
+                var respuesta = await client.GetAsync(url);
 
-        public static void Inicializar(string id)
+                var resultado = await respuesta.Content.ReadAsStringAsync();
+                var response = JsonConvert.DeserializeObject<Response>(resultado);
+                var sistema = JsonConvert.DeserializeObject<Adscsist>(response.Resultado.ToString());
+                return sistema;
+            }
+        }
+
+        public static async Task InicializarWebRecursosMateriales(string id)
         {
             try
             {
-                using (HttpClient client = new HttpClient())
-                {
-                    //client.BaseAddress = new Uri("http://localhost:53317");
-                    //var url = string.Format("{0}/{1}", "/api/Adscsists", id);
-                    //var respuesta = await client.GetAsync(url);
-
-                    //var resultado = await respuesta.Content.ReadAsStringAsync();
-                    //var response = JsonConvert.DeserializeObject<Response>(resultado);
-                    //var sistema = JsonConvert.DeserializeObject<Adscsist>(response.Resultado.ToString());
-                    WebApp.BaseAddress = "http://localhost:57258";
-
-                }
-
+                //var sistema = await ObtenerHostSistema(id, new Uri("http://carlos/swSeguridad/"));
+                //WebApp.BaseAddressRM = sistema.AdstHost;
+                WebApp.BaseAddressRM = "http://localhost:5000";
             }
-            catch (Exception ex)
-            {
-
-            }
-
+            catch (Exception)
+            { }
         }
 
+        public static async Task InicializarWebTalentoHumano(string id)
+        {
+            try
+            {
+                var sistema = await ObtenerHostSistema(id, new Uri("http://carlos/swSeguridad/"));
+                WebApp.BaseAddressTH = sistema.AdstHost;
+            }
+            catch (Exception)
+            { }
+        }
         #endregion
     }
 }

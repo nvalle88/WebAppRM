@@ -27,6 +27,7 @@ namespace bd.webapprm.entidades
 
         public virtual ICollection<DetalleFactura> DetalleFactura { get; set; }
 
+        public virtual ICollection<ActivosFijosAlta> ActivosFijosAlta { get; set; }
 
     }
 }

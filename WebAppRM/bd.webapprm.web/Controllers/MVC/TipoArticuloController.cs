@@ -28,8 +28,8 @@ namespace bd.webapprm.web.Controllers.MVC
             var lista = new List<TipoArticulo>();
             try
             {
-                lista = await apiServicio.Listar<TipoArticulo>(new Uri(WebApp.BaseAddress)
-                                                                    , "/api/TipoArticulo/ListarTipoArticulo");
+                lista = await apiServicio.Listar<TipoArticulo>(new Uri(WebApp.BaseAddressRM)
+                                                                    , "api/TipoArticulo/ListarTipoArticulo");
                 return View(lista);
             }
             catch (Exception ex)
@@ -60,8 +60,8 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 response = await apiServicio.InsertarAsync(tipoArticulo,
-                                                             new Uri(WebApp.BaseAddress),
-                                                             "/api/TipoArticulo/InsertarTipoArticulo");
+                                                             new Uri(WebApp.BaseAddressRM),
+                                                             "api/TipoArticulo/InsertarTipoArticulo");
                 if (response.IsSuccess)
                 {
 
@@ -105,8 +105,8 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddress),
-                                                                  "/api/TipoArticulo");
+                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddressRM),
+                                                                  "api/TipoArticulo");
 
 
                     respuesta.Resultado = JsonConvert.DeserializeObject<TipoArticulo>(respuesta.Resultado.ToString());                    
@@ -134,8 +134,8 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    response = await apiServicio.EditarAsync(id, tipoArticulo, new Uri(WebApp.BaseAddress),
-                                                                 "/api/TipoArticulo");
+                    response = await apiServicio.EditarAsync(id, tipoArticulo, new Uri(WebApp.BaseAddressRM),
+                                                                 "api/TipoArticulo");
 
                     if (response.IsSuccess)
                     {
@@ -176,8 +176,8 @@ namespace bd.webapprm.web.Controllers.MVC
 
             try
             {
-                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddress)
-                                                               , "/api/TipoArticulo");
+                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddressRM)
+                                                               , "api/TipoArticulo");
                 if (response.IsSuccess)
                 {
                     await GuardarLogService.SaveLogEntry(new LogEntryTranfer

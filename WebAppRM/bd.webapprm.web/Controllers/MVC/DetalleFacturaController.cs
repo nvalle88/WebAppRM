@@ -28,8 +28,8 @@ namespace bd.webapprm.web.Controllers.MVC
             var lista = new List<DetalleFactura>();
             try
             {
-                lista = await apiServicio.Listar<DetalleFactura>(new Uri(WebApp.BaseAddress)
-                                                                    , "/api/DetalleFactura/ListarDetallesFactura");
+                lista = await apiServicio.Listar<DetalleFactura>(new Uri(WebApp.BaseAddressRM)
+                                                                    , "api/DetalleFactura/ListarDetallesFactura");
                 return View(lista);
             }
             catch (Exception ex)
@@ -49,8 +49,8 @@ namespace bd.webapprm.web.Controllers.MVC
 
         public async Task<IActionResult> Create()
         {
-            ViewData["IdFactura"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<Factura>(new Uri(WebApp.BaseAddress), "/api/Factura/ListarFacturas"), "IdFactura", "Numero");
-            ViewData["IdArticulo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<Articulo>(new Uri(WebApp.BaseAddress), "/api/Articulo/ListarArticulos"), "IdArticulo", "Nombre");
+            ViewData["IdFactura"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<Factura>(new Uri(WebApp.BaseAddressRM), "api/Factura/ListarFacturas"), "IdFactura", "Numero");
+            ViewData["IdArticulo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<Articulo>(new Uri(WebApp.BaseAddressRM), "api/Articulo/ListarArticulos"), "IdArticulo", "Nombre");
             return View();
         }
 
@@ -62,8 +62,8 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 response = await apiServicio.InsertarAsync(detalleFactura,
-                                                             new Uri(WebApp.BaseAddress),
-                                                             "/api/DetalleFactura/InsertarDetalleFactura");
+                                                             new Uri(WebApp.BaseAddressRM),
+                                                             "api/DetalleFactura/InsertarDetalleFactura");
                 if (response.IsSuccess)
                 {
 
@@ -82,8 +82,8 @@ namespace bd.webapprm.web.Controllers.MVC
                 }
 
                 ViewData["Error"] = response.Message;
-                ViewData["IdFactura"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<Factura>(new Uri(WebApp.BaseAddress), "/api/Factura/ListarFacturas"), "IdFactura", "Numero");
-                ViewData["IdArticulo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<Articulo>(new Uri(WebApp.BaseAddress), "/api/Articulo/ListarArticulos"), "IdArticulo", "Nombre");
+                ViewData["IdFactura"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<Factura>(new Uri(WebApp.BaseAddressRM), "api/Factura/ListarFacturas"), "IdFactura", "Numero");
+                ViewData["IdArticulo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<Articulo>(new Uri(WebApp.BaseAddressRM), "api/Articulo/ListarArticulos"), "IdArticulo", "Nombre");
                 return View(detalleFactura);
 
             }
@@ -109,13 +109,13 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddress),
-                                                                  "/api/DetalleFactura");
+                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddressRM),
+                                                                  "api/DetalleFactura");
 
 
                     respuesta.Resultado = JsonConvert.DeserializeObject<DetalleFactura>(respuesta.Resultado.ToString());
-                    ViewData["IdFactura"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<Factura>(new Uri(WebApp.BaseAddress), "/api/Factura/ListarFacturas"), "IdFactura", "Numero");
-                    ViewData["IdArticulo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<Articulo>(new Uri(WebApp.BaseAddress), "/api/Articulo/ListarArticulos"), "IdArticulo", "Nombre");
+                    ViewData["IdFactura"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<Factura>(new Uri(WebApp.BaseAddressRM), "api/Factura/ListarFacturas"), "IdFactura", "Numero");
+                    ViewData["IdArticulo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<Articulo>(new Uri(WebApp.BaseAddressRM), "api/Articulo/ListarArticulos"), "IdArticulo", "Nombre");
                     if (respuesta.IsSuccess)
                     {
                         return View(respuesta.Resultado);
@@ -140,8 +140,8 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    response = await apiServicio.EditarAsync(id, detalleFactura, new Uri(WebApp.BaseAddress),
-                                                                 "/api/DetalleFactura");
+                    response = await apiServicio.EditarAsync(id, detalleFactura, new Uri(WebApp.BaseAddressRM),
+                                                                 "api/DetalleFactura");
 
                     if (response.IsSuccess)
                     {
@@ -160,8 +160,8 @@ namespace bd.webapprm.web.Controllers.MVC
 
                 }
                 ViewData["Error"] = response.Message;
-                ViewData["IdFactura"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<Factura>(new Uri(WebApp.BaseAddress), "/api/Factura/ListarFacturas"), "IdFactura", "Numero");
-                ViewData["IdArticulo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<Articulo>(new Uri(WebApp.BaseAddress), "/api/Articulo/ListarArticulos"), "IdArticulo", "Nombre");
+                ViewData["IdFactura"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<Factura>(new Uri(WebApp.BaseAddressRM), "api/Factura/ListarFacturas"), "IdFactura", "Numero");
+                ViewData["IdArticulo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<Articulo>(new Uri(WebApp.BaseAddressRM), "api/Articulo/ListarArticulos"), "IdArticulo", "Nombre");
                 return View(detalleFactura);
             }
             catch (Exception ex)
@@ -185,8 +185,8 @@ namespace bd.webapprm.web.Controllers.MVC
 
             try
             {
-                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddress)
-                                                               , "/api/DetalleFactura");
+                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddressRM)
+                                                               , "api/DetalleFactura");
                 if (response.IsSuccess)
                 {
                     await GuardarLogService.SaveLogEntry(new LogEntryTranfer

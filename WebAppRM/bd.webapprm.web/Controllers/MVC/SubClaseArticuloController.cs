@@ -29,8 +29,8 @@ namespace bd.webapprm.web.Controllers.MVC
             var lista = new List<SubClaseArticulo>();
             try
             {
-                lista = await apiServicio.Listar<SubClaseArticulo>(new Uri(WebApp.BaseAddress)
-                                                                    , "/api/SubClaseArticulo/ListarSubClaseArticulos");
+                lista = await apiServicio.Listar<SubClaseArticulo>(new Uri(WebApp.BaseAddressRM)
+                                                                    , "api/SubClaseArticulo/ListarSubClaseArticulos");
                 return View(lista);
             }
             catch (Exception ex)
@@ -50,7 +50,7 @@ namespace bd.webapprm.web.Controllers.MVC
 
         public async Task<IActionResult> Create()
         {
-            ViewData["IdClaseArticulo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<ClaseArticulo>(new Uri(WebApp.BaseAddress), "/api/ClaseArticulo/ListarClaseArticulo"), "IdClaseArticulo", "Nombre");
+            ViewData["IdClaseArticulo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<ClaseArticulo>(new Uri(WebApp.BaseAddressRM), "api/ClaseArticulo/ListarClaseArticulo"), "IdClaseArticulo", "Nombre");
             return View();
         }
 
@@ -62,8 +62,8 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 response = await apiServicio.InsertarAsync(subClaseArticulo,
-                                                             new Uri(WebApp.BaseAddress),
-                                                             "/api/SubClaseArticulo/InsertarSubClaseArticulo");
+                                                             new Uri(WebApp.BaseAddressRM),
+                                                             "api/SubClaseArticulo/InsertarSubClaseArticulo");
                 if (response.IsSuccess)
                 {
 
@@ -108,12 +108,12 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddress),
-                                                                  "/api/SubClaseArticulo");
+                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddressRM),
+                                                                  "api/SubClaseArticulo");
 
 
                     respuesta.Resultado = JsonConvert.DeserializeObject<SubClaseArticulo>(respuesta.Resultado.ToString());
-                    ViewData["IdClaseArticulo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<ClaseArticulo>(new Uri(WebApp.BaseAddress), "/api/ClaseArticulo/ListarClaseArticulo"), "IdClaseArticulo", "Nombre");
+                    ViewData["IdClaseArticulo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<ClaseArticulo>(new Uri(WebApp.BaseAddressRM), "api/ClaseArticulo/ListarClaseArticulo"), "IdClaseArticulo", "Nombre");
                     if (respuesta.IsSuccess)
                     {
                         return View(respuesta.Resultado);
@@ -139,8 +139,8 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    response = await apiServicio.EditarAsync(id, subClaseArticulo, new Uri(WebApp.BaseAddress),
-                                                                 "/api/SubClaseArticulo");
+                    response = await apiServicio.EditarAsync(id, subClaseArticulo, new Uri(WebApp.BaseAddressRM),
+                                                                 "api/SubClaseArticulo");
 
                     if (response.IsSuccess)
                     {
@@ -182,8 +182,8 @@ namespace bd.webapprm.web.Controllers.MVC
 
             try
             {
-                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddress)
-                                                               , "/api/SubClaseArticulo");
+                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddressRM)
+                                                               , "api/SubClaseArticulo");
                 if (response.IsSuccess)
                 {
                     await GuardarLogService.SaveLogEntry(new LogEntryTranfer

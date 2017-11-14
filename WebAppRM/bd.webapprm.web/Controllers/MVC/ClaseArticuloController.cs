@@ -28,8 +28,8 @@ namespace bd.webapprm.web.Controllers.MVC
             var lista = new List<ClaseArticulo>();
             try
             {
-                lista = await apiServicio.Listar<ClaseArticulo>(new Uri(WebApp.BaseAddress)
-                                                                    , "/api/ClaseArticulo/ListarClaseArticulo");
+                lista = await apiServicio.Listar<ClaseArticulo>(new Uri(WebApp.BaseAddressRM)
+                                                                    , "api/ClaseArticulo/ListarClaseArticulo");
                 return View(lista);
             }
             catch (Exception ex)
@@ -49,7 +49,7 @@ namespace bd.webapprm.web.Controllers.MVC
 
         public async Task<IActionResult> Create()
         {
-            ViewData["IdTipoArticulo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<TipoArticulo>(new Uri(WebApp.BaseAddress), "/api/TipoArticulo/ListarTipoArticulo"), "IdTipoArticulo", "Nombre");
+            ViewData["IdTipoArticulo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<TipoArticulo>(new Uri(WebApp.BaseAddressRM), "api/TipoArticulo/ListarTipoArticulo"), "IdTipoArticulo", "Nombre");
             return View();
         }
 
@@ -61,8 +61,8 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 response = await apiServicio.InsertarAsync(claseArticulo,
-                                                             new Uri(WebApp.BaseAddress),
-                                                             "/api/ClaseArticulo/InsertarClaseArticulo");
+                                                             new Uri(WebApp.BaseAddressRM),
+                                                             "api/ClaseArticulo/InsertarClaseArticulo");
                 if (response.IsSuccess)
                 {
 
@@ -81,7 +81,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 }
 
                 ViewData["Error"] = response.Message;
-                ViewData["IdTipoArticulo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<TipoArticulo>(new Uri(WebApp.BaseAddress), "/api/TipoArticulo/ListarTipoArticulo"), "IdTipoArticulo", "Nombre");
+                ViewData["IdTipoArticulo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<TipoArticulo>(new Uri(WebApp.BaseAddressRM), "api/TipoArticulo/ListarTipoArticulo"), "IdTipoArticulo", "Nombre");
                 return View(claseArticulo);
 
             }
@@ -107,12 +107,12 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddress),
-                                                                  "/api/ClaseArticulo");
+                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddressRM),
+                                                                  "api/ClaseArticulo");
 
 
                     respuesta.Resultado = JsonConvert.DeserializeObject<ClaseArticulo>(respuesta.Resultado.ToString());
-                    ViewData["IdTipoArticulo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<TipoArticulo>(new Uri(WebApp.BaseAddress), "/api/TipoArticulo/ListarTipoArticulo"), "IdTipoArticulo", "Nombre");
+                    ViewData["IdTipoArticulo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<TipoArticulo>(new Uri(WebApp.BaseAddressRM), "api/TipoArticulo/ListarTipoArticulo"), "IdTipoArticulo", "Nombre");
                     if (respuesta.IsSuccess)
                     {
                         return View(respuesta.Resultado);
@@ -137,8 +137,8 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    response = await apiServicio.EditarAsync(id, claseArticulo, new Uri(WebApp.BaseAddress),
-                                                                 "/api/ClaseArticulo");
+                    response = await apiServicio.EditarAsync(id, claseArticulo, new Uri(WebApp.BaseAddressRM),
+                                                                 "api/ClaseArticulo");
 
                     if (response.IsSuccess)
                     {
@@ -157,7 +157,7 @@ namespace bd.webapprm.web.Controllers.MVC
 
                 }
                 ViewData["Error"] = response.Message;
-                ViewData["IdTipoArticulo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<TipoArticulo>(new Uri(WebApp.BaseAddress), "/api/TipoArticulo/ListarTipoArticulo"), "IdTipoArticulo", "Nombre");
+                ViewData["IdTipoArticulo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<TipoArticulo>(new Uri(WebApp.BaseAddressRM), "api/TipoArticulo/ListarTipoArticulo"), "IdTipoArticulo", "Nombre");
                 return View(claseArticulo);
             }
             catch (Exception ex)
@@ -181,8 +181,8 @@ namespace bd.webapprm.web.Controllers.MVC
 
             try
             {
-                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddress)
-                                                               , "/api/ClaseArticulo");
+                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddressRM)
+                                                               , "api/ClaseArticulo");
                 if (response.IsSuccess)
                 {
                     await GuardarLogService.SaveLogEntry(new LogEntryTranfer

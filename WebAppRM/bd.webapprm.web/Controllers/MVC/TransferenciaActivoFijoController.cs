@@ -36,8 +36,8 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 response = await apiServicio.InsertarAsync(TransferenciaActivoFijo,
-                                                             new Uri(WebApp.BaseAddress),
-                                                             "/api/TransferenciaActivoFijo/InsertarTransferenciaActivoFijo");
+                                                             new Uri(WebApp.BaseAddressRM),
+                                                             "api/TransferenciaActivoFijo/InsertarTransferenciaActivoFijo");
                 if (response.IsSuccess)
                 {
 
@@ -81,8 +81,8 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddress),
-                                                                  "/api/TransferenciaActivoFijo");
+                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddressRM),
+                                                                  "api/TransferenciaActivoFijo");
 
 
                     respuesta.Resultado = JsonConvert.DeserializeObject<Marca>(respuesta.Resultado.ToString());
@@ -110,8 +110,8 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    response = await apiServicio.EditarAsync(id, TransferenciaActivoFijo, new Uri(WebApp.BaseAddress),
-                                                                 "/api/TransferenciaActivoFijo");
+                    response = await apiServicio.EditarAsync(id, TransferenciaActivoFijo, new Uri(WebApp.BaseAddressRM),
+                                                                 "api/TransferenciaActivoFijo");
 
                     if (!response.IsSuccess)
                     {
@@ -154,8 +154,8 @@ namespace bd.webapprm.web.Controllers.MVC
             var lista = new List<TransferenciaActivoFijo>();
             try
             {
-                lista = await apiServicio.Listar<TransferenciaActivoFijo>(new Uri(WebApp.BaseAddress)
-                                                                    , "/api/TransferenciaActivoFijo/ListarTransferenciaActivoFijo");
+                lista = await apiServicio.Listar<TransferenciaActivoFijo>(new Uri(WebApp.BaseAddressRM)
+                                                                    , "api/TransferenciaActivoFijo/ListarTransferenciaActivoFijo");
                 return View(lista);
             }
             catch (Exception ex)
@@ -178,8 +178,8 @@ namespace bd.webapprm.web.Controllers.MVC
 
             try
             {
-                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddress)
-                                                               , "/api/TransferenciaActivoFijo");
+                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddressRM)
+                                                               , "api/TransferenciaActivoFijo");
                 if (response.IsSuccess)
                 {
                     await GuardarLogService.SaveLogEntry(new LogEntryTranfer

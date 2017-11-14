@@ -26,9 +26,9 @@ namespace bd.webapprm.web.Controllers.MVC
 
         public async Task<IActionResult> Create()
         {
-            ViewData["IdArticulo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<Articulo>(new Uri(WebApp.BaseAddress), "/api/Articulo/ListarArticulos"), "IdArticulo", "Nombre");
-            ViewData["Minimo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<MaestroArticuloSucursal>(new Uri(WebApp.BaseAddress), "/api/MaestroArticuloSucursal/ListarMaestroArticuloSucursal"), "IdMaestroArticuloSucursal", "Minimo");
-            ViewData["Maximo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<Articulo>(new Uri(WebApp.BaseAddress), "/api/MaestroArticuloSucursal/ListarMaestroArticuloSucursal"), "IdMaestroArticuloSucursal", "Maximo");
+            ViewData["IdArticulo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<Articulo>(new Uri(WebApp.BaseAddressRM), "api/Articulo/ListarArticulos"), "IdArticulo", "Nombre");
+            ViewData["Minimo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<MaestroArticuloSucursal>(new Uri(WebApp.BaseAddressRM), "api/MaestroArticuloSucursal/ListarMaestroArticuloSucursal"), "IdMaestroArticuloSucursal", "Minimo");
+            ViewData["Maximo"] = new Microsoft.AspNetCore.Mvc.Rendering.SelectList(await apiServicio.Listar<Articulo>(new Uri(WebApp.BaseAddressRM), "api/MaestroArticuloSucursal/ListarMaestroArticuloSucursal"), "IdMaestroArticuloSucursal", "Maximo");
 
             return View();
         }
@@ -41,8 +41,8 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 response = await apiServicio.InsertarAsync(maestroDetalleArticulo,
-                                                             new Uri(WebApp.BaseAddress),
-                                                             "/api/MaestroDetalleArticulo/InsertarMaestroDetalleArticulo");
+                                                             new Uri(WebApp.BaseAddressRM),
+                                                             "api/MaestroDetalleArticulo/InsertarMaestroDetalleArticulo");
                 if (response.IsSuccess)
                 {
 
@@ -86,8 +86,8 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddress),
-                                                                  "/api/MaestroDetalleArticulo");
+                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddressRM),
+                                                                  "api/MaestroDetalleArticulo");
 
 
                     respuesta.Resultado = JsonConvert.DeserializeObject<MaestroDetalleArticulo>(respuesta.Resultado.ToString());
@@ -115,8 +115,8 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    response = await apiServicio.EditarAsync(id, maestroDetalleArticulo, new Uri(WebApp.BaseAddress),
-                                                                 "/api/MaestroDetalleArticulo");
+                    response = await apiServicio.EditarAsync(id, maestroDetalleArticulo, new Uri(WebApp.BaseAddressRM),
+                                                                 "api/MaestroDetalleArticulo");
 
                     if (!response.IsSuccess)
                     {
@@ -160,8 +160,8 @@ namespace bd.webapprm.web.Controllers.MVC
             var lista = new List<MaestroDetalleArticulo>();
             try
             {
-                lista = await apiServicio.Listar<MaestroDetalleArticulo>(new Uri(WebApp.BaseAddress)
-                                                                    , "/api/MaestroDetalleArticulo/ListarMaestroDetalleArticulo");
+                lista = await apiServicio.Listar<MaestroDetalleArticulo>(new Uri(WebApp.BaseAddressRM)
+                                                                    , "api/MaestroDetalleArticulo/ListarMaestroDetalleArticulo");
                 return View(lista);
             }
             catch (Exception ex)
@@ -184,8 +184,8 @@ namespace bd.webapprm.web.Controllers.MVC
 
             try
             {
-                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddress)
-                                                               , "/api/MaestroDetalleArticulo");
+                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddressRM)
+                                                               , "api/MaestroDetalleArticulo");
                 if (response.IsSuccess)
                 {
                     await GuardarLogService.SaveLogEntry(new LogEntryTranfer

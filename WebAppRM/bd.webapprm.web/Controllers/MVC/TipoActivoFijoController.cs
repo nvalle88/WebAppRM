@@ -37,8 +37,8 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 response = await apiServicio.InsertarAsync(tipoActivoFijo,
-                                                             new Uri(WebApp.BaseAddress),
-                                                             "/api/TipoActivoFijo/InsertarTipoActivoFijo");
+                                                             new Uri(WebApp.BaseAddressRM),
+                                                             "api/TipoActivoFijo/InsertarTipoActivoFijo");
                 if (response.IsSuccess)
                 {
 
@@ -82,8 +82,8 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddress),
-                                                                  "/api/TipoActivoFijo");
+                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddressRM),
+                                                                  "api/TipoActivoFijo");
 
 
                     respuesta.Resultado = JsonConvert.DeserializeObject<TipoActivoFijo>(respuesta.Resultado.ToString());
@@ -111,8 +111,8 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    response = await apiServicio.EditarAsync(id, tipoActivoFijo, new Uri(WebApp.BaseAddress),
-                                                                 "/api/TipoActivoFijo");
+                    response = await apiServicio.EditarAsync(id, tipoActivoFijo, new Uri(WebApp.BaseAddressRM),
+                                                                 "api/TipoActivoFijo");
 
                     if (response.IsSuccess)
                     {
@@ -153,8 +153,8 @@ namespace bd.webapprm.web.Controllers.MVC
             var lista = new List<TipoActivoFijo>();
             try
             {
-                lista = await apiServicio.Listar<TipoActivoFijo>(new Uri(WebApp.BaseAddress)
-                                                                    , "/api/TipoActivoFijo/ListarTipoActivoFijos");
+                lista = await apiServicio.Listar<TipoActivoFijo>(new Uri(WebApp.BaseAddressRM)
+                                                                    , "api/TipoActivoFijo/ListarTipoActivoFijos");
                 return View(lista);
             }
             catch (Exception ex)
@@ -177,8 +177,8 @@ namespace bd.webapprm.web.Controllers.MVC
 
             try
             {
-                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddress)
-                                                               , "/api/TipoActivoFijo");
+                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddressRM)
+                                                               , "api/TipoActivoFijo");
                 if (response.IsSuccess)
                 {
                     await GuardarLogService.SaveLogEntry(new LogEntryTranfer

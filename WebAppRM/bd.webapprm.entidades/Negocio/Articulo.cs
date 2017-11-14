@@ -30,16 +30,19 @@ namespace bd.webapprm.entidades
         public int? IdModelo { get; set; }
         public virtual Modelo Modelo { get; set; }
 
+        public virtual ICollection<AltaProveeduria> AltaProveeduria { get; set; }
 
         public virtual ICollection<MaestroDetalleArticulo> MaestroDetalleArticulo { get; set; }
 
         public virtual ICollection<RecepcionArticulos> RecepcionArticulos { get; set; }
 
-        public virtual ICollection<SolicitudProveduriaDetalle> SolicitudProveduriaDetalle { get; set; }
+        public virtual ICollection<SolicitudProveeduriaDetalle> SolicitudProveeduriaDetalle { get; set; }
 
         public virtual ICollection<DetalleFactura> DetalleFactura { get; set; }
 
         public virtual ICollection<TranferenciaArticulo> TranferenciaArticulo { get; set; }
+
+        public virtual ExistenciaArticuloProveeduria ExistenciaArticuloProveeduria { get; set; }
 
     }
 }

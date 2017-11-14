@@ -1,0 +1,127 @@
+@model bd.webapprm.entidades.DetalleFactura
+@{
+    ViewData["Title"] = "DetallesFactura";
+
+    //var listaProveedores = new List<bd.webapprm.entidades.Proveedor>();
+    //var listaArticulos = new List<bd.webapprm.entidades.Articulo>();
+
+    //listaProveedores = ViewBag.listaProveedores;
+    //listaArticulos = ViewBag.listaArticulos;
+
+    int ID = ViewBag.ID;
+    
+}
+
+<link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
+<link rel="stylesheet" href="~/lib/bootstrap-touchspin-master/src/jquery.bootstrap-touchspin.css" />
+<link rel="stylesheet" href="~/css/site.css" />
+<div id="content">
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-sm-12 col-md-12 col-lg-6">
+                <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+                        <h2>Detalles de Factura</h2>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox"></div>
+                        <div class="widget-body no-padding">
+                            <form asp-action="GuardarFacturas" id="checkout-form" class="smart-form" novalidate="novalidate">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <fieldset>
+                                    <input hidden asp-for="Factura.IdMaestroArticuloSucursal" type="text" value="@ID" />
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="Factura.Numero"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <input asp-for="Factura.Numero" class="form-control" />
+                                                <span asp-validation-for="Factura.Numero" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="Factura.IdProveedor"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <select asp-for="Factura.IdProveedor" class="form-control" asp-items="ViewBag.listaProveedor"></select>
+                                                <span asp-validation-for="Factura.IdProveedor" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="IdArticulo"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <select asp-for="IdArticulo" class="form-control" asp-items="ViewBag.listaArticulos"></select>
+                                                <span asp-validation-for="IdArticulo" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="Cantidad"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <input asp-for="Cantidad" class="form-control" min="0" />
+                                                <span asp-validation-for="Cantidad" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="Precio"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <input asp-for="Precio" class="form-control touchspin_tasa" />
+                                                <span asp-validation-for="Precio" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                </fieldset>
+
+                                <footer>
+                                    <span class="text-danger">@ViewData["Error"]</span>
+                                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                                    <a asp-action="IngresarFacturas" asp-controller="Proveeduria" class="btn btn-default">Cancelar</a>
+                                </footer>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+
+@section Scripts {
+    <script src='~/lib/select2/dist/js/select2.min.js'></script>
+    <script src='~/lib/select2/dist/js/i18n/es.js'></script>
+    <script src='~/js/site.js'></script>
+    <script src='~/lib/bootstrap-touchspin-master/src/jquery.bootstrap-touchspin.js'></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            Init_Select2();
+            Init_Touchspin();
+        });
+    </script>
+}
