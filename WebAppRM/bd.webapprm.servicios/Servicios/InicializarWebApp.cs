@@ -24,24 +24,45 @@ namespace bd.webapprm.servicios.Servicios
             }
         }
 
-        public static async Task InicializarWebRecursosMateriales(string id)
+        public static async Task InicializarWebRecursosMateriales(string id, Uri baseAddreess)
         {
             try
             {
-                //var sistema = await ObtenerHostSistema(id, new Uri("http://carlos/swSeguridad/"));
-                //WebApp.BaseAddressRM = sistema.AdstHost;
-                WebApp.BaseAddressRM = "http://localhost:5000";
+                var sistema = await ObtenerHostSistema(id, new Uri("http://carlos/swSeguridad/"));
+                WebApp.BaseAddressRM = sistema.AdstHost;
             }
             catch (Exception)
             { }
         }
 
-        public static async Task InicializarWebTalentoHumano(string id)
+        public static async Task InicializarWebTalentoHumano(string id, Uri baseAddreess)
         {
             try
             {
                 var sistema = await ObtenerHostSistema(id, new Uri("http://carlos/swSeguridad/"));
                 WebApp.BaseAddressTH = sistema.AdstHost;
+            }
+            catch (Exception)
+            { }
+        }
+
+        public static async Task InicializarSeguridad(string id, Uri baseAddreess)
+        {
+            try
+            {
+                var sistema = await ObtenerHostSistema(id, baseAddreess);
+                WebApp.BaseAddressSeguridad = sistema.AdstHost;
+            }
+            catch (Exception)
+            { }
+        }
+
+        public static async Task InicializarLogEntry(string id, Uri baseAddress)
+        {
+            try
+            {
+                var sistema = await ObtenerHostSistema(id, baseAddress);
+                //AppGuardarLog.BaseAddress = sistema.AdstHost;
             }
             catch (Exception)
             { }

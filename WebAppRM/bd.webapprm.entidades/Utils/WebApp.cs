@@ -8,5 +8,6 @@ namespace bd.webapprm.entidades.Utils
     {
         public static string BaseAddressRM { get; set; }
         public static string BaseAddressTH { get; set; }
+        public static string BaseAddressSeguridad { get; set; }
     }
 }
