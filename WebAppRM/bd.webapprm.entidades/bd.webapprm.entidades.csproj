@@ -8,4 +8,12 @@
     <None Remove="Negocio\ve-7044.tmp" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="bd.log.guardar" Version="1.0.1" />
+    <PackageReference Include="iTextSharp.LGPLv2.Core" Version="1.3.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="1.1.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="1.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="1.1.2" />
+  </ItemGroup>
+
 </Project>

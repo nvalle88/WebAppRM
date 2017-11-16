@@ -30,8 +30,17 @@ namespace bd.webapprm.web
             // Add framework services.
             services.AddMvc();
             services.AddSingleton<IApiServicio, ApiServicio>();
-            await InicializarWebApp.InicializarWebRecursosMateriales("SwRecursosMateriales");
-            await InicializarWebApp.InicializarWebTalentoHumano("SwTalentoHumano");
+
+            var ServicioSeguridad = Configuration.GetSection("ServicioSeguridad").Value;
+            var ServiciosLog = Configuration.GetSection("ServiciosLog").Value;
+            var ServicioTalentoHumano = Configuration.GetSection("ServiciosTalentoHumano").Value;
+            var ServiciosRecursosMateriales = Configuration.GetSection("ServiciosRecursosMateriales").Value;
+
+            var HostSeguridad = Configuration.GetSection("HostServicioSeguridad").Value;
+            await InicializarWebApp.InicializarWebRecursosMateriales(ServiciosRecursosMateriales, new Uri(HostSeguridad));
+            await InicializarWebApp.InicializarSeguridad(ServicioSeguridad, new Uri(HostSeguridad));
+            await InicializarWebApp.InicializarWebTalentoHumano(ServicioTalentoHumano, new Uri(HostSeguridad));
+            await InicializarWebApp.InicializarLogEntry(ServiciosLog, new Uri(HostSeguridad));
 
         }
 
