@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using bd.webapprm.entidades.ObjectTransfer;
 
 namespace bd.webapprm.web.Controllers.MVC
 {
@@ -51,10 +52,7 @@ namespace bd.webapprm.web.Controllers.MVC
             var listaProveedor = await apiServicio.Listar<Proveedor>(new Uri(WebApp.BaseAddressRM), "api/Proveedor/ListarProveedores");
             var tlistaProveedor = listaProveedor.Select(c => new { IdProveedor = c.IdProveedor, NombreApellidos = String.Format("{0} {1}", c.Nombre, c.Apellidos) });
             ViewData["Proveedor"] = new SelectList(tlistaProveedor, "IdProveedor", "NombreApellidos");
-
-            var listaEmpleado = await apiServicio.Listar<Empleado>(new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleados");
-            var tlistaEmpleado = listaEmpleado.Select(c => new { IdEmpleado = c.IdEmpleado, NombreApellidos = String.Format("{0} {1}", c.Persona.Nombres, c.Persona.Apellidos) });
-            ViewData["Empleado"] = new SelectList(tlistaEmpleado, "IdEmpleado", "NombreApellidos");
+            ViewData["Empleado"] = new SelectList(await apiServicio.Listar<ListaEmpleadoViewModel>(new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleados"), "IdEmpleado", "NombreApellido");
 
             ViewData["Marca"] = new SelectList(await apiServicio.Listar<Marca>(new Uri(WebApp.BaseAddressRM), "api/Marca/ListarMarca"), "IdMarca", "Nombre");
             ViewData["Modelo"] = await ObtenerSelectListModelo((ViewData["Marca"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Marca"] as SelectList).FirstOrDefault().Value) : -1);
@@ -95,10 +93,7 @@ namespace bd.webapprm.web.Controllers.MVC
                                 var tlistaProveedor = listaProveedor.Select(c => new { IdProveedor = c.IdProveedor, NombreApellidos = String.Format("{0} {1}", c.Nombre, c.Apellidos) });
                                 ViewData["Proveedor"] = new SelectList(tlistaProveedor, "IdProveedor", "NombreApellidos");
 
-                                var listaEmpleado = await apiServicio.Listar<Empleado>(new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleados");
-                                var tlistaEmpleado = listaEmpleado.Select(c => new { IdEmpleado = c.IdEmpleado, NombreApellidos = String.Format("{0} {1}", c.Persona.Nombres, c.Persona.Apellidos) });
-                                ViewData["Empleado"] = new SelectList(tlistaEmpleado, "IdEmpleado", "NombreApellidos");
-
+                                ViewData["Empleado"] = new SelectList(await apiServicio.Listar<ListaEmpleadoViewModel>(new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleados"), "IdEmpleado", "NombreApellido");
                                 ViewData["Marca"] = new SelectList(await apiServicio.Listar<Marca>(new Uri(WebApp.BaseAddressRM), "api/Marca/ListarMarca"), "IdMarca", "Nombre");
                                 ViewData["Modelo"] = await ObtenerSelectListModelo(recepcionActivoFijoDetalle?.ActivoFijo?.Modelo?.Marca?.IdMarca ?? -1);
                                 ViewData["UnidadMedida"] = new SelectList(await apiServicio.Listar<UnidadMedida>(new Uri(WebApp.BaseAddressRM), "api/UnidadMedida/ListarUnidadMedida"), "IdUnidadMedida", "Nombre");
@@ -377,10 +372,7 @@ namespace bd.webapprm.web.Controllers.MVC
                     var tlistaProveedor = listaProveedor.Select(c => new { IdProveedor = c.IdProveedor, NombreApellidos = String.Format("{0} {1}", c.Nombre, c.Apellidos) });
                     ViewData["Proveedor"] = new SelectList(tlistaProveedor, "IdProveedor", "NombreApellidos");
 
-                    var listaEmpleado = await apiServicio.Listar<Empleado>(new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleados");
-                    //var tlistaEmpleado = listaEmpleado.Select(c => new { IdEmpleado = c.IdEmpleado, NombreApellidos = String.Format("{0} {1}", c.Persona.Nombres, c.Persona.Apellidos) });
-                    ViewData["Empleado"] = new SelectList(listaEmpleado, "IdEmpleado", "IdEmpleado");
-
+                    ViewData["Empleado"] = new SelectList(await apiServicio.Listar<ListaEmpleadoViewModel>(new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleados"), "IdEmpleado", "NombreApellido");
                     ViewData["Marca"] = new SelectList(await apiServicio.Listar<Marca>(new Uri(WebApp.BaseAddressRM), "api/Marca/ListarMarca"), "IdMarca", "Nombre");
                     ViewData["Modelo"] = await ObtenerSelectListModelo(recepcionActivoFijoDetalle?.ActivoFijo?.Modelo?.Marca?.IdMarca ?? -1);
                     ViewData["UnidadMedida"] = new SelectList(await apiServicio.Listar<UnidadMedida>(new Uri(WebApp.BaseAddressRM), "api/UnidadMedida/ListarUnidadMedida"), "IdUnidadMedida", "Nombre");
@@ -420,16 +412,15 @@ namespace bd.webapprm.web.Controllers.MVC
                     try
                     {
                         int numeroConsecutivo = int.Parse(Request.Form["numeroConsecutivo"].ToString());
-                        string codigoSecuencial = String.Format("{0}{1}{2}", recepcionActivoFijoDetalle.RecepcionActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.Nombre, recepcionActivoFijoDetalle.RecepcionActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.Nombre, numeroConsecutivo);
+                        recepcionActivoFijoDetalle.ActivoFijo.CodigoActivoFijo.Codigosecuencial = String.Format("{0}{1}{2}", recepcionActivoFijoDetalle.RecepcionActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.Nombre, recepcionActivoFijoDetalle.RecepcionActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.Nombre, numeroConsecutivo);
                         ViewBag.numeroConsecutivo = numeroConsecutivo;
 
                         var listaCodigoActivoFijo = await apiServicio.Listar<CodigoActivoFijo>(new Uri(WebApp.BaseAddressRM), "api/CodigoActivoFijo/ListarCodigosActivoFijo");
-                        if (listaCodigoActivoFijo.Count(c => c.Codigosecuencial == codigoSecuencial && c.IdCodigoActivoFijo != recepcionActivoFijoDetalle.ActivoFijo.CodigoActivoFijo.IdCodigoActivoFijo) == 0)
-                        {
-                            if (listaCodigoActivoFijo.Count(c => c.CodigoBarras == recepcionActivoFijoDetalle.ActivoFijo.CodigoActivoFijo.CodigoBarras && c.IdCodigoActivoFijo != recepcionActivoFijoDetalle.ActivoFijo.CodigoActivoFijo.IdCodigoActivoFijo) == 0)
-                            {
-                                recepcionActivoFijoDetalle.ActivoFijo.CodigoActivoFijo.Codigosecuencial = codigoSecuencial;
 
+                        if (!ExisteCodigoUnico(listaCodigoActivoFijo, recepcionActivoFijoDetalle))
+                        {
+                            if (!ExisteCodigoBarras(listaCodigoActivoFijo, recepcionActivoFijoDetalle))
+                            {
                                 if (recepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle == 0)
                                     response = await InsertarRecepcionActivoFijoDetalle(recepcionActivoFijoDetalle, Request.Form["nombreCarpeta"].ToString());
                                 else
@@ -440,8 +431,7 @@ namespace bd.webapprm.web.Controllers.MVC
                                 else
                                 {
                                     ViewBag.Codificacion = true;
-                                    ViewData["ErrorCodificacion"] = "Modelo inválido";
-                                    ViewData["errorNumeroConsecutivo"] = "El Código Secuencial no puede tener más de 20 y menos de 2 caracteres";
+                                    ViewData["ErrorCodificacion"] = "El Código Secuencial y de Barras no pueden tener más de 20 y menos de 2 caracteres";
                                 }
                             }
                             else
@@ -481,6 +471,48 @@ namespace bd.webapprm.web.Controllers.MVC
 
                 return BadRequest();
             }
+        }
+
+        private bool ExisteCodigoUnico(List<CodigoActivoFijo> listaCodigoActivoFijo, RecepcionActivoFijoDetalle recepcionActivoFijoDetalle)
+        {
+            try
+            {
+                if (recepcionActivoFijoDetalle.IdActivoFijo == 0)
+                    return listaCodigoActivoFijo.Count(c => c.Codigosecuencial == recepcionActivoFijoDetalle.ActivoFijo.CodigoActivoFijo.Codigosecuencial) != 0;
+                else
+                {
+                    var listaCodigosAF = listaCodigoActivoFijo.Where(c => c.Codigosecuencial == recepcionActivoFijoDetalle.ActivoFijo.CodigoActivoFijo.Codigosecuencial);
+                    foreach (var item in listaCodigoActivoFijo)
+                    {
+                        if (item.IdCodigoActivoFijo != recepcionActivoFijoDetalle.ActivoFijo.IdCodigoActivoFijo)
+                            return true;
+                    }
+                }
+            }
+            catch (Exception)
+            { }
+            return false;
+        }
+
+        private bool ExisteCodigoBarras(List<CodigoActivoFijo> listaCodigoActivoFijo, RecepcionActivoFijoDetalle recepcionActivoFijoDetalle)
+        {
+            try
+            {
+                if (recepcionActivoFijoDetalle.IdActivoFijo == 0)
+                    return listaCodigoActivoFijo.Count(c => c.CodigoBarras == recepcionActivoFijoDetalle.ActivoFijo.CodigoActivoFijo.CodigoBarras) != 0;
+                else
+                {
+                    var listaCodigosAF = listaCodigoActivoFijo.Where(c => c.CodigoBarras == recepcionActivoFijoDetalle.ActivoFijo.CodigoActivoFijo.CodigoBarras);
+                    foreach (var item in listaCodigoActivoFijo)
+                    {
+                        if (item.IdCodigoActivoFijo != recepcionActivoFijoDetalle.ActivoFijo.IdCodigoActivoFijo)
+                            return true;
+                    }
+                }
+            }
+            catch (Exception)
+            { }
+            return false;
         }
 
         [HttpPost]
