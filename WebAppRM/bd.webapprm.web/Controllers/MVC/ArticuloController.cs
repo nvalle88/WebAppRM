@@ -29,7 +29,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 lista = await apiServicio.Listar<Articulo>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "api/Articulo/ListarArticulos");
+                                                                    , "/api/Articulo/ListarArticulos");
                 return View(lista);
             }
             catch (Exception ex)
