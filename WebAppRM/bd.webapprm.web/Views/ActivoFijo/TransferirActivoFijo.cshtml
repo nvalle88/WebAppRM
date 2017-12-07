@@ -217,6 +217,11 @@
     <script src='~/lib/waitMe/waitMe.min.js'></script>
     <script src='~/js/activoFijo/transferencia.js'></script>
     <script type="text/javascript">
+        var provinciaSelectResult = "@Url.Action("Provincia_SelectResult")";
+        var ciudadSelectResult = "@Url.Action("Ciudad_SelectResult")";
+        var sucursalSelectResult = "@Url.Action("Sucursal_SelectResult")";
+        var libroActivoFijoSelectResult = "@Url.Action("LibroActivoFijo_SelectResult")";
+
         $(document).ready(function () {
             Init_Select2();
         });

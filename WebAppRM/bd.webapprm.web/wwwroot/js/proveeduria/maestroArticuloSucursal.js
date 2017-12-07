@@ -25,7 +25,7 @@
     function partialViewProvincia(idPais) {
         mostrarLoadingPanel("checkout-form", "Cargando provincias...");
         $.ajax({
-            url: "/MaestroArticuloSucursal/Provincia_SelectResult",
+            url: provinciaSelectResult,
             method: "POST",
             data: { idPais: idPais != null ? idPais : -1 },
             success: function (data) {
@@ -45,7 +45,7 @@
     function partialViewCiudad(idProvincia) {
         mostrarLoadingPanel("checkout-form", "Cargando ciudades...");
         $.ajax({
-            url: "/MaestroArticuloSucursal/Ciudad_SelectResult",
+            url: ciudadSelectResult,
             method: "POST",
             data: { idProvincia: idProvincia != null ? idProvincia : -1 },
             success: function (data) {
@@ -65,7 +65,7 @@
     function partialViewSucursal(idCiudad) {
         mostrarLoadingPanel("checkout-form", "Cargando sucursales...");
         $.ajax({
-            url: "/MaestroArticuloSucursal/Sucursal_SelectResult",
+            url: sucursalSelectResult,
             method: "POST",
             data: { idCiudad: idCiudad != null ? idCiudad : -1 },
             success: function (data) {

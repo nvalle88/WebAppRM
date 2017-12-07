@@ -12,7 +12,7 @@ function eventoTipoActivoFijo() {
 function partialViewTipoActivoFijo(idTipoActivoFijo) {
     mostrarLoadingPanel("checkout-form", "Cargando clases de activo fijo...");
     $.ajax({
-        url: "/SubClaseActivoFijo/ClaseActivoFijo_SelectResult",
+        url: claseActivoFijoSelectResult,
         method: "POST",
         data: { idTipoActivoFijo: idTipoActivoFijo != null ? idTipoActivoFijo : -1 },
         success: function (data) {

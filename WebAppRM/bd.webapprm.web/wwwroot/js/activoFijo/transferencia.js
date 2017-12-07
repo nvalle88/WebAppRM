@@ -33,7 +33,7 @@ function eventoSucursal() {
 function partialViewProvincia(idPais) {
     mostrarLoadingPanel("checkout-form", "Cargando provincias...");
     $.ajax({
-        url: "/ActivoFijo/Provincia_SelectResult",
+        url: provinciaSelectResult,
         method: "POST",
         data: { idPais: idPais != null ? idPais : -1 },
         success: function (data) {
@@ -52,7 +52,7 @@ function partialViewProvincia(idPais) {
 function partialViewCiudad(idProvincia) {
     mostrarLoadingPanel("checkout-form", "Cargando ciudades...");
     $.ajax({
-        url: "/ActivoFijo/Ciudad_SelectResult",
+        url: ciudadSelectResult,
         method: "POST",
         data: { idProvincia: idProvincia != null ? idProvincia : -1 },
         success: function (data) {
@@ -71,7 +71,7 @@ function partialViewCiudad(idProvincia) {
 function partialViewSucursal(idCiudad) {
     mostrarLoadingPanel("checkout-form", "Cargando sucursales...");
     $.ajax({
-        url: "/ActivoFijo/Sucursal_SelectResult",
+        url: sucursalSelectResult,
         method: "POST",
         data: { idCiudad: idCiudad != null ? idCiudad : -1 },
         success: function (data) {
@@ -90,7 +90,7 @@ function partialViewSucursal(idCiudad) {
 function partialViewLibroActivoFijo(idSucursal) {
     mostrarLoadingPanel("checkout-form", "Cargando libros de activo fijo...");
     $.ajax({
-        url: "/ActivoFijo/LibroActivoFijo_SelectResult",
+        url: libroActivoFijoSelectResult,
         method: "POST",
         data: { idSucursal: idSucursal != null ? idSucursal : -1 },
         success: function (data) {
