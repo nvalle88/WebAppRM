@@ -56,7 +56,7 @@
     function partialViewProvincia(idPais) {
         mostrarLoadingPanel("checkout-form", "Cargando provincias...");
         $.ajax({
-            url: "/Proveeduria/Provincia_SelectResult",
+            url: provinciaSelectResult,
             method: "POST",
             data: { idPais: idPais != null ? idPais : -1 },
             success: function (data) {
@@ -76,7 +76,7 @@
     function partialViewCiudad(idProvincia) {
         mostrarLoadingPanel("checkout-form", "Cargando ciudades...");
         $.ajax({
-            url: "/Proveeduria/Ciudad_SelectResult",
+            url: ciudadSelectResult,
             method: "POST",
             data: { idProvincia: idProvincia != null ? idProvincia : -1 },
             success: function (data) {
@@ -96,7 +96,7 @@
     function partialViewSucursal(idCiudad) {
         mostrarLoadingPanel("checkout-form", "Cargando sucursales...");
         $.ajax({
-            url: "/Proveeduria/Sucursal_SelectResult",
+            url: sucursalSelectResult,
             method: "POST",
             data: { idCiudad: idCiudad != null ? idCiudad : -1 },
             success: function (data) {
@@ -116,7 +116,7 @@
     function partialViewMaestroArticuloSucursal(idSucursal) {
         mostrarLoadingPanel("checkout-form", "Cargando sucursales...");
         $.ajax({
-            url: "/Proveeduria/MaestroArticuloSucursal_SelectResult",
+            url: maestroArticuloSucursal,
             method: "POST",
             data: { idSucursal: idSucursal != null ? idSucursal : -1 },
             success: function (data) {
@@ -132,7 +132,7 @@
     function partialViewTipoArticulo(idTipoArticulo) {
         mostrarLoadingPanel("checkout-form", "Cargando clases de art&iacute;culos...");
         $.ajax({
-            url: "/Proveeduria/ClaseArticulo_SelectResult",
+            url: claseArticuloSucursal,
             method: "POST",
             data: { idTipoArticulo: idTipoArticulo != null ? idTipoArticulo : -1 },
             success: function (data) {
@@ -152,7 +152,7 @@
     function partialViewClaseArticulo(idClaseArticulo) {
         mostrarLoadingPanel("checkout-form", "Cargando sub clases de art&iacute;culos...");
         $.ajax({
-            url: "/Proveeduria/SubClaseArticulo_SelectResult",
+            url: subClaseArticuloSucursal,
             method: "POST",
             data: { idClaseArticulo: idClaseArticulo != null ? idClaseArticulo : -1 },
             success: function (data) {
@@ -169,7 +169,7 @@
     function partialViewSubClaseArticulo(idSubClaseArticulo) {
         mostrarLoadingPanel("checkout-form", "Cargando art&iacute;culos...");
         $.ajax({
-            url: "/Proveeduria/Articulo_SelectResult",
+            url: articuloSucursal,
             method: "POST",
             data: { idSubClaseArticulo: idSubClaseArticulo != null ? idSubClaseArticulo : -1 },
             success: function (data) {

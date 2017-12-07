@@ -45,7 +45,7 @@ function configurarDropzone()
         init: function () {
             this.on("removedfile", function (file, data) {
                 $.ajax({
-                    url: "/ActivoFijo/EliminarArchivo",
+                    url: urlEliminarActivoFijo,
                     method: "POST",
                     data: { fileName: file.name, dir: $("#dir").val() },
                     error: function (errorMessage)
@@ -149,7 +149,7 @@ function eventoMarca()
     $("#ActivoFijo_Modelo_IdMarca").on("change", function (e) {
         mostrarLoadingPanel("checkout-form", "Cargando modelos...");
         $.ajax({
-            url: "/ActivoFijo/Modelo_SelectResult",
+            url: urlModeloSelectResult,
             method: "POST",
             data: { idMarca: e.val },
             success: function (data) {
@@ -193,7 +193,7 @@ function partialViewProvincia(idPais) {
     mostrarLoadingPanel("checkout-form", "Cargando provincias...");
     
     $.ajax({
-        url: "/ActivoFijo/Provincia_SelectResult",
+        url: provinciaSelectResult,
         method: "POST",
         data: { idPais: obtenerIdAjax(idPais) },
         success: function (data) {
@@ -213,7 +213,7 @@ function partialViewProvincia(idPais) {
 function partialViewCiudad(idProvincia) {
     mostrarLoadingPanel("checkout-form", "Cargando ciudades...");
     $.ajax({
-        url: "/ActivoFijo/Ciudad_SelectResult",
+        url: ciudadSelectResult,
         method: "POST",
         data: { idProvincia: obtenerIdAjax(idProvincia) },
         success: function (data) {
@@ -232,7 +232,7 @@ function partialViewCiudad(idProvincia) {
 function partialViewSucursal(idCiudad) {
     mostrarLoadingPanel("checkout-form", "Cargando sucursales...");
     $.ajax({
-        url: "/ActivoFijo/Sucursal_SelectResult",
+        url: sucursalSelectResult,
         method: "POST",
         data: { idCiudad: obtenerIdAjax(idCiudad) },
         success: function (data) {
@@ -251,7 +251,7 @@ function partialViewSucursal(idCiudad) {
 function partialViewLibroActivoFijo(idSucursal) {
     mostrarLoadingPanel("checkout-form", "Cargando libros de activo fijo...");
     $.ajax({
-        url: "/ActivoFijo/LibroActivoFijo_SelectResult",
+        url: libroActivoFijoSelectResult,
         method: "POST",
         data: { idSucursal: obtenerIdAjax(idSucursal) },
         success: function (data) {
@@ -270,7 +270,7 @@ function partialViewLibroActivoFijo(idSucursal) {
 function partialViewTipoActivoFijo(idTipoActivoFijo) {
     mostrarLoadingPanel("checkout-form", "Cargando clases de activo fijo...");
     $.ajax({
-        url: "/ActivoFijo/ClaseActivoFijo_SelectResult",
+        url: claseActivoFijoSelectResult,
         method: "POST",
         data: { idTipoActivoFijo: obtenerIdAjax(idTipoActivoFijo) },
         success: function (data) {
@@ -291,7 +291,7 @@ function partialViewTipoActivoFijo(idTipoActivoFijo) {
 function partialViewClaseActivoFijo(idClaseActivoFijo) {
     mostrarLoadingPanel("checkout-form", "Cargando sub clases de activo fijo...");
     $.ajax({
-        url: "/ActivoFijo/SubClaseActivoFijo_SelectResult",
+        url: subClaseActivoFijoSelectResult,
         method: "POST",
         data: { idClaseActivoFijo: obtenerIdAjax(idClaseActivoFijo) },
         success: function (data) {
