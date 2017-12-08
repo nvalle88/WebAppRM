@@ -44,15 +44,20 @@ namespace bd.webapprm.web.Controllers.MVC
             }
             catch (Exception ex)
             {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                try
                 {
-                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Listando artículos recepcionados",
-                    ExceptionTrace = ex,
-                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
-                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                    UserName = "Usuario APP webappth"
-                });
+                    await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                    {
+                        ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                        Message = "Listando artículos recepcionados",
+                        ExceptionTrace = ex,
+                        LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
+                        LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                        UserName = "Usuario APP webappth"
+                    });
+                }
+                catch (Exception)
+                { }
                 return BadRequest();
             }
         }
@@ -236,16 +241,21 @@ namespace bd.webapprm.web.Controllers.MVC
 
                 if (response.IsSuccess)
                 {
-                    var responseLog = await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                    try
                     {
-                        ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                        ExceptionTrace = null,
-                        Message = recepcionArticulo.IdRecepcionArticulos == 0 ? "Se ha recepcionado un artículo" : "Se ha editado la recepción de un artículo",
-                        UserName = "Usuario 1",
-                        LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
-                        LogLevelShortName = Convert.ToString(LogLevelParameter.ADV),
-                        EntityID = string.Format("{0} {1}", "Artículo:", recepcionArticulo.IdArticulo),
-                    });
+                        await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                        {
+                            ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                            ExceptionTrace = null,
+                            Message = recepcionArticulo.IdRecepcionArticulos == 0 ? "Se ha recepcionado un artículo" : "Se ha editado la recepción de un artículo",
+                            UserName = "Usuario 1",
+                            LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
+                            LogLevelShortName = Convert.ToString(LogLevelParameter.ADV),
+                            EntityID = string.Format("{0} {1}", "Artículo:", recepcionArticulo.IdArticulo),
+                        });
+                    }
+                    catch (Exception)
+                    { }
                     return RedirectToAction("ListadoRecepcion");
                 }
 
@@ -270,15 +280,20 @@ namespace bd.webapprm.web.Controllers.MVC
             }
             catch (Exception ex)
             {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                try
                 {
-                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Creando recepción Artículo",
-                    ExceptionTrace = ex,
-                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
-                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                    UserName = "Usuario APP WebAppTh"
-                });
+                    await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                    {
+                        ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                        Message = "Creando recepción Artículo",
+                        ExceptionTrace = ex,
+                        LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
+                        LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                        UserName = "Usuario APP WebAppTh"
+                    });
+                }
+                catch (Exception)
+                { }
                 return BadRequest();
             }
         }
