@@ -41,9 +41,9 @@ namespace bd.webapprm.servicios.Servicios
         {
             try
             {
-                //var sistema = await ObtenerHostSistema(id, baseAddreess);
-                //WebApp.BaseAddressTH = sistema.AdstHost;
-                WebApp.BaseAddressTH = "http://localhost:49494/";
+                var sistema = await ObtenerHostSistema(id, baseAddreess);
+                WebApp.BaseAddressTH = sistema.AdstHost;
+                //WebApp.BaseAddressTH = "http://localhost:49494/";
             }
             catch (Exception)
             { }

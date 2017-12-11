@@ -38,7 +38,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Listando tipos de artículos",
-                    ExceptionTrace = ex,
+                    ExceptionTrace = ex.Message,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP webappth"
@@ -89,7 +89,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Creando Tipo de Artículo",
-                    ExceptionTrace = ex,
+                    ExceptionTrace = ex.Message,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP WebAppTh"
@@ -161,7 +161,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Editando un tipo de artículo",
-                    ExceptionTrace = ex,
+                    ExceptionTrace = ex.Message,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.Edit),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP webappth"
@@ -199,7 +199,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Eliminar Tipo de Artículo",
-                    ExceptionTrace = ex,
+                    ExceptionTrace = ex.Message,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.Delete),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP webappth"

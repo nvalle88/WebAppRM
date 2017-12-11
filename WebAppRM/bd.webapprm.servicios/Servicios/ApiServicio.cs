@@ -93,7 +93,7 @@ namespace bd.webapprm.servicios.Servicios
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    var uri = string.Format("{0}{1}", baseAddress, url).Replace("//", "/").Replace("http:/", "http://").Replace("https:/", "https://");
+                    var uri = string.Format("{0}/{1}", baseAddress, url).Replace("//", "/").Replace("http:/", "http://").Replace("https:/", "https://");
                     var respuesta = await client.GetAsync(new Uri(uri));
 
                     var resultado = await respuesta.Content.ReadAsStringAsync();
