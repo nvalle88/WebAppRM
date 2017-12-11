@@ -120,16 +120,21 @@ namespace bd.webapprm.web.Controllers.MVC
                                                              "api/RecepcionActivoFijo/InsertarRecepcionActivoFijo");
                 if (response.IsSuccess)
                 {
-                    var responseLog = await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                    try
                     {
-                        ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                        ExceptionTrace = null,
-                        Message = "Se ha recepcionado un activo fijo",
-                        UserName = "Usuario 1",
-                        LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
-                        LogLevelShortName = Convert.ToString(LogLevelParameter.ADV),
-                        EntityID = string.Format("{0} {1}", "Activo Fijo:", recepcionActivoFijoDetalle.ActivoFijo.IdActivoFijo),
-                    });
+                        await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                        {
+                            ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                            ExceptionTrace = null,
+                            Message = "Se ha recepcionado un activo fijo",
+                            UserName = "Usuario 1",
+                            LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
+                            LogLevelShortName = Convert.ToString(LogLevelParameter.ADV),
+                            EntityID = string.Format("{0} {1}", "Activo Fijo:", recepcionActivoFijoDetalle.ActivoFijo.IdActivoFijo),
+                        });
+                    }
+                    catch (Exception)
+                    { }
 
                     recepcionActivoFijoDetalle = JsonConvert.DeserializeObject<RecepcionActivoFijoDetalle>(response.Resultado.ToString());
                     EmpleadoActivoFijo nuevoEmpleadoActivoFijo = new EmpleadoActivoFijo { IdActivoFijo = recepcionActivoFijoDetalle.IdActivoFijo, IdEmpleado = recepcionActivoFijoDetalle.RecepcionActivoFijo.IdEmpleado, FechaAsignacion = DateTime.Now };
@@ -139,16 +144,21 @@ namespace bd.webapprm.web.Controllers.MVC
 
                     if (response.IsSuccess)
                     {
-                        responseLog = await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                        try
                         {
-                            ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                            ExceptionTrace = null,
-                            Message = "Se ha adicionado un empleado a un activo fijo",
-                            UserName = "Usuario 1",
-                            LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
-                            LogLevelShortName = Convert.ToString(LogLevelParameter.ADV),
-                            EntityID = string.Format("{0} {1}", "Empleado de Activo Fijo:", recepcionActivoFijoDetalle.RecepcionActivoFijo.IdEmpleado),
-                        });
+                            await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                            {
+                                ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                                ExceptionTrace = null,
+                                Message = "Se ha adicionado un empleado a un activo fijo",
+                                UserName = "Usuario 1",
+                                LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
+                                LogLevelShortName = Convert.ToString(LogLevelParameter.ADV),
+                                EntityID = string.Format("{0} {1}", "Empleado de Activo Fijo:", recepcionActivoFijoDetalle.RecepcionActivoFijo.IdEmpleado),
+                            });
+                        }
+                        catch (Exception)
+                        { }
                     }
 
                     try
@@ -175,16 +185,21 @@ namespace bd.webapprm.web.Controllers.MVC
                 response = await apiServicio.EditarAsync<RecepcionActivoFijoDetalle>(recepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle.ToString(), recepcionActivoFijoDetalle, new Uri(WebApp.BaseAddressRM), "api/RecepcionActivoFijo");
                 if (response.IsSuccess)
                 {
-                    var responseLog = await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                    try
                     {
-                        ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                        ExceptionTrace = null,
-                        Message = "Se ha editado una recepción de activo fijo",
-                        UserName = "Usuario 1",
-                        LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
-                        LogLevelShortName = Convert.ToString(LogLevelParameter.ADV),
-                        EntityID = string.Format("{0} {1}", "Activo Fijo:", recepcionActivoFijoDetalle.ActivoFijo.IdActivoFijo)
-                    });
+                        await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                        {
+                            ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                            ExceptionTrace = null,
+                            Message = "Se ha editado una recepción de activo fijo",
+                            UserName = "Usuario 1",
+                            LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
+                            LogLevelShortName = Convert.ToString(LogLevelParameter.ADV),
+                            EntityID = string.Format("{0} {1}", "Activo Fijo:", recepcionActivoFijoDetalle.ActivoFijo.IdActivoFijo)
+                        });
+                    }
+                    catch (Exception)
+                    { }
                 }
 
                 var listaEmpleadoActivoFijo = await apiServicio.Listar<EmpleadoActivoFijo>(new Uri(WebApp.BaseAddressRM), "api/EmpleadoActivoFijo/ListarEmpleadosActivoFijo");
@@ -195,16 +210,21 @@ namespace bd.webapprm.web.Controllers.MVC
                     response = await apiServicio.EditarAsync<EmpleadoActivoFijo>(empleadoActivoFijo.IdEmpleadoActivoFijo.ToString(), empleadoActivoFijo, new Uri(WebApp.BaseAddressRM), "api/EmpleadoActivoFijo");
                     if (response.IsSuccess)
                     {
-                        await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                        try
                         {
-                            ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                            ExceptionTrace = null,
-                            Message = "Se ha editado un empleado de un activo fijo",
-                            UserName = "Usuario 1",
-                            LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
-                            LogLevelShortName = Convert.ToString(LogLevelParameter.ADV),
-                            EntityID = string.Format("{0} {1}", "Empleado de Activo Fijo:", recepcionActivoFijoDetalle.RecepcionActivoFijo.IdEmpleado),
-                        });
+                            await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                            {
+                                ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                                ExceptionTrace = null,
+                                Message = "Se ha editado un empleado de un activo fijo",
+                                UserName = "Usuario 1",
+                                LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
+                                LogLevelShortName = Convert.ToString(LogLevelParameter.ADV),
+                                EntityID = string.Format("{0} {1}", "Empleado de Activo Fijo:", recepcionActivoFijoDetalle.RecepcionActivoFijo.IdEmpleado),
+                            });
+                        }
+                        catch (Exception)
+                        { }
                     }
                 }
             }
@@ -416,7 +436,6 @@ namespace bd.webapprm.web.Controllers.MVC
                         ViewBag.numeroConsecutivo = numeroConsecutivo;
 
                         var listaCodigoActivoFijo = await apiServicio.Listar<CodigoActivoFijo>(new Uri(WebApp.BaseAddressRM), "api/CodigoActivoFijo/ListarCodigosActivoFijo");
-
                         if (!ExisteCodigoUnico(listaCodigoActivoFijo, recepcionActivoFijoDetalle))
                         {
                             if (!ExisteCodigoBarras(listaCodigoActivoFijo, recepcionActivoFijoDetalle))
@@ -459,16 +478,20 @@ namespace bd.webapprm.web.Controllers.MVC
             }
             catch (Exception ex)
             {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                try
                 {
-                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Creando recepción Activo Fijo",
-                    ExceptionTrace = ex.Message,
-                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
-                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                    UserName = "Usuario APP WebAppTh"
-                });
-
+                    await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                    {
+                        ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                        Message = "Creando recepción Activo Fijo",
+                        ExceptionTrace = ex,
+                        LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
+                        LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                        UserName = "Usuario APP WebAppTh"
+                    });
+                }
+                catch (Exception)
+                { }
                 return BadRequest();
             }
         }
@@ -569,15 +592,20 @@ namespace bd.webapprm.web.Controllers.MVC
             }
             catch (Exception ex)
             {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                try
                 {
-                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Listando activos fijos recepcionados",
-                    ExceptionTrace = ex.Message,
-                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
-                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                    UserName = "Usuario APP webappth"
-                });
+                    await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                    {
+                        ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                        Message = "Listando activos fijos recepcionados",
+                        ExceptionTrace = ex,
+                        LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
+                        LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                        UserName = "Usuario APP webappth"
+                    });
+                }
+                catch (Exception)
+                { }
                 return BadRequest();
             }
         }
@@ -661,15 +689,20 @@ namespace bd.webapprm.web.Controllers.MVC
             }
             catch (Exception ex)
             {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                try
                 {
-                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Listando activos fijos que requieren validación técnica",
-                    ExceptionTrace = ex.Message,
-                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
-                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                    UserName = "Usuario APP webappth"
-                });
+                    await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                    {
+                        ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                        Message = "Listando activos fijos que requieren validación técnica",
+                        ExceptionTrace = ex,
+                        LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
+                        LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                        UserName = "Usuario APP webappth"
+                    });
+                }
+                catch (Exception)
+                { }
                 return BadRequest();
             }
         }
@@ -689,15 +722,20 @@ namespace bd.webapprm.web.Controllers.MVC
             }
             catch (Exception ex)
             {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                try
                 {
-                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Creando desaprobación Activo Fijo",
-                    ExceptionTrace = ex.Message,
-                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
-                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                    UserName = "Usuario APP WebAppTh"
-                });
+                    await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                    {
+                        ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                        Message = "Creando desaprobación Activo Fijo",
+                        ExceptionTrace = ex,
+                        LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
+                        LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                        UserName = "Usuario APP WebAppTh"
+                    });
+                }
+                catch (Exception)
+                { }
                 return BadRequest();
             }
             return RedirectToAction("ActivoValidacionTecnica");
@@ -716,9 +754,9 @@ namespace bd.webapprm.web.Controllers.MVC
                 ViewBag.numeroConsecutivo = numeroConsecutivo;
 
                 var listaCodigoActivoFijo = await apiServicio.Listar<CodigoActivoFijo>(new Uri(WebApp.BaseAddressRM), "api/CodigoActivoFijo/ListarCodigosActivoFijo");
-                if (listaCodigoActivoFijo.Count(c => c.Codigosecuencial == codigoSecuencial && c.IdCodigoActivoFijo != recepcionActivoFijoDetalle.ActivoFijo.CodigoActivoFijo.IdCodigoActivoFijo) == 0)
+                if (!ExisteCodigoUnico(listaCodigoActivoFijo, recepcionActivoFijoDetalle))
                 {
-                    if (listaCodigoActivoFijo.Count(c => c.CodigoBarras == recepcionActivoFijoDetalle.ActivoFijo.CodigoActivoFijo.CodigoBarras && c.IdCodigoActivoFijo != recepcionActivoFijoDetalle.ActivoFijo.CodigoActivoFijo.IdCodigoActivoFijo) == 0)
+                    if (!ExisteCodigoBarras(listaCodigoActivoFijo, recepcionActivoFijoDetalle))
                     {
                         recepcionActivoFijoDetalle.ActivoFijo.CodigoActivoFijo.Codigosecuencial = codigoSecuencial;
                         Response response = new Response();
@@ -732,29 +770,39 @@ namespace bd.webapprm.web.Controllers.MVC
 
                                 if (response.IsSuccess)
                                 {
-                                    await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                                    try
                                     {
-                                        ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                                        EntityID = string.Format("{0} : {1}", "Código de Activo Fijo", id),
-                                        LogCategoryParametre = Convert.ToString(LogCategoryParameter.Edit),
-                                        LogLevelShortName = Convert.ToString(LogLevelParameter.ADV),
-                                        Message = "Se ha actualizado un registro clase de código de activo fijo",
-                                        UserName = "Usuario 1"
-                                    });
+                                        await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                                        {
+                                            ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                                            EntityID = string.Format("{0} : {1}", "Código de Activo Fijo", id),
+                                            LogCategoryParametre = Convert.ToString(LogCategoryParameter.Edit),
+                                            LogLevelShortName = Convert.ToString(LogLevelParameter.ADV),
+                                            Message = "Se ha actualizado un registro clase de código de activo fijo",
+                                            UserName = "Usuario 1"
+                                        });
+                                    }
+                                    catch (Exception)
+                                    { }
 
                                     recepcionActivoFijoDetalle.Estado = new Estado { Nombre = "Recepcionado" };
                                     response = await apiServicio.EditarAsync(recepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle.ToString(), recepcionActivoFijoDetalle, new Uri(WebApp.BaseAddressRM), "api/RecepcionActivoFijo/EstadoActivoFijo");
                                     if (response.IsSuccess)
                                     {
-                                        await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                                        try
                                         {
-                                            ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                                            EntityID = string.Format("{0} : {1}", "Estado de Activo Fijo", id),
-                                            LogCategoryParametre = Convert.ToString(LogCategoryParameter.Edit),
-                                            LogLevelShortName = Convert.ToString(LogLevelParameter.ADV),
-                                            Message = "Se ha actualizado un registro estado de activo fijo",
-                                            UserName = "Usuario 1"
-                                        });
+                                            await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                                            {
+                                                ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                                                EntityID = string.Format("{0} : {1}", "Estado de Activo Fijo", id),
+                                                LogCategoryParametre = Convert.ToString(LogCategoryParameter.Edit),
+                                                LogLevelShortName = Convert.ToString(LogLevelParameter.ADV),
+                                                Message = "Se ha actualizado un registro estado de activo fijo",
+                                                UserName = "Usuario 1"
+                                            });
+                                        }
+                                        catch (Exception)
+                                        { }
                                         return RedirectToAction("ActivosFijosRecepcionados");
                                     }
                                 }
@@ -766,16 +814,20 @@ namespace bd.webapprm.web.Controllers.MVC
                         }
                         catch (Exception ex)
                         {
-                            await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                            try
                             {
-                                ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                                Message = "Editando un clase de código de activo fijo",
-                                ExceptionTrace = ex.Message,
-                                LogCategoryParametre = Convert.ToString(LogCategoryParameter.Edit),
-                                LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                                UserName = "Usuario APP webappth"
-                            });
-
+                                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                                {
+                                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                                    Message = "Editando un clase de código de activo fijo",
+                                    ExceptionTrace = ex,
+                                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.Edit),
+                                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                                    UserName = "Usuario APP webappth"
+                                });
+                            }
+                            catch (Exception)
+                            { }
                             return BadRequest();
                         }
                     }
@@ -817,15 +869,20 @@ namespace bd.webapprm.web.Controllers.MVC
             }
             catch (Exception ex)
             {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                try
                 {
-                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Listando activos fijos con estado Recepcionado sin número de póliza asignado",
-                    ExceptionTrace = ex.Message,
-                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
-                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                    UserName = "Usuario APP webappth"
-                });
+                    await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                    {
+                        ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                        Message = "Listando activos fijos con estado Recepcionado sin número de póliza asignado",
+                        ExceptionTrace = ex,
+                        LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
+                        LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                        UserName = "Usuario APP webappth"
+                    });
+                }
+                catch (Exception)
+                { }
                 return BadRequest();
             }
         }
@@ -851,7 +908,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Listando activos fijos con estado Recepcionado con número de póliza asignado",
-                    ExceptionTrace = ex.Message,
+                    ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP webappth"
@@ -895,7 +952,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Asignando Póliza",
-                    ExceptionTrace = ex.Message,
+                    ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP WebAppTh"
@@ -931,7 +988,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Listando activos fijos con estado Recepcionado",
-                    ExceptionTrace = ex.Message,
+                    ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP webappth"
@@ -959,7 +1016,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Listando activos fijos con estado Alta",
-                    ExceptionTrace = ex.Message,
+                    ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP webappth"
@@ -1034,7 +1091,7 @@ namespace bd.webapprm.web.Controllers.MVC
                                 {
                                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                                     Message = "Cambiando Estado de un Activo Fijo a Alta",
-                                    ExceptionTrace = ex.Message,
+                                    ExceptionTrace = ex,
                                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
                                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                                     UserName = "Usuario APP WebAppTh"
@@ -1049,7 +1106,7 @@ namespace bd.webapprm.web.Controllers.MVC
                         {
                             ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                             Message = "Insertando Alta de Activo Fijo",
-                            ExceptionTrace = ex.Message,
+                            ExceptionTrace = ex,
                             LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
                             LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                             UserName = "Usuario APP WebAppTh"
@@ -1065,7 +1122,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Seleccionando un Recepción Activo Fijo Detalle",
-                    ExceptionTrace = ex.Message,
+                    ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP WebAppTh"
@@ -1149,7 +1206,7 @@ namespace bd.webapprm.web.Controllers.MVC
                                 {
                                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                                     Message = "Cambiando Estado de un Activo Fijo a Alta",
-                                    ExceptionTrace = ex.Message,
+                                    ExceptionTrace = ex,
                                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
                                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                                     UserName = "Usuario APP WebAppTh"
@@ -1165,7 +1222,7 @@ namespace bd.webapprm.web.Controllers.MVC
                         {
                             ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                             Message = "Seleccionando un Activo Fijo Recepcion Detalle",
-                            ExceptionTrace = ex.Message,
+                            ExceptionTrace = ex,
                             LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
                             LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                             UserName = "Usuario APP WebAppTh"
@@ -1182,7 +1239,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Insertando Alta de Activo Fijo",
-                    ExceptionTrace = ex.Message,
+                    ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP WebAppTh"
@@ -1241,7 +1298,7 @@ namespace bd.webapprm.web.Controllers.MVC
                         {
                             ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                             Message = "Listando activos fijos con estado Recepcionado para adicionar componentes",
-                            ExceptionTrace = ex.Message,
+                            ExceptionTrace = ex,
                             LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
                             LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                             UserName = "Usuario APP webappth"
@@ -1330,7 +1387,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Listando activos fijos que han estado en Alta",
-                    ExceptionTrace = ex.Message,
+                    ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP webappth"
@@ -1360,7 +1417,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Listando activos fijos con estado Recepcionado",
-                    ExceptionTrace = ex.Message,
+                    ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP webappth"
@@ -1425,9 +1482,13 @@ namespace bd.webapprm.web.Controllers.MVC
                 ViewData["PaisO"] = new SelectList(await apiServicio.Listar<Pais>(new Uri(WebApp.BaseAddressTH), "api/Pais/ListarPais"), "IdPais", "Nombre");
                 ViewData["ProvinciaO"] = await ObtenerSelectListProvincia((ViewData["PaisO"] as SelectList).Where(x=>x.Value == recepcionActivoFijoDetalle.ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.IdPais.ToString()).FirstOrDefault() != null ? int.Parse((ViewData["PaisO"] as SelectList).Where(x => x.Value == recepcionActivoFijoDetalle.ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.IdPais.ToString()).FirstOrDefault().Value) : -1);
                 ViewData["CiudadO"] = await ObtenerSelectListCiudad((ViewData["ProvinciaO"] as SelectList).Where(x => x.Value == recepcionActivoFijoDetalle.ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.IdProvincia.ToString()).FirstOrDefault() != null ? int.Parse((ViewData["ProvinciaO"] as SelectList).Where(x => x.Value == recepcionActivoFijoDetalle.ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.IdProvincia.ToString()).FirstOrDefault().Value) : -1);
-                ViewData["SucursalO"] = await ObtenerSelectListSucursal((ViewData["CiudadO"] as SelectList).Where(x => x.Value == recepcionActivoFijoDetalle.ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.IdCiudad.ToString()).FirstOrDefault() != null ? int.Parse((ViewData["CiudadO"] as SelectList).Where(x => x.Value == recepcionActivoFijoDetalle.ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.IdCiudad.ToString()).FirstOrDefault().Value) : -1);               
-                ViewData["Empleado"] = new SelectList(await apiServicio.Listar<ListaEmpleadoViewModel>(new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleados"), "IdEmpleado", "NombreApellido");
+                ViewData["SucursalO"] = await ObtenerSelectListSucursal((ViewData["CiudadO"] as SelectList).Where(x => x.Value == recepcionActivoFijoDetalle.ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.IdCiudad.ToString()).FirstOrDefault() != null ? int.Parse((ViewData["CiudadO"] as SelectList).Where(x => x.Value == recepcionActivoFijoDetalle.ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.IdCiudad.ToString()).FirstOrDefault().Value) : -1);
 
+
+                var listaEmpleado = await apiServicio.Listar<Empleado>(new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleados");
+                var tlistaEmpleado = listaEmpleado.Select(c => new { IdEmpleado = c.IdEmpleado, NombreApellidos = String.Format("{0} {1}", c.Persona.Nombres, c.Persona.Apellidos) });
+                ViewData["Empleado"] = new SelectList(tlistaEmpleado, "IdEmpleado", "NombreApellidos");
+                                
                 return View("TransferirActivoFijo", recepcionActivoFijoDetalle);
             }
             catch (Exception ex)
@@ -1436,7 +1497,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Creando Transferencia de Activo Fijo",
-                    ExceptionTrace = ex.Message,
+                    ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP WebAppTh"
@@ -1557,7 +1618,7 @@ namespace bd.webapprm.web.Controllers.MVC
                                                     {
                                                         ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                                                         Message = "Listando activos fijos",
-                                                        ExceptionTrace = ex.Message,
+                                                        ExceptionTrace = ex,
                                                         LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
                                                         LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                                                         UserName = "Usuario APP webappth"
@@ -1583,7 +1644,7 @@ namespace bd.webapprm.web.Controllers.MVC
                         {
                             ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                             Message = "Seleccionando una Sucursal",
-                            ExceptionTrace = ex.Message,
+                            ExceptionTrace = ex,
                             LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
                             LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                             UserName = "Usuario APP WebAppTh"
@@ -1627,7 +1688,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 //            {
                 //                ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                 //                Message = "Listando activos fijos",
-                //                ExceptionTrace = ex.Message,
+                //                ExceptionTrace = ex,
                 //                LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
                 //                LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                 //                UserName = "Usuario APP webappth"
@@ -1642,7 +1703,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 //    {
                 //        ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                 //        Message = "Insertando una Transferencia de Activo Fijo",
-                //        ExceptionTrace = ex.Message,
+                //        ExceptionTrace = ex,
                 //        LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
                 //        LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                 //        UserName = "Usuario APP WebAppTh"
@@ -1729,7 +1790,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Creando Tipo Activo Fijo",
-                    ExceptionTrace = ex.Message,
+                    ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP WebAppRM"
@@ -1758,7 +1819,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Listando activos fijos con estado Baja",
-                    ExceptionTrace = ex.Message,
+                    ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP webappth"
@@ -1787,7 +1848,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Listando activos fijos con estado Recepcionado",
-                    ExceptionTrace = ex.Message,
+                    ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP webappth"
@@ -1814,7 +1875,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Listando Mantenimientos de Activos Fijos",
-                    ExceptionTrace = ex.Message,
+                    ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP webappth"
@@ -1826,7 +1887,9 @@ namespace bd.webapprm.web.Controllers.MVC
         public async Task<IActionResult> CrearMantenimiento()
         {
             ViewData["ActivoFijo"] = new SelectList(await apiServicio.Listar<ActivoFijo>(new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ListarActivosFijos"), "IdActivoFijo", "Nombre");
-            ViewData["Empleado"] = new SelectList(await apiServicio.Listar<ListaEmpleadoViewModel>(new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleados"), "IdEmpleado", "NombreApellido");
+            var listaEmpleado = await apiServicio.Listar<Empleado>(new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleados");
+            //var tlistaEmpleado = listaEmpleado.Select(c => new { IdEmpleado = c.IdEmpleado, NombreApellidos = String.Format("{0} {1}", c.Persona.Nombres, c.Persona.Apellidos) });
+            ViewData["Empleado"] = new SelectList(listaEmpleado, "IdEmpleado", "IdEmpleado");
             return View();
         }
 
@@ -1859,7 +1922,9 @@ namespace bd.webapprm.web.Controllers.MVC
 
                 ViewData["Error"] = response.Message;
                 ViewData["ActivoFijo"] = new SelectList(await apiServicio.Listar<ActivoFijo>(new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ListarActivosFijos"), "IdActivoFijo", "Nombre");
-                ViewData["Empleado"] = new SelectList(await apiServicio.Listar<ListaEmpleadoViewModel>(new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleados"), "IdEmpleado", "NombreApellido");
+                var listaEmpleado = await apiServicio.Listar<Empleado>(new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleados");
+                //var tlistaEmpleado = listaEmpleado.Select(c => new { IdEmpleado = c.IdEmpleado, NombreApellidos = String.Format("{0} {1}", c.Persona.Nombres, c.Persona.Apellidos) });
+                ViewData["Empleado"] = new SelectList(listaEmpleado, "IdEmpleado", "IdEmpleado");
                 return View(mantenimientoActivoFijo);
 
             }
@@ -1869,7 +1934,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Creando Mantenimiento Activo Fijo",
-                    ExceptionTrace = ex.Message,
+                    ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP WebAppTh"
@@ -1891,7 +1956,9 @@ namespace bd.webapprm.web.Controllers.MVC
 
                     respuesta.Resultado = JsonConvert.DeserializeObject<MantenimientoActivoFijo>(respuesta.Resultado.ToString());
                     ViewData["ActivoFijo"] = new SelectList(await apiServicio.Listar<ActivoFijo>(new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ListarActivosFijos"), "IdActivoFijo", "Nombre");
-                    ViewData["Empleado"] = new SelectList(await apiServicio.Listar<ListaEmpleadoViewModel>(new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleados"), "IdEmpleado", "NombreApellido");
+                    var listaEmpleado = await apiServicio.Listar<Empleado>(new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleados");
+                    var tlistaEmpleado = listaEmpleado.Select(c => new { IdEmpleado = c.IdEmpleado, NombreApellidos = String.Format("{0} {1}", c.Persona.Nombres, c.Persona.Apellidos) });
+                    ViewData["Empleado"] = new SelectList(tlistaEmpleado, "IdEmpleado", "NombreApellidos");
                     if (respuesta.IsSuccess)
                     {
                         return View(respuesta.Resultado);
@@ -1943,7 +2010,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Editando un Mantenimiento Activo Fijo",
-                    ExceptionTrace = ex.Message,
+                    ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.Edit),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP webappth"
@@ -1981,7 +2048,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Eliminar Mantenimiento Activo Fijo",
-                    ExceptionTrace = ex.Message,
+                    ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.Delete),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP webappth"
@@ -2015,7 +2082,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Listando activos fijos con estado Recepcionado",
-                    ExceptionTrace = ex.Message,
+                    ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP webappth"
@@ -2041,7 +2108,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Listando activos fijos por área usuaria y clasificado por funcionario",
-                    ExceptionTrace = ex.Message,
+                    ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP webappth"
@@ -2065,7 +2132,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Listando mantenimientos de activos fijos",
-                    ExceptionTrace = ex.Message,
+                    ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP webappth"
@@ -2091,7 +2158,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Listando activos fijos con estado Recepcionado con número de póliza asignado",
-                    ExceptionTrace = ex.Message,
+                    ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP webappth"

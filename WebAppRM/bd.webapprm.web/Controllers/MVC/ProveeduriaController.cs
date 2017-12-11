@@ -44,15 +44,20 @@ namespace bd.webapprm.web.Controllers.MVC
             }
             catch (Exception ex)
             {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                try
                 {
-                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Listando artículos recepcionados",
-                    ExceptionTrace = ex.Message,
-                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
-                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                    UserName = "Usuario APP webappth"
-                });
+                    await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                    {
+                        ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                        Message = "Listando artículos recepcionados",
+                        ExceptionTrace = ex,
+                        LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
+                        LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                        UserName = "Usuario APP webappth"
+                    });
+                }
+                catch (Exception)
+                { }
                 return BadRequest();
             }
         }
@@ -236,16 +241,21 @@ namespace bd.webapprm.web.Controllers.MVC
 
                 if (response.IsSuccess)
                 {
-                    var responseLog = await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                    try
                     {
-                        ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                        ExceptionTrace = null,
-                        Message = recepcionArticulo.IdRecepcionArticulos == 0 ? "Se ha recepcionado un artículo" : "Se ha editado la recepción de un artículo",
-                        UserName = "Usuario 1",
-                        LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
-                        LogLevelShortName = Convert.ToString(LogLevelParameter.ADV),
-                        EntityID = string.Format("{0} {1}", "Artículo:", recepcionArticulo.IdArticulo),
-                    });
+                        await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                        {
+                            ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                            ExceptionTrace = null,
+                            Message = recepcionArticulo.IdRecepcionArticulos == 0 ? "Se ha recepcionado un artículo" : "Se ha editado la recepción de un artículo",
+                            UserName = "Usuario 1",
+                            LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
+                            LogLevelShortName = Convert.ToString(LogLevelParameter.ADV),
+                            EntityID = string.Format("{0} {1}", "Artículo:", recepcionArticulo.IdArticulo),
+                        });
+                    }
+                    catch (Exception)
+                    { }
                     return RedirectToAction("ListadoRecepcion");
                 }
 
@@ -270,15 +280,20 @@ namespace bd.webapprm.web.Controllers.MVC
             }
             catch (Exception ex)
             {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                try
                 {
-                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Creando recepción Artículo",
-                    ExceptionTrace = ex.Message,
-                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
-                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                    UserName = "Usuario APP WebAppTh"
-                });
+                    await GuardarLogService.SaveLogEntry(new LogEntryTranfer
+                    {
+                        ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
+                        Message = "Creando recepción Artículo",
+                        ExceptionTrace = ex,
+                        LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
+                        LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
+                        UserName = "Usuario APP WebAppTh"
+                    });
+                }
+                catch (Exception)
+                { }
                 return BadRequest();
             }
         }
@@ -300,7 +315,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Listando Artículos en Alta",
-                    ExceptionTrace = ex.Message,
+                    ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP webappth"
@@ -323,7 +338,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Listando Artículos en Baja",
-                    ExceptionTrace = ex.Message,
+                    ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP webappth"
@@ -346,7 +361,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Listando Artículos Recepcionados",
-                    ExceptionTrace = ex.Message,
+                    ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP webappth"
@@ -369,7 +384,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Listando Artículos en alerta de vencimiento",
-                    ExceptionTrace = ex.Message,
+                    ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP webappth"
@@ -392,7 +407,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Listando Artículos recepcionados en Alta",
-                    ExceptionTrace = ex.Message,
+                    ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP webappth"
@@ -415,7 +430,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Listando Artículos recepcionados en Alta",
-                    ExceptionTrace = ex.Message,
+                    ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP webappth"
@@ -438,7 +453,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Listando Artículos Mínimos",
-                    ExceptionTrace = ex.Message,
+                    ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP webappth"
@@ -631,7 +646,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Listando articulos recepcionados",
-                    ExceptionTrace = ex.Message,
+                    ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP webappth"
@@ -664,7 +679,7 @@ namespace bd.webapprm.web.Controllers.MVC
                         {
                             ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                             Message = "Listando facturas",
-                            ExceptionTrace = ex.Message,
+                            ExceptionTrace = ex,
                             LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
                             LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                             UserName = "Usuario APP WebAppTh"
@@ -680,7 +695,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Listando un objeto de RecepcionArticulos",
-                    ExceptionTrace = ex.Message,
+                    ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP WebAppTh"
@@ -752,7 +767,7 @@ namespace bd.webapprm.web.Controllers.MVC
                         {
                             ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                             Message = "Listando facturas",
-                            ExceptionTrace = ex.Message,
+                            ExceptionTrace = ex,
                             LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
                             LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                             UserName = "Usuario APP WebAppTh"
@@ -770,7 +785,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Listando un objeto de RecepcionArticulos",
-                    ExceptionTrace = ex.Message,
+                    ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP WebAppTh"
@@ -840,7 +855,7 @@ namespace bd.webapprm.web.Controllers.MVC
                         {
                             ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                             Message = "Listando facturas",
-                            ExceptionTrace = ex.Message,
+                            ExceptionTrace = ex,
                             LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
                             LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                             UserName = "Usuario APP WebAppTh"
@@ -858,7 +873,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Listando un objeto de RecepcionArticulos",
-                    ExceptionTrace = ex.Message,
+                    ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP WebAppTh"
@@ -895,7 +910,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Incluyendo una factura a un objeto de Alta",
-                    ExceptionTrace = ex.Message,
+                    ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP WebAppTh"
@@ -962,7 +977,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Excluyendo una factura a un objeto de Alta",
-                    ExceptionTrace = ex.Message,
+                    ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP WebAppTh"
@@ -1057,7 +1072,7 @@ namespace bd.webapprm.web.Controllers.MVC
                                     {
                                         ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                                         Message = "Eliminando un objeto de AltaProveeduria",
-                                        ExceptionTrace = ex.Message,
+                                        ExceptionTrace = ex,
                                         LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
                                         LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                                         UserName = "Usuario APP WebAppTh"
@@ -1073,7 +1088,7 @@ namespace bd.webapprm.web.Controllers.MVC
                             {
                                 ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                                 Message = "Insertando un objeto de FacturasPorAltaProveeduria",
-                                ExceptionTrace = ex.Message,
+                                ExceptionTrace = ex,
                                 LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
                                 LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                                 UserName = "Usuario APP WebAppTh"
@@ -1094,7 +1109,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Listando un objeto de RecepcionArticulos",
-                    ExceptionTrace = ex.Message,
+                    ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP WebAppTh"
@@ -1119,7 +1134,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Listando maestros de artículos de sucursal",
-                    ExceptionTrace = ex.Message,
+                    ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP webappth"
@@ -1183,7 +1198,7 @@ namespace bd.webapprm.web.Controllers.MVC
                             {
                                 ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                                 Message = "Insertando Detalle de una Factura",
-                                ExceptionTrace = ex.Message,
+                                ExceptionTrace = ex,
                                 LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
                                 LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                                 UserName = "Usuario APP webappth"
@@ -1198,7 +1213,7 @@ namespace bd.webapprm.web.Controllers.MVC
                         {
                             ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                             Message = "Obteniendo factura por Numero",
-                            ExceptionTrace = ex.Message,
+                            ExceptionTrace = ex,
                             LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
                             LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                             UserName = "Usuario APP webappth"
@@ -1216,7 +1231,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Insertando una Factura",
-                    ExceptionTrace = ex.Message,
+                    ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP webappth"
@@ -1249,7 +1264,7 @@ namespace bd.webapprm.web.Controllers.MVC
                     {
                         ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                         Message = "Listando artículos en el ingreso de una factura",
-                        ExceptionTrace = ex.Message,
+                        ExceptionTrace = ex,
                         LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
                         LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                         UserName = "Usuario APP webappth"
@@ -1263,7 +1278,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Listando proveedores en el ingreso de una factura",
-                    ExceptionTrace = ex.Message,
+                    ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP webappth"
@@ -1291,7 +1306,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Listando articulos recepcionados",
-                    ExceptionTrace = ex.Message,
+                    ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP webappth"
@@ -1317,7 +1332,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Listando un objeto de RecepcionArticulos",
-                    ExceptionTrace = ex.Message,
+                    ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP WebAppTh"
@@ -1352,7 +1367,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Listando un objeto de RecepcionArticulos",
-                    ExceptionTrace = ex.Message,
+                    ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP WebAppTh"
@@ -1375,7 +1390,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Listando un objeto de RecepcionArticulos",
-                    ExceptionTrace = ex.Message,
+                    ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP WebAppTh"
@@ -1423,7 +1438,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Listando un objeto de RecepcionArticulos",
-                    ExceptionTrace = ex.Message,
+                    ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP WebAppTh"
@@ -1484,7 +1499,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Dando baja a un Artículo",
-                    ExceptionTrace = ex.Message,
+                    ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP WebAppTh"
@@ -1516,7 +1531,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Dando baja a un Artículo",
-                    ExceptionTrace = ex.Message,
+                    ExceptionTrace = ex,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP WebAppTh"
