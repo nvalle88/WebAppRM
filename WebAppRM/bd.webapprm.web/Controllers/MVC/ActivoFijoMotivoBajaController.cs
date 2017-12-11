@@ -66,7 +66,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Creando Activo Fijo Motivo Baja",
-                    ExceptionTrace = ex,
+                    ExceptionTrace = ex.Message,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP WebAppRM"
@@ -138,7 +138,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Editando un ActivoFijoMotivoBaja",
-                    ExceptionTrace = ex,
+                    ExceptionTrace = ex.Message,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.Edit),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP WebAppRM"
@@ -163,7 +163,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Listando Activo Fijo Motivo Baja",
-                    ExceptionTrace = ex,
+                    ExceptionTrace = ex.Message,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP WebAppRM"
@@ -200,7 +200,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
                     Message = "Eliminar Activo Fijo Motivo Baja",
-                    ExceptionTrace = ex,
+                    ExceptionTrace = ex.Message,
                     LogCategoryParametre = Convert.ToString(LogCategoryParameter.Delete),
                     LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
                     UserName = "Usuario APP WebAppRM"
