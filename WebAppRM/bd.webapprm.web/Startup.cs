@@ -1,7 +1,9 @@
-﻿using bd.webapprm.servicios.Interfaces;
+﻿using bd.webapprm.entidades.Utils;
+using bd.webapprm.servicios.Interfaces;
 using bd.webapprm.servicios.Servicios;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -31,16 +33,13 @@ namespace bd.webapprm.web
             services.AddMvc();
             services.AddSingleton<IApiServicio, ApiServicio>();
 
-            var ServicioSeguridad = Configuration.GetSection("ServicioSeguridad").Value;
-            var ServiciosLog = Configuration.GetSection("ServiciosLog").Value;
-            var ServicioTalentoHumano = Configuration.GetSection("ServiciosTalentoHumano").Value;
-            var ServiciosRecursosMateriales = Configuration.GetSection("ServiciosRecursosMateriales").Value;
+            WebApp.BaseAddressWebAppLogin = Configuration.GetSection("HostWebAppLogin").Value;
+            WebApp.NombreAplicacion = Configuration.GetSection("NombreAplicacion").Value;
 
-            var HostSeguridad = Configuration.GetSection("HostServicioSeguridad").Value;
-            await InicializarWebApp.InicializarWebRecursosMateriales(ServiciosRecursosMateriales, new Uri(HostSeguridad));
-            await InicializarWebApp.InicializarSeguridad(ServicioSeguridad, new Uri(HostSeguridad));
-            await InicializarWebApp.InicializarWebTalentoHumano(ServicioTalentoHumano, new Uri(HostSeguridad));
-            await InicializarWebApp.InicializarLogEntry(ServiciosLog, new Uri(HostSeguridad));
+            WebApp.BaseAddressRM = Configuration.GetSection("HostServiciosRecursosMateriales").Value;
+            WebApp.BaseAddressSeguridad = Configuration.GetSection("HostServicioSeguridad").Value;
+            WebApp.BaseAddressTH = Configuration.GetSection("HostServiciosTalentoHumano").Value;
+           // AppGuardarLog.BaseAddress = Configuration.GetSection("HostServicioLog").Value;
 
         }
 
