@@ -1,8 +1,5 @@
 @model bd.webapprm.entidades.RecepcionArticulos
-
 @{
-    ViewData["Title"] = "Formulario para Alta de Artículos de Proveedurías";
-
     //List<bd.webapprm.entidades.Factura> listadoTablaFacturas = new List<bd.webapprm.entidades.Factura>();
     //listadoTablaFacturas = ViewBag.tablaFacturas;
 
@@ -10,37 +7,23 @@
     //listadoTablaFacturasSeleccionadas = ViewBag.ListadoFacturasSeleccionadas;
 }
 
-<link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
-
+@section css{
+    <link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
+}
 
 <div id="content">
-
-    <!-- widget grid -->
     <section id="widget-grid" class="">
-
-        <!-- START ROW -->
         <div class="row">
-            <!-- NEW COL START -->
             <article class="col-sm-12 col-md-12 col-lg-7">
-                <!-- Widget ID (each widget will need unique ID)-->
                 <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
-
                     <header>
                         <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
                         <h2>Formulario de Altas a Art&iacute;culos de Proveedur&iacute;as</h2>
                     </header>
-                    <!-- widget div-->
                     <div>
-
-                        <!-- widget edit box -->
                         <div class="jarviswidget-editbox">
-                            <!-- This area used as dropdown edit box -->
-
                         </div>
-                        <!-- end widget edit box -->
-                        <!-- widget content -->
                         <div class="widget-body no-padding">
-
                             <form asp-action="AprobarAltaArticulo" controller="Proveeduria" id="checkout-form" class="smart-form" novalidate="novalidate">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <fieldset>
@@ -114,7 +97,7 @@
                                                 @*@Html.Partial("_FacturasIncluidas")*@
                                             </section>
                                         </div>
-                                        
+
                                     </div>
 
                                     <div class="row hide" id="divDocumentos">
@@ -128,112 +111,30 @@
                                             </div>
                                         </section>
                                     </div>
-
-
                                 </fieldset>
-
                                 <footer>
                                     <span class="text-danger">@ViewData["Error"]</span>
-                                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                                    <button type="submit" class="btn btn-primary" id="btn-guardar">Guardar</button>
                                     <a asp-action="Index" class="btn btn-default">Cancelar</a>
-
                                 </footer>
-
                             </form>
                         </div>
-                        <!-- end widget content -->
                     </div>
-                    <!-- end widget div -->
                 </div>
-                <!-- end widget -->
-
             </article>
-
         </div>
-        <!-- END ROW -->
     </section>
-    <!-- end widget grid -->
-    <!-- Modal -->
 </div>
 @section Scripts{
-    <script src='~/lib/select2/dist/js/select2.min.js'></script>
-    <script src='~/lib/select2/dist/js/i18n/es.js'></script>
-    <script src='~/js/site.js'></script>
+    @{await Html.RenderPartialAsync("_Select2ScriptsPartial");}
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/proveeduria/formularioAltaArticulo.js"></script>
     <script>
-        jQuery(document).ready(function () {
-            Init_Select2();
-            
-            var ID = '@Model.IdRecepcionArticulos';
-
-            $.ajax({
-                url: '/Proveeduria/CargarTablaFacturasExcluidas',
-                //type: 'json',
-                data: { ID: ID },
-                success: function (data) {
-                    $('#facturasExluidas').html(data);
-                }
-            });
-
-            $.ajax({
-                url: '/Proveeduria/CargarTablaFacturasIncluidas',
-                //type: 'json',
-                data: { ID: ID },
-                success: function (data) {
-                    $('#facturasIncluidas').html(data);
-                }
-            });
-            
-            $("#acreditacion").on("change", function (e) {
-                var valor = $("#acreditacion").val();
-                if (valor == "Facturas") {
-                    $("#divDocumentos").addClass("hide");
-                    $("#camposFactura").removeClass("hide");                                        
-                }
-                else {
-                    $("#camposFactura").addClass("hide");
-                    $("#divDocumentos").removeClass("hide");
-                }
-            });
-        });
-
-        function IncluirFacturas(idFactura) {
-            var idFact = idFactura;
-
-            $.ajax({
-                url: '/Proveeduria/RefrescarTablaExcluidos',
-                data: { idFactura: idFact },
-                success: function (data) {
-                    $('#facturasExluidas').html(data);
-                }
-            });
-
-            $.ajax({
-                url: '/Proveeduria/IncluirFacturasEnAlta',
-                data: { idFactura: idFact },
-                success: function (data) {
-                    $('#facturasIncluidas').html(data);
-                }
-            });
-        };
-
-        function ExcluirFacturas(idFactura) {
-            var idFact = idFactura;
-
-            $.ajax({
-                url: '/Proveeduria/RefrescarTablaIncluidos',
-                data: { idFactura: idFact },
-                success: function (data) {
-                    $('#facturasIncluidas').html(data);
-                }
-            });
-
-            $.ajax({
-                url: '/Proveeduria/ExcluirFacturasEnAlta',
-                data: { idFactura: idFact },
-                success: function (data) {
-                    $('#facturasExluidas').html(data);
-                }
-            });
-        };
+        var urlCargarTablaFacturasExcluidas = "@Url.Action("CargarTablaFacturasExcluidas", "Proveeduria")";
+        var urlCargarTablaFacturasIncluidas = "@Url.Action("CargarTablaFacturasIncluidas", "Proveeduria")";
+        var urlRefrescarTablaExcluidos = "@Url.Action("RefrescarTablaExcluidos", "Proveeduria")";
+        var urlIncluirFacturasEnAlta = "@Url.Action("IncluirFacturasEnAlta", "Proveeduria")";
+        var urlRefrescarTablaIncluidos = "@Url.Action("RefrescarTablaIncluidos", "Proveeduria")";
+        var urlExcluirFacturasEnAlta = "@Url.Action("ExcluirFacturasEnAlta", "Proveeduria")";
     </script>
 }

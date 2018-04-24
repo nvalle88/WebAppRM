@@ -1,16 +1,7 @@
 @model bd.webapprm.entidades.RecepcionActivoFijoDetalle
-@{ 
-    var codigoActivoFijo = Model?.ActivoFijo?.CodigoActivoFijo;
-    if (codigoActivoFijo != null)
-    {
-        if (codigoActivoFijo.CodigoBarras == "N/A")
-        {
-            codigoActivoFijo.CodigoBarras = "";
-        }
-    }
-
-    var numeroConsecutivo = ViewBag.numeroConsecutivo ?? 1;
-}
+<input type="hidden" asp-for="ActivoFijo.CodigoActivoFijo.IdCodigoActivoFijo" />
+<input type="hidden" asp-for="ActivoFijo.CodigoActivoFijo.TAF" />
+<input type="hidden" asp-for="ActivoFijo.CodigoActivoFijo.CAF" />
 <fieldset>
     <legend>Generaci&oacute;n y asignaci&oacute;n del C&oacute;digo &Uacute;nico</legend>
     <div class="row">
@@ -51,13 +42,13 @@
 
         <section class="col col-8">
             <div class="input-group spinner" data-trigger="spinner">
-                <input type="text" id="numeroConsecutivo" name="numeroConsecutivo" value="@numeroConsecutivo" class="form-control" data-rule="quantity" style="padding-left:10px !important;" />
+                <input type="text" asp-for="ActivoFijo.CodigoActivoFijo.Consecutivo" class="form-control" data-rule="quantity" style="padding-left:10px !important;" />
                 <div class="input-group-addon" style="padding-left:23px !important;">
                     <a href="javascript:;" class="spin-up" data-spin="up"><i class="fa fa-caret-up"></i></a>
                     <a href="javascript:;" class="spin-down" data-spin="down"><i class="fa fa-caret-down"></i></a>
                 </div>
             </div>
-            <span class="text-danger">@ViewData["errorNumeroConsecutivo"]</span>
+            <span asp-validation-for="ActivoFijo.CodigoActivoFijo.Consecutivo" class="text-danger"></span>
         </section>
     </div>
 
@@ -71,6 +62,7 @@
         <section class="col col-8">
             <label class="input">
                 <input class="form-control" asp-for="ActivoFijo.CodigoActivoFijo.CodigoBarras" maxlength="20" />
+                <span asp-validation-for="ActivoFijo.CodigoActivoFijo.CodigoBarras" class="text-danger"></span>
             </label>
         </section>
     </div>

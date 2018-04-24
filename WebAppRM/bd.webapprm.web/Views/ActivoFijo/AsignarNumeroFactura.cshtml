@@ -1,51 +1,36 @@
 @model bd.webapprm.entidades.RecepcionActivoFijoDetalle
-@{ 
+@{
     ICollection<bd.webapprm.entidades.Factura> lista = Model.RecepcionActivoFijo.Proveedor.Factura;
 
     List<SelectListItem> listadoFacturas = new List<SelectListItem>();
-    
+
     foreach (var item in lista)
     {
         SelectListItem _item = new SelectListItem();
         _item.Text = item.Numero;
         _item.Value = item.IdFactura.ToString();
-
         listadoFacturas.Add(_item);
     }
 }
 
-<link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
+@section css{
+    <link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
+}
+
 <div id="content">
-
-    <!-- widget grid -->
     <section id="widget-grid" class="">
-
-        <!-- START ROW -->
         <div class="row">
-            <!-- NEW COL START -->
             <article class="col-sm-12 col-md-12 col-lg-6">
-                <!-- Widget ID (each widget will need unique ID)-->
                 <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
-
                     <header>
                         <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
                         <h2>Asignar n&uacute;mero de factura</h2>
                     </header>
-                    <!-- widget div-->
                     <div>
-
-                        <!-- widget edit box -->
                         <div class="jarviswidget-editbox">
-                            <!-- This area used as dropdown edit box -->
-
                         </div>
-                        <!-- end widget edit box -->
-                        <!-- widget content -->
                         <div class="widget-body no-padding">
-
-                            <form asp-action="
-                                  
-                                  " id="checkout-form" class="smart-form" novalidate="novalidate">
+                            <form asp-action="AsignarNumeroFactura" id="checkout-form" class="smart-form" novalidate="novalidate">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <fieldset>
                                     <div class="row">
@@ -73,32 +58,20 @@
                                             <input type="submit" value="Dar Alta" class="btn btn-primary" disabled="disabled" />
                                         }
                                     }
-                                    
                                     <a asp-action="ActivosFijosRecepcionados" class="btn btn-default">Cancelar</a>
-     
                                 </footer>
-
                             </form>
                         </div>
-                        <!-- end widget content -->
                     </div>
-                    <!-- end widget div -->
                 </div>
-                <!-- end widget -->
-
             </article>
-
         </div>
-        <!-- END ROW -->
     </section>
-    <!-- end widget grid -->
-    <!-- Modal -->
 </div>
 
 @section Scripts {
-    <script src='~/lib/select2/dist/js/select2.min.js'></script>
-    <script src='~/lib/select2/dist/js/i18n/es.js'></script>
-    <script src='~/js/site.js'></script>
+    @{await Html.RenderPartialAsync("_Select2ScriptsPartial");}
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script type="text/javascript">
         $(document).ready(function () {
             Init_Select2();

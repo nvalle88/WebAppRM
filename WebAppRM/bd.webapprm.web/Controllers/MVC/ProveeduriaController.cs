@@ -13,6 +13,7 @@ using bd.webapprm.entidades;
 using bbd.webapprm.servicios.Enumeradores;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using bd.webapprm.entidades.ObjectTransfer;
+using bd.webapprm.servicios.Extensores;
 
 namespace bd.webapprm.web.Controllers.MVC
 {
@@ -38,50 +39,44 @@ namespace bd.webapprm.web.Controllers.MVC
             var lista = new List<RecepcionArticulos>();
             try
             {
-                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "api/RecepcionArticulo/ListarRecepcionArticulos");
-                return View(lista);
+                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM), "api/RecepcionArticulo/ListarRecepcionArticulos");
             }
             catch (Exception ex)
             {
-                try
-                {
-                    await GuardarLogService.SaveLogEntry(new LogEntryTranfer
-                    {
-                        ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                        Message = "Listando artículos recepcionados",
-                        ExceptionTrace = ex.Message,
-                        LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
-                        LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                        UserName = "Usuario APP webappth"
-                    });
-                }
-                catch (Exception)
-                { }
-                return BadRequest();
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Listando artículos recepcionados", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webappth" });
+                TempData["Mensaje"] = $"{Mensaje.Error}|{Mensaje.ErrorListado}";
             }
+            return View(lista);
         }
 
         public async Task<IActionResult> Recepcion()
         {
-            ViewData["TipoArticulo"] = new SelectList(await apiServicio.Listar<TipoArticulo>(new Uri(WebApp.BaseAddressRM), "api/TipoArticulo/ListarTipoArticulo"), "IdTipoArticulo", "Nombre");
-            ViewData["ClaseArticulo"] = await ObtenerSelectListClaseArticulo((ViewData["TipoArticulo"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["TipoArticulo"] as SelectList).FirstOrDefault().Value) : -1);
-            ViewData["SubClaseArticulo"] = await ObtenerSelectListSubClaseArticulo((ViewData["ClaseArticulo"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["ClaseArticulo"] as SelectList).FirstOrDefault().Value) : -1);
-            ViewData["Articulo"] = await ObtenerSelectListArticulo((ViewData["SubClaseArticulo"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["SubClaseArticulo"] as SelectList).FirstOrDefault().Value) : -1);
+            try
+            {
+                ViewData["TipoArticulo"] = new SelectList(await apiServicio.Listar<TipoArticulo>(new Uri(WebApp.BaseAddressRM), "api/TipoArticulo/ListarTipoArticulo"), "IdTipoArticulo", "Nombre");
+                ViewData["ClaseArticulo"] = await ObtenerSelectListClaseArticulo((ViewData["TipoArticulo"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["TipoArticulo"] as SelectList).FirstOrDefault().Value) : -1);
+                ViewData["SubClaseArticulo"] = await ObtenerSelectListSubClaseArticulo((ViewData["ClaseArticulo"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["ClaseArticulo"] as SelectList).FirstOrDefault().Value) : -1);
+                ViewData["Articulo"] = await ObtenerSelectListArticulo((ViewData["SubClaseArticulo"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["SubClaseArticulo"] as SelectList).FirstOrDefault().Value) : -1);
 
-            ViewData["Pais"] = new SelectList(await apiServicio.Listar<Pais>(new Uri(WebApp.BaseAddressTH), "api/Pais/ListarPais"), "IdPais", "Nombre");
-            ViewData["Provincia"] = await ObtenerSelectListProvincia((ViewData["Pais"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Pais"] as SelectList).FirstOrDefault().Value) : -1);
-            ViewData["Ciudad"] = await ObtenerSelectListCiudad((ViewData["Provincia"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Provincia"] as SelectList).FirstOrDefault().Value) : -1);
-            ViewData["Sucursal"] = await ObtenerSelectListSucursal((ViewData["Ciudad"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Ciudad"] as SelectList).FirstOrDefault().Value) : -1);
-            ViewData["MaestroArticuloSucursal"] = await ObtenerSelectListMaestroArticuloSucursal((ViewData["Sucursal"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Sucursal"] as SelectList).FirstOrDefault().Value) : -1);
+                ViewData["Pais"] = new SelectList(await apiServicio.Listar<Pais>(new Uri(WebApp.BaseAddressTH), "api/Pais/ListarPais"), "IdPais", "Nombre");
+                ViewData["Provincia"] = await ObtenerSelectListProvincia((ViewData["Pais"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Pais"] as SelectList).FirstOrDefault().Value) : -1);
+                ViewData["Ciudad"] = await ObtenerSelectListCiudad((ViewData["Provincia"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Provincia"] as SelectList).FirstOrDefault().Value) : -1);
+                ViewData["Sucursal"] = await ObtenerSelectListSucursal((ViewData["Ciudad"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Ciudad"] as SelectList).FirstOrDefault().Value) : -1);
+                ViewData["MaestroArticuloSucursal"] = await ObtenerSelectListMaestroArticuloSucursal((ViewData["Sucursal"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Sucursal"] as SelectList).FirstOrDefault().Value) : -1);
 
-            var listaProveedor = await apiServicio.Listar<Proveedor>(new Uri(WebApp.BaseAddressRM), "api/Proveedor/ListarProveedores");
-            var tlistaProveedor = listaProveedor.Select(c => new { IdProveedor = c.IdProveedor, NombreApellidos = String.Format("{0} {1}", c.Nombre, c.Apellidos) });
-            ViewData["Proveedor"] = new SelectList(tlistaProveedor, "IdProveedor", "NombreApellidos");
-
-            ViewData["Empleado"] = new SelectList(await apiServicio.Listar<ListaEmpleadoViewModel>(new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleados"), "IdEmpleado", "NombreApellido");
-            return View();
+                ViewData["Proveedor"] = new SelectList((await apiServicio.Listar<Proveedor>(new Uri(WebApp.BaseAddressRM), "api/Proveedor/ListarProveedores")).Select(c => new { c.IdProveedor, NombreApellidos = String.Format("{0} {1}", c.Nombre, c.Apellidos) }), "IdProveedor", "NombreApellidos");
+                ViewData["Empleado"] = new SelectList(await apiServicio.Listar<ListaEmpleadoViewModel>(new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleados"), "IdEmpleado", "NombreApellido");
+                return View();
+            }
+            catch (Exception)
+            {
+                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorCargarDatos}");
+            }
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Recepcion(RecepcionArticulos recepcionArticulo) => await GestionarRecepcionArticulos(recepcionArticulo);
 
         public async Task<IActionResult> EditarRecepcion(string id)
         {
@@ -89,11 +84,11 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddressRM),
-                                                                  "api/RecepcionArticulo");
-
-                    respuesta.Resultado = JsonConvert.DeserializeObject<RecepcionArticulos>(respuesta.Resultado.ToString());
-                    var recepcionArticulos = respuesta.Resultado as RecepcionArticulos;
+                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddressRM), "api/RecepcionArticulo");
+                    if (!respuesta.IsSuccess)
+                        return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}");
+                    
+                    var recepcionArticulos = JsonConvert.DeserializeObject<RecepcionArticulos>(respuesta.Resultado.ToString());
                     if (respuesta.IsSuccess)
                     {
                         ViewData["TipoArticulo"] = new SelectList(await apiServicio.Listar<TipoArticulo>(new Uri(WebApp.BaseAddressRM), "api/TipoArticulo/ListarTipoArticulo"), "IdTipoArticulo", "Nombre");
@@ -106,26 +101,19 @@ namespace bd.webapprm.web.Controllers.MVC
                         ViewData["Ciudad"] = await ObtenerSelectListCiudad(recepcionArticulos?.MaestroArticuloSucursal?.Sucursal?.Ciudad?.Provincia?.IdProvincia ?? -1);
                         ViewData["Sucursal"] = await ObtenerSelectListSucursal(recepcionArticulos?.MaestroArticuloSucursal?.Sucursal?.Ciudad?.IdCiudad ?? -1);
                         ViewData["MaestroArticuloSucursal"] = await ObtenerSelectListMaestroArticuloSucursal(recepcionArticulos?.MaestroArticuloSucursal?.Sucursal?.IdSucursal ?? -1);
-
-                        var listaProveedor = await apiServicio.Listar<Proveedor>(new Uri(WebApp.BaseAddressRM), "api/Proveedor/ListarProveedores");
-                        var tlistaProveedor = listaProveedor.Select(c => new { IdProveedor = c.IdProveedor, NombreApellidos = String.Format("{0} {1}", c.Nombre, c.Apellidos) });
-                        ViewData["Proveedor"] = new SelectList(tlistaProveedor, "IdProveedor", "NombreApellidos");
-
+                        
+                        ViewData["Proveedor"] = new SelectList((await apiServicio.Listar<Proveedor>(new Uri(WebApp.BaseAddressRM), "api/Proveedor/ListarProveedores")).Select(c => new { c.IdProveedor, NombreApellidos = String.Format("{0} {1}", c.Nombre, c.Apellidos) }), "IdProveedor", "NombreApellidos");
                         ViewData["Empleado"] = new SelectList(await apiServicio.Listar<ListaEmpleadoViewModel>(new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleados"), "IdEmpleado", "NombreApellido");
                         return View(recepcionArticulos);
                     }
                 }
-                return BadRequest();
+                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}");
             }
             catch (Exception)
             {
-                return BadRequest();
+                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorCargarDatos}");
             }
         }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Recepcion(RecepcionArticulos recepcionArticulo) => await GestionarRecepcionArticulos(recepcionArticulo);
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -133,107 +121,16 @@ namespace bd.webapprm.web.Controllers.MVC
 
         private async Task<IActionResult> GestionarRecepcionArticulos(RecepcionArticulos recepcionArticulo)
         {
-            Response response = new Response();
             try
             {
-                if (recepcionArticulo.IdArticulo == 0)
-                {
-                    try
-                    {
-                        recepcionArticulo.Articulo = new Articulo();
-                        int IdSubClaseArticulo = int.Parse(Request.Form["Articulo.IdSubClaseArticulo"].ToString());
-                        var listaSubClaseArticulo = await apiServicio.Listar<SubClaseArticulo>(new Uri(WebApp.BaseAddressRM), "api/SubClaseArticulo/ListarSubClaseArticulos");
-                        recepcionArticulo.Articulo.SubClaseArticulo = listaSubClaseArticulo.SingleOrDefault(c => c.IdSubClaseArticulo == IdSubClaseArticulo);
-                        recepcionArticulo.Articulo.IdSubClaseArticulo = IdSubClaseArticulo;
-                    }
-                    catch (Exception)
-                    {
-                        try
-                        {
-                            recepcionArticulo.Articulo.SubClaseArticulo = new SubClaseArticulo();
-                            int IdClaseArticulo = int.Parse(Request.Form["Articulo.SubClaseArticulo.IdClaseArticulo"].ToString());
-                            var listaClaseArticulo = await apiServicio.Listar<ClaseArticulo>(new Uri(WebApp.BaseAddressRM), "api/ClaseArticulo/ListarClaseArticulo");
-                            recepcionArticulo.Articulo.SubClaseArticulo.ClaseArticulo = listaClaseArticulo.SingleOrDefault(c => c.IdClaseArticulo == IdClaseArticulo);
-                            recepcionArticulo.Articulo.SubClaseArticulo.IdClaseArticulo = IdClaseArticulo;
-                        }
-                        catch (Exception)
-                        {
-                            try
-                            {
-                                recepcionArticulo.Articulo.SubClaseArticulo.ClaseArticulo = new ClaseArticulo();
-                                int IdTipoArticulo = int.Parse(Request.Form["Articulo.SubClaseArticulo.ClaseArticulo.IdTipoArticulo"].ToString());
-                                var listaTipoArticulo = await apiServicio.Listar<TipoArticulo>(new Uri(WebApp.BaseAddressRM), "api/TipoArticulo/ListarTipoArticulo");
-                                recepcionArticulo.Articulo.SubClaseArticulo.ClaseArticulo.TipoArticulo = listaTipoArticulo.SingleOrDefault(c => c.IdTipoArticulo == IdTipoArticulo);
-                                recepcionArticulo.Articulo.SubClaseArticulo.ClaseArticulo.IdTipoArticulo = IdTipoArticulo;
-                            }
-                            catch (Exception)
-                            { }
-                        }
-                    }
-                }
-                else
-                {
-                    var listaArticulo = await apiServicio.Listar<Articulo>(new Uri(WebApp.BaseAddressRM), "api/Articulo/ListarArticulos");
-                    recepcionArticulo.Articulo = listaArticulo.SingleOrDefault(c => c.IdArticulo == recepcionArticulo.IdArticulo);
-                }
+                recepcionArticulo.MaestroArticuloSucursal = JsonConvert.DeserializeObject<MaestroArticuloSucursal>((await apiServicio.SeleccionarAsync<Response>(recepcionArticulo.IdMaestroArticuloSucursal.ToString(), new Uri(WebApp.BaseAddressRM), "api/MaestroArticuloSucursal")).Resultado.ToString());
+                recepcionArticulo.IdMaestroArticuloSucursal = recepcionArticulo.MaestroArticuloSucursal.IdMaestroArticuloSucursal;
+                recepcionArticulo.Proveedor = JsonConvert.DeserializeObject<Proveedor>((await apiServicio.SeleccionarAsync<Response>(recepcionArticulo.IdProveedor.ToString(), new Uri(WebApp.BaseAddressRM), "api/Proveedor")).Resultado.ToString());
+                recepcionArticulo.IdProveedor = recepcionArticulo.Proveedor.IdProveedor;
+                recepcionArticulo.Articulo = JsonConvert.DeserializeObject<Articulo>((await apiServicio.SeleccionarAsync<Response>(recepcionArticulo.IdArticulo.ToString(), new Uri(WebApp.BaseAddressRM), "api/Articulo")).Resultado.ToString());
+                recepcionArticulo.IdArticulo = recepcionArticulo.Articulo.IdArticulo;
 
-                if (recepcionArticulo.IdMaestroArticuloSucursal == 0)
-                {
-                    try
-                    {
-                        recepcionArticulo.MaestroArticuloSucursal = new MaestroArticuloSucursal();
-                        int IdSucursal = int.Parse(Request.Form["MaestroArticuloSucursal.IdSucursal"].ToString());
-
-                        var listaSucursal = await apiServicio.Listar<Sucursal>(new Uri(WebApp.BaseAddressTH), "api/Sucursal/ListarSucursal");
-                        recepcionArticulo.MaestroArticuloSucursal.Sucursal = listaSucursal.SingleOrDefault(c => c.IdSucursal == IdSucursal);
-                        recepcionArticulo.MaestroArticuloSucursal.IdSucursal = IdSucursal;
-                    }
-                    catch (Exception)
-                    {
-                        try
-                        {
-                            recepcionArticulo.MaestroArticuloSucursal.Sucursal = new Sucursal();
-                            int IdCiudad = int.Parse(Request.Form["MaestroArticuloSucursal.Sucursal.IdCiudad"].ToString());
-
-                            var listaCiudad = await apiServicio.Listar<Ciudad>(new Uri(WebApp.BaseAddressTH), "api/Ciudad/ListarCiudad");
-                            recepcionArticulo.MaestroArticuloSucursal.Sucursal.Ciudad = listaCiudad.SingleOrDefault(c => c.IdCiudad == IdCiudad);
-                            recepcionArticulo.MaestroArticuloSucursal.Sucursal.IdCiudad = IdCiudad;
-                        }
-                        catch (Exception)
-                        {
-                            try
-                            {
-                                recepcionArticulo.MaestroArticuloSucursal.Sucursal.Ciudad = new Ciudad();
-                                int IdProvincia = int.Parse(Request.Form["MaestroArticuloSucursal.Sucursal.Ciudad.IdProvincia"].ToString());
-
-                                var listaProvincia = await apiServicio.Listar<Provincia>(new Uri(WebApp.BaseAddressTH), "api/Provincia/ListarProvincia");
-                                recepcionArticulo.MaestroArticuloSucursal.Sucursal.Ciudad.Provincia = listaProvincia.SingleOrDefault(c => c.IdProvincia == IdProvincia);
-                                recepcionArticulo.MaestroArticuloSucursal.Sucursal.Ciudad.IdProvincia = IdProvincia;
-                            }
-                            catch (Exception)
-                            {
-                                try
-                                {
-                                    recepcionArticulo.MaestroArticuloSucursal.Sucursal.Ciudad.Provincia = new Provincia();
-                                    int IdPais = int.Parse(Request.Form["MaestroArticuloSucursal.Sucursal.Ciudad.Provincia.IdPais"].ToString());
-
-                                    var listaPais = await apiServicio.Listar<Pais>(new Uri(WebApp.BaseAddressTH), "api/Pais/ListarPais");
-                                    recepcionArticulo.MaestroArticuloSucursal.Sucursal.Ciudad.Provincia.Pais = listaPais.SingleOrDefault(c => c.IdPais == IdPais);
-                                    recepcionArticulo.MaestroArticuloSucursal.Sucursal.Ciudad.Provincia.IdPais = IdPais;
-                                }
-                                catch (Exception)
-                                { }
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    var listaMaestroSucursal = await apiServicio.Listar<MaestroArticuloSucursal>(new Uri(WebApp.BaseAddressRM), "api/MaestroArticuloSucursal/ListarMaestroArticuloSucursal");
-                    recepcionArticulo.MaestroArticuloSucursal = listaMaestroSucursal.SingleOrDefault(c => c.IdMaestroArticuloSucursal == recepcionArticulo.IdMaestroArticuloSucursal);
-                }
-                TryValidateModel(recepcionArticulo);
-
+                var response = new Response();
                 if (recepcionArticulo.IdRecepcionArticulos == 0)
                     response = await apiServicio.InsertarAsync(recepcionArticulo, new Uri(WebApp.BaseAddressRM), "api/RecepcionArticulo/InsertarRecepcionArticulo");
                 else
@@ -241,22 +138,8 @@ namespace bd.webapprm.web.Controllers.MVC
 
                 if (response.IsSuccess)
                 {
-                    try
-                    {
-                        await GuardarLogService.SaveLogEntry(new LogEntryTranfer
-                        {
-                            ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                            ExceptionTrace = null,
-                            Message = recepcionArticulo.IdRecepcionArticulos == 0 ? "Se ha recepcionado un artículo" : "Se ha editado la recepción de un artículo",
-                            UserName = "Usuario 1",
-                            LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
-                            LogLevelShortName = Convert.ToString(LogLevelParameter.ADV),
-                            EntityID = string.Format("{0} {1}", "Artículo:", recepcionArticulo.IdArticulo),
-                        });
-                    }
-                    catch (Exception)
-                    { }
-                    return RedirectToAction("ListadoRecepcion");
+                    await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), ExceptionTrace = null, Message = recepcionArticulo.IdRecepcionArticulos == 0 ? "Se ha recepcionado un artículo" : "Se ha editado la recepción de un artículo", UserName = "Usuario 1", LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ADV), EntityID = string.Format("{0} {1}", "Artículo:", recepcionArticulo.IdArticulo) });
+                    return this.Redireccionar($"{Mensaje.Informacion}|{Mensaje.Satisfactorio}", "ListadoRecepcion");
                 }
 
                 ViewData["TipoArticulo"] = new SelectList(await apiServicio.Listar<TipoArticulo>(new Uri(WebApp.BaseAddressRM), "api/TipoArticulo/ListarTipoArticulo"), "IdTipoArticulo", "Nombre");
@@ -269,32 +152,16 @@ namespace bd.webapprm.web.Controllers.MVC
                 ViewData["Ciudad"] = await ObtenerSelectListCiudad(recepcionArticulo?.MaestroArticuloSucursal?.Sucursal?.Ciudad?.Provincia?.IdProvincia ?? -1);
                 ViewData["Sucursal"] = await ObtenerSelectListSucursal(recepcionArticulo?.MaestroArticuloSucursal?.Sucursal?.Ciudad?.IdCiudad ?? -1);
                 ViewData["MaestroArticuloSucursal"] = await ObtenerSelectListMaestroArticuloSucursal(recepcionArticulo?.MaestroArticuloSucursal?.Sucursal?.IdSucursal ?? -1);
-
-                var listaProveedor = await apiServicio.Listar<Proveedor>(new Uri(WebApp.BaseAddressRM), "api/Proveedor/ListarProveedores");
-                var tlistaProveedor = listaProveedor.Select(c => new { IdProveedor = c.IdProveedor, NombreApellidos = String.Format("{0} {1}", c.Nombre, c.Apellidos) });
-                ViewData["Proveedor"] = new SelectList(tlistaProveedor, "IdProveedor", "NombreApellidos");
-
+                
+                ViewData["Proveedor"] = new SelectList((await apiServicio.Listar<Proveedor>(new Uri(WebApp.BaseAddressRM), "api/Proveedor/ListarProveedores")).Select(c => new { c.IdProveedor, NombreApellidos = String.Format("{0} {1}", c.Nombre, c.Apellidos) }), "IdProveedor", "NombreApellidos");
                 ViewData["Empleado"] = new SelectList(await apiServicio.Listar<ListaEmpleadoViewModel>(new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleados"), "IdEmpleado", "NombreApellido");
                 ViewData["Error"] = response.Message;
                 return View(recepcionArticulo);
             }
             catch (Exception ex)
             {
-                try
-                {
-                    await GuardarLogService.SaveLogEntry(new LogEntryTranfer
-                    {
-                        ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                        Message = "Creando recepción Artículo",
-                        ExceptionTrace = ex.Message,
-                        LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
-                        LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                        UserName = "Usuario APP WebAppTh"
-                    });
-                }
-                catch (Exception)
-                { }
-                return BadRequest();
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Creando recepción Artículo", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP WebAppTh" });
+                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorCrear}");
             }
         }
         #endregion
@@ -302,166 +169,95 @@ namespace bd.webapprm.web.Controllers.MVC
         #region Reportes
         public async Task<IActionResult> ProveeduriaReporteAltas()
         {
-            var lista = new List<RecepcionArticulos>();
             try
             {
-                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "api/ProveeduriaReportes/ProveeduriaAltasReporte");
+                var lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM), "api/ProveeduriaReportes/ProveeduriaAltasReporte");
                 return View(lista);
             }
             catch (Exception ex)
             {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
-                {
-                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Listando Artículos en Alta",
-                    ExceptionTrace = ex.Message,
-                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
-                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                    UserName = "Usuario APP webappth"
-                });
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Listando Artículos en Alta", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webappth" });
                 return BadRequest();
             }
         }
         public async Task<IActionResult> ProveeduriaReporteBajas()
         {
-            var lista = new List<RecepcionArticulos>();
             try
             {
-                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "api/ProveeduriaReportes/ProveeduriaBajasReporte");
+                var lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM), "api/ProveeduriaReportes/ProveeduriaBajasReporte");
                 return View(lista);
             }
             catch (Exception ex)
             {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
-                {
-                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Listando Artículos en Baja",
-                    ExceptionTrace = ex.Message,
-                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
-                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                    UserName = "Usuario APP webappth"
-                });
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Listando Artículos en Baja", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webappth" });
                 return BadRequest();
             }
         }
         public async Task<IActionResult> EstadisticasConsumoAreaReporte()
         {
-            var lista = new List<SolicitudProveeduriaDetalle>();
             try
             {
-                lista = await apiServicio.Listar<SolicitudProveeduriaDetalle>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "api/ProveeduriaReportes/EstadisticasConsumoAreaReporte");
+                var lista = await apiServicio.Listar<SolicitudProveeduriaDetalle>(new Uri(WebApp.BaseAddressRM), "api/ProveeduriaReportes/EstadisticasConsumoAreaReporte");
                 return View(lista);
             }
             catch (Exception ex)
             {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
-                {
-                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Listando Artículos Recepcionados",
-                    ExceptionTrace = ex.Message,
-                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
-                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                    UserName = "Usuario APP webappth"
-                });
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Listando Artículos Recepcionados", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webappth" });
                 return BadRequest();
             }
         }
         public async Task<IActionResult> AlertaVencimientoReporte()
         {
-            var lista = new List<RecepcionArticulos>();
             try
             {
-                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "api/ProveeduriaReportes/AlertaVencimientoReporte");
+                var lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM), "api/ProveeduriaReportes/AlertaVencimientoReporte");
                 return View(lista);
             }
             catch (Exception ex)
             {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
-                {
-                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Listando Artículos en alerta de vencimiento",
-                    ExceptionTrace = ex.Message,
-                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
-                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                    UserName = "Usuario APP webappth"
-                });
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Listando Artículos en alerta de vencimiento", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webappth" });
                 return BadRequest();
             }
         }
         public async Task<IActionResult> ConsolidadoInventarioReporte()
         {
-            var lista = new List<SolicitudProveeduriaDetalle>();
             try
             {
-                lista = await apiServicio.Listar<SolicitudProveeduriaDetalle>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "api/ProveeduriaReportes/ConsolidadoInventarioReporte");
+                var lista = await apiServicio.Listar<SolicitudProveeduriaDetalle>(new Uri(WebApp.BaseAddressRM), "api/ProveeduriaReportes/ConsolidadoInventarioReporte");
                 return View(lista);
             }
             catch (Exception ex)
             {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
-                {
-                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Listando Artículos recepcionados en Alta",
-                    ExceptionTrace = ex.Message,
-                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
-                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                    UserName = "Usuario APP webappth"
-                });
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Listando Artículos recepcionados en Alta", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webappth" });
                 return BadRequest();
             }
         }
         public async Task<IActionResult> ConsolidadoSolicitudReporte()
         {
-            var lista = new List<SolicitudProveeduriaDetalle>();
             try
             {
-                lista = await apiServicio.Listar<SolicitudProveeduriaDetalle>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "api/ProveeduriaReportes/ConsolidadoSolicitudReporte");
+                var lista = await apiServicio.Listar<SolicitudProveeduriaDetalle>(new Uri(WebApp.BaseAddressRM), "api/ProveeduriaReportes/ConsolidadoSolicitudReporte");
                 return View(lista);
             }
             catch (Exception ex)
             {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
-                {
-                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Listando Artículos recepcionados en Alta",
-                    ExceptionTrace = ex.Message,
-                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
-                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                    UserName = "Usuario APP webappth"
-                });
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Listando Artículos recepcionados en Alta", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webappth" });
                 return BadRequest();
             }
         }
         public async Task<IActionResult> MinMaxReporte()
         {
-            var lista = new List<RecepcionArticulos>();
             try
             {
-                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "api/ProveeduriaReportes/ProveeduriaMinMaxReporte");
+                var lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM), "api/ProveeduriaReportes/ProveeduriaMinMaxReporte");
                 return View(lista);
             }
             catch (Exception ex)
             {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
-                {
-                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Listando Artículos Mínimos",
-                    ExceptionTrace = ex.Message,
-                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
-                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                    UserName = "Usuario APP webappth"
-                });
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Listando Artículos Mínimos", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webappth" });
                 return BadRequest();
             }
         }
-        
         #endregion
 
         #region AJAX_ClaseArticulo
@@ -469,8 +265,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var listaClaseArticulo = await apiServicio.Listar<ClaseArticulo>(new Uri(WebApp.BaseAddressRM), "api/ClaseArticulo/ListarClaseArticulo");
-                listaClaseArticulo = idTipoArticulo != -1 ? listaClaseArticulo.Where(c => c.IdTipoArticulo == idTipoArticulo).ToList() : new List<ClaseArticulo>();
+                var listaClaseArticulo = idTipoArticulo != -1 ? (await apiServicio.Listar<ClaseArticulo>(new Uri(WebApp.BaseAddressRM), "api/ClaseArticulo/ListarClaseArticulo")).Where(c => c.IdTipoArticulo == idTipoArticulo).ToList() : new List<ClaseArticulo>();
                 return new SelectList(listaClaseArticulo, "IdClaseArticulo", "Nombre");
             }
             catch (Exception)
@@ -492,8 +287,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var listaSubClaseArticulo = await apiServicio.Listar<SubClaseArticulo>(new Uri(WebApp.BaseAddressRM), "api/SubClaseArticulo/ListarSubClaseArticulos");
-                listaSubClaseArticulo = idClaseArticulo != -1 ? listaSubClaseArticulo.Where(c => c.IdClaseArticulo == idClaseArticulo).ToList() : new List<SubClaseArticulo>();
+                var listaSubClaseArticulo = idClaseArticulo != -1 ? (await apiServicio.Listar<SubClaseArticulo>(new Uri(WebApp.BaseAddressRM), "api/SubClaseArticulo/ListarSubClaseArticulos")).Where(c => c.IdClaseArticulo == idClaseArticulo).ToList() : new List<SubClaseArticulo>();
                 return new SelectList(listaSubClaseArticulo, "IdSubClaseArticulo", "Nombre");
             }
             catch (Exception)
@@ -515,8 +309,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var listaArticulo = await apiServicio.Listar<Articulo>(new Uri(WebApp.BaseAddressRM), "api/Articulo/ListarArticulos");
-                listaArticulo = idSubClaseArticulo != -1 ? listaArticulo.Where(c => c.IdSubClaseArticulo == idSubClaseArticulo).ToList() : new List<Articulo>();
+                var listaArticulo = idSubClaseArticulo != -1 ? (await apiServicio.Listar<Articulo>(new Uri(WebApp.BaseAddressRM), "api/Articulo/ListarArticulos")).Where(c => c.IdSubClaseArticulo == idSubClaseArticulo).ToList() : new List<Articulo>();
                 return new SelectList(listaArticulo, "IdArticulo", "Nombre");
             }
             catch (Exception)
@@ -538,8 +331,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var listaProvincia = await apiServicio.Listar<Provincia>(new Uri(WebApp.BaseAddressTH), "api/Provincia/ListarProvincia");
-                listaProvincia = idPais != -1 ? listaProvincia.Where(c => c.IdPais == idPais).ToList() : new List<Provincia>();
+                var listaProvincia = idPais != -1 ? (await apiServicio.Listar<Provincia>(new Uri(WebApp.BaseAddressTH), "api/Provincia/ListarProvincia")).Where(c => c.IdPais == idPais).ToList() : new List<Provincia>();
                 return new SelectList(listaProvincia, "IdProvincia", "Nombre");
             }
             catch (Exception)
@@ -561,8 +353,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var listaCiudad = await apiServicio.Listar<Ciudad>(new Uri(WebApp.BaseAddressTH), "api/Ciudad/ListarCiudad");
-                listaCiudad = idProvincia != -1 ? listaCiudad.Where(c => c.IdProvincia == idProvincia).ToList() : new List<Ciudad>();
+                var listaCiudad = idProvincia != -1 ? (await apiServicio.Listar<Ciudad>(new Uri(WebApp.BaseAddressTH), "api/Ciudad/ListarCiudad")).Where(c => c.IdProvincia == idProvincia).ToList() : new List<Ciudad>();
                 return new SelectList(listaCiudad, "IdCiudad", "Nombre");
             }
             catch (Exception)
@@ -584,8 +375,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var listaSucursal = await apiServicio.Listar<Sucursal>(new Uri(WebApp.BaseAddressTH), "api/Sucursal/ListarSucursal");
-                listaSucursal = idCiudad != -1 ? listaSucursal.Where(c => c.IdCiudad == idCiudad).ToList() : new List<Sucursal>();
+                var listaSucursal = idCiudad != -1 ? (await apiServicio.Listar<Sucursal>(new Uri(WebApp.BaseAddressTH), "api/Sucursal/ListarSucursal")).Where(c => c.IdCiudad == idCiudad).ToList() : new List<Sucursal>();
                 return new SelectList(listaSucursal, "IdSucursal", "Nombre");
             }
             catch (Exception)
@@ -607,10 +397,8 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var listaMaestroArticuloSucursal = await apiServicio.Listar<MaestroArticuloSucursal>(new Uri(WebApp.BaseAddressRM), "api/MaestroArticuloSucursal/ListarMaestroArticuloSucursal");
-                listaMaestroArticuloSucursal = idSucursal != -1 ? listaMaestroArticuloSucursal.Where(c => c.IdSucursal == idSucursal).ToList() : new List<MaestroArticuloSucursal>();
-                var tlistaMaestroArticuloSucursal = listaMaestroArticuloSucursal.Select(c => new { IdMaestroArticuloSucursal = c.IdMaestroArticuloSucursal, Maestro = String.Format("Mínimo: {0} - Máximo: {1}", c.Minimo, c.Maximo) });
-                return new SelectList(tlistaMaestroArticuloSucursal, "IdMaestroArticuloSucursal", "Maestro");
+                var listaMaestroArticuloSucursal = idSucursal != -1 ? (await apiServicio.Listar<MaestroArticuloSucursal>(new Uri(WebApp.BaseAddressRM), "api/MaestroArticuloSucursal/ListarMaestroArticuloSucursal")).Where(c => c.IdSucursal == idSucursal) : new List<MaestroArticuloSucursal>();
+                return new SelectList(listaMaestroArticuloSucursal.Select(c => new { c.IdMaestroArticuloSucursal, Maestro = String.Format("Mínimo: {0} - Máximo: {1}", c.Minimo, c.Maximo) }), "IdMaestroArticuloSucursal", "Maestro");
             }
             catch (Exception)
             {
@@ -624,33 +412,19 @@ namespace bd.webapprm.web.Controllers.MVC
             ViewBag.MaestroArticuloSucursal = await ObtenerSelectListMaestroArticuloSucursal(idSucursal);
             return PartialView("_MaestroArticuloSucursalSelect", new RecepcionArticulos());
         }
-
-        #endregion#region Alta de Proveeduría
+        #endregion
 
         #region Alta de Proveeduría
         public async Task<IActionResult> ArticulosADarAlta()
         {
-            var lista = new List<RecepcionArticulos>();
             try
             {
-                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "api/RecepcionArticulo/ListarRecepcionArticulos");
-
-                var listaArticulosRecepcionados = lista.Select(c => c).ToList();
-
-                return View("ArticulosAlta", listaArticulosRecepcionados);
+                var lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM), "api/RecepcionArticulo/ListarRecepcionArticulos");
+                return View("ArticulosAlta", lista);
             }
             catch (Exception ex)
             {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
-                {
-                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Listando articulos recepcionados",
-                    ExceptionTrace = ex.Message,
-                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
-                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                    UserName = "Usuario APP webappth"
-                });
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Listando articulos recepcionados", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webappth" });
                 return BadRequest();
             }
         }
@@ -660,50 +434,17 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 var respuesta = await apiServicio.SeleccionarAsync<Response>(ID.ToString(), new Uri(WebApp.BaseAddressRM), "api/RecepcionArticulo");
-
                 respuesta.Resultado = JsonConvert.DeserializeObject<RecepcionArticulos>(respuesta.Resultado.ToString());
-
                 RecepcionArticulos RecepcionArticulos = respuesta.Resultado as RecepcionArticulos;
-
                 ViewBag.Acreditacion = new SelectList(new List<string> { "Facturas", "Documentos" });
-
                 if (respuesta.IsSuccess)
-                {
-                    try
-                    {
-                        return View("FormularioAltaArticulo", RecepcionArticulos);
-                    }
-                    catch (Exception ex)
-                    {
-                        await GuardarLogService.SaveLogEntry(new LogEntryTranfer
-                        {
-                            ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                            Message = "Listando facturas",
-                            ExceptionTrace = ex.Message,
-                            LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
-                            LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                            UserName = "Usuario APP WebAppTh"
-                        });
-
-                        return BadRequest();
-                    }
-                }
+                    return View("FormularioAltaArticulo", RecepcionArticulos);
             }
             catch (Exception ex)
             {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
-                {
-                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Listando un objeto de RecepcionArticulos",
-                    ExceptionTrace = ex.Message,
-                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
-                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                    UserName = "Usuario APP WebAppTh"
-                });
-
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Listando un objeto de RecepcionArticulos", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP WebAppTh" });
                 return BadRequest();
             }
-
             return View();
         }
 
@@ -712,31 +453,22 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 var respuesta = await apiServicio.SeleccionarAsync<Response>(ID.ToString(), new Uri(WebApp.BaseAddressRM), "api/RecepcionArticulo");
-
                 respuesta.Resultado = JsonConvert.DeserializeObject<RecepcionArticulos>(respuesta.Resultado.ToString());
-
                 RecepcionArticulos RecepcionArticulos = respuesta.Resultado as RecepcionArticulos;
-
                 if (respuesta.IsSuccess)
                 {
                     try
                     {
                         List<DetalleFactura> listaDetalleFactura = RecepcionArticulos.Articulo.DetalleFactura.ToList();
-
                         foreach (var item in listaDetalleFactura)
                         {
                             respuesta = await apiServicio.SeleccionarAsync<Response>(item.IdFactura.ToString(), new Uri(WebApp.BaseAddressRM), "api/Factura");
-
                             respuesta.Resultado = JsonConvert.DeserializeObject<Factura>(respuesta.Resultado.ToString());
-
                             Factura factura = respuesta.Resultado as Factura;
-
                             var respuestaOtra = await apiServicio.SeleccionarAsync<Response>(factura.Numero.ToString(), new Uri(WebApp.BaseAddressRM), "api/FacturaPorAltaProveeduria");
-
                             if ((respuestaOtra.Resultado == null) && (respuesta.IsSuccess))
                             {
                                 bool siEsta = false;
-
                                 foreach (var _item in ListadoFacturas)
                                 {
                                     if (_item.IdFactura == factura.IdFactura)
@@ -756,41 +488,20 @@ namespace bd.webapprm.web.Controllers.MVC
                                 }
                             }
                         }
-
                         ViewBag.data = ListadoFacturas;
-
                         return PartialView("_FacturasExcluidas"); //return PartialView("_FacturasExcluidas", ListadoFacturas);
                     }
                     catch (Exception ex)
                     {
-                        await GuardarLogService.SaveLogEntry(new LogEntryTranfer
-                        {
-                            ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                            Message = "Listando facturas",
-                            ExceptionTrace = ex.Message,
-                            LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
-                            LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                            UserName = "Usuario APP WebAppTh"
-                        });
-
+                        await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Listando facturas", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP WebAppTh" });
                         return BadRequest();
                     }
                 }
-
                 return BadRequest();
             }
             catch (Exception ex)
             {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
-                {
-                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Listando un objeto de RecepcionArticulos",
-                    ExceptionTrace = ex.Message,
-                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
-                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                    UserName = "Usuario APP WebAppTh"
-                });
-
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Listando un objeto de RecepcionArticulos", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP WebAppTh" });
                 return BadRequest();
             }
         }
@@ -800,31 +511,22 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 var respuesta = await apiServicio.SeleccionarAsync<Response>(ID.ToString(), new Uri(WebApp.BaseAddressRM), "api/RecepcionArticulo");
-
                 respuesta.Resultado = JsonConvert.DeserializeObject<RecepcionArticulos>(respuesta.Resultado.ToString());
-
                 RecepcionArticulos RecepcionArticulos = respuesta.Resultado as RecepcionArticulos;
-
                 if (respuesta.IsSuccess)
                 {
                     try
                     {
                         List<DetalleFactura> listaDetalleFactura = RecepcionArticulos.Articulo.DetalleFactura.ToList();
-
                         foreach (var item in listaDetalleFactura)
                         {
                             respuesta = await apiServicio.SeleccionarAsync<Response>(item.IdFactura.ToString(), new Uri(WebApp.BaseAddressRM), "api/Factura");
-
                             respuesta.Resultado = JsonConvert.DeserializeObject<Factura>(respuesta.Resultado.ToString());
-
                             Factura factura = respuesta.Resultado as Factura;
-
                             var respuestaOtra = await apiServicio.SeleccionarAsync<Response>(factura.Numero.ToString(), new Uri(WebApp.BaseAddressRM), "api/FacturasPorAltaProveeduria");
-
                             if (respuestaOtra.Resultado != null)
                             {
                                 bool siEsta = false;
-
                                 foreach (var _item in ListadoFacturasSeleccionadas)
                                 {
                                     if (_item.IdFactura == factura.IdFactura)
@@ -833,7 +535,6 @@ namespace bd.webapprm.web.Controllers.MVC
                                         break;
                                     }
                                 }
-
                                 if (siEsta)
                                 {
 
@@ -844,41 +545,20 @@ namespace bd.webapprm.web.Controllers.MVC
                                 }
                             }
                         }
-
                         ViewBag.data = ListadoFacturasSeleccionadas;
-
                         return PartialView("_FacturasIncluidas"); //return PartialView("_FacturasExcluidas", ListadoFacturas);
                     }
                     catch (Exception ex)
                     {
-                        await GuardarLogService.SaveLogEntry(new LogEntryTranfer
-                        {
-                            ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                            Message = "Listando facturas",
-                            ExceptionTrace = ex.Message,
-                            LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
-                            LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                            UserName = "Usuario APP WebAppTh"
-                        });
-
+                        await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Listando facturas", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP WebAppTh" });
                         return BadRequest();
                     }
                 }
-
                 return BadRequest();
             }
             catch (Exception ex)
             {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
-                {
-                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Listando un objeto de RecepcionArticulos",
-                    ExceptionTrace = ex.Message,
-                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
-                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                    UserName = "Usuario APP WebAppTh"
-                });
-
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Listando un objeto de RecepcionArticulos", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP WebAppTh" });
                 return BadRequest();
             }
         }
@@ -888,34 +568,19 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 var respuesta = await apiServicio.SeleccionarAsync<Response>(idFactura.ToString(), new Uri(WebApp.BaseAddressRM), "api/Factura");
-
                 if (respuesta.IsSuccess)
                 {
                     respuesta.Resultado = JsonConvert.DeserializeObject<Factura>(respuesta.Resultado.ToString());
-
                     Factura factura = respuesta.Resultado as Factura;
-
                     ListadoFacturasSeleccionadas.Add(factura);
-
                     ViewBag.data = ListadoFacturasSeleccionadas;
-
                     return PartialView("_FacturasIncluidas");
                 }
-
                 return BadRequest();
             }
             catch (Exception ex)
             {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
-                {
-                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Incluyendo una factura a un objeto de Alta",
-                    ExceptionTrace = ex.Message,
-                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
-                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                    UserName = "Usuario APP WebAppTh"
-                });
-
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Incluyendo una factura a un objeto de Alta", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP WebAppTh" });
                 return BadRequest();
             }
         }
@@ -923,30 +588,20 @@ namespace bd.webapprm.web.Controllers.MVC
         public async Task<IActionResult> RefrescarTablaExcluidos(int idFactura)
         {
             var respuesta = await apiServicio.SeleccionarAsync<Response>(idFactura.ToString(), new Uri(WebApp.BaseAddressRM), "api/Factura");
-
             if (respuesta.IsSuccess)
             {
                 respuesta.Resultado = JsonConvert.DeserializeObject<Factura>(respuesta.Resultado.ToString());
-
                 Factura factura = respuesta.Resultado as Factura;
-
                 List<Factura> temporal = new List<Factura>();
-
                 foreach (var item in ListadoFacturas)
                 {
                     if (item.IdFactura != factura.IdFactura)
-                    {
                         temporal.Add(item);
-                    }
                 }
-
                 ListadoFacturas = temporal;
-
                 ViewBag.data = ListadoFacturas;
-
                 return PartialView("_FacturasExcluidas");
             }
-
             return BadRequest();
         }
 
@@ -955,34 +610,19 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 var respuesta = await apiServicio.SeleccionarAsync<Response>(idFactura.ToString(), new Uri(WebApp.BaseAddressRM), "api/Factura");
-
                 if (respuesta.IsSuccess)
                 {
                     respuesta.Resultado = JsonConvert.DeserializeObject<Factura>(respuesta.Resultado.ToString());
-
                     Factura factura = respuesta.Resultado as Factura;
-
                     ListadoFacturas.Add(factura);
-
                     ViewBag.data = ListadoFacturas;
-
                     return PartialView("_FacturasExcluidas");
                 }
-
                 return BadRequest();
             }
             catch (Exception ex)
             {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
-                {
-                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Excluyendo una factura a un objeto de Alta",
-                    ExceptionTrace = ex.Message,
-                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
-                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                    UserName = "Usuario APP WebAppTh"
-                });
-
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Excluyendo una factura a un objeto de Alta", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP WebAppTh" });
                 return BadRequest();
             }
         }
@@ -990,30 +630,20 @@ namespace bd.webapprm.web.Controllers.MVC
         public async Task<IActionResult> RefrescarTablaIncluidos(int idFactura)
         {
             var respuesta = await apiServicio.SeleccionarAsync<Response>(idFactura.ToString(), new Uri(WebApp.BaseAddressRM), "api/Factura");
-
             if (respuesta.IsSuccess)
             {
                 respuesta.Resultado = JsonConvert.DeserializeObject<Factura>(respuesta.Resultado.ToString());
-
                 Factura factura = respuesta.Resultado as Factura;
-
                 List<Factura> temporal = new List<Factura>();
-
                 foreach (var item in ListadoFacturasSeleccionadas)
                 {
                     if (item.IdFactura != factura.IdFactura)
-                    {
                         temporal.Add(item);
-                    }
                 }
-
                 ListadoFacturasSeleccionadas = temporal;
-
                 ViewBag.data = ListadoFacturasSeleccionadas;
-
                 return PartialView("_FacturasIncluidas");
             }
-
             return BadRequest();
         }
 
@@ -1028,29 +658,18 @@ namespace bd.webapprm.web.Controllers.MVC
                 int idProveedor = recepcionArticulos.IdProveedor;
 
                 var fechaAlta = DateTime.Now;
-
                 AltaProveeduria alta = new AltaProveeduria { IdArticulo = idArticulo, IdProveedor = idProveedor, Acreditacion = null, FechaAlta = fechaAlta };
-
-                Response response = new Response();
-
-                response = await apiServicio.InsertarAsync(alta,
-                                                                 new Uri(WebApp.BaseAddressRM),
-                                                                 "api/AltaProveeduria/InsertarAltaProveeduria");
-
+                var response = await apiServicio.InsertarAsync(alta, new Uri(WebApp.BaseAddressRM), "api/AltaProveeduria/InsertarAltaProveeduria");
                 if (response.IsSuccess)
                 {
                     response.Resultado = JsonConvert.DeserializeObject<AltaProveeduria>(response.Resultado.ToString());
-
                     AltaProveeduria altaProv = response.Resultado as AltaProveeduria;
-
                     foreach (var item in ListadoFacturasSeleccionadas)
                     {
                         FacturasPorAltaProveeduria facturasPorAltaProveeduria = new FacturasPorAltaProveeduria { IdAlta = altaProv.IdAlta, NumeroFactura = item.Numero };
-
                         try
                         {
                             response = await apiServicio.InsertarAsync(facturasPorAltaProveeduria, new Uri(WebApp.BaseAddressRM), "api/FacturaPorAltaProveeduria/InsertarFacturasPorAltaProveeduria");
-
                             if (response.IsSuccess)
                             {
 
@@ -1060,85 +679,43 @@ namespace bd.webapprm.web.Controllers.MVC
                                 try
                                 {
                                     var eliminar = await apiServicio.EliminarAsync(altaProv.IdAlta.ToString(), new Uri(WebApp.BaseAddressRM), "api/AltaProveeduria");
-
                                     if (eliminar.IsSuccess)
-                                    {
                                         break;
-                                    }
                                 }
                                 catch (Exception ex)
                                 {
-                                    await GuardarLogService.SaveLogEntry(new LogEntryTranfer
-                                    {
-                                        ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                                        Message = "Eliminando un objeto de AltaProveeduria",
-                                        ExceptionTrace = ex.Message,
-                                        LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
-                                        LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                                        UserName = "Usuario APP WebAppTh"
-                                    });
-
+                                    await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Eliminando un objeto de AltaProveeduria", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP WebAppTh" });
                                     return BadRequest();
                                 }
                             }
                         }
                         catch (Exception ex)
                         {
-                            await GuardarLogService.SaveLogEntry(new LogEntryTranfer
-                            {
-                                ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                                Message = "Insertando un objeto de FacturasPorAltaProveeduria",
-                                ExceptionTrace = ex.Message,
-                                LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
-                                LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                                UserName = "Usuario APP WebAppTh"
-                            });
-
+                            await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Insertando un objeto de FacturasPorAltaProveeduria", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP WebAppTh" });
                             return BadRequest();
                         }
                     }
-
                     return RedirectToAction("ArticulosADarAlta");
                 }
-
                 return BadRequest();
             }
             catch (Exception ex)
             {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
-                {
-                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Listando un objeto de RecepcionArticulos",
-                    ExceptionTrace = ex.Message,
-                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
-                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                    UserName = "Usuario APP WebAppTh"
-                });
-
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Listando un objeto de RecepcionArticulos", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP WebAppTh" });
                 return BadRequest();
             }
         }
 
         public async Task<IActionResult> IngresarFacturas()
         {
-            var lista = new List<MaestroArticuloSucursal>();
             try
             {
-                lista = await apiServicio.Listar<MaestroArticuloSucursal>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "api/MaestroArticuloSucursal/ListarMaestroArticuloSucursal");
+                var lista = await apiServicio.Listar<MaestroArticuloSucursal>(new Uri(WebApp.BaseAddressRM), "api/MaestroArticuloSucursal/ListarMaestroArticuloSucursal");
                 return View("IngresarFacturas", lista);
             }
             catch (Exception ex)
             {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
-                {
-                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Listando maestros de artículos de sucursal",
-                    ExceptionTrace = ex.Message,
-                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
-                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                    UserName = "Usuario APP webappth"
-                });
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Listando maestros de artículos de sucursal", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webappth" });
                 return BadRequest();
             }
         }
@@ -1150,9 +727,7 @@ namespace bd.webapprm.web.Controllers.MVC
             int idMAS = detalleFactura.Factura.IdMaestroArticuloSucursal;
             int idProveedor = detalleFactura.Factura.IdProveedor;
             string numero = detalleFactura.Factura.Numero;
-
             int cantidad = detalleFactura.Cantidad;
-
             decimal? precio = decimal.Parse(Request.Form["Precio"].ToString().Replace('.', ','));
 
             try
@@ -1161,81 +736,41 @@ namespace bd.webapprm.web.Controllers.MVC
                 factura.IdMaestroArticuloSucursal = idMAS;
                 factura.IdProveedor = idProveedor;
                 factura.Numero = numero;
-
-                Response response = new Response();
-
-                response = await apiServicio.InsertarAsync(factura, new Uri(WebApp.BaseAddressRM)
-                                                                    , "api/Factura/InsertarFactura");
-
+                var response = await apiServicio.InsertarAsync(factura, new Uri(WebApp.BaseAddressRM), "api/Factura/InsertarFactura");
                 if (response.IsSuccess)
                 {
                     try
                     {
-                        var respuesta = await apiServicio.SeleccionarAsync<Response>(numero, new Uri(WebApp.BaseAddressRM),
-                                                                                        "api/Factura/FacturaPorNumero");
-
+                        var respuesta = await apiServicio.SeleccionarAsync<Response>(numero, new Uri(WebApp.BaseAddressRM), "api/Factura/FacturaPorNumero");
                         respuesta.Resultado = JsonConvert.DeserializeObject<Factura>(respuesta.Resultado.ToString());
-
                         Factura respuestaFactura = respuesta.Resultado as Factura;
-
                         try
                         {
                             //detalleFactura.Factura = respuestaFactura;
                             detalleFactura.IdFactura = respuestaFactura.IdFactura;
                             detalleFactura.Precio = precio;
-
-                            response = await apiServicio.InsertarAsync(detalleFactura, new Uri(WebApp.BaseAddressRM)
-                                                                    , "api/DetalleFactura/InsertarDetalleFactura");
+                            response = await apiServicio.InsertarAsync(detalleFactura, new Uri(WebApp.BaseAddressRM), "api/DetalleFactura/InsertarDetalleFactura");
 
                             if (response.IsSuccess)
-                            {
                                 return RedirectToAction("IngresarFacturas");
-                            }
                         }
                         catch (Exception ex)
                         {
-                            await GuardarLogService.SaveLogEntry(new LogEntryTranfer
-                            {
-                                ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                                Message = "Insertando Detalle de una Factura",
-                                ExceptionTrace = ex.Message,
-                                LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
-                                LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                                UserName = "Usuario APP webappth"
-                            });
+                            await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Insertando Detalle de una Factura", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webappth" });
                             return BadRequest();
                         }
-
                     }
                     catch (Exception ex)
                     {
-                        await GuardarLogService.SaveLogEntry(new LogEntryTranfer
-                        {
-                            ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                            Message = "Obteniendo factura por Numero",
-                            ExceptionTrace = ex.Message,
-                            LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
-                            LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                            UserName = "Usuario APP webappth"
-                        });
+                        await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Obteniendo factura por Numero", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webappth" });
                         return BadRequest();
                     }
-
                 }
-
                 return RedirectToAction("FormularioAltaArticulo", idMAS);
             }
             catch (Exception ex)
             {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
-                {
-                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Insertando una Factura",
-                    ExceptionTrace = ex.Message,
-                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
-                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                    UserName = "Usuario APP webappth"
-                });
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Insertando una Factura", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webappth" });
                 return BadRequest();
             }
         }
@@ -1245,72 +780,39 @@ namespace bd.webapprm.web.Controllers.MVC
             var detalleFactura = new DetalleFactura();
             try
             {
-                var listaProveedor = await apiServicio.Listar<Proveedor>(new Uri(WebApp.BaseAddressRM), "api/Proveedor/ListarProveedores");
-                var tlistaProveedor = listaProveedor.Select(c => new { IdProveedor = c.IdProveedor, NombreApellidos = String.Format("{0} {1}", c.Nombre, c.Apellidos) });
-                ViewData["listaProveedor"] = new SelectList(tlistaProveedor, "IdProveedor", "NombreApellidos");
-
+                ViewData["listaProveedor"] = new SelectList((await apiServicio.Listar<Proveedor>(new Uri(WebApp.BaseAddressRM), "api/Proveedor/ListarProveedores")).Select(c => new { c.IdProveedor, NombreApellidos = String.Format("{0} {1}", c.Nombre, c.Apellidos) }), "IdProveedor", "NombreApellidos");
                 try
                 {
-                    var listaArticulos = new SelectList(await apiServicio.Listar<Articulo>(new Uri(WebApp.BaseAddressRM)
-                                                                        , "api/Articulo/ListarArticulos"), "IdArticulo", "Nombre");
+                    var listaArticulos = new SelectList(await apiServicio.Listar<Articulo>(new Uri(WebApp.BaseAddressRM), "api/Articulo/ListarArticulos"), "IdArticulo", "Nombre");
                     ViewBag.listaArticulos = listaArticulos;
                     ViewBag.ID = ID;
-
                     return View("DetallesFactura", detalleFactura);
                 }
                 catch (Exception ex)
                 {
-                    await GuardarLogService.SaveLogEntry(new LogEntryTranfer
-                    {
-                        ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                        Message = "Listando artículos en el ingreso de una factura",
-                        ExceptionTrace = ex.Message,
-                        LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
-                        LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                        UserName = "Usuario APP webappth"
-                    });
+                    await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Listando artículos en el ingreso de una factura", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webappth" });
                     return BadRequest();
                 }
             }
             catch (Exception ex)
             {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
-                {
-                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Listando proveedores en el ingreso de una factura",
-                    ExceptionTrace = ex.Message,
-                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
-                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                    UserName = "Usuario APP webappth"
-                });
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Listando proveedores en el ingreso de una factura", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webappth" });
                 return BadRequest();
             }
         }
         #endregion
 
         #region Baja de Proveeduría
-
         public async Task<IActionResult> ArticulosADarBaja()
         {
-            var lista = new List<RecepcionArticulos>();
             try
             {
-                lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "api/RecepcionArticulo/ListarArticulosAlta");
-
+                var lista = await apiServicio.Listar<RecepcionArticulos>(new Uri(WebApp.BaseAddressRM), "api/RecepcionArticulo/ListarArticulosAlta");
                 return View("ArticulosBaja", lista);
             }
             catch (Exception ex)
             {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
-                {
-                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Listando articulos recepcionados",
-                    ExceptionTrace = ex.Message,
-                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
-                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                    UserName = "Usuario APP webappth"
-                });
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Listando articulos recepcionados", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webappth" });
                 return BadRequest();
             }
         }
@@ -1328,15 +830,7 @@ namespace bd.webapprm.web.Controllers.MVC
             }
             catch (Exception ex)
             {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
-                {
-                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Listando un objeto de RecepcionArticulos",
-                    ExceptionTrace = ex.Message,
-                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
-                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                    UserName = "Usuario APP WebAppTh"
-                });
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Listando un objeto de RecepcionArticulos", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP WebAppTh" });
             }
             return BadRequest();
         }
@@ -1354,48 +848,27 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     var existenciaArticuloProveeduria = JsonConvert.DeserializeObject<ExistenciaArticuloProveeduria>(response.Resultado.ToString());
                     ViewBag.CantidadMaxima = existenciaArticuloProveeduria.Existencia;
-                }
-                else
-                    return BadRequest();
-                
-                if (respuesta.IsSuccess)
                     return View(RecepcionArticulos);
+                }
+                return BadRequest();
             }
             catch (Exception ex)
             {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
-                {
-                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Listando un objeto de RecepcionArticulos",
-                    ExceptionTrace = ex.Message,
-                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
-                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                    UserName = "Usuario APP WebAppTh"
-                });
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Listando un objeto de RecepcionArticulos", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP WebAppTh" });
+                return BadRequest();
             }
-            return BadRequest();
         }
 
         public async Task<IActionResult> ListarSolicitudesDeBaja()
         {
             try
             {
-                List<SolicitudProveeduriaDetalle> respuesta = await apiServicio.Listar<SolicitudProveeduriaDetalle>(new Uri(WebApp.BaseAddressRM), "api/SolicitudDetalleProveeduria/ListarSolicitudProveeduriasDetalle");
-
-                return View("SolicitudesDeBaja", respuesta);
+                var lista = await apiServicio.Listar<SolicitudProveeduriaDetalle>(new Uri(WebApp.BaseAddressRM), "api/SolicitudDetalleProveeduria/ListarSolicitudProveeduriasDetalle");
+                return View("SolicitudesDeBaja", lista);
             }
             catch (Exception ex)
             {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
-                {
-                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Listando un objeto de RecepcionArticulos",
-                    ExceptionTrace = ex.Message,
-                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
-                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                    UserName = "Usuario APP WebAppTh"
-                });
-
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Listando un objeto de RecepcionArticulos", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP WebAppTh" });
                 return BadRequest();
             }
         }
@@ -1404,49 +877,28 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                await apiServicio.InsertarAsync(new Estado { Nombre = "Baja Aprobada" },
-                                                             new Uri(WebApp.BaseAddressTH),
-                                                             "api/Estados/InsertarEstado");
+                await apiServicio.InsertarAsync(new Estado { Nombre = "Baja Aprobada" }, new Uri(WebApp.BaseAddressTH), "api/Estados/InsertarEstado");
                 var listaEstado = await apiServicio.Listar<Estado>(new Uri(WebApp.BaseAddressTH), "api/Estados/ListarEstados");
-
                 var respuesta = await apiServicio.SeleccionarAsync<Response>(id.ToString(), new Uri(WebApp.BaseAddressRM), "api/SolicitudDetalleProveeduria");
-
                 respuesta.Resultado = JsonConvert.DeserializeObject<SolicitudProveeduriaDetalle>(respuesta.Resultado.ToString());
-
                 SolicitudProveeduriaDetalle solProvDet = respuesta.Resultado as SolicitudProveeduriaDetalle;
-
                 if (respuesta.IsSuccess)
                 {
                     solProvDet.CantidadAprobada = solProvDet.CantidadSolicitada;
                     solProvDet.FechaAprobada = DateTime.Now;
                     solProvDet.IdEstado = listaEstado.SingleOrDefault(c => c.Nombre == "Baja Aprobada").IdEstado;
-
-                    respuesta = await apiServicio.EditarAsync(id.ToString(), solProvDet,
-                                                            new Uri(WebApp.BaseAddressRM), "api/SolicitudDetalleProveeduria");
-
+                    respuesta = await apiServicio.EditarAsync(id.ToString(), solProvDet, new Uri(WebApp.BaseAddressRM), "api/SolicitudDetalleProveeduria");
                     if (respuesta.IsSuccess)
-                    {
                         return RedirectToAction("ListarSolicitudesDeBaja");
-                    }
 
                     return BadRequest();
                 }
             }
             catch (Exception ex)
             {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
-                {
-                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Listando un objeto de RecepcionArticulos",
-                    ExceptionTrace = ex.Message,
-                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
-                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                    UserName = "Usuario APP WebAppTh"
-                });
-
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Listando un objeto de RecepcionArticulos", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP WebAppTh" });
                 return BadRequest();
             }
-
             return View();
         }
 
@@ -1456,23 +908,15 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                await apiServicio.InsertarAsync(new Estado { Nombre = "Baja Solicitada" },
-                                                             new Uri(WebApp.BaseAddressTH),
-                                                             "api/Estados/InsertarEstado");
+                await apiServicio.InsertarAsync(new Estado { Nombre = "Baja Solicitada" }, new Uri(WebApp.BaseAddressTH), "api/Estados/InsertarEstado");
                 var listaEstado = await apiServicio.Listar<Estado>(new Uri(WebApp.BaseAddressTH), "api/Estados/ListarEstados");
-
                 SolicitudProveeduria solProv = new SolicitudProveeduria { IdEmpleado = int.Parse(Request.Form["Empleado.IdEmpleado"].ToString()) };
-
                 var respuesta = await apiServicio.InsertarAsync(solProv, new Uri(WebApp.BaseAddressRM), "api/SolicitudProveeduria/InsertarSolicitudProveeduria");
-
                 if (respuesta.IsSuccess)
                 {
                     respuesta.Resultado = JsonConvert.DeserializeObject<SolicitudProveeduria>(respuesta.Resultado.ToString());
-
                     solProv = respuesta.Resultado as SolicitudProveeduria;
-
                     SolicitudProveeduriaDetalle solProvDetalle = new SolicitudProveeduriaDetalle();
-
                     DateTime ahora = DateTime.Now;
 
                     solProvDetalle.CantidadAprobada = 1;
@@ -1483,28 +927,17 @@ namespace bd.webapprm.web.Controllers.MVC
                     solProvDetalle.IdArticulo = int.Parse(Request.Form["IdArticulo"].ToString());
                     solProvDetalle.IdMaestroArticuloSucursal = int.Parse(Request.Form["IdMaestroArticuloSucursal"].ToString());
                     solProvDetalle.IdSolicitudProveeduria = solProv.IdSolicitudProveeduria;
-
                     respuesta = await apiServicio.InsertarAsync(solProvDetalle, new Uri(WebApp.BaseAddressRM), "api/SolicitudDetalleProveeduria/InsertarSolicitudProveeduriaDetalle");
 
                     //debe ir if (respuesta.IsSucces)
 
                     return RedirectToAction("ArticulosADarBaja");
                 }
-
                 return BadRequest();
             }
             catch (Exception ex)
             {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
-                {
-                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Dando baja a un Artículo",
-                    ExceptionTrace = ex.Message,
-                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
-                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                    UserName = "Usuario APP WebAppTh"
-                });
-
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Dando baja a un Artículo", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP WebAppTh" });
                 return BadRequest();
             }
         }
@@ -1527,15 +960,7 @@ namespace bd.webapprm.web.Controllers.MVC
             }
             catch (Exception ex)
             {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
-                {
-                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Dando baja a un Artículo",
-                    ExceptionTrace = ex.Message,
-                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
-                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                    UserName = "Usuario APP WebAppTh"
-                });
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Dando baja a un Artículo", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP WebAppTh" });
                 return BadRequest();
             }
         }

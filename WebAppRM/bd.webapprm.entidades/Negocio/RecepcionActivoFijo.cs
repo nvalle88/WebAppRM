@@ -3,8 +3,6 @@ namespace bd.webapprm.entidades
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-     
-     
 
     public partial class RecepcionActivoFijo
     {
@@ -43,11 +41,13 @@ namespace bd.webapprm.entidades
         public virtual LibroActivoFijo LibroActivoFijo { get; set; }
 
         [Display(Name = "Servidor público:")]
+        [Required(ErrorMessage = "Debe seleccionar el {0} ")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
         public int IdEmpleado { get; set; }
         public virtual Empleado Empleado { get; set; }
 
         [Display(Name = "Sub clase de activo fijo:")]
+        [Required(ErrorMessage = "Debe seleccionar el {0} ")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
         public int IdSubClaseActivoFijo { get; set; }
         public virtual SubClaseActivoFijo SubClaseActivoFijo { get; set; }
@@ -58,11 +58,11 @@ namespace bd.webapprm.entidades
         public virtual MotivoRecepcion MotivoRecepcion { get; set; }
 
         [Display(Name = "Proveedor:")]
+        [Required(ErrorMessage = "Debe seleccionar el {0} ")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
         public int IdProveedor { get; set; }
         public virtual Proveedor Proveedor { get; set; }
 
         public virtual ICollection<RecepcionActivoFijoDetalle> RecepcionActivoFijoDetalle { get; set; }
-
     }
 }

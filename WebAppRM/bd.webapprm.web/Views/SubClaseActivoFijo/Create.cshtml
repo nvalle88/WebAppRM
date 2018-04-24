@@ -1,11 +1,9 @@
 @model bd.webapprm.entidades.SubClaseActivoFijo
 
-@{
-    ViewData["Title"] = "Sub Clase de Activo Fijo";
+@section css{
+    <link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
 }
 
-<link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
-<link rel="stylesheet" href="~/lib/waitMe/waitMe.min.css" />
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
@@ -28,8 +26,8 @@
 
                                         <section class="col col-8">
                                             <label class="input">
-                                                <select asp-for="ClaseActivoFijo.TipoActivoFijo.IdTipoActivoFijo" class="form-control" asp-items="ViewBag.TipoActivoFijo"></select>
-                                                <span asp-validation-for="ClaseActivoFijo.TipoActivoFijo.IdTipoActivoFijo" class="text-danger"></span>
+                                                <select asp-for="ClaseActivoFijo.IdTipoActivoFijo" class="form-control" asp-items="ViewBag.TipoActivoFijo"></select>
+                                                <span asp-validation-for="ClaseActivoFijo.IdTipoActivoFijo" class="text-danger"></span>
                                             </label>
                                         </section>
                                     </div>
@@ -40,7 +38,7 @@
                                         </section>
 
                                         <div id="div_claseActivoFijo">
-                                            @{ await Html.RenderPartialAsync("_ClaseActivoFijoSelect", Model?.ClaseActivoFijo ?? new bd.webapprm.entidades.ClaseActivoFijo()); }
+                                            @{ await Html.RenderPartialAsync("_ClaseActivoFijoSelect", Model ?? new bd.webapprm.entidades.SubClaseActivoFijo()); }
                                         </div>
                                     </div>
 
@@ -57,10 +55,9 @@
                                         </section>
                                     </div>
                                 </fieldset>
-
                                 <footer>
                                     <span class="text-danger">@ViewData["Error"]</span>
-                                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                                    <button type="submit" class="btn btn-primary" id="btn-guardar">Guardar</button>
                                     <a asp-action="Index" class="btn btn-default">Cancelar</a>
                                 </footer>
                             </form>
@@ -73,10 +70,8 @@
 </div>
 
 @section Scripts {
-    <script src='~/lib/select2/dist/js/select2.min.js'></script>
-    <script src='~/lib/select2/dist/js/i18n/es.js'></script>
-    <script src='~/js/site.js'></script>
-    <script src='~/lib/waitMe/waitMe.min.js'></script>
+    @{await Html.RenderPartialAsync("_Select2ScriptsPartial");}
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src='~/js/subClaseActivoFijo/subClaseActivoFijo.js'></script>
     <script>
         var claseActivoFijoSelectResult = "@Url.Action("ClaseActivoFijo_SelectResult")";

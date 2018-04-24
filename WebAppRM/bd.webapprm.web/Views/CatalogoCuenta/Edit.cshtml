@@ -1,9 +1,12 @@
 @model bd.webapprm.entidades.CatalogoCuenta
-
 @{
-    ViewData["Title"] = "Catálogo de Cuenta";
+    bool IdCatalogoCuentaHijoVisible = (bool)ViewData["IdCatalogoCuentaHijoVisible"];
 }
-<link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
+
+@section css{
+    <link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
+}
+
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
@@ -20,18 +23,23 @@
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <input type="hidden" asp-for="IdCatalogoCuenta" />
                                 <fieldset>
-                                    <div class="row">
-                                        <section class="col col-4">
-                                            <label asp-for="IdCatalogoCuentaHijo"></label>
-                                        </section>
+                                    @{
+                                        if (IdCatalogoCuentaHijoVisible)
+                                        {
+                                            <div class="row">
+                                                <section class="col col-4">
+                                                    <label asp-for="IdCatalogoCuentaHijo"></label>
+                                                </section>
 
-                                        <section class="col col-8">
-                                            <label class="input">
-                                                <select asp-for="IdCatalogoCuentaHijo" class="form-control" asp-items="ViewBag.IdCatalogoCuentaHijo"></select>
-                                                <span asp-validation-for="IdCatalogoCuentaHijo" class="text-danger"></span>
-                                            </label>
-                                        </section>
-                                    </div>
+                                                <section class="col col-8">
+                                                    <label class="input">
+                                                        <select asp-for="IdCatalogoCuentaHijo" class="form-control" asp-items="ViewBag.IdCatalogoCuentaHijo"></select>
+                                                        <span asp-validation-for="IdCatalogoCuentaHijo" class="text-danger"></span>
+                                                    </label>
+                                                </section>
+                                            </div>
+                                        }
+                                    }
 
                                     <div class="row">
                                         <section class="col col-4">
@@ -48,7 +56,7 @@
                                 </fieldset>
                                 <footer>
                                     <span class="text-danger">@ViewData["Error"]</span>
-                                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                                    <button type="submit" class="btn btn-primary" id="btn-guardar">Guardar</button>
                                     <a asp-action="Index" class="btn btn-default">Cancelar</a>
                                 </footer>
                             </form>
@@ -60,9 +68,8 @@
     </section>
 </div>
 @section Scripts {
-    <script src='~/lib/select2/dist/js/select2.min.js'></script>
-    <script src='~/lib/select2/dist/js/i18n/es.js'></script>
-    <script src='~/js/site.js'></script>
+    @{await Html.RenderPartialAsync("_Select2ScriptsPartial");}
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script type="text/javascript">
         $(document).ready(function () {
             Init_Select2();

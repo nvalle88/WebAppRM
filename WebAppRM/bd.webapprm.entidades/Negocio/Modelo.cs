@@ -3,8 +3,6 @@ namespace bd.webapprm.entidades
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
-     
-     
 
     public partial class Modelo
     {
@@ -19,13 +17,14 @@ namespace bd.webapprm.entidades
         //Propiedades Virtuales Referencias a otras clases
 
         [Display(Name = "Marca:")]
-        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
+        [Required(ErrorMessage = "Debe seleccionar la {0} ")]
+        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar la {0} ")]
         public int IdMarca { get; set; }
+
         public virtual Marca Marca { get; set; }
 
         public virtual ICollection<ActivoFijo> ActivoFijo { get; set; }
 
         public virtual ICollection<Articulo> Articulo { get; set; }
-
     }
 }

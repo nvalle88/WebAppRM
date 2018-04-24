@@ -1,7 +1,5 @@
 @model bd.webapprm.entidades.DetalleFactura
 @{
-    ViewData["Title"] = "DetallesFactura";
-
     //var listaProveedores = new List<bd.webapprm.entidades.Proveedor>();
     //var listaArticulos = new List<bd.webapprm.entidades.Articulo>();
 
@@ -9,12 +7,13 @@
     //listaArticulos = ViewBag.listaArticulos;
 
     int ID = ViewBag.ID;
-    
 }
 
-<link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
-<link rel="stylesheet" href="~/lib/bootstrap-touchspin-master/src/jquery.bootstrap-touchspin.css" />
-<link rel="stylesheet" href="~/css/site.css" />
+@section css{
+    <link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap-touchspin-master/src/jquery.bootstrap-touchspin.css" />
+}
+
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
@@ -96,12 +95,10 @@
                                             </label>
                                         </section>
                                     </div>
-
                                 </fieldset>
-
                                 <footer>
                                     <span class="text-danger">@ViewData["Error"]</span>
-                                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                                    <button type="submit" class="btn btn-primary" id="btn-guardar">Guardar</button>
                                     <a asp-action="IngresarFacturas" asp-controller="Proveeduria" class="btn btn-default">Cancelar</a>
                                 </footer>
                             </form>
@@ -114,9 +111,8 @@
 </div>
 
 @section Scripts {
-    <script src='~/lib/select2/dist/js/select2.min.js'></script>
-    <script src='~/lib/select2/dist/js/i18n/es.js'></script>
-    <script src='~/js/site.js'></script>
+    @{await Html.RenderPartialAsync("_Select2ScriptsPartial");}
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src='~/lib/bootstrap-touchspin-master/src/jquery.bootstrap-touchspin.js'></script>
     <script type="text/javascript">
         $(document).ready(function () {

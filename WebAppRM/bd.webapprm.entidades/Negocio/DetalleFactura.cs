@@ -20,19 +20,15 @@ namespace bd.webapprm.entidades
         //Propiedades Virtuales Referencias a otras clases
 
         [Display(Name = "Factura:")]
+        [Required(ErrorMessage = "Debe seleccionar el {0} ")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
         public int IdFactura { get; set; }
         public virtual Factura Factura { get; set; }
-        
 
         [Display(Name = "Artículo:")]
+        [Required(ErrorMessage = "Debe seleccionar el {0} ")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
         public int IdArticulo { get; set; }
         public virtual Articulo Articulo { get; set; }
-
-
-
-
-        
     }
 }

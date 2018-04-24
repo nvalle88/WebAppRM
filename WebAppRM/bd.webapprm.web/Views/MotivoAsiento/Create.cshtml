@@ -1,10 +1,9 @@
 @model bd.webapprm.entidades.MotivoAsiento
 
-@{
-    ViewData["Title"] = "Motivo de Asiento";
+@section css{
+    <link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
 }
 
-<link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
@@ -19,14 +18,14 @@
                         <div class="widget-body no-padding">
                             <form asp-action="Create" id="checkout-form" class="smart-form" novalidate="novalidate">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                                <fieldset>                                    
+                                <fieldset>
                                     <div class="row">
                                         <section class="col col-4">
                                             <label asp-for="IdConfiguracionContabilidad"></label>
                                         </section>
                                         <section class="col col-8">
                                             <label class="input">
-                                                <select asp-for="IdConfiguracionContabilidad" class="form-control" asp-items="ViewBag.IdConfiguracionContabilidad"></select>
+                                                <select asp-for="IdConfiguracionContabilidad" class="form-control" asp-items="ViewBag.ConfiguracionContabilidad"></select>
                                                 <span asp-validation-for="IdConfiguracionContabilidad" class="text-danger"></span>
                                             </label>
                                         </section>
@@ -42,12 +41,10 @@
                                             </label>
                                         </section>
                                     </div>
-
                                 </fieldset>
-
                                 <footer>
                                     <span class="text-danger">@ViewData["Error"]</span>
-                                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                                    <button type="submit" class="btn btn-primary" id="btn-guardar">Guardar</button>
                                     <a asp-action="Index" class="btn btn-default">Cancelar</a>
                                 </footer>
                             </form>
@@ -59,10 +56,9 @@
     </section>
 </div>
 
-@section Scripts {
-    <script src='~/lib/select2/dist/js/select2.min.js'></script>
-    <script src='~/lib/select2/dist/js/i18n/es.js'></script>
-    <script src='~/js/site.js'></script>
+@section scripts {
+    @{await Html.RenderPartialAsync("_Select2ScriptsPartial");}
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script type="text/javascript">
         $(document).ready(function () {
             Init_Select2();

@@ -17,6 +17,7 @@ namespace bd.webapprm.entidades
         //Propiedades Virtuales Referencias a otras clases
 
         [Display(Name = "Clase de activo fijo:")]
+        [Required(ErrorMessage = "Debe seleccionar el {0} ")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
         public int IdClaseActivoFijo { get; set; }
         public virtual ClaseActivoFijo ClaseActivoFijo { get; set; }

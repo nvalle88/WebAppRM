@@ -1,76 +1,90 @@
 @model bd.webapprm.entidades.MaestroDetalleArticulo
 
-@{
-    ViewData["Title"] = "Edit";
+@section css{
+    <link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
+    <link rel="stylesheet" href="~/lib/jquery.spinner-master/dist/css/bootstrap-spinner.min.css" />
 }
 
-<!-- MAIN CONTENT -->
 <div id="content">
-
-    <!-- widget grid -->
     <section id="widget-grid" class="">
-
-        <!-- START ROW -->
         <div class="row">
-            <!-- NEW COL START -->
             <article class="col-sm-12 col-md-12 col-lg-6">
-                <!-- Widget ID (each widget will need unique ID)-->
                 <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
-
                     <header>
                         <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
                         <h2>Detalle Maestro Art&iacute;culo</h2>
                     </header>
-                    <!-- widget div-->
                     <div>
-
-                        <!-- widget edit box -->
                         <div class="jarviswidget-editbox">
-                            <!-- This area used as dropdown edit box -->
                         </div>
-                        <!-- end widget edit box -->
-                        <!-- widget content -->
                         <div class="widget-body no-padding">
-
                             <form asp-action="Edit" id="checkout-form" class="smart-form" novalidate="novalidate">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <input type="hidden" asp-for="IdMaestroDetalleArticulo" />
-                                <input type="hidden" asp-for="IdArticulo" />
-                                <input type="hidden" asp-for="IdMaestroArticuloSucursal" />
                                 <fieldset>
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label>Art&iacute;culo</label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <select asp-for="IdArticulo" class="form-control" asp-items="ViewBag.IdArticulo"></select>
+                                                <span asp-validation-for="IdArticulo" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="IdMaestroArticuloSucursal"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <select asp-for="IdMaestroArticuloSucursal" class="form-control" asp-items="ViewBag.MaestroArticuloSucursal"></select>
+                                                <span asp-validation-for="IdMaestroArticuloSucursal" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+
                                     <div class="row">
                                         <section class="col col-4">
                                             <label>Cantidad</label>
                                         </section>
 
                                         <section class="col col-8">
-                                            <label class="input">
-                                                <input maxlength="32" type="number" asp-for="Cantidad" class="form-control" placeholder="@Html.DisplayNameFor(model=>model.Cantidad)" />
-                                                <span asp-validation-for="Cantidad" class="text-danger"></span>
-                                            </label>
+                                            <div class="input-group spinner" data-trigger="spinner">
+                                                <input type="text" asp-for="Cantidad" class="form-control" data-rule="quantity" style="padding-left:10px !important;" />
+                                                <div class="input-group-addon" style="padding-left:23px !important;">
+                                                    <a href="javascript:;" class="spin-up" data-spin="up"><i class="fa fa-caret-up"></i></a>
+                                                    <a href="javascript:;" class="spin-down" data-spin="down"><i class="fa fa-caret-down"></i></a>
+                                                </div>
+                                            </div>
+                                            <span asp-validation-for="Cantidad" class="text-danger"></span>
                                         </section>
                                     </div>
                                 </fieldset>
                                 <footer>
                                     <span class="text-danger">@ViewData["Error"]</span>
-                                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                                    <button type="submit" class="btn btn-primary" id="btn-guardar">Guardar</button>
                                     <a asp-action="Index" class="btn btn-default">Cancelar</a>
                                 </footer>
                             </form>
                         </div>
-                        <!-- end widget content -->
                     </div>
-                    <!-- end widget div -->
                 </div>
-                <!-- end widget -->
-
             </article>
-
         </div>
-        <!-- END ROW -->
     </section>
-    <!-- end widget grid -->
-    <!-- Modal -->
-
 </div>
-<!-- END MAIN CONTENT -->
+@section Scripts {
+    @{await Html.RenderPartialAsync("_Select2ScriptsPartial");}
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src='~/lib/jquery.spinner-master/dist/js/jquery.spinner.min.js'></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            Init_Select2();
+        });
+    </script>
+}

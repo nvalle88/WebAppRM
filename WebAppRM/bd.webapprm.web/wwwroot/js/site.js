@@ -32,18 +32,21 @@ function mostrarLoadingPanel(idElemento, texto)
     });
 }
 
-function mostrarNotificacion(titulo, texto, color)
+function mostrarNotificacion(titulo, texto)
 {
-    switch (color) {
-        case 1: color = "#3276B1"; break;
-        case 2: color = "#C46A69"; break;
+    var color = "";
+    var icon = "";
+    switch (titulo)
+    {
+        case "Información": color = "#3276B1"; icon = "exclamation-circle"; break;
+        case "Error": color = "#C46A69"; icon = "times-circle"; break;
+        case "Aviso": color = "#c79121"; icon = "exclamation-triangle"; break;
     }
-
     $.smallBox({
         title: titulo,
         content: texto,
         color: color,
-        icon: "fa fa-warning shake animated",
+        icon: "fa fa-" + icon + " shake animated",
         timeout: 6000
     });
 }
@@ -63,4 +66,23 @@ function obtenerIdAjax(id)
     } catch (e) {
         return -1;
     }
+}
+
+function Gestionar_Msg() {
+    var mensaje = $("#span_mensaje").html();
+    if (mensaje != "" && mensaje != null) {
+        var arr_msg = mensaje.split('|');
+        mostrarNotificacion(arr_msg[0], arr_msg[1]);
+    }
+}
+
+function initLoadingForm()
+{
+    $(this).on("submit", function (event) {
+        if (!$(event.target).hasClass("noFormLoading"))
+        {
+            $("#btn-guardar").prop("disabled", "disabled");
+            $("#btn-guardar").html("<i class='fa fa-spinner fa-spin'></i> " + $("#btn-guardar").html());
+        }
+    });
 }

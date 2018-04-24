@@ -1,10 +1,5 @@
 ﻿@model bd.webapprm.entidades.Proveedor
 
-@{
-    ViewData["Title"] = "Proveedor";
-}
-
-<link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
@@ -67,7 +62,7 @@
 
                                         <section class="col col-8">
                                             <label class="input">
-                                                <input maxlength="32" asp-for="Direccion" class="form-control" />
+                                                <textarea asp-for="Direccion" class="form-control paddingTextArea" rows="4"></textarea>
                                                 <span asp-validation-for="Direccion" class="text-danger"></span>
                                             </label>
                                         </section>
@@ -75,7 +70,7 @@
                                 </fieldset>
                                 <footer>
                                     <span class="text-danger">@ViewData["Error"]</span>
-                                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                                    <button type="submit" class="btn btn-primary" id="btn-guardar">Guardar</button>
                                     <a asp-action="Index" class="btn btn-default">Cancelar</a>
                                 </footer>
                             </form>
@@ -87,8 +82,5 @@
     </section>
 </div>
 @section Scripts {
-    <script type="text/javascript">
-
-
-    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

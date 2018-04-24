@@ -19,8 +19,10 @@ namespace bd.webapprm.entidades
         //Propiedades Virtuales Referencias a otras clases
 
         [Display(Name = "Provincia:")]
+        [Required(ErrorMessage = "Debe seleccionar el {0} ")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
         public int IdProvincia { get; set; }
+
         public virtual Provincia Provincia { get; set; }
 
         public virtual ICollection<ActivoFijo> ActivoFijo { get; set; }
@@ -32,7 +34,5 @@ namespace bd.webapprm.entidades
         public virtual ICollection<ItinerarioViatico> ItinerarioViatico { get; set; }
 
         public virtual ICollection<Empleado> Empleado { get; set; }
-
-
     }
 }

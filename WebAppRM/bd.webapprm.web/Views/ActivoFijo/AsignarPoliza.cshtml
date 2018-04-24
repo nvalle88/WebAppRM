@@ -1,9 +1,13 @@
 @model bd.webapprm.entidades.RecepcionActivoFijoDetalle
-<link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
+
+@section css{
+    <link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
+}
+
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
-            <article class="col-sm-12 col-md-12 col-lg-8">
+            <article class="col-sm-12 col-md-12 col-lg-6">
                 <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
                     <header>
                         <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
@@ -12,7 +16,6 @@
                     <div>
                         <div class="jarviswidget-editbox"></div>
                         <div class="widget-body no-padding">
-                            <span class="text-success">@ViewData["mensaje"]</span>
                             <form asp-action="AsignarPoliza" id="checkout-form" class="smart-form" novalidate="novalidate">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <input type="hidden" asp-for="IdRecepcionActivoFijoDetalle" />
@@ -24,7 +27,7 @@
 
                                         <section class="col col-8">
                                             <label class="input">
-                                                <input maxlength="20" asp-for="NumeroPoliza" name="NumeroPoliza" class="form-control" />
+                                                <input asp-for="NumeroPoliza" name="NumeroPoliza" class="form-control" />
                                                 <span asp-validation-for="NumeroPoliza" class="text-danger"></span>
                                             </label>
                                         </section>
@@ -32,7 +35,7 @@
                                 </fieldset>
                                 <footer>
                                     <span class="text-danger">@ViewData["Error"]</span>
-                                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                                    <button type="submit" class="btn btn-primary" id="btn-guardar">Guardar</button>
                                     <a asp-action="ActivosFijosRecepcionadosSinPoliza" class="btn btn-default">Cancelar</a>
                                 </footer>
                             </form>
@@ -43,3 +46,6 @@
         </div>
     </section>
 </div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
