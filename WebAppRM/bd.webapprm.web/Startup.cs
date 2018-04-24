@@ -26,9 +26,11 @@ namespace bd.webapprm.web
         // This method gets called by the runtime. Use this method to add services to the container.
         public async void ConfigureServices(IServiceCollection services)
         {
-
             // Add framework services.
-            services.AddMvc();
+            services.AddMvc(config => {
+                config.ModelBindingMessageProvider.ValueMustBeANumberAccessor = (value) => $"El valor del campo {value} es inválido.";
+                config.ModelBindingMessageProvider.ValueMustNotBeNullAccessor = value => $"Debe introducir el {value}";
+            });
             services.AddSingleton<IApiServicio, ApiServicio>();
 
             var ServicioSeguridad = Configuration.GetSection("ServicioSeguridad").Value;
@@ -38,10 +40,12 @@ namespace bd.webapprm.web
 
             var HostSeguridad = Configuration.GetSection("HostServicioSeguridad").Value;
             await InicializarWebApp.InicializarWebRecursosMateriales(ServiciosRecursosMateriales, new Uri(HostSeguridad));
-            await InicializarWebApp.InicializarSeguridad(ServicioSeguridad, new Uri(HostSeguridad));
+            //await InicializarWebApp.InicializarSeguridad(ServicioSeguridad, new Uri(HostSeguridad));
             await InicializarWebApp.InicializarWebTalentoHumano(ServicioTalentoHumano, new Uri(HostSeguridad));
-            await InicializarWebApp.InicializarLogEntry(ServiciosLog, new Uri(HostSeguridad));
+            //await InicializarWebApp.InicializarLogEntry(ServiciosLog, new Uri(HostSeguridad));
 
+            services.AddMemoryCache();
+            services.AddSession();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,24 +54,18 @@ namespace bd.webapprm.web
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-
-
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseBrowserLink();
 
-
-                using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>()
-                .CreateScope())
+                using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
                 {
                     //serviceScope.ServiceProvider.GetService<LogDbContext>()
                     //         .Database.Migrate();
 
                    // serviceScope.ServiceProvider.GetService<InicializacionServico>().InicializacionAsync();
                 }
-
             }
             else
             {
@@ -75,7 +73,7 @@ namespace bd.webapprm.web
             }
 
             app.UseStaticFiles();
-
+            app.UseSession();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

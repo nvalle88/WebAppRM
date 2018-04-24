@@ -9,16 +9,61 @@
     eventoCiudad();
     eventoSucursal();
     eventoValidacionTecnicaChange();
-    eventoBtnAtras();
-    var wizard = $('.wizard').wizard();
+    gestionarWizard();
     $('#RecepcionActivoFijo_FechaRecepcion').datetimepicker({
         'format': 'D-M-Y hh:mm'
     });
     mostrarOcultarDatosEspecificosCodificacion($("#RecepcionActivoFijo_ValidacionTecnica").prop('checked'));
-    gestionarTab();
-    gestionarInformacionAdicional();
     configurarDropzone();
 });
+
+function gestionarWizard()
+{
+    var wizard = $('.wizard').wizard();
+    wizard.on('finished.fu.wizard', function (e, data) {
+        var validar = validarWizard();
+        if (validar)
+            $("#checkout-form").submit();
+        else
+            return false;
+    });
+    wizard.on('change.fu.wizard', function (e, data)
+    {
+        if (data.direction === 'previous')
+            return;
+
+        var validar = validarWizard();
+        if (validar)
+        {
+            if ($("#li_codificacion").css("display") == "none")
+            {
+                $("#checkout-form").submit();
+                return false;
+            }
+            else
+            {
+                $("#RecepcionActivoFijo_SubClaseActivoFijo_ClaseActivoFijo_TipoActivoFijo_Nombre").val($("#RecepcionActivoFijo_SubClaseActivoFijo_ClaseActivoFijo_IdTipoActivoFijo option:selected").text());
+                $("#RecepcionActivoFijo_SubClaseActivoFijo_ClaseActivoFijo_Nombre").val($("#RecepcionActivoFijo_SubClaseActivoFijo_IdClaseActivoFijo option:selected").text());
+                $("#ActivoFijo_CodigoActivoFijo_TAF").val($("#RecepcionActivoFijo_SubClaseActivoFijo_ClaseActivoFijo_IdTipoActivoFijo option:selected").text());
+                $("#ActivoFijo_CodigoActivoFijo_CAF").val($("#RecepcionActivoFijo_SubClaseActivoFijo_IdClaseActivoFijo option:selected").text());
+            }
+        }
+        return validar;
+    });
+}
+
+function validarWizard()
+{
+    var form = $("#checkout-form");
+    if (!form.valid()) {
+        mostrarNotificacion("Error", "Existen errores en el formulario.");
+        $("#spanError").html("El modelo es inválido.");
+        return false;
+    }
+    else
+        $("#spanError").html("");
+    return true;
+}
 
 function configurarDropzone()
 {
@@ -50,7 +95,7 @@ function configurarDropzone()
                     data: { fileName: file.name, dir: $("#dir").val() },
                     error: function (errorMessage)
                     {
-                        mostrarNotificacion("Error", "No se pudo eliminar o no se encontró el archivo " + file.name + ".", 2);
+                        mostrarNotificacion("Error", "No se pudo eliminar o no se encontró el archivo " + file.name + ".");
                     }
                 });
             });
@@ -62,53 +107,9 @@ function configurarDropzone()
 
             this.on("error", function (file, data) {
                 this.removeFile(file);
-                mostrarNotificacion("Error", "El sistema no tiene permisos suficientes para guardar la información.", 2);
+                mostrarNotificacion("Error", "El sistema no tiene permisos suficientes para guardar la información.");
             });
         }
-    });
-}
-
-function gestionarInformacionAdicional()
-{
-    $("#btn_informacionAdicional").on("click", function (e) {
-        $("#divInformacionAdicional").removeClass("hide");
-    });
-
-    $("#btn_cancelarInformacionAdicional").on("click", function (e) {
-        $("#divInformacionAdicional").addClass("hide");
-    });
-}
-
-function gestionarTab()
-{
-    var valor_tab = parseInt($("#tab").val());
-    if (valor_tab === 1) {
-        if ($("#RecepcionActivoFijo_ValidacionTecnica").prop("checked"))
-            $("#btn_guardar").attr("value", "Guardar");
-        else
-            $("#btn_guardar").attr("value", "Siguiente");
-
-        $("#btn_atras").addClass("hide");
-    }
-    else {
-        $("#btn_guardar").attr("value", "Guardar");
-        $("#btn_atras").removeClass("hide");
-    }
-}
-
-function eventoBtnAtras()
-{
-    $("#btn_atras").on("click", function (e) {
-        $("#tab").val(1);
-
-        $("#li_codificacion").removeClass("active");
-        $("#li_datosGenerales").addClass("active");
-
-        $("#step2").removeClass("active");
-        $("#step1").addClass("active");
-
-        $("#btn_guardar").attr("value", "Siguiente");
-        $("#btn_atras").addClass("hide");
     });
 }
 
@@ -123,12 +124,14 @@ function mostrarOcultarDatosEspecificosCodificacion(mostrarOcultar)
 {
     if (mostrarOcultar) {
         $("#li_codificacion").hide();
-        $("#btn_guardar").attr("value", "Guardar");
+        $("#btn-atras").hide();
+        $("#btn-guardar").html("Guardar<i class='fa fa-arrow-right'></i>");
     }
     else
     {
         $("#li_codificacion").show();
-        $("#btn_guardar").attr("value", "Siguiente");
+        $("#btn-atras").show();
+        $("#btn-guardar").html("Siguiente<i class='fa fa-arrow-right'></i>");
     }
 }
 
@@ -191,7 +194,6 @@ function eventoSucursal() {
 
 function partialViewProvincia(idPais) {
     mostrarLoadingPanel("checkout-form", "Cargando provincias...");
-    
     $.ajax({
         url: provinciaSelectResult,
         method: "POST",
@@ -205,6 +207,7 @@ function partialViewProvincia(idPais) {
         },
         complete: function (data)
         {
+            eventoProvincia();
             partialViewCiudad($("#ActivoFijo_LibroActivoFijo_Sucursal_Ciudad_IdProvincia").val());
         }
     });
@@ -224,6 +227,7 @@ function partialViewCiudad(idProvincia) {
             $("#checkout-form").waitMe("hide");
         },
         complete: function (data) {
+            eventoCiudad();
             partialViewSucursal($("#ActivoFijo_LibroActivoFijo_Sucursal_IdCiudad").val());
         }
     });
@@ -243,6 +247,7 @@ function partialViewSucursal(idCiudad) {
             $("#checkout-form").waitMe("hide");
         },
         complete: function (data) {
+            eventoSucursal();
             partialViewLibroActivoFijo($("#ActivoFijo_LibroActivoFijo_IdSucursal").val());
         }
     });
@@ -260,9 +265,6 @@ function partialViewLibroActivoFijo(idSucursal) {
         },
         complete: function (data) {
             $("#checkout-form").waitMe("hide");
-            eventoProvincia();
-            eventoCiudad();
-            eventoSucursal();
         }
     });
 }

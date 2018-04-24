@@ -1,13 +1,6 @@
 @model List<bd.webapprm.entidades.RecepcionActivoFijoDetalle>
 
-@{
-    ViewData["Title"] = "PolizasReporte";
-}
-
-<link rel="stylesheet" href="~/css/site.css" />
 <script src="~/lib/JsBarcode-master/dist/JsBarcode.all.min.js"></script>
-<script src='~/js/site.js'></script>
-
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
@@ -104,7 +97,7 @@
                                                     @Html.DisplayFor(modelItem => item.NumeroPoliza)
                                                 </td>
                                             </tr>
-                                                        }
+                                        }
                                     </tbody>
                                 </table>
 

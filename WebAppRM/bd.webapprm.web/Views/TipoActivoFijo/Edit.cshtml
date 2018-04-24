@@ -1,10 +1,5 @@
 ﻿@model bd.webapprm.entidades.TipoActivoFijo
 
-@{
-    ViewData["Title"] = "TipoActivoFijo";
-}
-
-
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
@@ -37,7 +32,7 @@
                                 </fieldset>
                                 <footer>
                                     <span class="text-danger">@ViewData["Error"]</span>
-                                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                                    <button type="submit" class="btn btn-primary" id="btn-guardar">Guardar</button>
                                     <a asp-action="Index" class="btn btn-default">Cancelar</a>
                                 </footer>
                             </form>
@@ -49,8 +44,5 @@
     </section>
 </div>
 @section Scripts {
-    <script type="text/javascript">
-
-
-    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

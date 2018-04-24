@@ -1,14 +1,9 @@
 @model List<bd.webapprm.entidades.CatalogoCuenta>
 
-@{
-    ViewData["Title"] = "Catálogo de Cuenta";
-}
-
 <div id="content">
     <p>
         <a asp-action="Create" class="btn btn-success">Nuevo Cat&aacute;logo de Cuenta</a>
     </p>
-
     <section id="widget-grid" class="">
         <div class="row">
             <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -41,7 +36,7 @@
                                             </td>
 
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.CatalogoCuentaReferencia.Codigo)
+                                                @Html.DisplayFor(modelItem => item.CatalogoCuentaHijo.Codigo)
                                             </td>
 
                                             <td>

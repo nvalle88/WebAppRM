@@ -1,9 +1,9 @@
 @model bd.webapprm.entidades.Articulo
 
-@{
-    ViewData["Title"] = "Artículo";
+@section css{
+    <link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
 }
-<link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
+
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
@@ -22,15 +22,58 @@
                                 <fieldset>
                                     <div class="row">
                                         <section class="col col-4">
-                                            <label asp-for="IdSubClaseArticulo"></label>
+                                            <label asp-for="SubClaseArticulo.ClaseArticulo.TipoArticulo.Nombre"></label>
                                         </section>
 
                                         <section class="col col-8">
                                             <label class="input">
-                                                <select asp-for="IdSubClaseArticulo" class="form-control" asp-items="ViewBag.IdSubClaseArticulo"></select>
-                                                <span asp-validation-for="IdSubClaseArticulo" class="text-danger"></span>
+                                                <select asp-for="SubClaseArticulo.ClaseArticulo.IdTipoArticulo" class="form-control" asp-items="ViewBag.TipoArticulo"></select>
+                                                <span asp-validation-for="SubClaseArticulo.ClaseArticulo.IdTipoArticulo" class="text-danger"></span>
                                             </label>
                                         </section>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="SubClaseArticulo.ClaseArticulo.Nombre"></label>
+                                        </section>
+
+                                        <div id="div_claseArticulo">
+                                            @{ await Html.RenderPartialAsync("_ClaseArticuloSelect", Model ?? new bd.webapprm.entidades.Articulo()); }
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="SubClaseArticulo.Nombre"></label>
+                                        </section>
+
+                                        <div id="div_subClaseArticulo">
+                                            @{ await Html.RenderPartialAsync("_SubClaseArticuloSelect", Model ?? new bd.webapprm.entidades.Articulo()); }
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="Modelo.Marca.Nombre"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <select asp-for="Modelo.IdMarca" class="form-control" asp-items="ViewBag.IdMarca"></select>
+                                                <span asp-validation-for="Modelo.IdMarca" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="Modelo.Nombre"></label>
+                                        </section>
+
+                                        <div id="div_modelo">
+                                            @{ await Html.RenderPartialAsync("_ModeloSelect", Model ?? new bd.webapprm.entidades.Articulo()); }
+                                        </div>
                                     </div>
 
                                     <div class="row">
@@ -48,25 +91,12 @@
 
                                     <div class="row">
                                         <section class="col col-4">
-                                            <label asp-for="IdModelo"></label>
-                                        </section>
-
-                                        <section class="col col-8">
-                                            <label class="input">
-                                                <select asp-for="IdModelo" class="form-control" asp-items="ViewBag.IdModelo"></select>
-                                                <span asp-validation-for="IdModelo" class="text-danger"></span>
-                                            </label>
-                                        </section>
-                                    </div>
-
-                                    <div class="row">
-                                        <section class="col col-4">
                                             <label asp-for="Nombre"></label>
                                         </section>
 
                                         <section class="col col-8">
                                             <label class="input">
-                                                <input maxlength="20" asp-for="Nombre" class="form-control" />
+                                                <input maxlength="50" asp-for="Nombre" class="form-control" />
                                                 <span asp-validation-for="Nombre" class="text-danger"></span>
                                             </label>
                                         </section>
@@ -74,7 +104,7 @@
                                 </fieldset>
                                 <footer>
                                     <span class="text-danger">@ViewData["Error"]</span>
-                                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                                    <button type="submit" class="btn btn-primary" id="btn-guardar">Guardar</button>
                                     <a asp-action="Index" class="btn btn-default">Cancelar</a>
                                 </footer>
                             </form>
@@ -86,12 +116,12 @@
     </section>
 </div>
 @section Scripts {
-    <script src='~/lib/select2/dist/js/select2.min.js'></script>
-    <script src='~/lib/select2/dist/js/i18n/es.js'></script>
-    <script src='~/js/site.js'></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            Init_Select2();
-        });
+    @{await Html.RenderPartialAsync("_Select2ScriptsPartial");}
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/articulo/articulo.js"></script>
+    <script>
+        var claseArticuloSelectResult = "@Url.Action("ClaseArticulo_SelectResult")";
+        var subClaseArticuloSelectResult = "@Url.Action("SubClaseArticulo_SelectResult")";
+        var modeloSelectResult = "@Url.Action("Modelo_SelectResult")";
     </script>
 }

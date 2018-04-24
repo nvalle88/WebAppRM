@@ -17,6 +17,7 @@ namespace bd.webapprm.entidades
         //Propiedades Virtuales Referencias a otras clases
 
         [Display(Name = "País:")]
+        [Required(ErrorMessage = "Debe seleccionar el {0} ")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
         public int IdPais { get; set; }
         public virtual Pais Pais { get; set; }
@@ -24,6 +25,5 @@ namespace bd.webapprm.entidades
         public virtual ICollection<Ciudad> Ciudad { get; set; }
 
         public virtual ICollection<Empleado> Empleado { get; set; }
-
     }
 }

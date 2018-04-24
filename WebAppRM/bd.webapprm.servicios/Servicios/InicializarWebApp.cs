@@ -14,10 +14,7 @@ namespace bd.webapprm.servicios.Servicios
         {
             using (HttpClient client = new HttpClient())
             {
-                var url = string.Format("{0}/{1}", "/api/Adscsists", id);
-                var uri = string.Format("{0}{1}", baseAddreess, url);
-                var respuesta = await client.GetAsync(new Uri(uri));
-
+                var respuesta = await client.GetAsync(new Uri($"{baseAddreess}/api/Adscsists/{id}"));
                 var resultado = await respuesta.Content.ReadAsStringAsync();
                 var response = JsonConvert.DeserializeObject<Response>(resultado);
                 var sistema = JsonConvert.DeserializeObject<Adscsist>(response.Resultado.ToString());
@@ -29,9 +26,7 @@ namespace bd.webapprm.servicios.Servicios
         {
             try
             {
-                //var sistema = await ObtenerHostSistema(id, baseAddreess);
-                //WebApp.BaseAddressRM = sistema.AdstHost;
-                WebApp.BaseAddressRM = "http://localhost:52480/";
+                WebApp.BaseAddressRM = "http://localhost:5000/";//(await ObtenerHostSistema(id, baseAddreess)).AdstHost;
             }
             catch (Exception)
             { }
@@ -41,9 +36,7 @@ namespace bd.webapprm.servicios.Servicios
         {
             try
             {
-                var sistema = await ObtenerHostSistema(id, baseAddreess);
-                WebApp.BaseAddressTH = sistema.AdstHost;
-                //WebApp.BaseAddressTH = "http://localhost:49494/";
+                WebApp.BaseAddressTH = "http://localhost:5001/";//(await ObtenerHostSistema(id, baseAddreess)).AdstHost;
             }
             catch (Exception)
             { }
@@ -53,33 +46,20 @@ namespace bd.webapprm.servicios.Servicios
         {
             try
             {
-                var sistema = await ObtenerHostSistema(id, baseAddress);
-                AppGuardarLog.BaseAddress = sistema.AdstHost;
-                // AppGuardarLog.BaseAddress = "http://localhost:53317";
-
+                AppGuardarLog.BaseAddress = (await ObtenerHostSistema(id, baseAddress)).AdstHost;
             }
-            catch (Exception ex)
-            {
-
-            }
-
+            catch (Exception)
+            { }
         }
 
         public static async Task InicializarSeguridad(string id, Uri baseAddreess)
         {
             try
             {
-                var sistema = await ObtenerHostSistema(id, baseAddreess);
-                WebApp.BaseAddressSeguridad = sistema.AdstHost;
-                // WebApp.BaseAddress = "http://localhost:6000";
-                //WebApp.BaseAddressRM = "http://localhost:9000";
-
+                WebApp.BaseAddressSeguridad = (await ObtenerHostSistema(id, baseAddreess)).AdstHost;
             }
-            catch (Exception ex)
-            {
-
-            }
-
+            catch (Exception)
+            { }
         }
         #endregion
     }

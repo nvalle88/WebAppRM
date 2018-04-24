@@ -11,16 +11,18 @@ namespace bd.webapprm.entidades
         [Required(ErrorMessage = "Debe introducir {0}")]
         [Display(Name = "Código:")]
         [StringLength(20, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
+        [RegularExpression(@"^[-A-Z0-9a-z-]*$", ErrorMessage = "El {0} tiene que ser alfanumérico.")]
         public string Codigo { get; set; }
 
         //Propiedades Virtuales Referencias a otras clases
 
         [Display(Name = "Catálogo de cuenta:")]
-        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
-        public int IdCatalogoCuentaHijo { get; set; }
-        public virtual CatalogoCuenta CatalogoCuentaReferencia { get; set; }
+        [Range(0, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
+        public int? IdCatalogoCuentaHijo { get; set; }
 
-        public virtual ICollection<CatalogoCuenta> CatalogoCuentas { get; set; }
+        public virtual CatalogoCuenta CatalogoCuentaHijo { get; set; }
+
+        public virtual ICollection<CatalogoCuenta> CatalogosCuenta { get; set; }
 
         public virtual ICollection<ConfiguracionContabilidad> ConfiguracionContabilidad { get; set; }
 

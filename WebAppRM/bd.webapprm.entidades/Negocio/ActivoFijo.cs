@@ -7,9 +7,6 @@ namespace bd.webapprm.entidades
     {
         [Key]
         public int IdActivoFijo { get; set; }
-        public virtual ActivosFijosAlta ActivosFijosAlta { get; set; }
-
-        public virtual ActivosFijosBaja ActivosFijosBaja { get; set; }
 
         [Required(ErrorMessage = "Debe introducir {0}")]
         [Display(Name = "Activo fijo:")]
@@ -31,39 +28,43 @@ namespace bd.webapprm.entidades
         [StringLength(100, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
         public string Ubicacion { get; set; }
 
-
         //Propiedades Virtuales Referencias a otras clases
 
         [Display(Name = "Sub clase de activo fijo:")]
+        [Required(ErrorMessage = "Debe seleccionar el {0} ")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
         public int IdSubClaseActivoFijo { get; set; }
         public virtual SubClaseActivoFijo SubClaseActivoFijo { get; set; }
 
         [Display(Name = "Libro de activo fijo:")]
+        [Required(ErrorMessage = "Debe seleccionar el {0} ")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
         public int IdLibroActivoFijo { get; set; }
         public virtual LibroActivoFijo LibroActivoFijo { get; set; }
 
         [Display(Name = "Ciudad:")]
+        [Required(ErrorMessage = "Debe seleccionar el {0} ")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
         public int IdCiudad { get; set; }
         public virtual Ciudad Ciudad { get; set; }
 
         [Display(Name = "Unidadd de medida:")]
+        [Required(ErrorMessage = "Debe seleccionar el {0} ")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
         public int IdUnidadMedida { get; set; }
         public virtual UnidadMedida UnidadMedida { get; set; }
 
         [Display(Name = "Código de activo fijo")]
+        [Required(ErrorMessage = "Debe seleccionar el {0} ")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
         public int IdCodigoActivoFijo { get; set; }
         public virtual CodigoActivoFijo CodigoActivoFijo { get; set; }
 
         [Display(Name = "Modelo:")]
+        [Required(ErrorMessage = "Debe seleccionar el {0} ")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
         public int IdModelo { get; set; }
         public virtual Modelo Modelo { get; set; }
-
 
         public virtual ICollection<EmpleadoActivoFijo> EmpleadoActivoFijo { get; set; }
 
@@ -76,5 +77,9 @@ namespace bd.webapprm.entidades
         public virtual ICollection<TransferenciaActivoFijoDetalle> TransferenciaActivoFijoDetalle { get; set; }
 
         public virtual ICollection<ActivosFijosAdicionados> ActivosFijosAdicionados { get; set; }
+
+        public virtual ActivosFijosAlta ActivosFijosAlta { get; set; }
+
+        public virtual ActivosFijosBaja ActivosFijosBaja { get; set; }
     }
 }

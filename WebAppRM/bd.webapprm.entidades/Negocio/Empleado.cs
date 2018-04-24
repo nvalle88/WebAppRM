@@ -31,8 +31,7 @@ namespace bd.webapprm.entidades
         [Required(ErrorMessage = "Debe introducir {0}")]
         [Display(Name = "¿Declaración jurada?")]
         public bool DeclaracionJurada { get; set; }
-
-        [Required(ErrorMessage = "Debe introducir {0}")]
+        
         [Display(Name = "Ingreso por otra actividad:")]
         [StringLength(20, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
         public string IngresosOtraActividad { get; set; }
@@ -66,7 +65,7 @@ namespace bd.webapprm.entidades
 
         [Display(Name = "Dependencia:")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
-        public int IdDependencia { get; set; }
+        public int? IdDependencia { get; set; }
         public virtual Dependencia Dependencia { get; set; }
 
 

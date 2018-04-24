@@ -23,6 +23,7 @@ namespace bd.webapprm.entidades
         //Propiedades Virtuales Referencias a otras clases
 
         [Display(Name = "Servidor público:")]
+        [Required(ErrorMessage = "Debe seleccionar el {0} ")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
         public int IdEmpleado { get; set; }
         public virtual Empleado Empleado { get; set; }
@@ -30,6 +31,7 @@ namespace bd.webapprm.entidades
         //Propiedades Virtuales Referencias a otras clases
 
         [Display(Name = "Artículo:")]
+        [Required(ErrorMessage = "Debe seleccionar el {0} ")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
         public int IdArticulo { get; set; }
         public virtual Articulo Articulo { get; set; }
@@ -37,6 +39,7 @@ namespace bd.webapprm.entidades
         //Propiedades Virtuales Referencias a otras clases
 
         [Display(Name = "Maestro de artículo de la sucursal:")]
+        [Required(ErrorMessage = "Debe seleccionar el {0} ")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
         public int IdMaestroArticuloSucursal { get; set; }
         public virtual MaestroArticuloSucursal MaestroArticuloSucursal { get; set; }
@@ -44,13 +47,11 @@ namespace bd.webapprm.entidades
         //Propiedades Virtuales Referencias a otras clases
 
         [Display(Name = "Proveedor:")]
+        [Required(ErrorMessage = "Debe seleccionar el {0} ")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
         public int IdProveedor { get; set; }
         public virtual Proveedor Proveedor { get; set; }
 
-
         public virtual ICollection<AltaProveeduria> AltaProveeduria { get; set; }
-
-
     }
 }

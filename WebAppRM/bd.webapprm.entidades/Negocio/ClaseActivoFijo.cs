@@ -3,10 +3,8 @@ namespace bd.webapprm.entidades
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
-
     public partial class ClaseActivoFijo
     {
-
         [Key]
         public int IdClaseActivoFijo { get; set; }
 
@@ -18,13 +16,17 @@ namespace bd.webapprm.entidades
         //Propiedades Virtuales Referencias a otras clases
 
         [Display(Name = "Tipo de activo fijo:")]
+        [Required(ErrorMessage = "Debe seleccionar el {0}")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
         public int IdTipoActivoFijo { get; set; }
+
         public virtual TipoActivoFijo TipoActivoFijo { get; set; }
 
         [Display(Name = "Depreciación")]
+        [Required(ErrorMessage = "Debe seleccionar el {0}")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
         public int IdTablaDepreciacion { get; set; }
+
         public virtual TablaDepreciacion TablaDepreciacion { get; set; }
 
         public virtual ICollection<SubClaseActivoFijo> SubClaseActivoFijo { get; set; }
