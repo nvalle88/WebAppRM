@@ -16,4 +16,8 @@
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="1.1.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Constantes\" />
+  </ItemGroup>
+
 </Project>
