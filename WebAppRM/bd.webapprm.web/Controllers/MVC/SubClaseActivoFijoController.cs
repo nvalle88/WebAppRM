@@ -154,7 +154,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var listaClaseActivoFijo = idTipoActivoFijo != -1 ? (await apiServicio.Listar<ClaseActivoFijo>(new Uri(WebApp.BaseAddressRM), "api/ClaseActivoFijo/ListarClaseActivoFijo")).Where(c => c.IdTipoActivoFijo == idTipoActivoFijo) : new List<ClaseActivoFijo>();
+                var listaClaseActivoFijo = idTipoActivoFijo != -1 ? await apiServicio.Listar<ClaseActivoFijo>(new Uri(WebApp.BaseAddressRM), $"api/ClaseActivoFijo/ListarClaseActivoFijoPorTipoActivoFijo/{idTipoActivoFijo}") : new List<ClaseActivoFijo>();
                 return new SelectList(listaClaseActivoFijo, "IdClaseActivoFijo", "Nombre");
             }
             catch (Exception)
