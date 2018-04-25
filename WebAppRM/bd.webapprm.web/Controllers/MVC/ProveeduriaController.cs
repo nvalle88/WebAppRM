@@ -265,7 +265,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var listaClaseArticulo = idTipoArticulo != -1 ? (await apiServicio.Listar<ClaseArticulo>(new Uri(WebApp.BaseAddressRM), "api/ClaseArticulo/ListarClaseArticulo")).Where(c => c.IdTipoArticulo == idTipoArticulo).ToList() : new List<ClaseArticulo>();
+                var listaClaseArticulo = idTipoArticulo != -1 ? await apiServicio.Listar<ClaseArticulo>(new Uri(WebApp.BaseAddressRM), $"api/ClaseArticulo/ListarClaseArticuloPorTipoArticulo/{idTipoArticulo}") : new List<ClaseArticulo>();
                 return new SelectList(listaClaseArticulo, "IdClaseArticulo", "Nombre");
             }
             catch (Exception)
@@ -287,7 +287,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var listaSubClaseArticulo = idClaseArticulo != -1 ? (await apiServicio.Listar<SubClaseArticulo>(new Uri(WebApp.BaseAddressRM), "api/SubClaseArticulo/ListarSubClaseArticulos")).Where(c => c.IdClaseArticulo == idClaseArticulo).ToList() : new List<SubClaseArticulo>();
+                var listaSubClaseArticulo = idClaseArticulo != -1 ? await apiServicio.Listar<SubClaseArticulo>(new Uri(WebApp.BaseAddressRM), $"api/SubClaseArticulo/ListarSubClaseArticulosPorClase/{idClaseArticulo}") : new List<SubClaseArticulo>();
                 return new SelectList(listaSubClaseArticulo, "IdSubClaseArticulo", "Nombre");
             }
             catch (Exception)
@@ -309,7 +309,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var listaArticulo = idSubClaseArticulo != -1 ? (await apiServicio.Listar<Articulo>(new Uri(WebApp.BaseAddressRM), "api/Articulo/ListarArticulos")).Where(c => c.IdSubClaseArticulo == idSubClaseArticulo).ToList() : new List<Articulo>();
+                var listaArticulo = idSubClaseArticulo != -1 ? await apiServicio.Listar<Articulo>(new Uri(WebApp.BaseAddressRM), $"api/Articulo/ListarArticulosPorSubClase/{idSubClaseArticulo}") : new List<Articulo>();
                 return new SelectList(listaArticulo, "IdArticulo", "Nombre");
             }
             catch (Exception)
@@ -397,7 +397,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var listaMaestroArticuloSucursal = idSucursal != -1 ? (await apiServicio.Listar<MaestroArticuloSucursal>(new Uri(WebApp.BaseAddressRM), "api/MaestroArticuloSucursal/ListarMaestroArticuloSucursal")).Where(c => c.IdSucursal == idSucursal) : new List<MaestroArticuloSucursal>();
+                var listaMaestroArticuloSucursal = idSucursal != -1 ? await apiServicio.Listar<MaestroArticuloSucursal>(new Uri(WebApp.BaseAddressRM), $"api/MaestroArticuloSucursal/ListarMaestroArticuloSucursalPorSucursal/{idSucursal}") : new List<MaestroArticuloSucursal>();
                 return new SelectList(listaMaestroArticuloSucursal.Select(c => new { c.IdMaestroArticuloSucursal, Maestro = String.Format("Mínimo: {0} - Máximo: {1}", c.Minimo, c.Maximo) }), "IdMaestroArticuloSucursal", "Maestro");
             }
             catch (Exception)
