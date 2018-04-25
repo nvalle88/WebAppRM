@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using bd.webapprm.entidades;
 using bbd.webapprm.servicios.Enumeradores;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using bd.webapprm.servicios.Extensores;
 
 namespace bd.webapprm.web.Controllers.MVC
 {
@@ -29,86 +30,32 @@ namespace bd.webapprm.web.Controllers.MVC
             var lista = new List<MaestroArticuloSucursal>();
             try
             {
-                lista = await apiServicio.Listar<MaestroArticuloSucursal>(new Uri(WebApp.BaseAddressRM)
-                                                                    , "api/MaestroArticuloSucursal/ListarMaestroArticuloSucursal");
-                return View(lista);
+                lista = await apiServicio.Listar<MaestroArticuloSucursal>(new Uri(WebApp.BaseAddressRM), "api/MaestroArticuloSucursal/ListarMaestroArticuloSucursal");
             }
             catch (Exception ex)
             {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
-                {
-                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Listando maestros de artículos de sucursal",
-                    ExceptionTrace = ex.Message,
-                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity),
-                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                    UserName = "Usuario APP webappth"
-                });
-                return BadRequest();
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Listando maestros de artículos de sucursal", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webappth" });
+                TempData["Mensaje"] = $"{Mensaje.Error}|{Mensaje.ErrorListado}";
             }
+            return View(lista);
         }
 
         public async Task<IActionResult> Create()
         {
-            ViewData["Pais"] = new SelectList(await apiServicio.Listar<Pais>(new Uri(WebApp.BaseAddressTH), "api/Pais/ListarPais"), "IdPais", "Nombre");
-            ViewData["Provincia"] = await ObtenerSelectListProvincia((ViewData["Pais"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Pais"] as SelectList).FirstOrDefault().Value) : -1);
-            ViewData["Ciudad"] = await ObtenerSelectListCiudad((ViewData["Provincia"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Provincia"] as SelectList).FirstOrDefault().Value) : -1);
-            ViewData["Sucursal"] = await ObtenerSelectListSucursal((ViewData["Ciudad"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Ciudad"] as SelectList).FirstOrDefault().Value) : -1);
-            return View();
-        }
-
-        private async Task<MaestroArticuloSucursal> ObtenerMaestroArticuloSucursalValidacion(MaestroArticuloSucursal maestroArticuloSucursal)
-        {
             try
             {
-                if (maestroArticuloSucursal.IdSucursal == 0)
-                {
-                    try
-                    {
-                        maestroArticuloSucursal.Sucursal = new Sucursal();
-                        int IdCiudad = int.Parse(Request.Form["Sucursal.IdCiudad"].ToString());
-
-                        var listaCiudad = await apiServicio.Listar<Ciudad>(new Uri(WebApp.BaseAddressTH), "api/Ciudad/ListarCiudad");
-                        maestroArticuloSucursal.Sucursal.Ciudad = listaCiudad.SingleOrDefault(c => c.IdCiudad == IdCiudad);
-                        maestroArticuloSucursal.Sucursal.IdCiudad = IdCiudad;
-                    }
-                    catch (Exception)
-                    {
-                        try
-                        {
-                            maestroArticuloSucursal.Sucursal.Ciudad = new Ciudad();
-                            int IdProvincia = int.Parse(Request.Form["Sucursal.Ciudad.IdProvincia"].ToString());
-
-                            var listaProvincia = await apiServicio.Listar<Provincia>(new Uri(WebApp.BaseAddressTH), "api/Provincia/ListarProvincia");
-                            maestroArticuloSucursal.Sucursal.Ciudad.Provincia = listaProvincia.SingleOrDefault(c => c.IdProvincia == IdProvincia);
-                            maestroArticuloSucursal.Sucursal.Ciudad.IdProvincia = IdProvincia;
-                        }
-                        catch (Exception)
-                        {
-                            try
-                            {
-                                maestroArticuloSucursal.Sucursal.Ciudad.Provincia = new Provincia();
-                                int IdPais = int.Parse(Request.Form["Sucursal.Ciudad.Provincia.IdPais"].ToString());
-
-                                var listaPais = await apiServicio.Listar<Pais>(new Uri(WebApp.BaseAddressTH), "api/Pais/ListarPais");
-                                maestroArticuloSucursal.Sucursal.Ciudad.Provincia.Pais = listaPais.SingleOrDefault(c => c.IdPais == IdPais);
-                                maestroArticuloSucursal.Sucursal.Ciudad.Provincia.IdPais = IdPais;
-                            }
-                            catch (Exception)
-                            { }
-                        }
-                    }
-                }
-                else
-                {
-                    var listaSucursal = await apiServicio.Listar<Sucursal>(new Uri(WebApp.BaseAddressTH), "api/Sucursal/ListarSucursal");
-                    maestroArticuloSucursal.Sucursal = listaSucursal.SingleOrDefault(c => c.IdSucursal == maestroArticuloSucursal.IdSucursal);
-                }
+                ViewData["Pais"] = new SelectList(await apiServicio.Listar<Pais>(new Uri(WebApp.BaseAddressTH), "api/Pais/ListarPais"), "IdPais", "Nombre");
+                ViewData["Provincia"] = await ObtenerSelectListProvincia((ViewData["Pais"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Pais"] as SelectList).FirstOrDefault().Value) : -1);
+                ViewData["Ciudad"] = await ObtenerSelectListCiudad((ViewData["Provincia"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Provincia"] as SelectList).FirstOrDefault().Value) : -1);
+                ViewData["Sucursal"] = await ObtenerSelectListSucursal((ViewData["Ciudad"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Ciudad"] as SelectList).FirstOrDefault().Value) : -1);
+                return View();
             }
             catch (Exception)
-            { }
-            return maestroArticuloSucursal;
+            {
+                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorCargarDatos}");
+            }
         }
+
         private bool ValidacionMinMax(MaestroArticuloSucursal maestroArticuloSucursal, Response response)
         {
             if (maestroArticuloSucursal.Minimo > 0 && maestroArticuloSucursal.Maximo > 0)
@@ -128,56 +75,30 @@ namespace bd.webapprm.web.Controllers.MVC
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(MaestroArticuloSucursal maestroArticuloSucursal)
         {
-            Response response = new Response();
             try
             {
-                maestroArticuloSucursal = await ObtenerMaestroArticuloSucursalValidacion(maestroArticuloSucursal);
-                TryValidateModel(maestroArticuloSucursal);
-
+                var response = new Response();
                 if (ValidacionMinMax(maestroArticuloSucursal, response))
                 {
-                    response = await apiServicio.InsertarAsync(maestroArticuloSucursal,
-                                                             new Uri(WebApp.BaseAddressRM),
-                                                             "api/MaestroArticuloSucursal/InsertarMaestroArticuloSucursal");
+                    maestroArticuloSucursal.Sucursal = JsonConvert.DeserializeObject<Sucursal>((await apiServicio.SeleccionarAsync<Response>(maestroArticuloSucursal.IdSucursal.ToString(), new Uri(WebApp.BaseAddressTH), "api/Sucursal")).Resultado.ToString());
+                    response = await apiServicio.InsertarAsync(maestroArticuloSucursal, new Uri(WebApp.BaseAddressRM), "api/MaestroArticuloSucursal/InsertarMaestroArticuloSucursal");
                     if (response.IsSuccess)
                     {
-
-                        var responseLog = await GuardarLogService.SaveLogEntry(new LogEntryTranfer
-                        {
-                            ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                            ExceptionTrace = null,
-                            Message = "Se ha creado un maestro artículo de sucursal",
-                            UserName = "Usuario 1",
-                            LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
-                            LogLevelShortName = Convert.ToString(LogLevelParameter.ADV),
-                            EntityID = string.Format("{0} {1}", "Maestro Artículo de Sucursal:", maestroArticuloSucursal.IdMaestroArticuloSucursal),
-                        });
-
-                        return RedirectToAction("Index");
+                        await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), ExceptionTrace = null, Message = "Se ha creado un maestro artículo de sucursal", UserName = "Usuario 1", LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ADV), EntityID = string.Format("{0} {1}", "Maestro Artículo de Sucursal:", maestroArticuloSucursal.IdMaestroArticuloSucursal) });
+                        return this.Redireccionar($"{Mensaje.Informacion}|{Mensaje.Satisfactorio}");
                     }
                 }
-
                 ViewData["Error"] = response.Message;
                 ViewData["Pais"] = new SelectList(await apiServicio.Listar<Pais>(new Uri(WebApp.BaseAddressTH), "api/Pais/ListarPais"), "IdPais", "Nombre");
                 ViewData["Provincia"] = await ObtenerSelectListProvincia(maestroArticuloSucursal?.Sucursal.Ciudad?.Provincia?.IdPais ?? -1);
                 ViewData["Ciudad"] = await ObtenerSelectListCiudad(maestroArticuloSucursal?.Sucursal?.Ciudad?.IdProvincia ?? -1);
                 ViewData["Sucursal"] = await ObtenerSelectListSucursal(maestroArticuloSucursal?.Sucursal?.IdCiudad ?? -1);
                 return View(maestroArticuloSucursal);
-
             }
             catch (Exception ex)
             {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
-                {
-                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Creando Maestro Artículo de Sucursal",
-                    ExceptionTrace = ex.Message,
-                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create),
-                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                    UserName = "Usuario APP WebAppTh"
-                });
-
-                return BadRequest();
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Creando Maestro Artículo de Sucursal", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP WebAppTh" });
+                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorCrear}");
             }
         }
 
@@ -187,28 +108,22 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddressRM),
-                                                                  "api/MaestroArticuloSucursal");
+                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddressRM), "api/MaestroArticuloSucursal");
+                    if (!respuesta.IsSuccess)
+                        return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}");
 
-
-                    respuesta.Resultado = JsonConvert.DeserializeObject<MaestroArticuloSucursal>(respuesta.Resultado.ToString());
-                    if (respuesta.IsSuccess)
-                    {
-                        MaestroArticuloSucursal maestroArticuloSucursal = respuesta.Resultado as MaestroArticuloSucursal;
-                        ViewData["Pais"] = new SelectList(await apiServicio.Listar<Pais>(new Uri(WebApp.BaseAddressTH), "api/Pais/ListarPais"), "IdPais", "Nombre");
-                        ViewData["Provincia"] = await ObtenerSelectListProvincia(maestroArticuloSucursal?.Sucursal.Ciudad?.Provincia?.IdPais ?? -1);
-                        ViewData["Ciudad"] = await ObtenerSelectListCiudad(maestroArticuloSucursal?.Sucursal?.Ciudad?.IdProvincia ?? -1);
-                        ViewData["Sucursal"] = await ObtenerSelectListSucursal(maestroArticuloSucursal?.Sucursal?.IdCiudad ?? -1);
-                        return View(respuesta.Resultado);
-                    }
-
+                    var maestroArticuloSucursal = JsonConvert.DeserializeObject<MaestroArticuloSucursal>(respuesta.Resultado.ToString());
+                    ViewData["Pais"] = new SelectList(await apiServicio.Listar<Pais>(new Uri(WebApp.BaseAddressTH), "api/Pais/ListarPais"), "IdPais", "Nombre");
+                    ViewData["Provincia"] = await ObtenerSelectListProvincia(maestroArticuloSucursal?.Sucursal.Ciudad?.Provincia?.IdPais ?? -1);
+                    ViewData["Ciudad"] = await ObtenerSelectListCiudad(maestroArticuloSucursal?.Sucursal?.Ciudad?.IdProvincia ?? -1);
+                    ViewData["Sucursal"] = await ObtenerSelectListSucursal(maestroArticuloSucursal?.Sucursal?.IdCiudad ?? -1);
+                    return View(maestroArticuloSucursal);
                 }
-
-                return BadRequest();
+                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}");
             }
             catch (Exception)
             {
-                return BadRequest();
+                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorCargarDatos}");
             }
         }
 
@@ -216,93 +131,53 @@ namespace bd.webapprm.web.Controllers.MVC
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(string id, MaestroArticuloSucursal maestroArticuloSucursal)
         {
-            Response response = new Response();
+            var response = new Response();
             try
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    maestroArticuloSucursal = await ObtenerMaestroArticuloSucursalValidacion(maestroArticuloSucursal);
-                    TryValidateModel(maestroArticuloSucursal);
-
                     if (ValidacionMinMax(maestroArticuloSucursal, response))
                     {
-                        response = await apiServicio.EditarAsync(id, maestroArticuloSucursal, new Uri(WebApp.BaseAddressRM),
-                                                                 "api/MaestroArticuloSucursal");
-
+                        maestroArticuloSucursal.Sucursal = JsonConvert.DeserializeObject<Sucursal>((await apiServicio.SeleccionarAsync<Response>(maestroArticuloSucursal.IdSucursal.ToString(), new Uri(WebApp.BaseAddressTH), "api/Sucursal")).Resultado.ToString());
+                        response = await apiServicio.EditarAsync(id, maestroArticuloSucursal, new Uri(WebApp.BaseAddressRM), "api/MaestroArticuloSucursal");
                         if (response.IsSuccess)
                         {
-                            await GuardarLogService.SaveLogEntry(new LogEntryTranfer
-                            {
-                                ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                                EntityID = string.Format("{0} : {1}", "Maestro Artículo de Sucursal", id),
-                                LogCategoryParametre = Convert.ToString(LogCategoryParameter.Edit),
-                                LogLevelShortName = Convert.ToString(LogLevelParameter.ADV),
-                                Message = "Se ha actualizado un registro maestro artículo de sucursal",
-                                UserName = "Usuario 1"
-                            });
-
-                            return RedirectToAction("Index");
+                            await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), EntityID = string.Format("{0} : {1}", "Maestro Artículo de Sucursal", id), LogCategoryParametre = Convert.ToString(LogCategoryParameter.Edit), LogLevelShortName = Convert.ToString(LogLevelParameter.ADV), Message = "Se ha actualizado un registro maestro artículo de sucursal", UserName = "Usuario 1" });
+                            return this.Redireccionar($"{Mensaje.Informacion}|{Mensaje.Satisfactorio}");
                         }
                     }
+                    ViewData["Error"] = response.Message;
+                    ViewData["Pais"] = new SelectList(await apiServicio.Listar<Pais>(new Uri(WebApp.BaseAddressTH), "api/Pais/ListarPais"), "IdPais", "Nombre");
+                    ViewData["Provincia"] = await ObtenerSelectListProvincia(maestroArticuloSucursal?.Sucursal.Ciudad?.Provincia?.IdPais ?? -1);
+                    ViewData["Ciudad"] = await ObtenerSelectListCiudad(maestroArticuloSucursal?.Sucursal?.Ciudad?.IdProvincia ?? -1);
+                    ViewData["Sucursal"] = await ObtenerSelectListSucursal(maestroArticuloSucursal?.Sucursal?.IdCiudad ?? -1);
+                    return View(maestroArticuloSucursal);
                 }
-                ViewData["Error"] = response.Message;
-                ViewData["Pais"] = new SelectList(await apiServicio.Listar<Pais>(new Uri(WebApp.BaseAddressTH), "api/Pais/ListarPais"), "IdPais", "Nombre");
-                ViewData["Provincia"] = await ObtenerSelectListProvincia(maestroArticuloSucursal?.Sucursal.Ciudad?.Provincia?.IdPais ?? -1);
-                ViewData["Ciudad"] = await ObtenerSelectListCiudad(maestroArticuloSucursal?.Sucursal?.Ciudad?.IdProvincia ?? -1);
-                ViewData["Sucursal"] = await ObtenerSelectListSucursal(maestroArticuloSucursal?.Sucursal?.IdCiudad ?? -1);
-                return View(maestroArticuloSucursal);
+                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}");
             }
             catch (Exception ex)
             {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
-                {
-                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Editando un maestro artículo de sucursal",
-                    ExceptionTrace = ex.Message,
-                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.Edit),
-                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                    UserName = "Usuario APP webappth"
-                });
-
-                return BadRequest();
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Editando un maestro artículo de sucursal", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Edit), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webappth" });
+                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorEditar}");
             }
         }
 
         public async Task<IActionResult> Delete(string id)
         {
-
             try
             {
-                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddressRM)
-                                                               , "api/MaestroArticuloSucursal");
+                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddressRM), "api/MaestroArticuloSucursal");
                 if (response.IsSuccess)
                 {
-                    await GuardarLogService.SaveLogEntry(new LogEntryTranfer
-                    {
-                        ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                        EntityID = string.Format("{0} : {1}", "Maestro Artículo de Sucursal", id),
-                        Message = "Registro eliminado",
-                        LogCategoryParametre = Convert.ToString(LogCategoryParameter.Delete),
-                        LogLevelShortName = Convert.ToString(LogLevelParameter.ADV),
-                        UserName = "Usuario APP webappth"
-                    });
-                    return RedirectToAction("Index");
+                    await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), EntityID = string.Format("{0} : {1}", "Maestro Artículo de Sucursal", id), Message = "Registro eliminado", LogCategoryParametre = Convert.ToString(LogCategoryParameter.Delete), LogLevelShortName = Convert.ToString(LogLevelParameter.ADV), UserName = "Usuario APP webappth" });
+                    return this.Redireccionar($"{Mensaje.Informacion}|{response.Message}");
                 }
-                return BadRequest();
+                return this.Redireccionar($"{Mensaje.Error}|{response.Message}");
             }
             catch (Exception ex)
             {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer
-                {
-                    ApplicationName = Convert.ToString(Aplicacion.WebAppRM),
-                    Message = "Eliminar Maestro Artículo de Sucursal",
-                    ExceptionTrace = ex.Message,
-                    LogCategoryParametre = Convert.ToString(LogCategoryParameter.Delete),
-                    LogLevelShortName = Convert.ToString(LogLevelParameter.ERR),
-                    UserName = "Usuario APP webappth"
-                });
-
-                return BadRequest();
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Eliminar Maestro Artículo de Sucursal", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Delete), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webappth" });
+                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.Excepcion}");
             }
         }
 
@@ -311,8 +186,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var listaProvincia = await apiServicio.Listar<Provincia>(new Uri(WebApp.BaseAddressTH), "api/Provincia/ListarProvincia");
-                listaProvincia = idPais != -1 ? listaProvincia.Where(c => c.IdPais == idPais).ToList() : new List<Provincia>();
+                var listaProvincia = idPais != -1 ? (await apiServicio.Listar<Provincia>(new Uri(WebApp.BaseAddressTH), "api/Provincia/ListarProvincia")).Where(c => c.IdPais == idPais) : new List<Provincia>();
                 return new SelectList(listaProvincia, "IdProvincia", "Nombre");
             }
             catch (Exception)
@@ -334,8 +208,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var listaCiudad = await apiServicio.Listar<Ciudad>(new Uri(WebApp.BaseAddressTH), "api/Ciudad/ListarCiudad");
-                listaCiudad = idProvincia != -1 ? listaCiudad.Where(c => c.IdProvincia == idProvincia).ToList() : new List<Ciudad>();
+                var listaCiudad = idProvincia != -1 ? (await apiServicio.Listar<Ciudad>(new Uri(WebApp.BaseAddressTH), "api/Ciudad/ListarCiudad")).Where(c => c.IdProvincia == idProvincia) : new List<Ciudad>();
                 return new SelectList(listaCiudad, "IdCiudad", "Nombre");
             }
             catch (Exception)
@@ -357,8 +230,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var listaSucursal = await apiServicio.Listar<Sucursal>(new Uri(WebApp.BaseAddressTH), "api/Sucursal/ListarSucursal");
-                listaSucursal = idCiudad != -1 ? listaSucursal.Where(c => c.IdCiudad == idCiudad).ToList() : new List<Sucursal>();
+                var listaSucursal = idCiudad != -1 ? (await apiServicio.Listar<Sucursal>(new Uri(WebApp.BaseAddressTH), "api/Sucursal/ListarSucursal")).Where(c => c.IdCiudad == idCiudad) : new List<Sucursal>();
                 return new SelectList(listaSucursal, "IdSucursal", "Nombre");
             }
             catch (Exception)

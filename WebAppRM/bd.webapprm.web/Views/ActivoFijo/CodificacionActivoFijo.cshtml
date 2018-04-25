@@ -1,11 +1,13 @@
 @model bd.webapprm.entidades.RecepcionActivoFijoDetalle
-<link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
-<link rel="stylesheet" href="~/lib/jquery.spinner-master/dist/css/bootstrap-spinner.min.css" />
-<style>
-    .widget-body.no-padding .alert {
-        margin: 0 13px 10px !important;
-    }
-</style>
+
+@section css{
+    <link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
+    <link rel="stylesheet" href="~/lib/jquery.spinner-master/dist/css/bootstrap-spinner.min.css" />
+    <style>
+        .widget-body.no-padding .alert { margin: 0 13px 10px !important; }
+    </style>
+}
+
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
@@ -25,10 +27,9 @@
                                 <input type="hidden" asp-for="ActivoFijo.CodigoActivoFijo.IdCodigoActivoFijo" />
                                 <input type="hidden" asp-for="IdRecepcionActivoFijoDetalle" />
                                 @{ await Html.RenderPartialAsync("_Codificacion", Model); }
-                                
                                 <footer>
                                     <span class="text-danger">@ViewData["Error"]</span>
-                                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                                    <button type="submit" class="btn btn-primary" id="btn-guardar">Guardar</button>
                                     <a asp-action="ActivoValidacionTecnica" class="btn btn-default">Cancelar</a>
                                 </footer>
                             </form>
@@ -40,7 +41,7 @@
     </section>
 </div>
 @section Scripts{
-    <script src='~/js/site.js'></script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src='~/lib/jquery.spinner-master/dist/js/jquery.spinner.min.js'></script>
     <script src='~/js/activoFijo/codificacion.js'></script>
 }

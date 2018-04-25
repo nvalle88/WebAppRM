@@ -1,14 +1,9 @@
 @model List<bd.webapprm.entidades.MotivoAsiento>
 
-@{
-    ViewData["Title"] = "Motivo de Asiento";
-}
-
 <div id="content">
     <p>
         <a asp-action="Create" class="btn btn-success">Nuevo Motivo Asiento</a>
     </p>
-
     <section id="widget-grid" class="">
         <div class="row">
             <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -41,7 +36,7 @@
                                             </td>
 
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.ConfiguracionContabilidad.idConfiguracionContabilidad)
+                                                @{await ViewContext.Writer.WriteAsync($"Valor Debe: {item.ConfiguracionContabilidad.ValorD}, Valor Haber: {item.ConfiguracionContabilidad.ValorH}");}
                                             </td>
                                             <td>
                                                 @Html.ActionLink("Editar", "Edit", new { id = item.IdMotivoAsiento }) |

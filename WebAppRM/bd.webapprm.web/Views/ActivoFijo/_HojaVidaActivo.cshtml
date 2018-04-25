@@ -128,7 +128,7 @@
             </tr>
 
             @{
-                if (Model.ActivoFijo.CodigoActivoFijo.Codigosecuencial != "N/A")
+                if (Model.ActivoFijo.CodigoActivoFijo.Codigosecuencial != null)
                 {
                     <tr>
                         <td><a href="javascript:void(0);"><label asp-for="ActivoFijo.CodigoActivoFijo.Codigosecuencial"></label></a></td>
@@ -136,7 +136,7 @@
                     </tr>
                 }
 
-                if (Model.ActivoFijo.CodigoActivoFijo.CodigoBarras != "N/A")
+                if (Model.ActivoFijo.CodigoActivoFijo.CodigoBarras != null)
                 {
                     <tr>
                         <td><a href="javascript:void(0);"><label asp-for="ActivoFijo.CodigoActivoFijo.CodigoBarras"></label></a></td>

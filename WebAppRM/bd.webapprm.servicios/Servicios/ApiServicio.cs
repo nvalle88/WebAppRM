@@ -19,10 +19,7 @@ namespace bd.webapprm.servicios.Servicios
                 {
                     var request = JsonConvert.SerializeObject(model);
                     var content = new StringContent(request, Encoding.UTF8, "application/json");
-
-                    var uri = string.Format("{0}/{1}", baseAddress, url);
-                    var response = await client.PostAsync(new Uri(uri), content);
-
+                    var response = await client.PostAsync(new Uri($"{baseAddress}{url}"), content);
                     var resultado = await response.Content.ReadAsStringAsync();
                     var respuesta = JsonConvert.DeserializeObject<Response>(resultado);
                     return respuesta;
@@ -33,7 +30,7 @@ namespace bd.webapprm.servicios.Servicios
                 return new Response
                 {
                     IsSuccess = true,
-                    Message = ex.Message,
+                    Message = ex.Message
                 };
             }
         }
@@ -43,10 +40,7 @@ namespace bd.webapprm.servicios.Servicios
             {
                 using (HttpClient client = new HttpClient())
                 {
-                   
-                    url = string.Format("{0}/{1}", url, id);
-                    var uri = string.Format("{0}/{1}", baseAddress, url);
-                    var response = await client.DeleteAsync(new Uri(uri));
+                    var response = await client.DeleteAsync(new Uri($"{baseAddress}{url}/{id}"));
                     var resultado = await response.Content.ReadAsStringAsync();
                     var respuesta = JsonConvert.DeserializeObject<Response>(resultado);
                     return respuesta;
@@ -69,10 +63,7 @@ namespace bd.webapprm.servicios.Servicios
                 {
                     var request = JsonConvert.SerializeObject(model);
                     var content = new StringContent(request, Encoding.UTF8, "application/json");
-                    url = string.Format("{0}/{1}", url, id);
-                    var uri = string.Format("{0}/{1}", baseAddress, url);
-
-                    var response = await client.PutAsync(new Uri(uri), content);
+                    var response = await client.PutAsync(new Uri($"{baseAddress}{url}/{id}"), content);
                     var resultado = await response.Content.ReadAsStringAsync();
                     var respuesta = JsonConvert.DeserializeObject<Response>(resultado);
                     return respuesta;
@@ -83,7 +74,7 @@ namespace bd.webapprm.servicios.Servicios
                 return new Response
                 {
                     IsSuccess = true,
-                    Message = ex.Message,
+                    Message = ex.Message
                 };
             }
         }
@@ -93,20 +84,16 @@ namespace bd.webapprm.servicios.Servicios
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    var uri = string.Format("{0}/{1}", baseAddress, url);
-                    var respuesta = await client.GetAsync(new Uri(uri));
-
+                    var respuesta = await client.GetAsync(new Uri($"{baseAddress}{url}"));
                     var resultado = await respuesta.Content.ReadAsStringAsync();
                     var response = JsonConvert.DeserializeObject<List<T>>(resultado);
                     return response ?? new List<T>();
                 }
             }
-
             catch (Exception )
             {
                 return new List<T>();
             }
-                           
         }
         public async Task<T> SeleccionarAsync<T>(string id,Uri baseAddress, string url) where T : class
         {
@@ -114,10 +101,7 @@ namespace bd.webapprm.servicios.Servicios
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    url = string.Format("{0}/{1}", url, id);
-                    var uri = string.Format("{0}/{1}", baseAddress, url);
-                    var respuesta = await client.GetAsync(new Uri(uri));
-
+                    var respuesta = await client.GetAsync(new Uri($"{baseAddress}{url}/{id}"));
                     var resultado = await respuesta.Content.ReadAsStringAsync();
                     var response = JsonConvert.DeserializeObject<T>(resultado);
                     return response;
@@ -127,10 +111,7 @@ namespace bd.webapprm.servicios.Servicios
             {
                 return null;
             }
-
         }
-
-
         public async Task<T> ObtenerElementoAsync1<T>(object model, Uri baseAddress, string url) where T : class
         {
             try
@@ -139,17 +120,13 @@ namespace bd.webapprm.servicios.Servicios
                 {
                     var request = JsonConvert.SerializeObject(model);
                     var content = new StringContent(request, Encoding.UTF8, "application/json");
-
-                    var uri = string.Format("{0}/{1}", baseAddress, url);
-
-                    var response = await client.PostAsync(new Uri(uri), content);
-
+                    var response = await client.PostAsync(new Uri($"{baseAddress}{url}"), content);
                     var resultado = await response.Content.ReadAsStringAsync();
                     var respuesta = JsonConvert.DeserializeObject<T>(resultado);
                     return respuesta;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }

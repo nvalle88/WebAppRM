@@ -3,7 +3,7 @@
     eventoPais();
     eventoProvincia();
     eventoCiudad();
-    eventoSucursal();    
+    eventoSucursal();
 });
 
 function eventoPais() {
@@ -44,6 +44,7 @@ function partialViewProvincia(idPais) {
             $("#checkout-form").waitMe("hide");
         },
         complete: function (data) {
+            eventoProvincia();
             partialViewCiudad($("#ActivoFijo_LibroActivoFijo_Sucursal_Ciudad_IdProvincia").val());
         }
     });
@@ -63,6 +64,7 @@ function partialViewCiudad(idProvincia) {
             $("#checkout-form").waitMe("hide");
         },
         complete: function (data) {
+            eventoCiudad();
             partialViewSucursal($("#ActivoFijo_LibroActivoFijo_Sucursal_IdCiudad").val());
         }
     });
@@ -82,6 +84,7 @@ function partialViewSucursal(idCiudad) {
             $("#checkout-form").waitMe("hide");
         },
         complete: function (data) {
+            eventoSucursal();
             partialViewLibroActivoFijo($("#ActivoFijo_LibroActivoFijo_IdSucursal").val());
         }
     });
@@ -99,9 +102,6 @@ function partialViewLibroActivoFijo(idSucursal) {
         },
         complete: function (data) {
             $("#checkout-form").waitMe("hide");
-            eventoProvincia();
-            eventoCiudad();
-            eventoSucursal();
         }
     });
 }

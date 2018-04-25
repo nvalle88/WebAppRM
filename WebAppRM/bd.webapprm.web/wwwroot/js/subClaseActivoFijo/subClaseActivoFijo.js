@@ -4,7 +4,7 @@
 });
 
 function eventoTipoActivoFijo() {
-    $("#ClaseActivoFijo_TipoActivoFijo_IdTipoActivoFijo").on("change", function (e) {
+    $("#ClaseActivoFijo_IdTipoActivoFijo").on("change", function (e) {
         partialViewTipoActivoFijo(e.val);
     });
 }

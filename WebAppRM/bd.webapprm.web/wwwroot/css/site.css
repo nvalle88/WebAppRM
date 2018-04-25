@@ -100,3 +100,18 @@ tr.group:hover {
     background-color: #ddd !important;
     cursor: pointer;
 }
+
+.select2-container {
+    height: 36px !important;
+    border:none !important;
+}
+
+.paddingTextArea {
+    padding: 5px 9px !important;
+    width: 96%;
+}
+
+.paddingTextArea97 {
+    padding: 5px 9px !important;
+    width: 97%;
+}

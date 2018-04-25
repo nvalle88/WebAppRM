@@ -1,9 +1,5 @@
 @model bd.webapprm.entidades.TipoArticulo
 
-@{
-    ViewData["Title"] = "Tipo de Artículo";
-}
-<link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
@@ -19,7 +15,7 @@
                             <form asp-action="Edit" id="checkout-form" class="smart-form" novalidate="novalidate">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <input type="hidden" asp-for="IdTipoArticulo" />
-                                <fieldset>  
+                                <fieldset>
                                     <div class="row">
                                         <section class="col col-4">
                                             <label asp-for="Nombre"></label>
@@ -35,7 +31,7 @@
                                 </fieldset>
                                 <footer>
                                     <span class="text-danger">@ViewData["Error"]</span>
-                                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                                    <button type="submit" class="btn btn-primary" id="btn-guardar">Guardar</button>
                                     <a asp-action="Index" class="btn btn-default">Cancelar</a>
                                 </footer>
                             </form>
@@ -47,12 +43,5 @@
     </section>
 </div>
 @section Scripts {
-    <script src='~/lib/select2/dist/js/select2.min.js'></script>
-    <script src='~/lib/select2/dist/js/i18n/es.js'></script>
-    <script src='~/js/site.js'></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            Init_Select2();
-        });
-    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

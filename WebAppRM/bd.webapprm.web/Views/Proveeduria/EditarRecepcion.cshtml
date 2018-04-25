@@ -1,9 +1,11 @@
 @model bd.webapprm.entidades.RecepcionArticulos
-<link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
-<link rel="stylesheet" href="~/lib/waitMe/waitMe.min.css" />
-<link rel="stylesheet" href="~/css/site.css" />
-<link rel="stylesheet" href="~/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
-<link rel="stylesheet" href="~/lib/jquery.spinner-master/dist/css/bootstrap-spinner.min.css" />
+
+@section css{
+    <link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
+    <link rel="stylesheet" href="~/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+    <link rel="stylesheet" href="~/lib/jquery.spinner-master/dist/css/bootstrap-spinner.min.css" />
+}
+
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
@@ -174,7 +176,7 @@
                                 </fieldset>
                                 <footer>
                                     <span class="text-danger">@ViewData["Error"]</span>
-                                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                                    <button type="submit" class="btn btn-primary" id="btn-guardar">Guardar</button>
                                     <a asp-action="ListadoRecepcion" class="btn btn-default">Cancelar</a>
                                 </footer>
                             </form>
@@ -187,13 +189,9 @@
 </div>
 
 @section Scripts {
-    <script src='~/lib/select2/dist/js/select2.min.js'></script>
-    <script src='~/lib/select2/dist/js/i18n/es.js'></script>
-    <script src='~/js/site.js'></script>
-    <script src='~/lib/waitMe/waitMe.min.js'></script>
-    <script src='~/lib/moment/min/moment.min.js'></script>
-    <script src='~/lib/moment/locale/es.js'></script>
-    <script src='~/lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'></script>
+    @{await Html.RenderPartialAsync("_Select2ScriptsPartial");}
+    @{await Html.RenderPartialAsync("_DatetimePickerScriptsPartial");}
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src='~/lib/jquery.spinner-master/dist/js/jquery.spinner.min.js'></script>
     <script src='~/js/proveeduria/recepcion.js'></script>
     <script>

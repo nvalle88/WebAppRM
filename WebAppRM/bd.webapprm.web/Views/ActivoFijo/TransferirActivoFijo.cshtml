@@ -1,23 +1,8 @@
-@model bd.webapprm.entidades.RecepcionActivoFijoDetalle
-@{
-    ViewData["Title"] = "TransferirActivoFijo";
+@model bd.webapprm.entidades.TransferenciaActivoFijoDetalle
 
-    List<SelectListItem> listaMT = new List<SelectListItem>();
-    listaMT = ViewBag.listaMT;
-
-    List<SelectListItem> listaP = new List<SelectListItem>();
-    listaP = ViewBag.listaP;
-
-    SelectList listaE = ViewBag.Empleado;
-    SelectList listaPO = ViewBag.PaisO;
-    SelectList listaProvO = ViewBag.ProvinciaO;
-    SelectList listaCO = ViewBag.CiudadO;
-    SelectList listaSO = ViewBag.SucursalO;
+@section css{
+    <link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
 }
-
-<link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
-<link rel="stylesheet" href="~/lib/waitMe/waitMe.min.css" />
-
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
@@ -31,11 +16,10 @@
                         <div class="jarviswidget-editbox">
                         </div>
                         <div class="widget-body no-padding">
-                            <form asp-action="GuardarTransferencia" id="checkout-form" class="smart-form" novalidate="novalidate">
+                            <form asp-action="TransferirActivoFijo" id="checkout-form" class="smart-form" novalidate="novalidate">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <fieldset>
-                                    <input type="hidden" asp-for="ActivoFijo.LibroActivoFijo.Sucursal.Nombre" />
-                                    <input type="hidden" asp-for="IdRecepcionActivoFijoDetalle" />
+                                    <input type="hidden" id="IdActivoFijo" name="IdActivoFijo" value="@ViewBag.IdActivoFijo" />
                                     <div class="row">
                                         <section class="col col-4">
                                             <label>Motivo de Transferencia</label>
@@ -43,17 +27,14 @@
 
                                         <section class="col col-8">
                                             <label class="input">
-                                                @Html.DropDownList("motivoTransferencia", listaMT, new { @class = "form-control" })
+                                                <select asp-for="TransferenciaActivoFijo.IdMotivoTransferencia" class="form-control" asp-items="ViewBag.MotivoTransferencia"></select>
                                             </label>
                                         </section>
                                     </div>
+                                </fieldset>
 
-                                    <div class="row">
-                                        <section class="col col-12">
-                                            <label><strong>Datos del Origen del Activo Fijo</strong></label>
-                                        </section>
-                                    </div>
-
+                                <fieldset>
+                                    <legend>Datos del Origen del Activo Fijo</legend>
                                     <div class="row">
                                         <section class="col col-4">
                                             <label>Pa&iacute;s</label>
@@ -61,9 +42,7 @@
 
                                         <section class="col col-8">
                                             <label class="input">
-                                                @Html.DropDownList("paisOrigen", listaPO.Select(x => new SelectListItem { Value = x.Value, Text = x.Text, Selected = (x.Value == Model.ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.IdPais.ToString()) }), new { @class = "form-control", disabled = "disabled" })
-                                                @*<select asp-for="ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.IdPais" class="form-control" asp-items="ViewBag.PaisO" disabled></select>*@
-                                                <span asp-validation-for="ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.IdPais" class="text-danger"></span>
+                                                <select class="form-control" asp-items="ViewBag.PaisOrigen" disabled="disabled"></select>
                                             </label>
                                         </section>
                                     </div>
@@ -75,9 +54,7 @@
 
                                         <section class="col col-8">
                                             <label class="input">
-                                                @Html.DropDownList("provinciaOrigen", listaProvO.Select(x => new SelectListItem { Value = x.Value, Text = x.Text, Selected = (x.Value == Model.ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.IdProvincia.ToString()) }), new { @class = "form-control", disabled = "disabled" })
-                                                @*<select asp-for="ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.IdPais" class="form-control" asp-items="ViewBag.PaisO" disabled></select>*@
-                                                <span asp-validation-for="ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.IdProvincia" class="text-danger"></span>
+                                                <select class="form-control" asp-items="ViewBag.ProvinciaOrigen" disabled="disabled"></select>
                                             </label>
                                         </section>
                                     </div>
@@ -89,9 +66,7 @@
 
                                         <section class="col col-8">
                                             <label class="input">
-                                                @Html.DropDownList("ciudadOrigen", listaCO.Select(x => new SelectListItem { Value = x.Value, Text = x.Text, Selected = (x.Value == Model.ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.IdCiudad.ToString()) }), new { @class = "form-control", disabled = "disabled" })
-                                                @*<select asp-for="ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.IdPais" class="form-control" asp-items="ViewBag.PaisO" disabled></select>*@
-                                                <span asp-validation-for="ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.IdProvincia" class="text-danger"></span>
+                                                <select class="form-control" asp-items="ViewBag.CiudadOrigen" disabled="disabled"></select>
                                             </label>
                                         </section>
                                     </div>
@@ -103,19 +78,26 @@
 
                                         <section class="col col-8">
                                             <label class="input">
-                                                @Html.DropDownList("sucursalOrigen", listaSO.Select(x => new SelectListItem { Value = x.Value, Text = x.Text, Selected = (x.Value == Model.ActivoFijo.LibroActivoFijo.Sucursal.IdSucursal.ToString()) }), new { @class = "form-control", disabled = "disabled" })
-                                                @*<select asp-for="ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.IdPais" class="form-control" asp-items="ViewBag.PaisO" disabled></select>*@
-                                                <span asp-validation-for="ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.IdProvincia" class="text-danger"></span>
+                                                <select class="form-control" asp-items="ViewBag.SucursalOrigen" disabled="disabled"></select>
                                             </label>
                                         </section>
                                     </div>
 
                                     <div class="row">
-                                        <section class="col col-12">
-                                            <label><strong>Datos del Destino del Activo Fijo (Seleccionar)</strong></label>
+                                        <section class="col col-4">
+                                            <label>Libro de Activo Fijo</label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <select class="form-control" asp-items="ViewBag.LibroActivoFijoOrigen" disabled="disabled"></select>
+                                            </label>
                                         </section>
                                     </div>
+                                </fieldset>
 
+                                <fieldset>
+                                    <legend>Datos del Destino del Activo Fijo (Seleccionar)</legend>
                                     <div class="row">
                                         <section class="col col-4">
                                             <label asp-for="ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.Pais.Nombre"></label>
@@ -135,7 +117,7 @@
                                         </section>
 
                                         <div id="div_provincia">
-                                            @{ await Html.RenderPartialAsync("_ProvinciaSelect", Model); }
+                                            @{ await Html.RenderPartialAsync("_ProvinciaSelect", new bd.webapprm.entidades.RecepcionActivoFijoDetalle()); }
                                         </div>
                                     </div>
 
@@ -145,7 +127,7 @@
                                         </section>
 
                                         <div id="div_ciudad">
-                                            @{ await Html.RenderPartialAsync("_CiudadSelect", Model); }
+                                            @{ await Html.RenderPartialAsync("_CiudadSelect", new bd.webapprm.entidades.RecepcionActivoFijoDetalle()); }
                                         </div>
                                     </div>
 
@@ -155,52 +137,88 @@
                                         </section>
 
                                         <div id="div_sucursal">
-                                            @{ await Html.RenderPartialAsync("_SucursalSelect", Model); }
+                                            @{ await Html.RenderPartialAsync("_SucursalSelect", new bd.webapprm.entidades.RecepcionActivoFijoDetalle()); }
                                         </div>
                                     </div>
 
                                     <div class="row">
                                         <section class="col col-4">
-                                            <label asp-for="RecepcionActivoFijo.IdEmpleado">Responsable de env&iacute;o</label>
+                                            <label asp-for="ActivoFijo.IdLibroActivoFijo"></label>
+                                        </section>
+
+                                        <div id="div_libroActivoFijo">
+                                            @{ await Html.RenderPartialAsync("_LibroActivoFijoSelect", new bd.webapprm.entidades.RecepcionActivoFijoDetalle()); }
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="TransferenciaActivoFijo.IdEmpleadoRegistra"></label>
                                         </section>
 
                                         <section class="col col-8">
                                             <label class="input">
-                                                @*<select class="form-control" asp-items="ViewBag.Empleado"></select>*@
-                                                @Html.DropDownList("empleadoEnvia", listaE, new { @class = "form-control" })
+                                                <select asp-for="TransferenciaActivoFijo.IdEmpleadoRegistra" class="form-control" asp-items="ViewBag.Empleado"></select>
+                                                <span asp-validation-for="TransferenciaActivoFijo.IdEmpleadoRegistra" class="text-danger"></span>
                                             </label>
                                         </section>
                                     </div>
 
                                     <div class="row">
                                         <section class="col col-4">
-                                            <label asp-for="RecepcionActivoFijo.IdEmpleado">Responsable de recibo</label>
+                                            <label asp-for="TransferenciaActivoFijo.IdEmpleadoResponsableEnvio"></label>
                                         </section>
 
                                         <section class="col col-8">
                                             <label class="input">
-                                                @Html.DropDownList("empleadoRecibe", listaE, new { @class = "form-control" })
+                                                <select asp-for="TransferenciaActivoFijo.IdEmpleadoResponsableEnvio" class="form-control" asp-items="ViewBag.Empleado"></select>
+                                                <span asp-validation-for="TransferenciaActivoFijo.IdEmpleadoResponsableEnvio" class="text-danger"></span>
                                             </label>
                                         </section>
                                     </div>
 
                                     <div class="row">
                                         <section class="col col-4">
-                                            <label>Observaciones</label>                                            
+                                            <label asp-for="TransferenciaActivoFijo.IdEmpleadoResponsableRecibo"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <select asp-for="TransferenciaActivoFijo.IdEmpleadoResponsableRecibo" class="form-control" asp-items="ViewBag.Empleado"></select>
+                                                <span asp-validation-for="TransferenciaActivoFijo.IdEmpleadoResponsableRecibo" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="TransferenciaActivoFijo.IdEmpleadoRecibo"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <select asp-for="TransferenciaActivoFijo.IdEmpleadoRecibo" class="form-control" asp-items="ViewBag.Empleado"></select>
+                                                <span asp-validation-for="TransferenciaActivoFijo.IdEmpleadoRecibo" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label>Observaciones</label>
                                         </section>
 
                                         <section class="col col-8">
                                             <label class="textarea textarea-resizable">
-                                                <textarea rows="3" class="custom-scroll" name="observaciones"></textarea>
+                                                <textarea asp-for="TransferenciaActivoFijo.Observaciones" rows="4" class="custom-scroll"></textarea>
                                             </label>
                                         </section>
                                     </div>
-
                                 </fieldset>
                                 <footer>
                                     <span class="text-danger">@ViewData["Error"]</span>
-                                    <input type="submit" value="Transferir" class="btn btn-primary" />
-                                    <a asp-action="Index" class="btn btn-default">Cancelar</a>
+                                    <button type="submit" class="btn btn-primary" id="btn-guardar">Guardar</button>
+                                    <a asp-action="ActivosFijosATransferir" class="btn btn-default">Cancelar</a>
                                 </footer>
                             </form>
                         </div>
@@ -211,20 +229,14 @@
     </section>
 </div>
 @section Scripts {
-    <script src='~/lib/select2/dist/js/select2.min.js'></script>
-    <script src='~/lib/select2/dist/js/i18n/es.js'></script>
-    <script src='~/js/site.js'></script>
-    <script src='~/lib/waitMe/waitMe.min.js'></script>
+    @{await Html.RenderPartialAsync("_Select2ScriptsPartial");}
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src='~/js/activoFijo/transferencia.js'></script>
     <script type="text/javascript">
         var provinciaSelectResult = "@Url.Action("Provincia_SelectResult")";
         var ciudadSelectResult = "@Url.Action("Ciudad_SelectResult")";
         var sucursalSelectResult = "@Url.Action("Sucursal_SelectResult")";
         var libroActivoFijoSelectResult = "@Url.Action("LibroActivoFijo_SelectResult")";
-
-        $(document).ready(function () {
-            Init_Select2();
-        });
     </script>
 }
 

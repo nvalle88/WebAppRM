@@ -1,14 +1,12 @@
 @model bd.webapprm.entidades.MantenimientoActivoFijo
 
-@{
-    ViewData["Title"] = "CrearMantenimiento";
+@section css{
+    <link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
+    <link rel="stylesheet" href="~/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap-touchspin-master/src/jquery.bootstrap-touchspin.css" />
 }
 
-<link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
-<link rel="stylesheet" href="~/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
-
 <div id="content">
-
     <section id="widget-grid" class="">
         <div class="row">
             <article class="col-sm-12 col-md-12 col-lg-8">
@@ -22,72 +20,47 @@
                         <div class="widget-body no-padding">
                             <span class="text-success">@ViewData["mensaje"]</span>
                             <form asp-action="CrearMantenimiento" id="checkout-form" class="smart-form" novalidate="novalidate">
-                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>                                
-                                <fieldset>                                    
-                                
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <fieldset>
                                     <div class="row">
                                         <section class="col col-4">
-                                            <label asp-for="FechaMantenimiento" class="col-md-2 control-label"></label>
+                                            <label asp-for="FechaMantenimiento"></label>
                                         </section>
                                         <section class="col col-8">
                                             <label class="input">
-                                                <input asp-for="FechaMantenimiento" class="form-control" />
+                                                <input type="text" asp-for="FechaMantenimiento" class="form-control" />
                                                 <span asp-validation-for="FechaMantenimiento" class="text-danger"></span>
                                             </label>
                                         </section>
                                     </div>
-                                
+
                                     <div class="row">
                                         <section class="col col-4">
-                                            <label asp-for="FechaDesde" class="col-md-2 control-label"></label>
+                                            <label asp-for="FechaDesde"></label>
                                         </section>
                                         <section class="col col-8">
                                             <label class="input">
-                                                <input asp-for="FechaDesde" class="form-control" />
+                                                <input type="text" asp-for="FechaDesde" class="form-control" />
                                                 <span asp-validation-for="FechaDesde" class="text-danger"></span>
                                             </label>
                                         </section>
                                     </div>
-                                
+
                                     <div class="row">
                                         <section class="col col-4">
-                                            <label asp-for="FechaHasta" class="col-md-2 control-label"></label>
+                                            <label asp-for="FechaHasta"></label>
                                         </section>
                                         <section class="col col-8">
                                             <label class="input">
-                                                <input asp-for="FechaHasta" class="form-control" />
+                                                <input type="text" asp-for="FechaHasta" class="form-control" />
                                                 <span asp-validation-for="FechaHasta" class="text-danger"></span>
                                             </label>
                                         </section>
                                     </div>
-                                
+
                                     <div class="row">
                                         <section class="col col-4">
-                                            <label asp-for="Valor" class="col-md-2 control-label"></label>
-                                        </section>
-                                        <section class="col col-8">
-                                            <label class="input">
-                                                <input asp-for="Valor" class="form-control" />
-                                                <span asp-validation-for="Valor" class="text-danger"></span>
-                                            </label>
-                                        </section>
-                                    </div>
-                                
-                                    <div class="row">
-                                        <section class="col col-4">
-                                            <label asp-for="Observaciones" class="col-md-2 control-label"></label>
-                                        </section>
-                                        <section class="col col-8">
-                                            <label class="input">
-                                                <input asp-for="Observaciones" class="form-control" />
-                                                <span asp-validation-for="Observaciones" class="text-danger"></span>
-                                            </label>
-                                        </section>
-                                    </div>
-                                
-                                    <div class="row">
-                                        <section class="col col-4">
-                                            <label asp-for="IdEmpleado" class="col-md-2 control-label"></label>
+                                            <label asp-for="IdEmpleado"></label>
                                         </section>
                                         <section class="col col-8">
                                             <label class="input">
@@ -99,7 +72,7 @@
 
                                     <div class="row">
                                         <section class="col col-4">
-                                            <label asp-for="IdActivoFijo" class="col-md-2 control-label"></label>
+                                            <label asp-for="IdActivoFijo"></label>
                                         </section>
                                         <section class="col col-8">
                                             <label class="input">
@@ -109,10 +82,33 @@
                                         </section>
                                     </div>
 
-                                </fieldset>                                
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="Valor"></label>
+                                        </section>
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <input asp-for="Valor" class="form-control touchspin_tasa" />
+                                                <span asp-validation-for="Valor" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="Observaciones"></label>
+                                        </section>
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <textarea asp-for="Observaciones" class="form-control paddingTextArea97" rows="5"></textarea>
+                                                <span asp-validation-for="Observaciones" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+                                </fieldset>
                                 <footer>
                                     <span class="text-danger">@ViewData["Error"]</span>
-                                    <input type="submit" value="Guardar" class="btn btn-primary" />
+                                    <button type="submit" class="btn btn-primary" id="btn-guardar">Guardar</button>
                                     <a asp-action="ListarMantenimientos" class="btn btn-default">Cancelar</a>
                                 </footer>
                             </form>
@@ -125,24 +121,9 @@
 </div>
 
 @section Scripts {
-    <script src='~/lib/select2/dist/js/select2.min.js'></script>
-    <script src='~/lib/select2/dist/js/i18n/es.js'></script>
-    <script src='~/js/site.js'></script>
-    <script src='~/lib/moment/min/moment.min.js'></script>
-    <script src='~/lib/moment/locale/es.js'></script>
-    <script src='~/lib/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js'></script>
-    <script type="text/javascript">
-        $(document).ready(function () {
-            Init_Select2();
-            $('#FechaMantenimiento').datetimepicker({
-                'format': 'D-M-Y'
-            });
-            $('#FechaDesde').datetimepicker({
-                'format': 'D-M-Y'
-            });
-            $('#FechaHasta').datetimepicker({
-                'format': 'D-M-Y'
-            });
-        });
-    </script>
+    @{await Html.RenderPartialAsync("_Select2ScriptsPartial");}
+    @{await Html.RenderPartialAsync("_DatetimePickerScriptsPartial");}
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src='~/lib/bootstrap-touchspin-master/src/jquery.bootstrap-touchspin.js'></script>
+    <script src="~/js/activoFijo/mantenimiento.js"></script>
 }

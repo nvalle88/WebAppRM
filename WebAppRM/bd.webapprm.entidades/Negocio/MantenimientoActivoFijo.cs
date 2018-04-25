@@ -3,8 +3,6 @@ namespace bd.webapprm.entidades
     using System;
     using System.ComponentModel.DataAnnotations;
 
-
-
     public partial class MantenimientoActivoFijo
     {
         [Key]
@@ -41,11 +39,13 @@ namespace bd.webapprm.entidades
         //Propiedades Virtuales Referencias a otras clases
 
         [Display(Name = "Empleado:")]
+        [Required(ErrorMessage = "Debe seleccionar el {0} ")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
         public int IdEmpleado { get; set; }
         public virtual Empleado Empleado { get; set; }
 
         [Display(Name = "Activo fijo:")]
+        [Required(ErrorMessage = "Debe seleccionar el {0} ")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
         public int IdActivoFijo { get; set; }
         public virtual ActivoFijo ActivoFijo { get; set; }

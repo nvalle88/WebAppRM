@@ -21,8 +21,10 @@ namespace bd.webapprm.entidades
         //Propiedades Virtuales Referencias a otras clases
 
         [Display(Name = "Sucursal:")]
+        [Required(ErrorMessage = "Debe seleccionar el {0} ")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
         public int IdSucursal { get; set; }
+
         public virtual Sucursal Sucursal { get; set; }
 
         public virtual ICollection<Factura> Factura { get; set; }
