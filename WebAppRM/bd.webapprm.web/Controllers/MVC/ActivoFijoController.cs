@@ -99,7 +99,7 @@ namespace bd.webapprm.web.Controllers.MVC
                         ViewData["UnidadMedida"] = new SelectList(await apiServicio.Listar<UnidadMedida>(new Uri(WebApp.BaseAddressRM), "api/UnidadMedida/ListarUnidadMedida"), "IdUnidadMedida", "Nombre");
 
                         if (!recepcionActivoFijoDetalle.RecepcionActivoFijo.ValidacionTecnica)
-                            recepcionActivoFijoDetalle.ActivoFijo.CodigoActivoFijo.Consecutivo = int.Parse(String.Join("", recepcionActivoFijoDetalle.ActivoFijo.CodigoActivoFijo.Codigosecuencial.Except($"{recepcionActivoFijoDetalle?.RecepcionActivoFijo?.SubClaseActivoFijo?.ClaseActivoFijo?.Nombre}{recepcionActivoFijoDetalle?.RecepcionActivoFijo?.SubClaseActivoFijo?.ClaseActivoFijo?.TipoActivoFijo?.Nombre}")));
+                            try { recepcionActivoFijoDetalle.ActivoFijo.CodigoActivoFijo.Consecutivo = int.Parse(String.Join("", recepcionActivoFijoDetalle.ActivoFijo.CodigoActivoFijo.Codigosecuencial.Except($"{recepcionActivoFijoDetalle?.RecepcionActivoFijo?.SubClaseActivoFijo?.ClaseActivoFijo?.Nombre}{recepcionActivoFijoDetalle?.RecepcionActivoFijo?.SubClaseActivoFijo?.ClaseActivoFijo?.TipoActivoFijo?.Nombre}"))); } catch (Exception) { recepcionActivoFijoDetalle.ActivoFijo.CodigoActivoFijo.Consecutivo = 1; }
                         return View("EditarRecepcion", recepcionActivoFijoDetalle);
                     }
                 }
@@ -263,7 +263,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var lista = (await apiServicio.Listar<RecepcionActivoFijoDetalle>(new Uri(WebApp.BaseAddressRM), "api/RecepcionActivoFijo/ListarRecepcionActivoFijo")).Where(c => c.Estado.Nombre == "Recepcionado").ToList();
+                var lista = await apiServicio.Listar<RecepcionActivoFijoDetalle>(new Uri(WebApp.BaseAddressRM), "api/RecepcionActivoFijo/ListarRecepcionActivoFijoPorEstado/Recepcionado");
                 ViewData["titulo"] = "Activos Fijos Recepcionados";
                 ViewData["textoColumna"] = "Editar";
                 ViewData["url"] = "EditarRecepcionAR";
@@ -342,7 +342,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var lista = (await apiServicio.Listar<RecepcionActivoFijoDetalle>(new Uri(WebApp.BaseAddressRM), "api/RecepcionActivoFijo/ListarRecepcionActivoFijo")).Where(c => c.Estado.Nombre == "Validación Técnica").ToList();
+                var lista = await apiServicio.Listar<RecepcionActivoFijoDetalle>(new Uri(WebApp.BaseAddressRM), "api/RecepcionActivoFijo/ListarRecepcionActivoFijoPorEstado/Validación Técnica");
                 ViewData["titulo"] = "Activos Fijos que requieren Validación Técnica";
                 ViewData["textoColumna"] = "Revisar";
                 ViewData["url"] = "RevisionActivoFijo";
@@ -479,7 +479,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var lista = (await apiServicio.Listar<RecepcionActivoFijoDetalle>(new Uri(WebApp.BaseAddressRM), "api/RecepcionActivoFijo/ListarRecepcionActivoFijo")).Where(c => c.Estado.Nombre == "Recepcionado").ToList();
+                var lista = await apiServicio.Listar<RecepcionActivoFijoDetalle>(new Uri(WebApp.BaseAddressRM), "api/RecepcionActivoFijo/ListarRecepcionActivoFijoPorEstado/Recepcionado");
                 ViewData["titulo"] = "Activos Fijos Recepcionados";
                 ViewData["textoColumna"] = "Dar Alta";
                 ViewData["url"] = "AsignarNumeroFactura";
@@ -497,7 +497,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var lista = (await apiServicio.Listar<RecepcionActivoFijoDetalle>(new Uri(WebApp.BaseAddressRM), "api/RecepcionActivoFijo/ListarRecepcionActivoFijo")).Where(c => c.Estado.Nombre == "Alta").ToList();
+                var lista = await apiServicio.Listar<RecepcionActivoFijoDetalle>(new Uri(WebApp.BaseAddressRM), "api/RecepcionActivoFijo/ListarRecepcionActivoFijoPorEstado/Alta");
                 ViewData["titulo"] = "Activos Fijos con Estado Alta";
                 return View("ListadoActivoFijoAlta", lista);
             }
@@ -851,7 +851,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var lista = (await apiServicio.Listar<RecepcionActivoFijoDetalle>(new Uri(WebApp.BaseAddressRM), "api/RecepcionActivoFijo/ListarRecepcionActivoFijo")).Where(c => c.Estado.Nombre == "Baja").ToList();
+                var lista = await apiServicio.Listar<RecepcionActivoFijoDetalle>(new Uri(WebApp.BaseAddressRM), "api/RecepcionActivoFijo/ListarRecepcionActivoFijoPorEstado/Baja");
                 ViewData["titulo"] = "Activos Fijos con Estado Baja";
                 return View("ListadoActivoFijoBaja", lista);
             }
@@ -866,7 +866,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var lista = (await apiServicio.Listar<RecepcionActivoFijoDetalle>(new Uri(WebApp.BaseAddressRM), "api/RecepcionActivoFijo/ListarRecepcionActivoFijo")).Where(c => c.Estado.Nombre == "Alta").ToList();
+                var lista = await apiServicio.Listar<RecepcionActivoFijoDetalle>(new Uri(WebApp.BaseAddressRM), "api/RecepcionActivoFijo/ListarRecepcionActivoFijoPorEstado/Alta");
                 ViewData["titulo"] = "Activos Fijos de Alta";
                 ViewData["textoColumna"] = "Dar Baja";
                 ViewData["url"] = "ActivoFijoBaja";
@@ -1026,7 +1026,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var lista = (await apiServicio.Listar<RecepcionActivoFijoDetalle>(new Uri(WebApp.BaseAddressRM), "api/RecepcionActivoFijo/ListarRecepcionActivoFijo")).Where(c => c.Estado.Nombre == "Alta").ToList();
+                var lista = await apiServicio.Listar<RecepcionActivoFijoDetalle>(new Uri(WebApp.BaseAddressRM), "api/RecepcionActivoFijo/ListarRecepcionActivoFijoPorEstado/Alta");
                 ViewData["titulo"] = "Activos Fijos";
                 ViewData["textoColumna"] = "Ver Hoja de Vida";
                 ViewData["url"] = "HojaVidaActivoFijo";

@@ -156,7 +156,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var listaClaseArticulo = idTipoArticulo != -1 ? (await apiServicio.Listar<ClaseArticulo>(new Uri(WebApp.BaseAddressRM), "api/ClaseArticulo/ListarClaseArticulo")).Where(c => c.IdTipoArticulo == idTipoArticulo) : new List<ClaseArticulo>();
+                var listaClaseArticulo = idTipoArticulo != -1 ? await apiServicio.Listar<ClaseArticulo>(new Uri(WebApp.BaseAddressRM), $"api/ClaseArticulo/ListarClaseArticuloPorTipoArticulo/{idTipoArticulo}") : new List<ClaseArticulo>();
                 return new SelectList(listaClaseArticulo, "IdClaseArticulo", "Nombre");
             }
             catch (Exception)

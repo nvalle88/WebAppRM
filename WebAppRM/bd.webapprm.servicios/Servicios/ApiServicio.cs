@@ -78,13 +78,13 @@ namespace bd.webapprm.servicios.Servicios
                 };
             }
         }
-        public async Task<List<T>> Listar<T>(Uri baseAddress, string url) where T : class
+        public async Task<List<T>> Listar<T>(Uri baseAddress, string url, string id = null) where T : class
         {
             try
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    var respuesta = await client.GetAsync(new Uri($"{baseAddress}{url}"));
+                    var respuesta = await client.GetAsync(new Uri(!String.IsNullOrEmpty(id) ? $"{baseAddress}{url}{url}/{id}" : $"{baseAddress}{url}"));
                     var resultado = await respuesta.Content.ReadAsStringAsync();
                     var response = JsonConvert.DeserializeObject<List<T>>(resultado);
                     return response ?? new List<T>();
