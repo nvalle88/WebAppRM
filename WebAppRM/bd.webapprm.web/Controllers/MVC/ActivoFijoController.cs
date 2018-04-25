@@ -415,7 +415,7 @@ namespace bd.webapprm.web.Controllers.MVC
             var lista = new List<RecepcionActivoFijoDetalle>();
             try
             {
-                lista = (await apiServicio.Listar<RecepcionActivoFijoDetalle>(new Uri(WebApp.BaseAddressRM), "api/RecepcionActivoFijo/ListarRecepcionActivoFijo")).Where(c => c.Estado.Nombre == "Recepcionado" && c.NumeroPoliza == null).ToList();
+                lista = await apiServicio.Listar<RecepcionActivoFijoDetalle>(new Uri(WebApp.BaseAddressRM), "api/RecepcionActivoFijo/ListarRecepcionActivoFijoSinPoliza");
                 ViewData["titulo"] = "Activos Fijos sin Póliza de Seguro";
                 ViewData["textoColumna"] = "Asignar Póliza";
                 ViewData["url"] = "AsignarPoliza";
@@ -433,7 +433,7 @@ namespace bd.webapprm.web.Controllers.MVC
             var lista = new List<RecepcionActivoFijoDetalle>();
             try
             {
-                lista = (await apiServicio.Listar<RecepcionActivoFijoDetalle>(new Uri(WebApp.BaseAddressRM), "api/RecepcionActivoFijo/ListarRecepcionActivoFijo")).Where(c => c.Estado.Nombre == "Recepcionado" && c.NumeroPoliza != null).ToList();
+                lista = await apiServicio.Listar<RecepcionActivoFijoDetalle>(new Uri(WebApp.BaseAddressRM), "api/RecepcionActivoFijo/ListarRecepcionActivoFijoConPoliza");
                 ViewData["titulo"] = "Activos Fijos con Póliza de Seguro";
                 ViewData["textoColumna"] = "Editar Póliza";
                 ViewData["url"] = "AsignarPoliza";
@@ -650,7 +650,6 @@ namespace bd.webapprm.web.Controllers.MVC
                         return BadRequest();
                     }                    
                 }
-                
             }
             catch (Exception)
             { }
@@ -1043,7 +1042,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var lista = (await apiServicio.Listar<RecepcionActivoFijoDetalle>(new Uri(WebApp.BaseAddressRM), "api/RecepcionActivoFijo/ListarRecepcionActivoFijo")).Where(c => c.Estado.Nombre != "Validación Técnica" && c.Estado.Nombre != "Desaprobado").OrderBy(c => c.ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.Pais.Nombre).ThenBy(c => c.ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.Nombre).ThenBy(c => c.ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Nombre).ThenBy(c => c.ActivoFijo.LibroActivoFijo.Sucursal.Nombre).ThenBy(c => c.ActivoFijo.LibroActivoFijo.IdSucursal).ThenBy(c => c.RecepcionActivoFijo.Empleado.Persona.Nombres).ThenBy(c => c.RecepcionActivoFijo.Empleado.Persona.Apellidos).ToList();
+                var lista = await apiServicio.Listar<RecepcionActivoFijoDetalle>(new Uri(WebApp.BaseAddressRM), "api/RecepcionActivoFijo/BienesReporte");
                 return View(lista);
             }
             catch (Exception ex)
@@ -1071,7 +1070,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var lista = (await apiServicio.Listar<RecepcionActivoFijoDetalle>(new Uri(WebApp.BaseAddressRM), "api/RecepcionActivoFijo/ListarRecepcionActivoFijo")).Where(c => c.Estado.Nombre == "Recepcionado" && c.NumeroPoliza != null).ToList();
+                var lista = await apiServicio.Listar<RecepcionActivoFijoDetalle>(new Uri(WebApp.BaseAddressRM), "api/RecepcionActivoFijo/ListarRecepcionActivoFijoConPoliza");
                 return View(lista);
             }
             catch (Exception ex)
@@ -1087,8 +1086,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var listaClaseActivoFijo = await apiServicio.Listar<ClaseActivoFijo>(new Uri(WebApp.BaseAddressRM), "api/ClaseActivoFijo/ListarClaseActivoFijo");
-                listaClaseActivoFijo = idTipoActivoFijo != -1 ? listaClaseActivoFijo.Where(c => c.IdTipoActivoFijo == idTipoActivoFijo).ToList() : new List<ClaseActivoFijo>();
+                var listaClaseActivoFijo = idTipoActivoFijo != -1 ? await apiServicio.Listar<ClaseActivoFijo>(new Uri(WebApp.BaseAddressRM), $"api/ClaseActivoFijo/ListarClaseActivoFijoPorTipoActivoFijo/{idTipoActivoFijo}") : new List<ClaseActivoFijo>();
                 return new SelectList(listaClaseActivoFijo, "IdClaseActivoFijo", "Nombre");
             }
             catch (Exception)
@@ -1110,7 +1108,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var listaSubClaseActivoFijo = idClaseActivoFijo != -1 ? (await apiServicio.Listar<SubClaseActivoFijo>(new Uri(WebApp.BaseAddressRM), "api/SubClaseActivoFijo/ListarSubClasesActivoFijo")).Where(c => c.IdClaseActivoFijo == idClaseActivoFijo).ToList() : new List<SubClaseActivoFijo>();
+                var listaSubClaseActivoFijo = idClaseActivoFijo != -1 ? await apiServicio.Listar<SubClaseActivoFijo>(new Uri(WebApp.BaseAddressRM), $"api/SubClaseActivoFijo/ListarSubClasesActivoFijoPorClase/{idClaseActivoFijo}") : new List<SubClaseActivoFijo>();
                 return new SelectList(listaSubClaseActivoFijo, "IdSubClaseActivoFijo", "Nombre");
             }
             catch (Exception)
@@ -1132,7 +1130,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var listaModelo = idMarca != -1 ? (await apiServicio.Listar<Modelo>(new Uri(WebApp.BaseAddressRM), "api/Modelo/ListarModelos")).Where(c => c.IdMarca == idMarca).ToList() : new List<Modelo>();
+                var listaModelo = idMarca != -1 ? await apiServicio.Listar<Modelo>(new Uri(WebApp.BaseAddressRM), $"api/Modelo/ListarModelosPorMarca/{idMarca}") : new List<Modelo>();
                 return new SelectList(listaModelo, "IdModelo", "Nombre");
             }
             catch (Exception)
@@ -1220,7 +1218,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var listaLibroActivoFijo = idSucursal != -1 ? (await apiServicio.Listar<LibroActivoFijo>(new Uri(WebApp.BaseAddressRM), "api/LibroActivoFijo/ListarLibrosActivoFijo")).Where(c => c.IdSucursal == idSucursal).ToList() : new List<LibroActivoFijo>();
+                var listaLibroActivoFijo = idSucursal != -1 ? await apiServicio.Listar<LibroActivoFijo>(new Uri(WebApp.BaseAddressRM), $"api/LibroActivoFijo/ListarLibrosActivoFijoPorSucursal/{idSucursal}") : new List<LibroActivoFijo>();
                 return new SelectList(listaLibroActivoFijo, "IdLibroActivoFijo", "IdLibroActivoFijo");
             }
             catch (Exception)

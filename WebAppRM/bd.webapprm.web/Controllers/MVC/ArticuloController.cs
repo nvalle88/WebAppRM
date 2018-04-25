@@ -172,7 +172,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var listaClaseArticulo = idTipoArticulo != -1 ? (await apiServicio.Listar<ClaseArticulo>(new Uri(WebApp.BaseAddressRM), "api/ClaseArticulo/ListarClaseArticulo")).Where(c => c.IdTipoArticulo == idTipoArticulo) : new List<ClaseArticulo>();
+                var listaClaseArticulo = idTipoArticulo != -1 ? await apiServicio.Listar<ClaseArticulo>(new Uri(WebApp.BaseAddressRM), $"api/ClaseArticulo/ListarClaseArticuloPorTipoArticulo/{idTipoArticulo}") : new List<ClaseArticulo>();
                 return new SelectList(listaClaseArticulo, "IdClaseArticulo", "Nombre");
             }
             catch (Exception)
@@ -192,7 +192,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var listaSubClaseArticulo = idClaseArticulo != -1 ? (await apiServicio.Listar<SubClaseArticulo>(new Uri(WebApp.BaseAddressRM), "api/SubClaseArticulo/ListarSubClaseArticulos")).Where(c => c.IdClaseArticulo == idClaseArticulo) : new List<SubClaseArticulo>();
+                var listaSubClaseArticulo = idClaseArticulo != -1 ? await apiServicio.Listar<SubClaseArticulo>(new Uri(WebApp.BaseAddressRM), $"api/SubClaseArticulo/ListarSubClaseArticulosPorClase/{idClaseArticulo}") : new List<SubClaseArticulo>();
                 return new SelectList(listaSubClaseArticulo, "IdSubClaseArticulo", "Nombre");
             }
             catch (Exception)
@@ -212,7 +212,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var listaModelo = idMarca != -1 ? (await apiServicio.Listar<Modelo>(new Uri(WebApp.BaseAddressRM), "api/Modelo/ListarModelos")).Where(c => c.IdMarca == idMarca).ToList() : new List<Modelo>();
+                var listaModelo = idMarca != -1 ? await apiServicio.Listar<Modelo>(new Uri(WebApp.BaseAddressRM), $"api/Modelo/ListarModelosPorMarca/{idMarca}") : new List<Modelo>();
                 return new SelectList(listaModelo, "IdModelo", "Nombre");
             }
             catch (Exception)
