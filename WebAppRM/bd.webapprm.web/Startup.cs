@@ -1,4 +1,5 @@
-﻿using bd.webapprm.entidades.Utils;
+﻿using bd.log.guardar.Inicializar;
+using bd.webapprm.entidades.Utils;
 using bd.webapprm.servicios.Interfaces;
 using bd.webapprm.servicios.Servicios;
 using Microsoft.AspNetCore.Builder;
@@ -26,7 +27,7 @@ namespace bd.webapprm.web
         public IConfigurationRoot Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
-        public async void ConfigureServices(IServiceCollection services)
+        public void ConfigureServices(IServiceCollection services)
         {
             // Add framework services.
             services.AddMvc(config => {
@@ -37,13 +38,8 @@ namespace bd.webapprm.web
 
             WebApp.BaseAddressWebAppLogin = Configuration.GetSection("HostWebAppLogin").Value;
             WebApp.NombreAplicacion = Configuration.GetSection("NombreAplicacion").Value;
-          
+
             var HostSeguridad = Configuration.GetSection("HostServicioSeguridad").Value;
-            await InicializarWebApp.InicializarWebRecursosMateriales(ServiciosRecursosMateriales, new Uri(HostSeguridad));
-            await InicializarWebApp.InicializarSeguridad(ServicioSeguridad, new Uri(HostSeguridad));
-            await InicializarWebApp.InicializarWebTalentoHumano(ServicioTalentoHumano, new Uri(HostSeguridad));
-            await InicializarWebApp.InicializarLogEntry(ServiciosLog, new Uri(HostSeguridad));
-          
             WebApp.BaseAddressRM = Configuration.GetSection("HostServiciosRecursosMateriales").Value;
             WebApp.BaseAddressSeguridad = Configuration.GetSection("HostServicioSeguridad").Value;
             WebApp.BaseAddressTH = Configuration.GetSection("HostServiciosTalentoHumano").Value;
