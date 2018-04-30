@@ -6,7 +6,7 @@
                 <a href="@Url.Action("Index", "Home")"><i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">Principal</span></a>
             </li>
             <li class="@Html.RouteIf("nomencladores", "active")">
-                <a href="#"><i class="fa fa-lg fa-fw fa-edit"></i> <span class="menu-item-parent">Nomencladores</span></a>
+                <a href="#"><i class="fa fa-lg fa-fw fa-edit"></i> <span class="menu-item-parent">Configuraci&oacute;n</span></a>
                 <ul>
                     <li class="@Html.RouteIf("Articulo", "active")">
                         <a href="@Url.Action("Index", "Articulo")">Art&iacute;culo</a>
@@ -41,8 +41,8 @@
                     <li class="@Html.RouteIf("MotivoAsiento", "active")">
                         <a href="@Url.Action("Index", "MotivoAsiento")">Motivo de Asiento</a>
                     </li>
-                    <li class="@Html.RouteIf("ActivoFijoMotivoBaja", "active")">
-                        <a href="@Url.Action("Index", "ActivoFijoMotivoBaja")">Motivo de Baja</a>
+                    <li class="@Html.RouteIf("MotivoBaja", "active")">
+                        <a href="@Url.Action("Index", "MotivoBaja")">Motivo de Baja</a>
                     </li>
                     <li class="@Html.RouteIf("MotivoRecepcion", "active")">
                         <a href="@Url.Action("Index", "MotivoRecepcion")">Motivo de Recepción</a>

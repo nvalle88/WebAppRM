@@ -31,14 +31,14 @@ namespace bd.webapprm.web.Controllers.MVC
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ActivosFijosBaja ActivosFijosBaja)
+        public async Task<IActionResult> Create(BajaActivoFijoDetalle ActivosFijosBaja)
         {
             try
             {
                 var response = await apiServicio.InsertarAsync(ActivosFijosBaja, new Uri(WebApp.BaseAddressRM), "api/ActivosFijosBaja/InsertarActivosFijosBaja");
                 if (response.IsSuccess)
                 {
-                    var responseLog = await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), ExceptionTrace = null, Message = "Se ha creado un ActivosFijosBaja", UserName = "Usuario 1", LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ADV), EntityID = string.Format("{0} {1}", "ActivosFijosBaja:", ActivosFijosBaja.IdBaja) });
+                    var responseLog = await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), ExceptionTrace = null, Message = "Se ha creado un ActivosFijosBaja", UserName = "Usuario 1", LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ADV), EntityID = string.Format("{0} {1}", "ActivosFijosBaja:", ActivosFijosBaja.IdActivoFijoBaja) });
                     return RedirectToAction("Index");
                 }
                 ViewData["Error"] = response.Message;
@@ -59,7 +59,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 if (!string.IsNullOrEmpty(id))
                 {
                     var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddressRM), "api/ActivosFijosBaja");
-                    respuesta.Resultado = JsonConvert.DeserializeObject<ActivosFijosBaja>(respuesta.Resultado.ToString());
+                    respuesta.Resultado = JsonConvert.DeserializeObject<BajaActivoFijoDetalle>(respuesta.Resultado.ToString());
                     if (respuesta.IsSuccess)
                         return View(respuesta.Resultado);
                 }
@@ -73,7 +73,7 @@ namespace bd.webapprm.web.Controllers.MVC
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, ActivosFijosBaja activosFijosBaja)
+        public async Task<IActionResult> Edit(string id, BajaActivoFijoDetalle activosFijosBaja)
         {
             try
             {
@@ -102,7 +102,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var lista = await apiServicio.Listar<ActivosFijosBaja>(new Uri(WebApp.BaseAddressRM), "api/ActivosFijosBaja/ListarActivosFijosBaja");
+                var lista = await apiServicio.Listar<BajaActivoFijoDetalle>(new Uri(WebApp.BaseAddressRM), "api/ActivosFijosBaja/ListarActivosFijosBaja");
                 return View(lista);
             }
             catch (Exception ex)

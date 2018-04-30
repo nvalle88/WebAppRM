@@ -9,7 +9,7 @@ namespace bd.webapprm.entidades
         [Key]
         public int IdSucursal { get; set; }
 
-        [Required(ErrorMessage = "Debe introducir {0}")]
+        [Required(ErrorMessage = "Debe introducir el {0}")]
         [Display(Name = "Sucursal:")]
         [StringLength(20, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
         public string Nombre { get; set; }
@@ -17,8 +17,8 @@ namespace bd.webapprm.entidades
         //Propiedades Virtuales Referencias a otras clases
 
         [Display(Name = "Ciudad:")]
-        [Required(ErrorMessage = "Debe seleccionar el {0} ")]
-        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
+        [Required(ErrorMessage = "Debe seleccionar la {0} ")]
+        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar la {0} ")]
         public int IdCiudad { get; set; }
         public virtual Ciudad Ciudad { get; set; }
 

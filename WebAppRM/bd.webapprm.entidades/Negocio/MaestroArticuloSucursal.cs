@@ -8,23 +8,22 @@ namespace bd.webapprm.entidades
         [Key]
         public int IdMaestroArticuloSucursal { get; set; }
 
-        [Required(ErrorMessage = "Debe introducir {0}")]
+        [Required(ErrorMessage = "Debe introducir el {0}")]
         [Display(Name = "Mínimo:")]
-        [Range(1, int.MaxValue, ErrorMessage = "El valor  ")]
+        [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar el {0}")]
         public int Minimo { get; set; }
 
-        [Required(ErrorMessage = "Debe introducir {0}")]
+        [Required(ErrorMessage = "Debe introducir el {0}")]
         [Display(Name = "Máximo:")]
-        [Range(1, int.MaxValue, ErrorMessage = "El valor  ")]
+        [Range(1, int.MaxValue, ErrorMessage = "Debe seleccionar el {0}")]
         public int Maximo { get; set; }
 
         //Propiedades Virtuales Referencias a otras clases
 
         [Display(Name = "Sucursal:")]
-        [Required(ErrorMessage = "Debe seleccionar el {0} ")]
-        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
+        [Required(ErrorMessage = "Debe seleccionar la {0} ")]
+        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar la {0}")]
         public int IdSucursal { get; set; }
-
         public virtual Sucursal Sucursal { get; set; }
 
         public virtual ICollection<Factura> Factura { get; set; }

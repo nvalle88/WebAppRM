@@ -1,4 +1,4 @@
-﻿@model bd.webapprm.entidades.ActivoFijoMotivoBaja
+﻿@model bd.webapprm.entidades.MotivoBaja
 
 <div id="content">
     <section id="widget-grid" class="">
@@ -7,20 +7,20 @@
                 <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
                     <header>
                         <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
-                        <h2>Motivo de Baja de un Activo Fijo</h2>
+                        <h2>Motivo de Baja de Activo Fijo</h2>
                     </header>
                     <div>
                         <div class="jarviswidget-editbox">
                         </div>
                         <div class="widget-body no-padding">
-                            <form asp-action="Create" id="checkout-form" class="smart-form" novalidate="novalidate">
+                            <form asp-action="Edit" id="checkout-form" class="smart-form" novalidate="novalidate">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <input type="hidden" asp-for="IdMotivoBaja" />
                                 <fieldset>
                                     <div class="row">
                                         <section class="col col-4">
                                             <label asp-for="Nombre"></label>
                                         </section>
-
                                         <section class="col col-8">
                                             <label class="input">
                                                 <input maxlength="32" asp-for="Nombre" class="form-control" />

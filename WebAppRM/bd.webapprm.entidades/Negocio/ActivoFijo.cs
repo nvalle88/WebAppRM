@@ -5,6 +5,19 @@ namespace bd.webapprm.entidades
 
     public partial class ActivoFijo
     {
+        public ActivoFijo()
+        {
+            ActivosFijosComponentes = new HashSet<ActivoFijoComponentes>();
+            ActivsoFijosOrigen = new HashSet<ActivoFijoComponentes>();
+            BajaActivosFijosDetalles = new HashSet<BajaActivoFijoDetalle>();
+            AltaActivosFijosDetalles = new HashSet<AltaActivoFijoDetalle>();
+            DepreciacionActivoFijo = new HashSet<DepreciacionActivoFijo>();
+            EmpleadoActivoFijo = new HashSet<EmpleadoActivoFijo>();
+            MantenimientoActivoFijo = new HashSet<MantenimientoActivoFijo>();
+            RecepcionActivoFijoDetalle = new HashSet<RecepcionActivoFijoDetalle>();
+            TransferenciaActivoFijoDetalle = new HashSet<TransferenciaActivoFijoDetalle>();
+        }
+
         [Key]
         public int IdActivoFijo { get; set; }
 
@@ -76,10 +89,12 @@ namespace bd.webapprm.entidades
 
         public virtual ICollection<TransferenciaActivoFijoDetalle> TransferenciaActivoFijoDetalle { get; set; }
 
-        public virtual ICollection<ActivosFijosAdicionados> ActivosFijosAdicionados { get; set; }
+        public virtual ICollection<AltaActivoFijoDetalle> AltaActivosFijosDetalles { get; set; }
 
-        public virtual ActivosFijosAlta ActivosFijosAlta { get; set; }
+        public virtual ICollection<BajaActivoFijoDetalle> BajaActivosFijosDetalles { get; set; }
 
-        public virtual ActivosFijosBaja ActivosFijosBaja { get; set; }
+        public virtual ICollection<ActivoFijoComponentes> ActivosFijosComponentes { get; set; }
+
+        public virtual ICollection<ActivoFijoComponentes> ActivsoFijosOrigen { get; set; }
     }
 }
