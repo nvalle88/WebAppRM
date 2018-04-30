@@ -70,7 +70,7 @@ namespace bd.webapprm.web.Controllers.MVC
             }
             catch (Exception)
             {
-                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorCargarDatos}");
+                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorCargarDatos}", nameof(ListadoRecepcion));
             }
         }
 
@@ -86,7 +86,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddressRM), "api/RecepcionArticulo");
                     if (!respuesta.IsSuccess)
-                        return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}");
+                        return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}", nameof(ListadoRecepcion));
                     
                     var recepcionArticulos = JsonConvert.DeserializeObject<RecepcionArticulos>(respuesta.Resultado.ToString());
                     if (respuesta.IsSuccess)
@@ -107,11 +107,11 @@ namespace bd.webapprm.web.Controllers.MVC
                         return View(recepcionArticulos);
                     }
                 }
-                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}");
+                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}", nameof(ListadoRecepcion));
             }
             catch (Exception)
             {
-                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorCargarDatos}");
+                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorCargarDatos}", nameof(ListadoRecepcion));
             }
         }
 
@@ -139,7 +139,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 if (response.IsSuccess)
                 {
                     await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), ExceptionTrace = null, Message = recepcionArticulo.IdRecepcionArticulos == 0 ? "Se ha recepcionado un artículo" : "Se ha editado la recepción de un artículo", UserName = "Usuario 1", LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ADV), EntityID = string.Format("{0} {1}", "Artículo:", recepcionArticulo.IdArticulo) });
-                    return this.Redireccionar($"{Mensaje.Informacion}|{Mensaje.Satisfactorio}", "ListadoRecepcion");
+                    return this.Redireccionar($"{Mensaje.Informacion}|{Mensaje.Satisfactorio}", nameof(ListadoRecepcion));
                 }
 
                 ViewData["TipoArticulo"] = new SelectList(await apiServicio.Listar<TipoArticulo>(new Uri(WebApp.BaseAddressRM), "api/TipoArticulo/ListarTipoArticulo"), "IdTipoArticulo", "Nombre");
@@ -161,7 +161,7 @@ namespace bd.webapprm.web.Controllers.MVC
             catch (Exception ex)
             {
                 await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Creando recepción Artículo", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP WebAppTh" });
-                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorCrear}");
+                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorCrear}", nameof(ListadoRecepcion));
             }
         }
         #endregion

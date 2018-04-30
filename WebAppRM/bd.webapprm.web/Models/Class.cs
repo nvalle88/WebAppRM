@@ -8,9 +8,6 @@ using System.Threading.Tasks;
 
 namespace bd.webapprm.web.Models
 {
-
-
-
     public class RolesHandler : AuthorizationHandler<RolesRequirement>
     {
         public readonly IApiServicio apiServicio;
@@ -19,8 +16,6 @@ namespace bd.webapprm.web.Models
         {
             this.apiServicio = apiServicio;
         }
-
-
 
         protected  override  Task HandleRequirementAsync(AuthorizationHandlerContext context, RolesRequirement requirement)
         {
@@ -46,22 +41,15 @@ namespace bd.webapprm.web.Models
 
                 //respuesta.Result.IsSuccess = true;
                 if (respuesta.Result.IsSuccess)
-                {
                     context.Succeed(requirement);
-
-                }
                 else
-                {
                     context.Fail();
-                }
-                
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 context.Fail();
                 return Task.CompletedTask;
             }
-            
             return Task.FromResult(0);
         }
     }

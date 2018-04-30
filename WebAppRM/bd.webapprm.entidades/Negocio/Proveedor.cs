@@ -9,27 +9,26 @@ namespace bd.webapprm.entidades
         [Key]
         public int IdProveedor { get; set; }
 
-        [Required(ErrorMessage = "Debe introducir {0}")]
+        [Required(ErrorMessage = "Debe introducir el {0}")]
         [Display(Name = "Nombre:")]
         [StringLength(20, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
         public string Nombre { get; set; }
 
-        [Required(ErrorMessage = "Debe introducir {0}")]
+        [Required(ErrorMessage = "Debe introducir los {0}")]
         [Display(Name = "Apellidos:")]
-        [StringLength(20, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
+        [StringLength(20, MinimumLength = 2, ErrorMessage = "Los {0} no pueden tener más de {1} y menos de {2}")]
         public string Apellidos { get; set; }
 
-        [Required(ErrorMessage = "Debe introducir {0}")]
+        [Required(ErrorMessage = "Debe introducir la {0}")]
         [Display(Name = "Identificación:")]
-        [StringLength(20, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
+        [StringLength(20, MinimumLength = 2, ErrorMessage = "La {0} no puede tener más de {1} y menos de {2}")]
         [RegularExpression(@"^\d*$", ErrorMessage = "La {0} solo puede contener números.")]
         public string Identificacion { get; set; }
 
-        [Required(ErrorMessage = "Debe introducir {0}")]
+        [Required(ErrorMessage = "Debe introducir la {0}")]
         [Display(Name = "Dirección:")]
         [StringLength(20, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
         public string Direccion { get; set; }
-
 
         //Propiedades Virtuales Referencias a otras clases
 

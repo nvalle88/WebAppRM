@@ -1,4 +1,4 @@
-﻿@model List<bd.webapprm.entidades.ActivoFijoMotivoBaja>
+﻿@model List<bd.webapprm.entidades.MotivoBaja>
 
 <div id="content">
     <p>
@@ -32,8 +32,8 @@
                                                 @Html.DisplayFor(modelItem => item.Nombre)
                                             </td>
                                             <td>
-                                                @Html.ActionLink("Editar", "Edit", new { id = item.IdActivoFijoMotivoBaja}) |
-                                                <a href="javascript:void(0);" id="@item.IdActivoFijoMotivoBaja" onclick="abrirVentanaConfirmacion('@item.IdActivoFijoMotivoBaja')" data-url="@Url.Action("Delete", values: new { id = item.IdActivoFijoMotivoBaja})" data-titulo="Eliminar" data-descripcion="&#191;Desea eliminar el Motivo de Baja... ?">Eliminar</a>
+                                                @Html.ActionLink("Editar", "Edit", new { id = item.IdMotivoBaja}) |
+                                                <a href="javascript:void(0);" id="@item.IdMotivoBaja" onclick="abrirVentanaConfirmacion('@item.IdMotivoBaja')" data-url="@Url.Action("Delete", values: new { id = item.IdMotivoBaja})" data-titulo="Eliminar" data-descripcion="&#191;Desea eliminar el Motivo de Baja... ?">Eliminar</a>
                                             </td>
                                         </tr>
                                     }

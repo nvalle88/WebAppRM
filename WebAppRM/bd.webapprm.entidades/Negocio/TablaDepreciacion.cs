@@ -9,7 +9,7 @@ namespace bd.webapprm.entidades
         [Key]
         public int IdTablaDepreciacion { get; set; }
 
-        [Required(ErrorMessage = "Debe introducir {0}")]
+        [Required(ErrorMessage = "Debe introducir el {0}")]
         [Display(Name = "Índice de Depreciación:")]
         [DisplayFormat(DataFormatString = "{0:C2}", ApplyFormatInEditMode = false)]
         public decimal IndiceDepreciacion { get; set; }

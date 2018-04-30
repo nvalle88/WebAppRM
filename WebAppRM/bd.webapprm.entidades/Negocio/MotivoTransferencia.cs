@@ -10,7 +10,7 @@ namespace bd.webapprm.entidades
         [Key]
         public int IdMotivoTransferencia { get; set; }
 
-        [Required(ErrorMessage = "Debe introducir  {0}")]
+        [Required(ErrorMessage = "Debe introducir el {0}")]
         [Display(Name = "Motivo de Transferencia:")]
         [StringLength(150, MinimumLength = 2, ErrorMessage = "El {0} no puede tener menos de {2} y más de {1}")]
         public string Motivo_Transferencia { get; set; }
