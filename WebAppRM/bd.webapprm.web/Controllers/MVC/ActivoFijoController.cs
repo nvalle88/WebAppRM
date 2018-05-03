@@ -17,6 +17,7 @@ using System.IO;
 using Microsoft.AspNetCore.Hosting;
 using bd.webapprm.entidades.ObjectTransfer;
 using bd.webapprm.servicios.Extensores;
+using Microsoft.AspNetCore.Routing;
 
 namespace bd.webapprm.web.Controllers.MVC
 {
@@ -195,6 +196,25 @@ namespace bd.webapprm.web.Controllers.MVC
             }
         }
 
+        public async Task<IActionResult> DeleteRecepcion(string id, bool activoFijoRecepcionado)
+        {
+            try
+            {
+                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddressRM), "api/RecepcionActivoFijo");
+                if (response.IsSuccess)
+                {
+                    await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), EntityID = string.Format("{0} : {1}", "Sistema", id), Message = "Registro eliminado", LogCategoryParametre = Convert.ToString(LogCategoryParameter.Delete), LogLevelShortName = Convert.ToString(LogLevelParameter.ADV), UserName = "Usuario APP webappth" });
+                    return this.Redireccionar($"{Mensaje.Informacion}|{response.Message}", activoFijoRecepcionado ? nameof(ActivosFijosRecepcionados) : nameof(ActivoValidacionTecnica));
+                }
+                return this.Redireccionar($"{Mensaje.Error}|{response.Message}", activoFijoRecepcionado ? nameof(ActivosFijosRecepcionados) : nameof(ActivoValidacionTecnica));
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Eliminar Marca", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Delete), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webappth" });
+                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.Excepcion}", activoFijoRecepcionado ? nameof(ActivosFijosRecepcionados) : nameof(ActivoValidacionTecnica));
+            }
+        }
+
         private string ObtenerCodigoSecuencial(string claseActivoFijo, string tipoActivoFijo, int? numeroConsecutivo = null)
         {
             try
@@ -280,6 +300,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 ViewData["titulo"] = "Activos Fijos Recepcionados";
                 ViewData["textoColumna"] = "Editar";
                 ViewData["url"] = "EditarRecepcionAR";
+                ViewData["eliminarRecepcionActivoFijo"] = true;
                 return View("ListadoActivoFijo", lista);
             }
             catch (Exception ex)
@@ -360,6 +381,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 ViewData["textoColumna"] = "Revisar";
                 ViewData["url"] = "RevisionActivoFijo";
                 ViewData["urlEditar"] = "EditarRecepcionVT";
+                ViewData["eliminarRecepcionActivoFijo"] = true;
                 return View("ListadoActivoFijo", lista);
             }
             catch (Exception ex)

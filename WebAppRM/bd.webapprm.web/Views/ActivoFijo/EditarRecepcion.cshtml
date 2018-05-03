@@ -334,6 +334,19 @@
                                                                 </label>
                                                             </section>
                                                         </div>
+
+                                                        <div class="row">
+                                                            <section class="col col-4">
+                                                                <label asp-for="ActivoFijo.Depreciacion"></label>
+                                                            </section>
+
+                                                            <section class="col col-8">
+                                                                <label class="toggle" style="float:left;padding-right:50px !important;">
+                                                                    <input type="checkbox" name="checkbox-toggle" asp-for="ActivoFijo.Depreciacion">
+                                                                    <i data-swchon-text="SI" data-swchoff-text="NO"></i>
+                                                                </label>
+                                                            </section>
+                                                        </div>
                                                     </fieldset>
                                                 </div>
                                                 <div class="step-pane" id="step2">

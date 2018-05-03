@@ -41,6 +41,10 @@ namespace bd.webapprm.entidades
         [StringLength(100, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
         public string Ubicacion { get; set; }
 
+        [Required(ErrorMessage = "Debe introducir la {0}")]
+        [Display(Name = "¿Depreciación?")]
+        public bool Depreciacion { get; set; }
+
         //Propiedades Virtuales Referencias a otras clases
 
         [Display(Name = "Sub clase de activo fijo:")]
