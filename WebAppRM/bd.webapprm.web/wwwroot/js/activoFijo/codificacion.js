@@ -8,12 +8,13 @@
 
 function asignarCodigoBarras()
 {
-    var codigoBarras = document.getElementById("ActivoFijo_CodigoActivoFijo_CodigoBarras").value;
-    if (codigoBarras != "")
-    {
-        Asignar_Codigo_Barras("barcode1", codigoBarras);
-        document.getElementById("barcode1").style.display = "";
-    }
-    else
-        document.getElementById("barcode1").style.display = "none";
+    try {
+        var codigoBarras = document.getElementById("ActivoFijo_CodigoActivoFijo_CodigoBarras").value;
+        if (codigoBarras != "") {
+            Asignar_Codigo_Barras("barcode1", codigoBarras);
+            document.getElementById("barcode1").style.display = "";
+        }
+        else
+            document.getElementById("barcode1").style.display = "none";
+    } catch (e) { }
 }

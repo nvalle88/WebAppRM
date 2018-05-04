@@ -14,7 +14,7 @@
 <script src="~/js/smart-vector.js"></script>
 <script src="~/js/smart-calendar.js"></script>
 <script src='~/lib/waitMe/waitMe.min.js'></script>
-<script src="~/js/site.js"></script>
+<script src="~/js/site.min.js"></script>
 
 <script>
     $(document).ready(function () {
@@ -22,5 +22,6 @@
         drawBreadCrumb();
         Gestionar_Msg();
         initLoadingForm();
+        $.sound_path = "@Url.Content("~/sound/")";
     });
 </script>
