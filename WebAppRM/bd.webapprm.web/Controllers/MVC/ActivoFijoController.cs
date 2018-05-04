@@ -143,26 +143,40 @@ namespace bd.webapprm.web.Controllers.MVC
                     recepcionActivoFijoDetalle.ActivoFijo.CodigoActivoFijo = null;
 
                 var response = new Response();
+                int idActivoFijo = 0;
                 if (recepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle == 0)
                 {
                     response = await apiServicio.InsertarAsync(recepcionActivoFijoDetalle, new Uri(WebApp.BaseAddressRM), "api/RecepcionActivoFijo/InsertarRecepcionActivoFijo");
                     if (response.IsSuccess)
                     {
                         await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), ExceptionTrace = null, Message = "Se ha recepcionado un activo fijo", UserName = "Usuario 1", LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ADV), EntityID = string.Format("{0} {1}", "Activo Fijo:", recepcionActivoFijoDetalle.ActivoFijo.IdActivoFijo) });
-
-                        //try
-                        //{
-                        //    DirectoryInfo dInfo = new DirectoryInfo(String.Format("{0}\\wwwroot\\images\\ActivoFijo\\{1}", _hostingEnvironment.ContentRootPath, nombreCarpeta));
-                        //    dInfo.MoveTo(String.Format("{0}\\wwwroot\\images\\ActivoFijo\\{1}", _hostingEnvironment.ContentRootPath, recepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle.ToString()));
-                        //}
-                        //catch (Exception) { }
+                        idActivoFijo = JsonConvert.DeserializeObject<RecepcionActivoFijoDetalle>(response.Resultado.ToString()).IdActivoFijo;
                     }
                 }
                 else
                 {
+                    idActivoFijo = recepcionActivoFijoDetalle.IdActivoFijo;
                     response = await apiServicio.EditarAsync<RecepcionActivoFijoDetalle>(recepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle.ToString(), recepcionActivoFijoDetalle, new Uri(WebApp.BaseAddressRM), "api/RecepcionActivoFijo");
                     if (response.IsSuccess)
                         await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), ExceptionTrace = null, Message = "Se ha editado una recepción de activo fijo", UserName = "Usuario 1", LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ADV), EntityID = string.Format("{0} {1}", "Activo Fijo:", recepcionActivoFijoDetalle.ActivoFijo.IdActivoFijo) });
+                }
+
+                if (response.IsSuccess)
+                {
+                    if (Request.Form.Files.Count > 0)
+                    {
+                        foreach (var item in Request.Form.Files)
+                        {
+                            byte[] data;
+                            using (var br = new BinaryReader(item.OpenReadStream()))
+                                data = br.ReadBytes((int)item.OpenReadStream().Length);
+
+                            var activoFijoDocumentoTransfer = new ActivoFijoDocumentoTransfer { Nombre = item.FileName, Fichero = data, IdActivoFijo = idActivoFijo };
+                            response = await apiServicio.InsertarAsync(activoFijoDocumentoTransfer, new Uri(WebApp.BaseAddressRM), "api/ActivoFijoDocumento/UploadFiles");
+                            if (response.IsSuccess)
+                                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), ExceptionTrace = null, Message = "Se ha subido un archivo", UserName = "Usuario 1", LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ADV), EntityID = string.Format("{0} {1}", "Documento de Activo Fijo:", activoFijoDocumentoTransfer.Nombre) });
+                        }
+                    }
                 }
 
                 if (response.IsSuccess)
