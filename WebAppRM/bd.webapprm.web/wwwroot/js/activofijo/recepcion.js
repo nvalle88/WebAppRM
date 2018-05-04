@@ -10,11 +10,10 @@
     eventoSucursal();
     eventoValidacionTecnicaChange();
     gestionarWizard();
-    $('#RecepcionActivoFijo_FechaRecepcion').datetimepicker({
-        'format': 'D-M-Y hh:mm'
-    });
-    mostrarOcultarDatosEspecificosCodificacion($("#RecepcionActivoFijo_ValidacionTecnica").prop('checked'));
-    configurarDropzone();
+    Init_DatetimePicker("RecepcionActivoFijo_FechaRecepcion");
+    mostrarOcultarDatosEspecificosCodificacion(isEditar ? true : $("#RecepcionActivoFijo_ValidacionTecnica").prop('checked'));
+    Init_FileInput("file");
+    //configurarDropzone();
 });
 
 function gestionarWizard()
@@ -75,6 +74,9 @@ function configurarDropzone()
         acceptedFiles: acceptedFiles,
         addRemoveLinks: true,
         uploadMultiple: true,
+        parallelUploads: 100,
+        paramName: "file",
+        autoProcessQueue: false,
         createImageThumbnails: true,
         maxThumbnailFilesize: 10,
         maxFilesize: 10,
@@ -116,20 +118,20 @@ function configurarDropzone()
 function eventoValidacionTecnicaChange()
 {
     $("#RecepcionActivoFijo_ValidacionTecnica").on("change", function (e) {
-        mostrarOcultarDatosEspecificosCodificacion(e.currentTarget.checked);
+        mostrarOcultarDatosEspecificosCodificacion(isEditar ? true : e.currentTarget.checked);
     });
 }
 
 function mostrarOcultarDatosEspecificosCodificacion(mostrarOcultar)
 {
     if (mostrarOcultar) {
-        $("#li_codificacion").hide();
+        try { $("#li_codificacion").hide(); } catch (e) { }
         $("#btn-atras").hide();
         $("#btn-guardar").html("Guardar<i class='fa fa-arrow-right'></i>");
     }
     else
     {
-        $("#li_codificacion").show();
+        try { $("#li_codificacion").show(); } catch (e) { }
         $("#btn-atras").show();
         $("#btn-guardar").html("Siguiente<i class='fa fa-arrow-right'></i>");
     }

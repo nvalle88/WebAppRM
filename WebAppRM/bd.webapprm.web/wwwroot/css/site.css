@@ -1,4 +1,8 @@
-﻿.padding-top-0 {
+﻿.padding0 {
+    padding:0px !important;
+}
+
+.padding-top-0 {
     padding-top: 0 !important;
 }
 
@@ -114,4 +118,8 @@ tr.group:hover {
 .paddingTextArea97 {
     padding: 5px 9px !important;
     width: 97%;
+}
+
+.width100 {
+    width:100% !important;
 }

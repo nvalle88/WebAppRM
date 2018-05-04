@@ -94,7 +94,12 @@
                                                         }
                                                         @Html.ActionLink(ViewData["textoColumna"].ToString(), ViewData["url"].ToString(), new { id = item.IdRecepcionActivoFijoDetalle })
 
-                                                        if (ViewBag.eliminarRecepcionActivoFijo)
+                                                        if (ViewBag.urlCodificacion != null)
+	                                                    {
+                                                            <span>| </span>@Html.ActionLink("Codificaci\u00F3n", ViewData["urlCodificacion"].ToString(), new { id = item.IdRecepcionActivoFijoDetalle })
+	                                                    }
+
+                                                        if (ViewBag.eliminarRecepcionActivoFijo != null)
 	                                                    {
                                                             <span>| </span><a href="javascript:void(0);" id="@item.IdRecepcionActivoFijoDetalle" onclick="abrirVentanaConfirmacion('@item.IdRecepcionActivoFijoDetalle')" data-url="@Url.Action("DeleteRecepcion", values: new { id = item.IdRecepcionActivoFijoDetalle, activoFijoRecepcionado = item.Estado.Nombre == "Recepcionado" })" data-titulo="Eliminar" data-descripcion="&#191;Desea eliminar la recepci&oacute;n del Activo Fijo... ?">Eliminar</a>
 	                                                    }
@@ -113,5 +118,5 @@
     </section>
 </div>
 @section Scripts {
-    <script src='~/js/datatables/init.js'></script>
+    <script src='~/js/datatables/init.min.js'></script>
 }

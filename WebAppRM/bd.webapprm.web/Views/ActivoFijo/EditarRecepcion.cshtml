@@ -5,7 +5,9 @@
     <link rel="stylesheet" href="~/lib/bootstrap-touchspin-master/src/jquery.bootstrap-touchspin.css" />
     <link rel="stylesheet" href="~/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
     <link rel="stylesheet" href="~/lib/jquery.spinner-master/dist/css/bootstrap-spinner.min.css" />
-    <link rel="stylesheet" href="~/lib/dropzone/min/dropzone.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/lib/bootstrap-fileinput/css/fileinput.min.css">
+    <link rel="stylesheet" type="text/css" href="~/css/activoFijo/recepcion.min.css" />
+    @*<link rel="stylesheet" href="~/lib/dropzone/min/dropzone.min.css" />*@
 }
 
 <div id="content">
@@ -20,7 +22,7 @@
                     <div>
                         <div class="jarviswidget-editbox"></div>
                         <div class="widget-body no-padding">
-                            <form asp-action="EditarRecepcion" id="checkout-form" class="smart-form" novalidate="novalidate">
+                            <form asp-action="EditarRecepcion" id="checkout-form" class="smart-form" novalidate="novalidate" enctype="multipart/form-data">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <input type="hidden" asp-for="IdRecepcionActivoFijoDetalle" />
                                 <input type="hidden" asp-for="IdRecepcionActivoFijo" />
@@ -29,17 +31,16 @@
                                 <input type="hidden" asp-for="RecepcionActivoFijo.IdRecepcionActivoFijo" />
                                 <input type="hidden" asp-for="ActivoFijo.IdActivoFijo" />
                                 <input type="hidden" asp-for="ActivoFijo.IdCodigoActivoFijo" />
+                                <input type="hidden" asp-for="ActivoFijo.CodigoActivoFijo.IdCodigoActivoFijo" />
+                                <input type="hidden" asp-for="ActivoFijo.CodigoActivoFijo.CodigoBarras" />
+                                <input type="hidden" asp-for="ActivoFijo.CodigoActivoFijo.Codigosecuencial" />
                                 <input type="hidden" asp-for="Estado.IdEstado" />
-                                <input type="hidden" id="nombreCarpeta" name="nombreCarpeta" value="@ViewBag.nombreCarpeta" />
                                 <fieldset>
                                     <div class="widget-body fuelux">
                                         <div class="wizard">
                                             <ul class="steps">
                                                 <li data-target="#step1" class="active">
                                                     <span class="badge badge-info" style="padding:3px 4px !important;">1</span>Datos Generales<span class="chevron"></span>
-                                                </li>
-                                                <li data-target="#step2" id="li_codificacion" style="display:none;">
-                                                    <span class="badge" style="padding:3px 4px !important;">2</span>Codificaci&oacute;n<span class="chevron"></span>
                                                 </li>
                                             </ul>
                                             <div class="actions">
@@ -347,10 +348,14 @@
                                                                 </label>
                                                             </section>
                                                         </div>
+
+                                                        <legend>Informaci&oacute;n Adicional</legend>
+                                                        <div class="row" style="margin-top:25px;">
+                                                            <section class="col col-12">
+                                                                <input type="file" id="file" name="file" multiple="multiple" />
+                                                            </section>
+                                                        </div>
                                                     </fieldset>
-                                                </div>
-                                                <div class="step-pane" id="step2">
-                                                    @{ await Html.RenderPartialAsync("_Codificacion", Model); }
                                                 </div>
                                             </div>
                                         </div>
@@ -360,34 +365,6 @@
                                     <span class="text-danger" id="spanError">@ViewData["Error"]</span>
                                 </footer>
                             </form>
-                        </div>
-                    </div>
-                </div>
-            </article>
-            <article id="divInformacionAdicional" class="col-sm-12 col-md-12 col-lg-8">
-                <div class="jarviswidget" id="wid-id-2" data-widget-editbutton="false" data-widget-custombutton="false">
-                    <header>
-                        <span class="widget-icon"> <i class="fa fa-cloud-upload"></i> </span>
-                        <h2>Informaci&oacute;n adicional de Activo Fijo</h2>
-                    </header>
-
-                    <div>
-                        <div class="jarviswidget-editbox"></div>
-                        <div class="widget-body no-padding">
-                            <div class="smart-form">
-                                <fieldset>
-                                    <div class="row" style="padding-left:15px !important;padding-right:15px !important;">
-                                        <div class="alert alert-info alert-block" style="border-left-width:5px !important;">
-                                            <h4 class="alert-heading">Informaci&oacute;n</h4>
-                                            Adicione documentaci&oacute;n o archivos referentes y fotograf&iacute;as de los bienes.<br />
-                                            Extensiones de archivos permitidas: <span style="color:#a90329;" id="spanExtensionesPermitidas"></span>
-                                        </div>
-                                    </div>
-                                </fieldset>
-                                <form asp-action="SubirArchivos" id="mydropzone" class="dropzone" novalidate="novalidate" style="margin-left:15px !important;margin-right:15px !important;border:1px dashed;">
-                                    <input type="hidden" id="dir" name="dir" value="@Model.IdRecepcionActivoFijoDetalle" />
-                                </form>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -402,9 +379,11 @@
     <script src='~/lib/bootstrap-touchspin-master/src/jquery.bootstrap-touchspin.js'></script>
     @{await Html.RenderPartialAsync("_DatetimePickerScriptsPartial");}
     <script src='~/lib/jquery.spinner-master/dist/js/jquery.spinner.min.js'></script>
-    <script src='~/lib/dropzone/min/dropzone.min.js'></script>
-    <script src='~/js/activoFijo/recepcion.js'></script>
-    <script src='~/js/activoFijo/codificacion.js'></script>
+    @*<script src='~/lib/dropzone/min/dropzone.min.js'></script>*@
+    <script src='~/lib/bootstrap-fileinput/js/fileinput.min.js'></script>
+    <script src='~/lib/bootstrap-fileinput/js/locales/es.js'></script>
+    <script src='~/js/activoFijo/recepcion.min.js'></script>
+    <script src='~/js/activoFijo/codificacion.min.js'></script>
     <script>
         var urlEliminarActivoFijo = "@Url.Action("EliminarArchivo")";
         var urlModeloSelectResult = "@Url.Action("Modelo_SelectResult")";
@@ -414,5 +393,6 @@
         var libroActivoFijoSelectResult = "@Url.Action("LibroActivoFijo_SelectResult")";
         var claseActivoFijoSelectResult = "@Url.Action("ClaseActivoFijo_SelectResult")";
         var subClaseActivoFijoSelectResult = "@Url.Action("SubClaseActivoFijo_SelectResult")";
+        var isEditar = true;
     </script>
 }

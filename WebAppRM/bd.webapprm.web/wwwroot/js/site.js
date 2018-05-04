@@ -21,6 +21,30 @@ function Init_Select2()
     });
 }
 
+function Init_Date(idElemento)
+{
+    $('#' + idElemento).datetimepicker({
+        'format': 'D-M-Y'
+    });
+}
+
+function Init_DatetimePicker(idElemento)
+{
+    $('#' + idElemento).datetimepicker({
+        'format': 'D-M-Y hh:mm'
+    });
+}
+
+function Init_FileInput(idElemento)
+{
+    $("#" + idElemento).fileinput({
+        // showCaption: false,
+        showUpload: false,
+        language: 'es'
+        // showPreview: false
+    });
+}
+
 function mostrarLoadingPanel(idElemento, texto)
 {
     $('#' + idElemento).waitMe({
@@ -42,6 +66,7 @@ function mostrarNotificacion(titulo, texto)
         case "Error": color = "#C46A69"; icon = "times-circle"; break;
         case "Aviso": color = "#c79121"; icon = "exclamation-triangle"; break;
     }
+    $.sound_on = true;
     $.smallBox({
         title: titulo,
         content: texto,
@@ -52,11 +77,13 @@ function mostrarNotificacion(titulo, texto)
 }
 
 function Asignar_Codigo_Barras(idElemento, valor) {
-    JsBarcode("#" + idElemento, valor, {
-        format: "CODE128",
-        displayValue: true,
-        fontSize: 20
-    });
+    try {
+        JsBarcode("#" + idElemento, valor, {
+            format: "CODE128",
+            displayValue: true,
+            fontSize: 20
+        });
+    } catch (e) { }
 }
 
 function obtenerIdAjax(id)
