@@ -150,7 +150,7 @@
     }
 
     function partialViewClaseArticulo(idClaseArticulo) {
-        mostrarLoadingPanel("checkout-form", "Cargando sub clases de art&iacute;culos...");
+        mostrarLoadingPanel("checkout-form", "Cargando subclases de art&iacute;culos...");
         $.ajax({
             url: subClaseArticuloSucursal,
             method: "POST",

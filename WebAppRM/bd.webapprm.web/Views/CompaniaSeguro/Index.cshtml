@@ -1,0 +1,65 @@
+@model List<bd.webapprm.entidades.CompaniaSeguro>
+
+<div id="content">
+    <p>
+        <a asp-action="Create" class="btn btn-success">Nueva compa&ntilde;&iacute;a de seguro</a>
+    </p>
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                        <h2>Listado de Compa&ntilde;&iacute;as de seguro</h2>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox">
+                        </div>
+                        <div class="widget-body no-padding">
+                            <table id="dt_basic" class="table table-striped table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().Nombre)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().FechaInicioVigencia)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().FechaFinVigencia)
+                                        </th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Nombre)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.FechaInicioVigencia)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.FechaFinVigencia)
+                                            </td>
+                                            <td>
+                                                @Html.ActionLink("Editar", "Edit", new { id = item.IdCompaniaSeguro }) |
+                                                <a href="javascript:void(0);" id="@item.IdCompaniaSeguro" onclick="abrirVentanaConfirmacion('@item.IdCompaniaSeguro')" data-url="@Url.Action("Delete", values: new { id = item.IdCompaniaSeguro })" data-titulo="Eliminar" data-descripcion="&#191;Desea eliminar la Compa&ntilde;&iacute;a de Seguro... ?">Eliminar</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+
+@section Scripts {
+    <script src='~/js/datatables/init.min.js'></script>
+}

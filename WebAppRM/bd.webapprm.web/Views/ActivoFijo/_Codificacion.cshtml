@@ -1,38 +1,15 @@
 @model bd.webapprm.entidades.RecepcionActivoFijoDetalle
 <input type="hidden" asp-for="ActivoFijo.CodigoActivoFijo.IdCodigoActivoFijo" />
-<input type="hidden" asp-for="ActivoFijo.CodigoActivoFijo.TAF" />
+<input type="hidden" asp-for="ActivoFijo.CodigoActivoFijo.SUBCAF" />
 <input type="hidden" asp-for="ActivoFijo.CodigoActivoFijo.CAF" />
+<input type="hidden" asp-for="ActivoFijo.CodigoActivoFijo.SUC" />
 <fieldset>
     <legend>Generaci&oacute;n y asignaci&oacute;n del C&oacute;digo &Uacute;nico</legend>
     <div class="row">
         <div class="alert alert-info alert-block" style="border-left-width:5px !important;">
             <h4 class="alert-heading">Informaci&oacute;n</h4>
-            El c&oacute;digo &uacute;nico de cada detalle de activo se generar&aacute; a partir de la Clase de Activo y Tipo de Activo al cual pertenece, adem&aacute;s de un consecutivo.
+            El c&oacute;digo &uacute;nico de cada detalle de activo se generar&aacute; a partir del Fondo y Sucursal, Clase de Activo y Subclase de Activo al cual pertenece, adem&aacute;s de un n&uacute;mero consecutivo.
         </div>
-    </div>
-
-    <div class="row" style="margin-top:10px;">
-        <section class="col col-4">
-            <label asp-for="RecepcionActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.Nombre"></label>
-        </section>
-
-        <section class="col col-8">
-            <label class="input">
-                <input class="form-control" asp-for="RecepcionActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.Nombre" disabled="disabled" style="background:#ededed !important;" />
-            </label>
-        </section>
-    </div>
-
-    <div class="row">
-        <section class="col col-4">
-            <label asp-for="RecepcionActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.Nombre"></label>
-        </section>
-
-        <section class="col col-8">
-            <label class="input">
-                <input class="form-control" asp-for="RecepcionActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.Nombre" disabled="disabled" style="background:#ededed !important;" />
-            </label>
-        </section>
     </div>
 
     <div class="row">
@@ -41,12 +18,15 @@
         </section>
 
         <section class="col col-8">
-            <div class="input-group spinner" data-trigger="spinner">
+            <div class="input-group spinner spinnerNumeroConsecutivo" data-trigger="spinner">
                 <input type="text" asp-for="ActivoFijo.CodigoActivoFijo.Consecutivo" class="form-control" data-rule="quantity" style="padding-left:10px !important;" />
                 <div class="input-group-addon" style="padding-left:23px !important;">
                     <a href="javascript:;" class="spin-up" data-spin="up"><i class="fa fa-caret-up"></i></a>
                     <a href="javascript:;" class="spin-down" data-spin="down"><i class="fa fa-caret-down"></i></a>
                 </div>
+            </div>
+            <div class="note">
+                <strong>C&oacute;digo Secuencial:</strong> <span id="spanCodigoSecuencial"></span><span id="spanNumeroConsecutivo"></span>
             </div>
             <span asp-validation-for="ActivoFijo.CodigoActivoFijo.Consecutivo" class="text-danger"></span>
         </section>
@@ -72,9 +52,8 @@
 
         <section class="col col-8">
             <label class="input">
-                <img id="barcode1" />
+                <img class="imgBarCode" id="barcode1" />
             </label>
         </section>
     </div>
 </fieldset>
-<script src="~/lib/JsBarcode-master/dist/JsBarcode.all.min.js"></script>

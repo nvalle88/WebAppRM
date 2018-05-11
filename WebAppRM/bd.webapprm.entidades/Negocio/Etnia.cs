@@ -16,7 +16,5 @@ namespace bd.webapprm.entidades
         //Propiedades Virtuales Referencias a otras clases
 
         public virtual ICollection<Persona> Persona { get; set; }
-
-        public virtual ICollection<NacionalidadIndigena> NacionalidadIndigena { get; set; }
     }
 }

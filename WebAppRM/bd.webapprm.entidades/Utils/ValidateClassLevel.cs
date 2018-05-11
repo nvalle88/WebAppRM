@@ -15,4 +15,15 @@ namespace bd.webapprm.entidades
             yield return ValidationResult.Success;
         }
     }
+
+    public partial class CompaniaSeguro : IValidatableObject
+    {
+        public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
+        {
+            var companiaSeguro = (CompaniaSeguro)validationContext.ObjectInstance;
+            if (companiaSeguro.FechaInicioVigencia > companiaSeguro.FechaFinVigencia)
+                yield return new ValidationResult($"La fecha de inicio de vigencia no puede ser mayor que la Fecha de fin de vigencia", new[] { "FechaInicioVigencia" });
+            yield return ValidationResult.Success;
+        }
+    }
 }

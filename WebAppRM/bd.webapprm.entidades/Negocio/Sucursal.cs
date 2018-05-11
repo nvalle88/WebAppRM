@@ -27,5 +27,7 @@ namespace bd.webapprm.entidades
         public virtual ICollection<LibroActivoFijo> LibroActivoFijo { get; set; }
 
         public virtual ICollection<MaestroArticuloSucursal> MaestroArticuloSucursal { get; set; }
+
+        public virtual ICollection<Bodega> Bodegas { get; set; }
     }
 }

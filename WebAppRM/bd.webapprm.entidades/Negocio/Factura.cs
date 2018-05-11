@@ -28,7 +28,6 @@ namespace bd.webapprm.entidades
         public virtual MaestroArticuloSucursal MaestroArticuloSucursal { get; set; }
 
         public virtual ICollection<DetalleFactura> DetalleFactura { get; set; }
-
-        public virtual ICollection<AltaActivoFijoDetalle> AltaActivosFijosDetalles { get; set; }
+        public virtual ICollection<AltaActivoFijo> AltaActivosFijos { get; set; }
     }
 }

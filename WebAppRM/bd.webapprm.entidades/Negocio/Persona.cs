@@ -63,13 +63,13 @@ namespace bd.webapprm.entidades
 
         //Propiedades Virtuales Referencias a otras clases
 
-        [Display(Name = "Sub clase de activo fijo:")]
+        [Display(Name = "Subclase de activo fijo:")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
         public int? IdSexo { get; set; }
         public virtual Sexo Sexo { get; set; }
 
         public int? IdNacionalidadIndigena { get; set; }
-        public virtual NacionalidadIndigena NacionalidadIndigena { get; set; }
+        //public virtual NacionalidadIndigena NacionalidadIndigena { get; set; }
 
         public int? IdParroquia { get; set; }
         public virtual Parroquia Parroquia { get; set; }
@@ -104,21 +104,21 @@ namespace bd.webapprm.entidades
         public virtual Nacionalidad Nacionalidad { get; set; }
         public int? IdNacionalidad { get; set; }
 
-        public virtual ICollection<PersonaEnfermedad> PersonaEnfermedad { get; set; }
+        //public virtual ICollection<PersonaEnfermedad> PersonaEnfermedad { get; set; }
 
-        public virtual ICollection<PersonaDiscapacidad> PersonaDiscapacidad { get; set; }
+        //public virtual ICollection<PersonaDiscapacidad> PersonaDiscapacidad { get; set; }
 
-        public virtual ICollection<PersonaCapacitacion> PersonaCapacitacion { get; set; }
+        //public virtual ICollection<PersonaCapacitacion> PersonaCapacitacion { get; set; }
 
-        public virtual ICollection<PersonaEstudio> PersonaEstudio { get; set; }
+        //public virtual ICollection<PersonaEstudio> PersonaEstudio { get; set; }
 
-        public virtual ICollection<TrayectoriaLaboral> TrayectoriaLaboral { get; set; }
+        //public virtual ICollection<TrayectoriaLaboral> TrayectoriaLaboral { get; set; }
 
         public virtual ICollection<Empleado> Empleado { get; set; }
 
-        public virtual ICollection<EmpleadoContactoEmergencia> EmpleadoContactoEmergencia { get; set; }
+        //public virtual ICollection<EmpleadoContactoEmergencia> EmpleadoContactoEmergencia { get; set; }
 
-        public virtual ICollection<EmpleadoFamiliar> EmpleadoFamiliar { get; set; }
+        //public virtual ICollection<EmpleadoFamiliar> EmpleadoFamiliar { get; set; }
 
     }
 }

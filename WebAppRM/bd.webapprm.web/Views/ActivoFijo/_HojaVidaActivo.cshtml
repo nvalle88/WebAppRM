@@ -1,156 +1,171 @@
-@model bd.webapprm.entidades.RecepcionActivoFijoDetalle
+@model bd.webapprm.entidades.ActivoFijo
 <style>
     .fc-border-separate thead tr, .table thead tr{font-size:14px !important;}
 </style>
 <fieldset>
-    <legend>Detalles de Activo Fijo</legend>
+    <legend>Clasificaci&oacute;n</legend>
     <table id="tbReporteHojaVidaActivo" class="table table-hover">
         <thead>
             <tr>
-                <th>Propiedad</th>
-                <th>Descripci&oacute;n</th>
+                <th style="width:50%">Propiedad</th>
+                <th style="width:50%">Descripci&oacute;n</th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td><a href="javascript:void(0);"><label asp-for="RecepcionActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.Nombre"></label></a></td>
-                <td>@Html.DisplayFor(m => m.RecepcionActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.Nombre)</td>
+                <td><a href="javascript:void(0);"><label asp-for="SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.Nombre"></label></a></td>
+                <td>@Html.DisplayFor(m => m.SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.Nombre)</td>
             </tr>
 
             <tr>
-                <td><a href="javascript:void(0);"><label asp-for="RecepcionActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.Nombre"></label></a></td>
-                <td>@Html.DisplayFor(m => m.RecepcionActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.Nombre)</td>
+                <td><a href="javascript:void(0);"><label asp-for="SubClaseActivoFijo.ClaseActivoFijo.Nombre"></label></a></td>
+                <td>@Html.DisplayFor(m => m.SubClaseActivoFijo.ClaseActivoFijo.Nombre)</td>
             </tr>
 
             <tr>
-                <td><a href="javascript:void(0);"><label asp-for="RecepcionActivoFijo.SubClaseActivoFijo.Nombre"></label></a></td>
-                <td>@Html.DisplayFor(m => m.RecepcionActivoFijo.SubClaseActivoFijo.Nombre)</td>
+                <td><a href="javascript:void(0);"><label asp-for="SubClaseActivoFijo.Nombre"></label></a></td>
+                <td>@Html.DisplayFor(m => m.SubClaseActivoFijo.Nombre)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <legend>Distribuci&oacute;n</legend>
+    <table class="table table-hover margin-top-25">
+        <thead>
+            <tr>
+                <th style="width:50%">Propiedad</th>
+                <th style="width:50%">Descripci&oacute;n</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><a href="javascript:void(0);"><label asp-for="RecepcionActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijo.FirstOrDefault().LibroActivoFijo.Sucursal.Ciudad.Provincia.Pais.Nombre"></label></a></td>
+                <td>@Html.DisplayFor(m => m.RecepcionActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijo.FirstOrDefault().LibroActivoFijo.Sucursal.Ciudad.Provincia.Pais.Nombre)</td>
             </tr>
 
             <tr>
-                <td><a href="javascript:void(0);"><label asp-for="RecepcionActivoFijo.MotivoRecepcion.Descripcion"></label></a></td>
-                <td>@Html.DisplayFor(m => m.RecepcionActivoFijo.MotivoRecepcion.Descripcion)</td>
+                <td><a href="javascript:void(0);"><label asp-for="RecepcionActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijo.FirstOrDefault().LibroActivoFijo.Sucursal.Ciudad.Provincia.Nombre"></label></a></td>
+                <td>@Html.DisplayFor(m => m.RecepcionActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijo.FirstOrDefault().LibroActivoFijo.Sucursal.Ciudad.Provincia.Nombre)</td>
             </tr>
 
             <tr>
-                <td><a href="javascript:void(0);"><label asp-for="RecepcionActivoFijo.Proveedor"></label></a></td>
-                <td>@{ await ViewContext.Writer.WriteAsync(String.Format("{0} {1}", Model.RecepcionActivoFijo.Proveedor.Nombre, Model.RecepcionActivoFijo.Proveedor.Apellidos)); }</td>
+                <td><a href="javascript:void(0);"><label asp-for="RecepcionActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijo.FirstOrDefault().LibroActivoFijo.Sucursal.Ciudad.Nombre"></label></a></td>
+                <td>@Html.DisplayFor(m => m.RecepcionActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijo.FirstOrDefault().LibroActivoFijo.Sucursal.Ciudad.Nombre)</td>
             </tr>
 
             <tr>
-                <td><a href="javascript:void(0);"><label asp-for="RecepcionActivoFijo.IdEmpleado"></label></a></td>
-                <td>@{ await ViewContext.Writer.WriteAsync(String.Format("{0} {1}", Model.RecepcionActivoFijo.Empleado.Persona.Nombres, Model.RecepcionActivoFijo.Empleado.Persona.Apellidos)); }</td>
+                <td><a href="javascript:void(0);"><label asp-for="RecepcionActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijo.FirstOrDefault().LibroActivoFijo.Sucursal.Nombre"></label></a></td>
+                <td>@Html.DisplayFor(m => m.RecepcionActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijo.FirstOrDefault().LibroActivoFijo.Sucursal.Nombre)</td>
             </tr>
 
             <tr>
-                <td><a href="javascript:void(0);"><label asp-for="ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.Pais.Nombre"></label></a></td>
-                <td>@Html.DisplayFor(m => m.ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.Pais.Nombre)</td>
+                <td><a href="javascript:void(0);"><label asp-for="RecepcionActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijo.FirstOrDefault().IdLibroActivoFijo"></label></a></td>
+                <td>@Html.DisplayFor(m => m.RecepcionActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijo.FirstOrDefault().IdLibroActivoFijo)</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <legend>Datos Generales</legend>
+    <table class="table table-hover margin-top-25">
+        <thead>
+            <tr>
+                <th style="width:50%">Propiedad</th>
+                <th style="width:50%">Descripci&oacute;n</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><a href="javascript:void(0);"><label asp-for="RecepcionActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijo.MotivoRecepcion.Descripcion"></label></a></td>
+                <td>@Html.DisplayFor(m => m.RecepcionActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijo.MotivoRecepcion.Descripcion)</td>
             </tr>
 
             <tr>
-                <td><a href="javascript:void(0);"><label asp-for="ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.Nombre"></label></a></td>
-                <td>@Html.DisplayFor(m => m.ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.Nombre)</td>
+                <td><a href="javascript:void(0);"><label asp-for="RecepcionActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijo.Proveedor"></label></a></td>
+                <td>@{ await ViewContext.Writer.WriteAsync(String.Format("{0} {1}", Model.RecepcionActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijo.Proveedor.Nombre, Model.RecepcionActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijo.Proveedor.Apellidos)); }</td>
             </tr>
 
             <tr>
-                <td><a href="javascript:void(0);"><label asp-for="ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Nombre"></label></a></td>
-                <td>@Html.DisplayFor(m => m.ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Nombre)</td>
+                <td><a href="javascript:void(0);"><label asp-for="RecepcionActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijo.FechaRecepcion"></label></a></td>
+                <td>@Html.DisplayFor(m => m.RecepcionActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijo.FechaRecepcion)</td>
             </tr>
 
             <tr>
-                <td><a href="javascript:void(0);"><label asp-for="ActivoFijo.LibroActivoFijo.Sucursal.Nombre"></label></a></td>
-                <td>@Html.DisplayFor(m => m.ActivoFijo.LibroActivoFijo.Sucursal.Nombre)</td>
+                <td><a href="javascript:void(0);"><label asp-for="RecepcionActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijo.Cantidad"></label></a></td>
+                <td>@Html.DisplayFor(m => m.RecepcionActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijo.Cantidad)</td>
             </tr>
 
             <tr>
-                <td><a href="javascript:void(0);"><label asp-for="ActivoFijo.IdLibroActivoFijo"></label></a></td>
-                <td>@Html.DisplayFor(m => m.ActivoFijo.LibroActivoFijo.IdLibroActivoFijo)</td>
+                <td><a href="javascript:void(0);"><label asp-for="Modelo.Marca.Nombre"></label></a></td>
+                <td>@Html.DisplayFor(m => m.Modelo.Marca.Nombre)</td>
             </tr>
 
             <tr>
-                <td><a href="javascript:void(0);"><label asp-for="RecepcionActivoFijo.FechaRecepcion"></label></a></td>
-                <td>@Html.DisplayFor(m => m.RecepcionActivoFijo.FechaRecepcion)</td>
+                <td><a href="javascript:void(0);"><label asp-for="Modelo.Nombre"></label></a></td>
+                <td>@Html.DisplayFor(m => m.Modelo.Nombre)</td>
             </tr>
 
             <tr>
-                <td><a href="javascript:void(0);"><label asp-for="RecepcionActivoFijo.Fondo"></label></a></td>
-                <td>@Html.DisplayFor(m => m.RecepcionActivoFijo.Fondo)</td>
+                <td><a href="javascript:void(0);"><label asp-for="IdUnidadMedida"></label></a></td>
+                <td>@Html.DisplayFor(m => m.UnidadMedida.Nombre)</td>
             </tr>
 
             <tr>
-                <td><a href="javascript:void(0);"><label asp-for="RecepcionActivoFijo.OrdenCompra"></label></a></td>
-                <td>@Html.DisplayFor(m => m.RecepcionActivoFijo.OrdenCompra)</td>
+                <td><a href="javascript:void(0);"><label asp-for="Nombre"></label></a></td>
+                <td>@Html.DisplayFor(m => m.Nombre)</td>
             </tr>
 
             <tr>
-                <td><a href="javascript:void(0);"><label asp-for="RecepcionActivoFijo.Cantidad"></label></a></td>
-                <td>@Html.DisplayFor(m => m.RecepcionActivoFijo.Cantidad)</td>
+                <td><a href="javascript:void(0);"><label asp-for="ValorCompra"></label></a></td>
+                <td>@Html.DisplayFor(m => m.ValorCompra)</td>
             </tr>
 
             <tr>
-                <td><a href="javascript:void(0);"><label asp-for="RecepcionActivoFijo.ValidacionTecnica"></label></a></td>
-                <td>@Html.DisplayFor(m => m.RecepcionActivoFijo.ValidacionTecnica)</td>
+                <td><a href="javascript:void(0);"><label asp-for="RecepcionActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijo.Fondo"></label></a></td>
+                <td>@Html.DisplayFor(m => m.RecepcionActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijo.Fondo)</td>
             </tr>
 
             <tr>
-                <td><a href="javascript:void(0);"><label asp-for="ActivoFijo.Modelo.Marca.Nombre"></label></a></td>
-                <td>@Html.DisplayFor(m => m.ActivoFijo.Modelo.Marca.Nombre)</td>
+                <td><a href="javascript:void(0);"><label asp-for="RecepcionActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijo.OrdenCompra"></label></a></td>
+                <td>@Html.DisplayFor(m => m.RecepcionActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijo.OrdenCompra)</td>
             </tr>
 
             <tr>
-                <td><a href="javascript:void(0);"><label asp-for="ActivoFijo.Modelo.Nombre"></label></a></td>
-                <td>@Html.DisplayFor(m => m.ActivoFijo.Modelo.Nombre)</td>
+                <td><a href="javascript:void(0);"><label asp-for="Depreciacion"></label></a></td>
+                <td>@Html.DisplayFor(m => m.Depreciacion)</td>
             </tr>
 
             <tr>
-                <td><a href="javascript:void(0);"><label asp-for="ActivoFijo.IdUnidadMedida"></label></a></td>
-                <td>@Html.DisplayFor(m => m.ActivoFijo.UnidadMedida.Nombre)</td>
+                <td><a href="javascript:void(0);"><label asp-for="RecepcionActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijo.ValidacionTecnica"></label></a></td>
+                <td>@Html.DisplayFor(m => m.RecepcionActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijo.ValidacionTecnica)</td>
             </tr>
+        </tbody>
+    </table>
 
+    <legend>Codificaci&oacute;n</legend>
+    <table class="table table-hover margin-top-25">
+        <thead>
             <tr>
-                <td><a href="javascript:void(0);"><label asp-for="ActivoFijo.Nombre"></label></a></td>
-                <td>@Html.DisplayFor(m => m.ActivoFijo.Nombre)</td>
+                <th style="width:50%">Propiedad</th>
+                <th style="width:50%">Descripci&oacute;n</th>
             </tr>
-
-            <tr>
-                <td><a href="javascript:void(0);"><label asp-for="ActivoFijo.Serie"></label></a></td>
-                <td>@Html.DisplayFor(m => m.ActivoFijo.Serie)</td>
-            </tr>
-
-            <tr>
-                <td><a href="javascript:void(0);"><label asp-for="ActivoFijo.Ubicacion"></label></a></td>
-                <td>@Html.DisplayFor(m => m.ActivoFijo.Ubicacion)</td>
-            </tr>
-
-            <tr>
-                <td><a href="javascript:void(0);"><label asp-for="ActivoFijo.ValorCompra"></label></a></td>
-                <td>@Html.DisplayFor(m => m.ActivoFijo.ValorCompra)</td>
-            </tr>
-
+        </thead>
+        <tbody>
             @{
-                if (Model.ActivoFijo.CodigoActivoFijo.Codigosecuencial != null)
+                if (Model.CodigoActivoFijo.Codigosecuencial != null)
                 {
                     <tr>
-                        <td><a href="javascript:void(0);"><label asp-for="ActivoFijo.CodigoActivoFijo.Codigosecuencial"></label></a></td>
-                        <td>@Html.DisplayFor(m => m.ActivoFijo.CodigoActivoFijo.Codigosecuencial)</td>
+                        <td><a href="javascript:void(0);"><label asp-for="CodigoActivoFijo.Codigosecuencial"></label></a></td>
+                        <td>@Html.DisplayFor(m => m.CodigoActivoFijo.Codigosecuencial)</td>
                     </tr>
                 }
 
-                if (Model.ActivoFijo.CodigoActivoFijo.CodigoBarras != null)
+                if (Model.CodigoActivoFijo.CodigoBarras != null)
                 {
                     <tr>
-                        <td><a href="javascript:void(0);"><label asp-for="ActivoFijo.CodigoActivoFijo.CodigoBarras"></label></a></td>
+                        <td><a href="javascript:void(0);"><label asp-for="CodigoActivoFijo.CodigoBarras"></label></a></td>
                         <td>
-                            <img id="barcode_@Model.ActivoFijo.CodigoActivoFijo.IdCodigoActivoFijo" />
-                            @{ 
-                                <script type="text/javascript">
-                                    setTimeout(function () {
-                                        var idElemento = "barcode_" + "@Model.ActivoFijo.CodigoActivoFijo.IdCodigoActivoFijo";
-                                        var valor = "@Model.ActivoFijo.CodigoActivoFijo.CodigoBarras";
-                                        Asignar_Codigo_Barras(idElemento, valor);
-                                    });
-                                </script>
-                            }
+                            <img class="imgBarCode" id="barcode_@Model.CodigoActivoFijo.IdCodigoActivoFijo" />
+                            <input type="hidden" asp-for="CodigoActivoFijo.CodigoBarras" />
                         </td>
                     </tr>
                 }

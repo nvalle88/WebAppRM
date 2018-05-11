@@ -25,19 +25,9 @@ namespace bd.webapprm.entidades
         public int IdSucursal { get; set; }
         public virtual Sucursal Sucursal { get; set; }
 
-        public virtual ICollection<ConfiguracionViatico> ConfiguracionViatico { get; set; }
-
         public virtual ICollection<Empleado> Empleado { get; set; }
 
-        public virtual ICollection<Evaluador> Evaluador { get; set; }
-
-        public virtual ICollection<DependenciaDocumento> DependenciaDocumento { get; set; }
-
-        public virtual ICollection<SituacionPropuesta> SituacionPropuesta { get; set; }
-
         public virtual ICollection<Dependencia> Dependencia1 { get; set; }
-
-        public virtual ICollection<ProcesoDetalle> ProcesoDetalle { get; set; }
 
         public virtual ICollection<IndiceOcupacional> IndiceOcupacional { get; set; }
 

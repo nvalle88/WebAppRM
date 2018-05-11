@@ -22,15 +22,18 @@ namespace bd.webapprm.entidades
         public string CodigoBarras { get; set; }
 
         [NotMapped]
-        [Display(Name = "Código Único:")]
-        [Remote("ValidarCodigoUnico", "ActivoFijo", AdditionalFields = "IdCodigoActivoFijo,TAF,CAF", ErrorMessage = "El {0} ya existe.", HttpMethod = "POST")]
+        [Display(Name = "Código secuencial:")]
+        [Remote("ValidarCodigoUnico", "ActivoFijo", AdditionalFields = "IdCodigoActivoFijo,SUBCAF,CAF,SUC", ErrorMessage = "El {0} ya existe.", HttpMethod = "POST")]
         public int Consecutivo { get; set; }
 
         [NotMapped]
-        public string TAF { get; set; }
+        public string CAF { get; set; }
 
         [NotMapped]
-        public string CAF { get; set; }
+        public string SUBCAF { get; set; }
+
+        [NotMapped]
+        public string SUC { get; set; }
 
         //Propiedades Virtuales Referencias a otras clases
         public virtual ICollection<ActivoFijo> ActivoFijo { get; set; }
