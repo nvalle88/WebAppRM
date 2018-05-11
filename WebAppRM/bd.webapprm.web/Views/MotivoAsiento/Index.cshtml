@@ -19,10 +19,10 @@
                                 <thead>
                                     <tr>
                                         <th>
-                                            Descripci&oacute;n
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().Descripcion)
                                         </th>
                                         <th>
-                                            Configuraci&oacute;n Contabilidad
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().IdConfiguracionContabilidad)
                                         </th>                                        
                                         <th>Opciones</th>
                                     </tr>
@@ -54,5 +54,5 @@
     </section>
 </div>
 @section Scripts {
-    <script src='~/js/datatables/init.js'></script>
+    <script src='~/js/datatables/init.min.js'></script>
 }

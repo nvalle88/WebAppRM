@@ -8,9 +8,9 @@ namespace bd.webapprm.entidades
         [Key]
         public int IdMarca { get; set; }
 
-        [Required(ErrorMessage = "Debe introducir {0}")]
+        [Required(ErrorMessage = "Debe introducir la {0}")]
         [Display(Name ="Marca:")]
-        [StringLength(50, MinimumLength = 2, ErrorMessage = "El {0} no puede tener menos de {2} y más de {1}")]
+        [StringLength(50, MinimumLength = 2, ErrorMessage = "La {0} no puede tener menos de {2} y más de {1}")]
         public string Nombre { get; set; }
 
         public virtual ICollection<Modelo> Modelo { get; set; }

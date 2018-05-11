@@ -14,9 +14,13 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\API\**" />
+    <Compile Remove="wwwroot\images\ActivoFijo\**" />
     <Content Remove="Controllers\API\**" />
+    <Content Remove="wwwroot\images\ActivoFijo\**" />
     <EmbeddedResource Remove="Controllers\API\**" />
+    <EmbeddedResource Remove="wwwroot\images\ActivoFijo\**" />
     <None Remove="Controllers\API\**" />
+    <None Remove="wwwroot\images\ActivoFijo\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -37,14 +41,12 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="1.1.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer.Design" Version="1.1.2" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="1.1.2" />
+    <PackageReference Include="Microsoft.jQuery.Unobtrusive.Ajax" Version="3.2.5" />
     <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="1.1.2" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="1.1.1" />
   </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.1" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="wwwroot\images\ActivoFijo\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\bd.sw.externos\bd.sw.externos.csproj" />

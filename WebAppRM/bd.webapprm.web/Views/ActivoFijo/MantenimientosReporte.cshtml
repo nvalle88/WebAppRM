@@ -45,25 +45,25 @@
                                     <thead>
                                         <tr>
                                             <th>
-                                                Activo Fijo
+                                                @Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.IdActivoFijo)
                                             </th>
                                             <th>
-                                                Fecha de Registro
+                                                @Html.DisplayNameFor(model => model.FirstOrDefault().FechaMantenimiento)
                                             </th>
                                             <th>
-                                                Fecha de Inicio
+                                                @Html.DisplayNameFor(model => model.FirstOrDefault().FechaDesde)
                                             </th>
                                             <th>
-                                                Fecha de Fin
+                                                @Html.DisplayNameFor(model => model.FirstOrDefault().FechaHasta)
                                             </th>
                                             <th>
-                                                Responsable
+                                                @Html.DisplayNameFor(model => model.FirstOrDefault().IdEmpleado)
                                             </th>
                                             <th>
-                                                Valor
+                                                @Html.DisplayNameFor(model => model.FirstOrDefault().Valor)
                                             </th>
                                             <th>
-                                                Observaciones
+                                                @Html.DisplayNameFor(model => model.FirstOrDefault().Observaciones)
                                             </th>
                                         </tr>
                                     </thead>
@@ -72,7 +72,7 @@
                                         {
                                             <tr>
                                                 <td>
-                                                    @Html.DisplayFor(modelItem => item.ActivoFijo.Nombre)
+                                                    @Html.DisplayFor(modelItem => item.RecepcionActivoFijoDetalle.ActivoFijo.Nombre)
                                                 </td>
                                                 <td>
                                                     @Html.DisplayFor(modelItem => item.FechaMantenimiento)
@@ -118,5 +118,5 @@
 
 @section Scripts{
     <script src="~/lib/TableTools-master/src/dataTables.tableTools.js"></script>
-    <script src="~/js/activoFijo/reporteMantenimientos.js"></script>
+    <script src="~/js/activoFijo/reporteMantenimientos.min.js"></script>
 }

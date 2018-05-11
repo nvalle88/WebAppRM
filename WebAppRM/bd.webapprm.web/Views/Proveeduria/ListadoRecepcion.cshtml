@@ -19,25 +19,25 @@
                                 <thead>
                                     <tr>
                                         <th>
-                                            Tipo Art&iacute;culo
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().Articulo.SubClaseArticulo.ClaseArticulo.IdTipoArticulo)
                                         </th>
                                         <th>
-                                            Clase Art&iacute;culo
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().Articulo.SubClaseArticulo.IdClaseArticulo)
                                         </th>
                                         <th>
-                                            Subclase Art&iacute;culo
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().Articulo.IdSubClaseArticulo)
                                         </th>
                                         <th>
-                                            Art&iacute;culo
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().IdArticulo)
                                         </th>
                                         <th>
-                                            Fecha
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().Fecha)
                                         </th>
                                         <th>
-                                            Cantidad
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().Cantidad)
                                         </th>
                                         <th>
-                                            Proveedor
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().IdProveedor)
                                         </th>
                                         <th>Opciones</th>
                                     </tr>
@@ -89,5 +89,5 @@
     </section>
 </div>
 @section Scripts {
-    <script src='~/js/datatables/init.js'></script>
+    <script src='~/js/datatables/init.min.js'></script>
 }

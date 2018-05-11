@@ -19,7 +19,7 @@
                                 <thead>
                                     <tr>
                                         <th>
-                                            Nombre
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().Nombre)
                                         </th>
                                         <th>Opciones</th>
                                     </tr>
@@ -48,5 +48,5 @@
     </section>
 </div>
 @section Scripts {
-    <script src='~/js/datatables/init.js'></script>
+    <script src='~/js/datatables/init.min.js'></script>
 }

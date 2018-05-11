@@ -2,7 +2,7 @@
 
 <div id="content">
     <p>
-        <a asp-action="Create" class="btn btn-success">Nuevo Sub Clase Artículo</a>
+        <a asp-action="Create" class="btn btn-success">Nuevo Subclase Artículo</a>
     </p>
     <section id="widget-grid" class="">
         <div class="row">
@@ -10,7 +10,7 @@
                 <div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
                     <header>
                         <span class="widget-icon"> <i class="fa fa-table"></i> </span>
-                        <h2>Sub Clase Artículos</h2>
+                        <h2>Subclase Artículos</h2>
                     </header>
                     <div>
                         <div class="jarviswidget-editbox"></div>
@@ -19,12 +19,11 @@
                                 <thead>
                                     <tr>
                                         <th>
-                                            Nombre
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().Nombre)
                                         </th>
                                         <th>
-                                            Clase Artículo
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().IdClaseArticulo)
                                         </th>
-                                        
                                         <th>Opciones</th>
                                     </tr>
                                 </thead>
@@ -42,7 +41,7 @@
                                             
                                             <td>
                                                 @Html.ActionLink("Editar", "Edit", new { id = item.IdSubClaseArticulo }) |
-                                                <a href="javascript:void(0);" id="@item.IdSubClaseArticulo" onclick="abrirVentanaConfirmacion('@item.IdSubClaseArticulo')" data-url="@Url.Action("Delete", values: new { id = item.IdSubClaseArticulo })" data-titulo="Eliminar" data-descripcion="&#191;Desea eliminar la Sub Clase Art&iacute;culo... ?">Eliminar</a>
+                                                <a href="javascript:void(0);" id="@item.IdSubClaseArticulo" onclick="abrirVentanaConfirmacion('@item.IdSubClaseArticulo')" data-url="@Url.Action("Delete", values: new { id = item.IdSubClaseArticulo })" data-titulo="Eliminar" data-descripcion="&#191;Desea eliminar la Subclase Art&iacute;culo... ?">Eliminar</a>
                                             </td>
                                         </tr>
                                     }
@@ -56,5 +55,5 @@
     </section>
 </div>
 @section Scripts {
-    <script src='~/js/datatables/init.js'></script>
+    <script src='~/js/datatables/init.min.js'></script>
 }

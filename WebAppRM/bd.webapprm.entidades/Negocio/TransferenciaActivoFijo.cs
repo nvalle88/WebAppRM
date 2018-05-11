@@ -1,6 +1,5 @@
 namespace bd.webapprm.entidades
 {
-    using bd.webapprm.entidades.Negocio;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -39,24 +38,25 @@ namespace bd.webapprm.entidades
         public int IdMotivoTransferencia { get; set; }
         public virtual MotivoTransferencia MotivoTransferencia { get; set; }
 
-        [Required(ErrorMessage = "Debe introducir {0}")]
+        [Required(ErrorMessage = "Debe introducir la {0}")]
         [Display(Name = "Fecha de transferencia:")]
         [DataType(DataType.DateTime)]
         [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy hh:mm}", ApplyFormatInEditMode = true)]
         public DateTime FechaTransferencia { get; set; }
 
-        [Display(Name = "Origen:")]
-        [StringLength(50, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
-        public string Origen { get; set; }
-
-        [Display(Name = "Destino:")]
-        [Required(ErrorMessage = "Debe introducir {0}")]
-        [StringLength(50, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
-        public string Destino { get; set; }
-
         [Display(Name = "Observaciones:")]
         public string Observaciones { get; set; }
 
-        public virtual ICollection<TransferenciaActivoFijoDetalle> TransferenciaActivoFijoDetalle { get; set; }
+        [Display(Name = "Ubicación de origen:")]
+        [Required(ErrorMessage = "Debe seleccionar la {0} ")]
+        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar la {0} ")]
+        public int IdUbicacionActivoFijoOrigen { get; set; }
+        public virtual UbicacionActivoFijo UbicacionActivoFijoOrigen { get; set; }
+
+        [Display(Name = "Ubicación de destino:")]
+        [Required(ErrorMessage = "Debe seleccionar la {0} ")]
+        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar la {0} ")]
+        public int IdUbicacionActivoFijoDestino { get; set; }
+        public virtual UbicacionActivoFijo UbicacionActivoFijoDestino { get; set; }
     }
 }

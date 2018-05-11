@@ -6,10 +6,13 @@
                 <a href="@Url.Action("Index", "Home")"><i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">Principal</span></a>
             </li>
             <li class="@Html.RouteIf("nomencladores", "active")">
-                <a href="#"><i class="fa fa-lg fa-fw fa-edit"></i> <span class="menu-item-parent">Nomencladores</span></a>
+                <a href="#"><i class="fa fa-lg fa-fw fa-edit"></i> <span class="menu-item-parent">Configuraci&oacute;n</span></a>
                 <ul>
                     <li class="@Html.RouteIf("Articulo", "active")">
                         <a href="@Url.Action("Index", "Articulo")">Art&iacute;culo</a>
+                    </li>
+                    <li class="@Html.RouteIf("Bodega", "active")">
+                        <a href="@Url.Action("Index", "Bodega")">Bodega</a>
                     </li>
                     <li class="@Html.RouteIf("CatalogoCuenta", "active")">
                         <a href="@Url.Action("Index", "CatalogoCuenta")">Cat&aacute;logo de Cuenta</a>
@@ -19,6 +22,9 @@
                     </li>
                     <li class="@Html.RouteIf("ClaseArticulo", "active")">
                         <a href="@Url.Action("Index", "ClaseArticulo")">Clase de Art&iacute;culo</a>
+                    </li>
+                    <li class="@Html.RouteIf("CompaniaSeguro", "active")">
+                        <a href="@Url.Action("Index", "CompaniaSeguro")">Compa&ntilde;&iacute;a de Seguro</a>
                     </li>
                     <li class="@Html.RouteIf("DetalleFactura", "active")">
                         <a href="@Url.Action("Index", "DetalleFactura")">Detalle de Factura</a>
@@ -41,8 +47,8 @@
                     <li class="@Html.RouteIf("MotivoAsiento", "active")">
                         <a href="@Url.Action("Index", "MotivoAsiento")">Motivo de Asiento</a>
                     </li>
-                    <li class="@Html.RouteIf("ActivoFijoMotivoBaja", "active")">
-                        <a href="@Url.Action("Index", "ActivoFijoMotivoBaja")">Motivo de Baja</a>
+                    <li class="@Html.RouteIf("MotivoBaja", "active")">
+                        <a href="@Url.Action("Index", "MotivoBaja")">Motivo de Baja</a>
                     </li>
                     <li class="@Html.RouteIf("MotivoRecepcion", "active")">
                         <a href="@Url.Action("Index", "MotivoRecepcion")">Motivo de Recepción</a>
@@ -53,11 +59,17 @@
                     <li class="@Html.RouteIf("Proveedor", "active")">
                         <a href="@Url.Action("Index", "Proveedor")">Proveedor</a>
                     </li>
+                    <li class="@Html.RouteIf("Ramo", "active")">
+                        <a href="@Url.Action("Index", "Ramo")">Ramo</a>
+                    </li>
                     <li class="@Html.RouteIf("SubClaseActivoFijo", "active")">
-                        <a href="@Url.Action("Index", "SubClaseActivoFijo")">Sub Clase de Activo Fijo</a>
+                        <a href="@Url.Action("Index", "SubClaseActivoFijo")">Subclase de Activo Fijo</a>
                     </li>
                     <li class="@Html.RouteIf("SubClaseArticulo", "active")">
-                        <a href="@Url.Action("Index", "SubClaseArticulo")">Sub Clase de Art&iacute;culo</a>
+                        <a href="@Url.Action("Index", "SubClaseArticulo")">Subclase de Art&iacute;culo</a>
+                    </li>
+                    <li class="@Html.RouteIf("Subramo", "active")">
+                        <a href="@Url.Action("Index", "Subramo")">Subramo</a>
                     </li>
                     <li class="@Html.RouteIf("TablaDepreciacion", "active")">
                         <a href="@Url.Action("Index", "TablaDepreciacion")">Tabla de Depreciaci&oacute;n</a>
@@ -80,13 +92,13 @@
                         <a href="#"><span class="menu-item-parent">Recepci&oacute;n</span></a>
                         <ul>
                             <li class="@Html.RouteIf("Recepcion", "active")">
-                                <a href="@Url.Action("Recepcion", "ActivoFijo")">Recepcionar Activo</a>
+                                <a href="@Url.Action("Recepcion", "ActivoFijo")">Recepcionar Activo Fijo</a>
                             </li>
                             <li class="@Html.RouteIf("ActivoValidacionTecnica", "active")">
-                                <a href="@Url.Action("ActivoValidacionTecnica", "ActivoFijo")">Activos que requieren Validaci&oacute;n T&eacute;cnica</a>
+                                <a href="@Url.Action("ActivoValidacionTecnica", "ActivoFijo")">Activos Fijos que requieren Validaci&oacute;n T&eacute;cnica</a>
                             </li>
-                            <li class="@Html.RouteIf("ActivosRecepcionados", "active")">
-                                <a href="@Url.Action("ActivosRecepcionados", "ActivoFijo")">Activos Recepcionados</a>
+                            <li class="@Html.RouteIf("ActivosFijosRecepcionados", "active")">
+                                <a href="@Url.Action("ActivosFijosRecepcionados", "ActivoFijo")">Activos Fijos Recepcionados</a>
                             </li>
                         </ul>
                     </li>
@@ -94,7 +106,7 @@
                         <a href="#"><span class="menu-item-parent">P&oacute;liza de Seguro</span></a>
                         <ul>
                             <li class="@Html.RouteIf("ActivosFijosRecepcionadosSinPoliza", "active")">
-                                <a href="@Url.Action("ActivosFijosRecepcionadosSinPoliza", "ActivoFijo")">Asignar P&oacute;liza</a>
+                                <a href="@Url.Action("ActivosFijosRecepcionadosSinPoliza", "ActivoFijo")">Asignar P&oacute;liza de Seguro</a>
                             </li>
                             <li class="@Html.RouteIf("ActivosFijosRecepcionadosConPoliza", "active")">
                                 <a href="@Url.Action("ActivosFijosRecepcionadosConPoliza", "ActivoFijo")">P&oacute;lizas Asignadas</a>

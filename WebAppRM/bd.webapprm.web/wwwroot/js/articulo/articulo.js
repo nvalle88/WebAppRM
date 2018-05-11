@@ -36,7 +36,7 @@ function partialViewTipoArticulo(idTipoArticulo) {
 }
 
 function partialViewClaseArticulo(idClaseArticulo) {
-    mostrarLoadingPanel("checkout-form", "Cargando sub clases de artículo...");
+    mostrarLoadingPanel("checkout-form", "Cargando subclases de artículo...");
     $.ajax({
         url: subClaseArticuloSelectResult,
         method: "POST",

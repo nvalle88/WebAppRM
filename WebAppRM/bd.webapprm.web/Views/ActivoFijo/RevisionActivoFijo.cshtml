@@ -1,4 +1,4 @@
-@model bd.webapprm.entidades.RecepcionActivoFijoDetalle
+@model bd.webapprm.entidades.ActivoFijo
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
@@ -15,8 +15,8 @@
                                 @{ await Html.RenderPartialAsync("_HojaVidaActivo", Model); }
 
                                 <footer>
-                                    @Html.ActionLink("Aprobar", "CodificacionActivoFijo", new { id = Model.IdRecepcionActivoFijoDetalle }, new { @class = "btn btn-primary" })
-                                    <a href="javascript:void(0);" id="btn_desaprobar" class="btn btn-danger" onclick="abrirVentanaConfirmacion('btn_desaprobar')" data-url="@Url.Action("DesaprobarActivoFijo", values: new { id = Model.IdRecepcionActivoFijoDetalle })" data-titulo="Emitir desaprobaci&oacute;n" data-descripcion="&#191;Desea desaprobar la recepci&oacute;n de este Activo Fijo?">Desaprobar</a>
+                                    <a href="javascript:void(0);" id="btn_aprobar" class="btn btn-primary" onclick="abrirVentanaConfirmacion('btn_aprobar')" data-url="@Url.Action("GestionarAprobacionActivoFijo", values: new { id = Model.IdActivoFijo, id2 = true })" data-titulo="Emitir aprobaci&oacute;n" data-descripcion="&#191;Desea aprobar la recepci&oacute;n de este Activo Fijo?">Aprobar</a>
+                                    <a href="javascript:void(0);" id="btn_desaprobar" class="btn btn-danger" onclick="abrirVentanaConfirmacion('btn_desaprobar')" data-url="@Url.Action("GestionarAprobacionActivoFijo", values: new { id = Model.IdActivoFijo, id2 = false })" data-titulo="Emitir desaprobaci&oacute;n" data-descripcion="&#191;Desea desaprobar la recepci&oacute;n de este Activo Fijo?">Desaprobar</a>
                                     <a asp-action="ActivoValidacionTecnica" class="btn btn-default">Cancelar</a>
                                 </footer>
                             </div>
@@ -29,5 +29,7 @@
 </div>
 
 @section Scripts {
-    <script src='~/js/datatables/init.js'></script>
+    <script src='~/js/datatables/init.min.js'></script>
+    <script src="~/lib/JsBarcode-master/dist/JsBarcode.all.min.js"></script>
+    <script src="~/js/activoFijo/revision.min.js"></script>
 }

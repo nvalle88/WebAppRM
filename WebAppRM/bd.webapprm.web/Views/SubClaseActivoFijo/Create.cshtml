@@ -3,7 +3,6 @@
 @section css{
     <link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
 }
-
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
@@ -11,7 +10,7 @@
                 <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
                     <header>
                         <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
-                        <h2>Sub Clases de Activo Fijo</h2>
+                        <h2>Subclases de Activo Fijo</h2>
                     </header>
                     <div>
                         <div class="jarviswidget-editbox"></div>
@@ -72,7 +71,7 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_Select2ScriptsPartial");}
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src='~/js/subClaseActivoFijo/subClaseActivoFijo.js'></script>
+    <script src='~/js/subClaseActivoFijo/subClaseActivoFijo.min.js'></script>
     <script>
         var claseActivoFijoSelectResult = "@Url.Action("ClaseActivoFijo_SelectResult")";
     </script>

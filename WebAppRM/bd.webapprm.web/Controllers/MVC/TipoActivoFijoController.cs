@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using bd.webapprm.servicios.Interfaces;
-using bd.webapprm.entidades.Negocio;
 using bd.webapprm.entidades.Utils;
 using bd.log.guardar.Servicios;
 using bd.log.guardar.ObjectTranfer;
