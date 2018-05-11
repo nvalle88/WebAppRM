@@ -19,14 +19,11 @@
                             <table id="dt_basic" class="table table-striped table-bordered table-hover" style="width:100%;">
                                 <thead>
                                     <tr>
-                                        <th class="hidden">
-                                            @Html.DisplayNameFor(model => model.FirstOrDefault().IdModelo)
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().Nombre)
                                         </th>
                                         <th>
-                                            Nombre del Modelo
-                                        </th>
-                                        <th>
-                                            Marca
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().IdMarca)
                                         </th>
                                         <th></th>
                                     </tr>
@@ -35,9 +32,6 @@
                                     @foreach (var item in Model)
                                     {
                                         <tr>
-                                            <td class="hidden">
-                                                @Html.DisplayFor(modelItem => item.IdModelo)
-                                            </td>
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.Nombre)
                                             </td>

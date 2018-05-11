@@ -13,6 +13,7 @@ namespace bd.webapprm.entidades.Utils
         public static string ErrorListado { get { return "Ha ocurrido un error al cargar el listado."; } }
         public static string Excepcion { get { return "Ha ocurrido una Excepción."; } }
         public static string ErrorCargarDatos { get { return "Ha ocurrido un error al cargar los datos."; } }
+        public static string ErrorUploadFiles { get { return "Ha ocurrido un error al subir la documentación adicional."; } }
         public static string ModeloInvalido { get { return "El Módelo es inválido"; } }
         public static string Informacion { get { return "Información"; } }
         public static string Error { get { return "Error"; } }

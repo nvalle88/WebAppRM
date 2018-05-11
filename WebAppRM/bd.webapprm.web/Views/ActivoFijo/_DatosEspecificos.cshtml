@@ -1,0 +1,174 @@
+@model List<RecepcionActivoFijoDetalle>
+@{ 
+    int idCategoria = ViewBag.IdCategoria;
+}
+<div class="row margin-top-25">
+    <section class="col col-4">
+        <label>Categor&iacute;a:</label>
+    </section>
+
+    <section class="col col-8">
+        <label class="input">
+            <select id="IdCategoria" name="IdCategoria" class="form-control" asp-items="ViewBag.Categoria"></select>
+        </label>
+    </section>
+</div>
+
+<div class="row">
+    <section class="col col-12 width100">
+        <table id="tbDatosEspecificos" class="table table-hover">
+        <thead>
+            <tr id="trHeadDatosEspecificos">
+                @{
+                    switch (idCategoria)
+                    {
+                        case 1:
+                            {
+                                <th id="tdDatosEspecificosNumeroClaveCatastral">@Html.DisplayNameFor(model => model.FirstOrDefault().NumeroClaveCatastral)</th>
+                                break;
+                            }
+                        case 2:
+                            {
+                                <th id="tdDatosEspecificosNumeroChasis">@Html.DisplayNameFor(model => model.FirstOrDefault().NumeroChasis)</th>
+                                <th id="tdDatosEspecificosNumeroMotor">@Html.DisplayNameFor(model => model.FirstOrDefault().NumeroMotor)</th>
+                                <th id="tdDatosEspecificosPlaca">@Html.DisplayNameFor(model => model.FirstOrDefault().Placa)</th>
+                                break;
+                            }
+                        default:
+                            {
+                                <th id="tdDatosEspecificosSerie">@Html.DisplayNameFor(model => model.FirstOrDefault().Serie)</th>
+                                break;
+                            }
+                    }
+                }
+                <th id="tdDatosEspecificosBodega">@Html.DisplayNameFor(model => model.FirstOrDefault().UbicacionActivoFijo.FirstOrDefault().IdBodega)</th>
+                <th id="tdDatosEspecificosEmpleado">@Html.DisplayNameFor(model => model.FirstOrDefault().UbicacionActivoFijo.FirstOrDefault().IdEmpleado)</th>
+                <th>Opciones</th>
+            </tr>
+        </thead>
+        <tbody id="tBodyDatosEspecificos">
+            @{
+                if (Model.Count > 0)
+                {
+                    for (int i = 0; i < Model.Count; i++)
+                    {
+                        <tr id="trDatosEspecificos_@i">
+                            @{ 
+                                switch (idCategoria)
+                                {
+                                    case 1:
+                                        {
+                                            <td id="tdNumeroClaveCatastral_@i">
+                                                <span id="spanNumeroClaveCatastral_@i">@{await ViewContext.Writer.WriteAsync(Model[i].NumeroClaveCatastral ?? "-");}</span>
+                                                <input type="hidden" id="hNumeroClaveCatastral_@i" name="hNumeroClaveCatastral_@i" value="@Model[i].NumeroClaveCatastral" />
+                                            </td>
+                                            break;
+                                        }
+                                    case 2:
+                                        {
+                                            <td id="tdNumeroChasis_@i">
+                                                <span id="spanNumeroChasis_@i">@{await ViewContext.Writer.WriteAsync(Model[i].NumeroChasis ?? "-");}</span>
+                                                <input type="hidden" id="hNumeroChasis_@i" name="hNumeroChasis_@i" value="@Model[i].NumeroChasis" />
+                                            </td>
+                                            <td id="tdNumeroMotor_@i">
+                                                <span id="spanNumeroMotor_@i">@{await ViewContext.Writer.WriteAsync(Model[i].NumeroMotor ?? "-");}</span>
+                                                <input type="hidden" id="hNumeroMotor_@i" name="hNumeroMotor_@i" value="@Model[i].NumeroMotor" />
+                                            </td>
+                                            <td id="tdPlaca_@i">
+                                                <span id="spanPlaca_@i">@{await ViewContext.Writer.WriteAsync(Model[i].Placa ?? "-");}</span>
+                                                <input type="hidden" id="hPlaca_@i" name="hPlaca_@i" value="@Model[i].Placa" />
+                                            </td>
+                                            break;
+                                        }
+                                    default:
+                                        { 
+                                            <td id="tdSerie_@i">
+                                                <span id="spanSerie_@i">@{await ViewContext.Writer.WriteAsync(Model[i].Serie ?? "-");}</span>
+                                                <input type="hidden" id="hSerie_@i" name="hSerie_@i" value="@Model[i].Serie" />
+                                            </td>
+                                            break;
+                                        }
+                                }
+                            }
+                            <td id="tdBodega_@i">
+                                <span id="spanBodega_@i">@{await ViewContext.Writer.WriteAsync(Model[i].UbicacionActivoFijo.FirstOrDefault().Bodega?.Nombre ?? "-");}</span>
+                                <input type="hidden" id="hBodega_@i" name="hBodega_@i" value="@Model[i].UbicacionActivoFijo.FirstOrDefault().IdBodega" />
+                            </td>
+                            <td id="tdEmpleado_@i">
+                                <span id="spanEmpleado_@i">@{await ViewContext.Writer.WriteAsync(Model[i].UbicacionActivoFijo.FirstOrDefault().Empleado != null ? $"{Model[i].UbicacionActivoFijo.FirstOrDefault().Empleado?.Persona?.Nombres} {Model[i].UbicacionActivoFijo.FirstOrDefault().Empleado?.Persona?.Apellidos}" : "-");}</span>
+                                <input type="hidden" id="hEmpleado_@i" name="hEmpleado_@i" value="@Model[i].UbicacionActivoFijo.FirstOrDefault().IdEmpleado" />
+                            </td>
+                            <td>
+                                <input type="hidden" id="hIdRecepcionActivoFijoDetalle_@i" name="hIdRecepcionActivoFijoDetalle_@i" value="@Model[i].IdRecepcionActivoFijoDetalle" />
+                                <input type="hidden" id="hUbicacion_@i" name="hUbicacion_@i" value="@Model[i].UbicacionActivoFijo.FirstOrDefault().IdUbicacionActivoFijo" />
+                                <a href="javascript:void(0);" onclick="cargarFormularioDatosEspecificos(@i)" class="btnEditarDatosEspecificos" data-idfila="@i" data-toggle="modal" data-target="#myModal">Editar</a>
+                                @{ 
+                                    if (Model.Count > 1)
+                                    {
+                                        <div id="divEliminarDatosEspecificos_@i" class="btnEliminarDatosEspecificos" style="display:inline;">
+                                            <span>| </span><a href="javascript:void(0);" id="btnEliminarDatosEspecifico_@i" onclick="abrirVentanaConfirmacionEliminar(@i)" data-titulo="Eliminar" data-descripcion="&#191;Desea eliminar el Dato Espec&iacute;fico... ?">Eliminar</a>
+                                        </div>
+                                    }
+                                }
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr id="trDatosEspecificos_0">
+                        <td id="tdSerie_0">
+                            <span id="spanSerie_0">-</span>
+                            <input type="hidden" id="hSerie_0" name="hSerie_0" />
+                        </td>
+                        <td id="tdBodega_0">
+                            <span id="spanBodega_0">-</span>
+                            <input type="hidden" id="hBodega_0" name="hBodega_0" />
+                        </td>
+                        <td id="tdEmpleado_0">
+                            <span id="spanEmpleado_0">-</span>
+                            <input type="hidden" id="hEmpleado_0" name="hEmpleado_0" />
+                        </td>
+                        <td>
+                            <input type="hidden" id="hIdRecepcionActivoFijoDetalle_0" name="hIdRecepcionActivoFijoDetalle_0" />
+                            <input type="hidden" id="hUbicacion_0" name="hUbicacion_0" />
+                            <a href="javascript:void(0);" onclick="cargarFormularioDatosEspecificos(0)" class="btnEditarDatosEspecificos" data-idfila="0" data-toggle="modal" data-target="#myModal">Editar</a>
+                            <div id="divEliminarDatosEspecificos_0" class="hide btnEliminarDatosEspecificos" style="display:inline;">
+                                <span>| </span><a href="javascript:void(0);" id="btnEliminarDatosEspecifico_0" onclick="abrirVentanaConfirmacionEliminar(0)" data-titulo="Eliminar" data-descripcion="&#191;Desea eliminar el Dato Espec&iacute;fico... ?">Eliminar</a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="margin-left:28% !important;margin-top:30px !important;">
+            <div class="modal-content" id="modalContentDatosEspecificos">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="padding:10px !important;">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalLabel" style="padding:12px !important;">Editar</h4>
+                    <input type="hidden" id="hIdFilaModalDatosEspecificos" />
+                    <input type="hidden" id="hIdRecepcionActivoFijoDetalle" />
+                    <input type="hidden" id="hIdUbicacionActivoFijo" />
+                </div>
+                <div class="modal-body" style="padding:15px !important;padding-top:10px !important;" id="modalBodyDatosEspecificos"></div>
+                <div class="modal-footer" style="padding:15px !important;">
+                    <button type="button" class="btn btn-default" id="btnCancelarDatosEspecificos" data-dismiss="modal" style="padding:7px !important;">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="btnGuardarDatosEspecificos" style="padding:7px !important;padding-left:15px !important;padding-right:15px !important;">Guardar</button>
+                </div>
+            </div>
+        </div>
+	</div>
+    </section>
+</div>
+<script>
+    var maxIdFila = "@{await ViewContext.Writer.WriteAsync(Model.Count == 0 ? "1" : Model.Count.ToString());}";
+    var headerNumeroChasis = "@Html.DisplayNameFor(model => model.FirstOrDefault().NumeroChasis)";
+    var headerNumeroMotor = "@Html.DisplayNameFor(model => model.FirstOrDefault().NumeroMotor)";
+    var headerPlaca = "@Html.DisplayNameFor(model => model.FirstOrDefault().Placa)";
+    var headerNumeroClaveCatastral = "@Html.DisplayNameFor(model => model.FirstOrDefault().NumeroClaveCatastral)";
+    var headerSerie = "@Html.DisplayNameFor(model => model.FirstOrDefault().Serie)";
+</script>

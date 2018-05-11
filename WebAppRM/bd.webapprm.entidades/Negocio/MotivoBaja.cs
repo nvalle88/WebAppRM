@@ -13,6 +13,6 @@ namespace bd.webapprm.entidades
         [StringLength(100, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
         public string Nombre { get; set; }
 
-        public virtual ICollection<BajaActivoFijoDetalle> BajaActivosFijosDetalles { get; set; }
+        public virtual ICollection<BajaActivoFijo> BajaActivosFijos { get; set; }
     }
 }

@@ -10,7 +10,7 @@ namespace bd.webapprm.entidades
         public int IdSubClaseActivoFijo { get; set; }
 
         [Required(ErrorMessage = "Debe introducir la {0}")]
-        [Display(Name = "Sub clase de activo fijo:")]
+        [Display(Name = "Subclase de activo fijo:")]
         [StringLength(20, MinimumLength = 2, ErrorMessage = "La {0} no puede tener más de {1} y menos de {2}")]
         public string Nombre { get; set; }
 
@@ -23,7 +23,5 @@ namespace bd.webapprm.entidades
         public virtual ClaseActivoFijo ClaseActivoFijo { get; set; }
 
         public virtual ICollection<ActivoFijo> ActivoFijo { get; set; }
-
-        public virtual ICollection<RecepcionActivoFijo> RecepcionActivoFijo { get; set; }
     }
 }

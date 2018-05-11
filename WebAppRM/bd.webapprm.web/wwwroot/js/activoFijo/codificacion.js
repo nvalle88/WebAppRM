@@ -11,7 +11,7 @@ function asignarCodigoBarras()
     try {
         var codigoBarras = document.getElementById("ActivoFijo_CodigoActivoFijo_CodigoBarras").value;
         if (codigoBarras != "") {
-            Asignar_Codigo_Barras("barcode1", codigoBarras);
+            Asignar_Codigo_Barras(codigoBarras);
             document.getElementById("barcode1").style.display = "";
         }
         else

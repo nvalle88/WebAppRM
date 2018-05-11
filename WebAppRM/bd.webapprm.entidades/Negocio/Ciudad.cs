@@ -24,13 +24,9 @@ namespace bd.webapprm.entidades
         public int IdProvincia { get; set; }
         public virtual Provincia Provincia { get; set; }
 
-        public virtual ICollection<ActivoFijo> ActivoFijo { get; set; }
-
         public virtual ICollection<Sucursal> Sucursal { get; set; }
 
         public virtual ICollection<Parroquia> Parroquia { get; set; }
-
-        public virtual ICollection<ItinerarioViatico> ItinerarioViatico { get; set; }
 
         public virtual ICollection<Empleado> Empleado { get; set; }
     }

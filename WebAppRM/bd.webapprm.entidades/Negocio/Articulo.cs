@@ -14,7 +14,7 @@ namespace bd.webapprm.entidades
 
         //Propiedades Virtuales Referencias a otras clases
 
-        [Display(Name = "Sub clase de artículo:")]
+        [Display(Name = "Subclase de artículo:")]
         [Required(ErrorMessage = "Debe seleccionar la {0} ")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar la {0}")]
         public int IdSubClaseArticulo { get; set; }

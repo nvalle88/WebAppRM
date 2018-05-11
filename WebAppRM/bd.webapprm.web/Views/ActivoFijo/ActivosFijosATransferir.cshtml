@@ -16,31 +16,31 @@
                                 <thead>
                                     <tr>
                                         <th>
-                                            Activo Fijo
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().IdActivoFijo)
                                         </th>
                                         <th>
-                                            Tipo
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.IdTipoActivoFijo)
                                         </th>
                                         <th>
-                                            Clase
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().ActivoFijo.SubClaseActivoFijo.IdClaseActivoFijo)
                                         </th>
                                         <th>
-                                            Pa&Iacute;s
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().UbicacionActivoFijo.FirstOrDefault().LibroActivoFijo.Sucursal.Ciudad.Provincia.IdPais)
                                         </th>
                                         <th>
-                                            Provincia
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().UbicacionActivoFijo.FirstOrDefault().LibroActivoFijo.Sucursal.Ciudad.IdProvincia)
                                         </th>
                                         <th>
-                                            Ciudad
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().UbicacionActivoFijo.FirstOrDefault().LibroActivoFijo.Sucursal.IdCiudad)
                                         </th>
                                         <th>
-                                            Sucursal
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().UbicacionActivoFijo.FirstOrDefault().LibroActivoFijo.IdSucursal)
                                         </th>
                                         <th>
-                                            Proveedor
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijo.IdProveedor)
                                         </th>
                                         <th>
-                                            Fecha de Registro
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijo.FechaRecepcion)
                                         </th>
                                         <th>
                                             Opciones
@@ -55,27 +55,27 @@
                                                 @Html.DisplayFor(modelItem => item.ActivoFijo.Nombre)
                                             </td>
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.RecepcionActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.Nombre)
+                                                @Html.DisplayFor(modelItem => item.ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.Nombre)
                                             </td>
 
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.RecepcionActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.Nombre)
+                                                @Html.DisplayFor(modelItem => item.ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.Nombre)
                                             </td>
 
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.Pais.Nombre)
+                                                @Html.DisplayFor(modelItem => item.UbicacionActivoFijo.FirstOrDefault().LibroActivoFijo.Sucursal.Ciudad.Provincia.Pais.Nombre)
                                             </td>
 
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.Nombre)
+                                                @Html.DisplayFor(modelItem => item.UbicacionActivoFijo.FirstOrDefault().LibroActivoFijo.Sucursal.Ciudad.Provincia.Nombre)
                                             </td>
 
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.ActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Nombre)
+                                                @Html.DisplayFor(modelItem => item.UbicacionActivoFijo.FirstOrDefault().LibroActivoFijo.Sucursal.Ciudad.Nombre)
                                             </td>
 
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.ActivoFijo.LibroActivoFijo.Sucursal.Nombre)
+                                                @Html.DisplayFor(modelItem => item.UbicacionActivoFijo.FirstOrDefault().LibroActivoFijo.Sucursal.Nombre)
                                             </td>
 
                                             <td>

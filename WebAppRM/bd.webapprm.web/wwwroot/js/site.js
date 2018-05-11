@@ -38,10 +38,8 @@ function Init_DatetimePicker(idElemento)
 function Init_FileInput(idElemento)
 {
     $("#" + idElemento).fileinput({
-        // showCaption: false,
         showUpload: false,
         language: 'es'
-        // showPreview: false
     });
 }
 
@@ -76,9 +74,9 @@ function mostrarNotificacion(titulo, texto)
     });
 }
 
-function Asignar_Codigo_Barras(idElemento, valor) {
+function Asignar_Codigo_Barras(valor) {
     try {
-        JsBarcode("#" + idElemento, valor, {
+        JsBarcode(".imgBarCode", valor, {
             format: "CODE128",
             displayValue: true,
             fontSize: 20
@@ -112,4 +110,15 @@ function initLoadingForm()
             $("#btn-guardar").html("<i class='fa fa-spinner fa-spin'></i> " + $("#btn-guardar").html());
         }
     });
+}
+
+function agregarCeros(valor, cantidadCeros)
+{
+    if (valor.length < cantidadCeros)
+    {
+        var longitud = cantidadCeros - valor.length;
+        for (var i = 0; i < longitud; i++)
+            valor = "0" + valor;
+    }
+    return valor;
 }

@@ -25,10 +25,10 @@ namespace bd.webapprm.entidades
         public decimal ValorResidual { get; set; }
 
         //Propiedades Virtuales Referencias a otras clases
-        [Display(Name = "Activo fijo:")]
+        [Display(Name = "Detalle de Recepción de Activo Fijo:")]
         [Required(ErrorMessage = "Debe seleccionar el {0}")]
-        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
-        public int IdActivoFijo { get; set; }
-        public virtual ActivoFijo ActivoFijo { get; set; }
+        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0}")]
+        public int IdRecepcionActivoFijoDetalle { get; set; }
+        public virtual RecepcionActivoFijoDetalle RecepcionActivoFijoDetalle { get; set; }
     }
 }

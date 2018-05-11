@@ -34,6 +34,8 @@ namespace bd.webapprm.web
         {
             // Add framework services.
             services.AddMvc(config => {
+                config.ModelBinderProviders.Insert(0, new InvariantDatetimeModelBinderProvider());
+                //config.ModelBinderProviders.Insert(1, new InvariantDecimalModelBinderProvider());
                 config.ModelBindingMessageProvider.ValueMustBeANumberAccessor = (value) => $"El valor del campo {value} es inválido.";
                 config.ModelBindingMessageProvider.ValueMustNotBeNullAccessor = value => $"Debe introducir el {value}";
             });
