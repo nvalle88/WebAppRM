@@ -11,7 +11,7 @@ namespace bd.webapprm.entidades
 
         [Required(ErrorMessage = "Debe introducir la {0}")]
         [Display(Name = "Subclase de artículo:")]
-        [StringLength(20, MinimumLength = 2, ErrorMessage = "La {0} no puede tener más de {1} y menos de {2}")]
+        [StringLength(200, MinimumLength = 2, ErrorMessage = "La {0} no puede tener más de {1} y menos de {2}")]
         public string Nombre { get; set; }
 
         //Propiedades Virtuales Referencias a otras clases

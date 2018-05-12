@@ -89,34 +89,6 @@
                                                         <legend>Distribuci&oacute;n</legend>
                                                         <div class="row margin-top-25">
                                                             <section class="col col-4">
-                                                                <label>@Html.LabelFor(c => ubicacionActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.Pais.Nombre)</label>
-                                                            </section>
-
-                                                            @{ await Html.RenderPartialAsync("_PaisSelect", new bd.webapprm.entidades.UbicacionActivoFijo()); }
-                                                        </div>
-
-                                                        <div class="row">
-                                                            <section class="col col-4">
-                                                                <label>@Html.LabelFor(c => ubicacionActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Provincia.Nombre)</label>
-                                                            </section>
-
-                                                            <div id="div_provincia">
-                                                                @{ await Html.RenderPartialAsync("_ProvinciaSelect", new bd.webapprm.entidades.UbicacionActivoFijo()); }
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="row">
-                                                            <section class="col col-4">
-                                                                <label>@Html.LabelFor(c => ubicacionActivoFijo.LibroActivoFijo.Sucursal.Ciudad.Nombre)</label>
-                                                            </section>
-
-                                                            <div id="div_ciudad">
-                                                                @{ await Html.RenderPartialAsync("_CiudadSelect", new bd.webapprm.entidades.UbicacionActivoFijo()); }
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="row">
-                                                            <section class="col col-4">
                                                                 <label>@Html.LabelFor(c => ubicacionActivoFijo.LibroActivoFijo.Sucursal.Nombre)</label>
                                                             </section>
 
@@ -158,6 +130,19 @@
                                                                 <label class="input">
                                                                     <select asp-for="RecepcionActivoFijo.IdProveedor" class="form-control" asp-items="ViewBag.Proveedor"></select>
                                                                     <span asp-validation-for="RecepcionActivoFijo.IdProveedor" class="text-danger"></span>
+                                                                </label>
+                                                            </section>
+                                                        </div>
+
+                                                        <div class="row">
+                                                            <section class="col col-4">
+                                                                <label asp-for="RecepcionActivoFijo.IdFondoFinanciamiento"></label>
+                                                            </section>
+
+                                                            <section class="col col-8">
+                                                                <label class="input">
+                                                                    <select asp-for="RecepcionActivoFijo.IdFondoFinanciamiento" class="form-control" asp-items="ViewBag.FondoFinanciamiento"></select>
+                                                                    <span asp-validation-for="RecepcionActivoFijo.IdFondoFinanciamiento" class="text-danger"></span>
                                                                 </label>
                                                             </section>
                                                         </div>
@@ -217,19 +202,6 @@
 
                                                         <div class="row">
                                                             <section class="col col-4">
-                                                                <label asp-for="ActivoFijo.IdUnidadMedida"></label>
-                                                            </section>
-
-                                                            <section class="col col-8">
-                                                                <label class="input">
-                                                                    <select asp-for="ActivoFijo.IdUnidadMedida" class="form-control" asp-items="ViewBag.UnidadMedida"></select>
-                                                                    <span asp-validation-for="ActivoFijo.IdUnidadMedida" class="text-danger"></span>
-                                                                </label>
-                                                            </section>
-                                                        </div>
-
-                                                        <div class="row">
-                                                            <section class="col col-4">
                                                                 <label asp-for="ActivoFijo.Nombre"></label>
                                                             </section>
 
@@ -250,19 +222,6 @@
                                                                 <label class="input">
                                                                     <input asp-for="ActivoFijo.ValorCompra" class="form-control touchspin_tasa" />
                                                                     <span asp-validation-for="ActivoFijo.ValorCompra" class="text-danger"></span>
-                                                                </label>
-                                                            </section>
-                                                        </div>
-
-                                                        <div class="row">
-                                                            <section class="col col-4">
-                                                                <label asp-for="RecepcionActivoFijo.Fondo"></label>
-                                                            </section>
-
-                                                            <section class="col col-8">
-                                                                <label class="input">
-                                                                    <textarea asp-for="RecepcionActivoFijo.Fondo" class="form-control paddingTextArea97"></textarea>
-                                                                    <span asp-validation-for="RecepcionActivoFijo.Fondo" class="text-danger"></span>
                                                                 </label>
                                                             </section>
                                                         </div>
@@ -320,20 +279,20 @@
                                                 <div class="step-pane" id="step3">
                                                     <div class="row margin-top-25">
                                                         <section class="col col-4">
-                                                            <label asp-for="ActivoFijo.Subramo.Ramo.Nombre"></label>
+                                                            <label asp-for="ActivoFijo.PolizaSeguroActivoFijo.Subramo.Ramo.Nombre"></label>
                                                         </section>
 
                                                         <section class="col col-8">
                                                             <label class="input">
-                                                                <select asp-for="ActivoFijo.Subramo.IdRamo" class="form-control" asp-items="ViewBag.Ramo"></select>
-                                                                <span asp-validation-for="ActivoFijo.Subramo.IdRamo" class="text-danger"></span>
+                                                                <select asp-for="ActivoFijo.PolizaSeguroActivoFijo.Subramo.IdRamo" class="form-control" asp-items="ViewBag.Ramo"></select>
+                                                                <span asp-validation-for="ActivoFijo.PolizaSeguroActivoFijo.Subramo.IdRamo" class="text-danger"></span>
                                                             </label>
                                                         </section>
                                                     </div>
 
                                                     <div class="row">
                                                         <section class="col col-4">
-                                                            <label asp-for="ActivoFijo.Subramo.Nombre"></label>
+                                                            <label asp-for="ActivoFijo.PolizaSeguroActivoFijo.Subramo.Nombre"></label>
                                                         </section>
 
                                                         <div id="div_subramo">
@@ -343,13 +302,13 @@
 
                                                     <div class="row">
                                                         <section class="col col-4">
-                                                            <label asp-for="ActivoFijo.CompaniaSeguro.Nombre"></label>
+                                                            <label asp-for="ActivoFijo.PolizaSeguroActivoFijo.CompaniaSeguro.Nombre"></label>
                                                         </section>
 
                                                         <section class="col col-8">
                                                             <label class="input">
-                                                                <select asp-for="ActivoFijo.IdCompaniaSeguro" class="form-control" asp-items="ViewBag.CompaniaSeguro"></select>
-                                                                <span asp-validation-for="ActivoFijo.IdCompaniaSeguro" class="text-danger"></span>
+                                                                <select asp-for="ActivoFijo.PolizaSeguroActivoFijo.IdCompaniaSeguro" class="form-control" asp-items="ViewBag.CompaniaSeguro"></select>
+                                                                <span asp-validation-for="ActivoFijo.PolizaSeguroActivoFijo.IdCompaniaSeguro" class="text-danger"></span>
                                                             </label>
                                                         </section>
                                                     </div>

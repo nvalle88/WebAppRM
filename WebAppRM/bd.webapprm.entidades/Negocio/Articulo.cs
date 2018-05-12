@@ -8,8 +8,9 @@ namespace bd.webapprm.entidades
         [Key]
         public int IdArticulo { get; set; }
 
-        [Required(ErrorMessage = "Debe introducir  {0}")]
-        [StringLength(50)]
+        [Display(Name = "Artículo:")]
+        [Required(ErrorMessage = "Debe introducir el {0}")]
+        [StringLength(200, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
         public string Nombre { get; set; }
 
         //Propiedades Virtuales Referencias a otras clases

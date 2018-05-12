@@ -7,9 +7,6 @@ $(document).ready(function () {
     eventoClaseActivoFijo();
     eventoMarca();
     eventoRamo();
-    eventoPais();
-    eventoProvincia();
-    eventoCiudad();
     eventoSucursal();
     gestionarWizard();
     Init_DatetimePicker("RecepcionActivoFijo_FechaRecepcion");
@@ -181,7 +178,7 @@ function eventoMarca()
 }
 
 function eventoRamo() {
-    $("#ActivoFijo_Subramo_IdRamo").on("change", function (e) {
+    $("#ActivoFijo_PolizaSeguroActivoFijo_Subramo_IdRamo").on("change", function (e) {
         mostrarLoadingPanel("checkout-form", "Cargando subramos...");
         $.ajax({
             url: urlSubramoSelectResult,
@@ -198,90 +195,9 @@ function eventoRamo() {
     });
 }
 
-function eventoPais() {
-    $("#LibroActivoFijo_Sucursal_Ciudad_Provincia_IdPais").on("change", function (e) {
-        partialViewProvincia(e.val);
-    });
-}
-
-function eventoProvincia()
-{
-    $("#LibroActivoFijo_Sucursal_Ciudad_IdProvincia").on("change", function (e) {
-        partialViewCiudad(e.val);
-    });
-}
-
-function eventoCiudad()
-{
-    $("#LibroActivoFijo_Sucursal_IdCiudad").on("change", function (e) {
-        partialViewSucursal(e.val);
-    });
-}
-
 function eventoSucursal() {
     $("#LibroActivoFijo_IdSucursal").on("change", function (e) {
         partialViewLibroActivoFijo(e.val);
-    });
-}
-
-function partialViewProvincia(idPais) {
-    mostrarLoadingPanel("checkout-form", "Cargando provincias...");
-    $.ajax({
-        url: provinciaSelectResult,
-        method: "POST",
-        data: { idPais: obtenerIdAjax(idPais) },
-        success: function (data) {
-            $("#div_provincia").html(data);
-            Init_Select2();
-        },
-        error: function (data) {
-            $("#checkout-form").waitMe("hide");
-        },
-        complete: function (data)
-        {
-            eventoProvincia();
-            partialViewCiudad($("#LibroActivoFijo_Sucursal_Ciudad_IdProvincia").val());
-        }
-    });
-}
-
-function partialViewCiudad(idProvincia) {
-    mostrarLoadingPanel("checkout-form", "Cargando ciudades...");
-    $.ajax({
-        url: ciudadSelectResult,
-        method: "POST",
-        data: { idProvincia: obtenerIdAjax(idProvincia) },
-        success: function (data) {
-            $("#div_ciudad").html(data);
-            Init_Select2();
-        },
-        error: function (data) {
-            $("#checkout-form").waitMe("hide");
-        },
-        complete: function (data) {
-            eventoCiudad();
-            partialViewSucursal($("#LibroActivoFijo_Sucursal_IdCiudad").val());
-        }
-    });
-}
-
-function partialViewSucursal(idCiudad) {
-    mostrarLoadingPanel("checkout-form", "Cargando sucursales...");
-    $.ajax({
-        url: sucursalSelectResult,
-        method: "POST",
-        data: { idCiudad: obtenerIdAjax(idCiudad) },
-        success: function (data) {
-            $("#div_sucursal").html(data);
-            Init_Select2();
-        },
-        error: function (data) {
-            $("#checkout-form").waitMe("hide");
-        },
-        complete: function (data) {
-            eventoSucursal();
-            partialViewLibroActivoFijo($("#LibroActivoFijo_IdSucursal").val());
-        }
     });
 }
 
@@ -296,6 +212,7 @@ function partialViewLibroActivoFijo(idSucursal) {
             Init_Select2();
         },
         complete: function (data) {
+            clearDatosEspecificosBodegaEmpleado();
             $("#checkout-form").waitMe("hide");
         }
     });
@@ -390,8 +307,9 @@ function crearFilas(cantidad)
         var tdBodega = "<td id='tdBodega_" + nuevoIdFila + "'>" + "<span id='spanBodega_" + nuevoIdFila + "'>-</span>" + "<input type='hidden' id='hBodega_" + nuevoIdFila + "'" + "name='hBodega_" + nuevoIdFila + "'" + "/></td>";
         var tdEmpleado = "<td id='tdEmpleado_" + nuevoIdFila + "'>" + "<span id='spanEmpleado_" + nuevoIdFila + "'>-</span>" + "<input type='hidden' id='hEmpleado_" + nuevoIdFila + "'" + "name='hEmpleado_" + nuevoIdFila + "'" + "/></td>";
         var btnEditarDatosEspecificos = "<td><input type='hidden' id='hIdRecepcionActivoFijoDetalle_" + nuevoIdFila + "' name='hIdRecepcionActivoFijoDetalle_" + nuevoIdFila + "' /><input type='hidden' id='hUbicacion_" + nuevoIdFila + "' name='hUbicacion_" + nuevoIdFila + "' /><a href='javascript: void(0);' onclick='cargarFormularioDatosEspecificos(" + nuevoIdFila + ")' class='btnEditarDatosEspecificos' data-idfila='" + nuevoIdFila + "' data-toggle='modal' data-target='#myModal'>" + "Editar</a>";
-        var btnEliminarDatosEspecificos = "<div id='divEliminarDatosEspecificos_" + nuevoIdFila + "' class='btnEliminarDatosEspecificos' style='display:inline;'><span>| </span><a href='javascript: void(0);' id='btnEliminarDatosEspecifico_" + nuevoIdFila + "' onclick='abrirVentanaConfirmacionEliminar(" + nuevoIdFila + ")' data-titulo='Eliminar' data-descripcion='&#191; Desea eliminar el Dato Espec&iacute; fico... ?'>Eliminar</a></div>";
-        $("#tBodyDatosEspecificos").append("<tr id='trDatosEspecificos_" + nuevoIdFila + "'>" + tdRecepcionActivoFijoDetalle + tdBodega + tdEmpleado + btnEditarDatosEspecificos + btnEliminarDatosEspecificos + "</td></tr>");
+        var btnComponentesDatosEspecificos = "<span> | </span><a href='javascript: void(0);' onclick='cargarFormularioComponentesDatosEspecificos(" + nuevoIdFila + ")' class='btnComponentesDatosEspecificos' data-idfila='" + nuevoIdFila + "' data-toggle='modal' data-target='#myModalComponente'>" + "Componentes</a>";
+        var btnEliminarDatosEspecificos = "<div id='divEliminarDatosEspecificos_" + nuevoIdFila + "' class='btnEliminarDatosEspecificos' style='display:inline;'><span>| </span><a href='javascript: void(0);' id='btnEliminarDatosEspecifico_" + nuevoIdFila + "' onclick=abrirVentanaConfirmacion('btnEliminarDatosEspecifico_" + nuevoIdFila + "') data-titulo='Eliminar' data-descripcion='&#191; Desea eliminar el Dato Espec&iacute; fico... ?'>Eliminar</a></div>";
+        $("#tBodyDatosEspecificos").append("<tr id='trDatosEspecificos_" + nuevoIdFila + "'>" + tdRecepcionActivoFijoDetalle + tdBodega + tdEmpleado + btnEditarDatosEspecificos + btnComponentesDatosEspecificos + btnEliminarDatosEspecificos + "</td></tr>");
         arrIdsfilas.push(nuevoIdFila);
     }
 }
@@ -686,6 +604,14 @@ function eventoGuardarDatosEspecificos()
     });
 }
 
+function clearDatosEspecificosBodegaEmpleado()
+{
+    for (var i = 0; i < arrIdsfilas.length; i++) {
+        putDatoBodegaEmpleadoFila(arrIdsfilas[i], "Bodega", "-", "");
+        putDatoBodegaEmpleadoFila(arrIdsfilas[i], "Empleado", "-", "");
+    }
+}
+
 function putDatoBodegaEmpleadoFila(idFila, selector, datoSpan, datoHiddeh)
 {
     $("#span" + selector + "_" + idFila).html(datoSpan);
@@ -750,23 +676,15 @@ function validarDatosEspecificosExisten(objData)
     return true;
 }
 
-function abrirVentanaConfirmacionEliminar(id) {
-    var btn_eliminar = $("#btnEliminarDatosEspecifico_" + id);
-    $.SmartMessageBox({
-        title: btn_eliminar.data("titulo"),
-        content: btn_eliminar.data("descripcion"),
-        buttons: '[No][Si]'
-    }, function (ButtonPressed) {
-        if (ButtonPressed === "Si") {
-            var posFila = obtenerPosIdFila(id);
-            $("#trDatosEspecificos_" + arrIdsfilas[posFila]).remove();
-            arrIdsfilas.splice(posFila, 1);
-            $("#RecepcionActivoFijo_Cantidad").val(arrIdsfilas.length);
+function callBackFunctionEliminar(id)
+{
+    var idFila = id.split("_")[1];
+    var posFila = obtenerPosIdFila(idFila);
+    $("#trDatosEspecificos_" + arrIdsfilas[posFila]).remove();
+    arrIdsfilas.splice(posFila, 1);
+    $("#RecepcionActivoFijo_Cantidad").val(arrIdsfilas.length);
 
-            console.log(arrIdsfilas);
-            if (arrIdsfilas.length == 1) {
-                $("#divEliminarDatosEspecificos_" + arrIdsfilas[0]).addClass("hide");
-            }
-        }
-    });
+    if (arrIdsfilas.length == 1) {
+        $("#divEliminarDatosEspecificos_" + arrIdsfilas[0]).addClass("hide");
+    }
 }

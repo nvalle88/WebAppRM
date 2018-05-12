@@ -106,17 +106,3 @@
         }
     });
 });
-
-function abrirVentanaConfirmacion(id)
-{
-    var btn_eliminar = $("#" + id);
-    $.SmartMessageBox({
-        title: btn_eliminar.data("titulo"),
-        content: btn_eliminar.data("descripcion"),
-        buttons: '[No][Si]'
-    }, function (ButtonPressed) {
-        if (ButtonPressed === "Si") {
-            window.location.href = btn_eliminar.data("url");
-        }
-    });
-}

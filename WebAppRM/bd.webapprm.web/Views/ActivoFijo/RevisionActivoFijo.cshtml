@@ -17,7 +17,7 @@
                                 <footer>
                                     <a href="javascript:void(0);" id="btn_aprobar" class="btn btn-primary" onclick="abrirVentanaConfirmacion('btn_aprobar')" data-url="@Url.Action("GestionarAprobacionActivoFijo", values: new { id = Model.IdActivoFijo, id2 = true })" data-titulo="Emitir aprobaci&oacute;n" data-descripcion="&#191;Desea aprobar la recepci&oacute;n de este Activo Fijo?">Aprobar</a>
                                     <a href="javascript:void(0);" id="btn_desaprobar" class="btn btn-danger" onclick="abrirVentanaConfirmacion('btn_desaprobar')" data-url="@Url.Action("GestionarAprobacionActivoFijo", values: new { id = Model.IdActivoFijo, id2 = false })" data-titulo="Emitir desaprobaci&oacute;n" data-descripcion="&#191;Desea desaprobar la recepci&oacute;n de este Activo Fijo?">Desaprobar</a>
-                                    <a asp-action="ActivoValidacionTecnica" class="btn btn-default">Cancelar</a>
+                                    <a asp-action="ActivosFijosValidacionTecnica" class="btn btn-default">Cancelar</a>
                                 </footer>
                             </div>
                         </div>

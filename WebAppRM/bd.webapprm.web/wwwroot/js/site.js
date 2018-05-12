@@ -122,3 +122,79 @@ function agregarCeros(valor, cantidadCeros)
     }
     return valor;
 }
+
+function abrirVentanaConfirmacion(id) {
+    var btn_eliminar = $("#" + id);
+    $.SmartMessageBox({
+        title: btn_eliminar.data("titulo"),
+        content: btn_eliminar.data("descripcion"),
+        buttons: '[No][Si]'
+    }, function (ButtonPressed) {
+        if (ButtonPressed === "Si") {
+            var dataUrl = btn_eliminar.data("url");
+            if (dataUrl != null && dataUrl != "")
+                window.location.href = btn_eliminar.data("url");
+            else {
+                try {
+                    callBackFunctionEliminar(id);
+                } catch (e) { }
+            }
+        }
+    });
+}
+
+function initDataTableFiltrado(idTabla, arrColumnHidden)
+{
+    var responsiveHelper_datatable_fixed_column = undefined;
+
+    var breakpointDefinition = {
+        tablet: 1024,
+        phone: 480
+    };
+
+    var otable = $('#' + idTabla).DataTable({
+        "columnDefs": [
+            { "visible": false, "targets": arrColumnHidden }
+        ],
+        "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-6 hidden-xs'l'C>r>" +
+        "t" +
+        "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-sm-6 col-xs-12'p>>",
+        "autoWidth": true,
+        "preDrawCallback": function () {
+            if (!responsiveHelper_datatable_fixed_column)
+                responsiveHelper_datatable_fixed_column = new ResponsiveDatatablesHelper($('#' + idTabla), breakpointDefinition);
+        },
+        "rowCallback": function (nRow) {
+            responsiveHelper_datatable_fixed_column.createExpandIcon(nRow);
+        },
+        "drawCallback": function (oSettings) {
+            responsiveHelper_datatable_fixed_column.respond();
+        }
+    });
+    
+    $("#" + idTabla + " thead th input[type=text]").on('keyup change', function () {
+        otable.column($(this).parent().index() + ':visible').search(this.value).draw();
+    });
+
+    for (var i = 0; i < arrColumnHidden.length; i++) {
+        otable.column(arrColumnHidden[i]).visible(false);
+    }
+}
+
+function abrirVentanaDetallesActivoFijo(id)
+{
+    mostrarLoadingPanel("modalContentTableActivosFijos", "Cargando detalles de activo fijo...");
+    var btn_detalles = $("#btnDetallesActivoFijo_" + id);
+    var arrIdsRecepcionActivoFijoDetalle = btn_detalles.data("ids").toString().split(",");
+    $.ajax({
+        url: btn_detalles.data("url"),
+        method: "POST",
+        data: { idsRecepcionActivoFijoDetalle: arrIdsRecepcionActivoFijoDetalle },
+        success: function (data) {
+            $("#modalBodyTableActivosFijos").html(data);
+        },
+        complete: function (data) {
+            $("#modalContentTableActivosFijos").waitMe("hide");
+        }
+    });
+}

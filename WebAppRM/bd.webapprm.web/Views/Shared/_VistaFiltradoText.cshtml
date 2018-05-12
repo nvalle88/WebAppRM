@@ -1,0 +1,46 @@
+@model int
+@{ 
+    var listaCustomFilter = ViewBag.ListadoCustomFilter as List<PropiedadValor> ?? new List<PropiedadValor>();
+}
+<tr>
+    @{
+        for (int i = 0; i < Model; i++)
+        {
+            if (i == (Model - 1))
+            {
+                <th class="hasinput"></th>
+            }
+            else
+            {
+                if (listaCustomFilter.Count > 0 && listaCustomFilter.Any(c => c.Propiedad == i.ToString()))
+                {
+                    string valor = listaCustomFilter.FirstOrDefault(c => c.Propiedad == i.ToString()).Valor;
+                    switch (valor)
+                    {
+                        case "Fecha":
+                            {
+                                <th class="hasinput icon-addon">
+                                    <input id="dateselect_filter_@i" type="text" placeholder="Filtrar..." class="form-control datepicker" data-dateformat="dd-mm-yy">
+                                    <label for="dateselect_filter_@i" class="glyphicon glyphicon-calendar no-margin padding-top-15" rel="tooltip" title="" data-original-title="Filtrar por fecha..."></label>
+                                </th>
+                                break;
+                            }
+                        default:
+                            {
+                                <th class="hasinput">
+                                    <input type="text" class="form-control" placeholder="Filtrar..." />
+                                </th>
+                                break;
+                            }
+                    }
+                }
+                else
+                {
+                    <th class="hasinput">
+                        <input type="text" class="form-control" placeholder="Filtrar..." />
+                    </th>
+                }
+            }
+        }
+    }
+</tr>

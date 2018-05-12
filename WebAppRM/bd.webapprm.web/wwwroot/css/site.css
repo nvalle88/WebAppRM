@@ -127,3 +127,7 @@ tr.group:hover {
 .width100 {
     width:100% !important;
 }
+
+ul.ColVis_collection {
+    min-width: 230px !important;
+}

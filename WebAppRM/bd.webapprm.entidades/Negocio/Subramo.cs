@@ -9,7 +9,7 @@ namespace bd.webapprm.entidades
     {
         public Subramo()
         {
-            ActivosFijos = new HashSet<ActivoFijo>();
+            PolizasSeguroActivoFijo = new HashSet<PolizaSeguroActivoFijo>();
         }
 
         [Key]
@@ -23,9 +23,9 @@ namespace bd.webapprm.entidades
 
         [Required(ErrorMessage = "Debe introducir el {0}")]
         [Display(Name = "Subramo:")]
-        [StringLength(100, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
+        [StringLength(200, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
         public string Nombre { get; set; }
 
-        public virtual ICollection<ActivoFijo> ActivosFijos { get; set; }
+        public virtual ICollection<PolizaSeguroActivoFijo> PolizasSeguroActivoFijo { get; set; }
     }
 }
