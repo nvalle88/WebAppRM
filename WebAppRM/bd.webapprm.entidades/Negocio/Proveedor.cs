@@ -6,17 +6,24 @@ namespace bd.webapprm.entidades
      
     public partial class Proveedor
     {
+        public Proveedor()
+        {
+            Factura = new HashSet<Factura>();
+            RecepcionActivoFijo = new HashSet<RecepcionActivoFijo>();
+            RecepcionArticulos = new HashSet<RecepcionArticulos>();
+        }
+
         [Key]
         public int IdProveedor { get; set; }
 
         [Required(ErrorMessage = "Debe introducir el {0}")]
         [Display(Name = "Nombre:")]
-        [StringLength(20, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
+        [StringLength(200, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
         public string Nombre { get; set; }
 
         [Required(ErrorMessage = "Debe introducir los {0}")]
         [Display(Name = "Apellidos:")]
-        [StringLength(20, MinimumLength = 2, ErrorMessage = "Los {0} no pueden tener más de {1} y menos de {2}")]
+        [StringLength(200, MinimumLength = 2, ErrorMessage = "Los {0} no pueden tener más de {1} y menos de {2}")]
         public string Apellidos { get; set; }
 
         [Required(ErrorMessage = "Debe introducir la {0}")]
@@ -27,8 +34,47 @@ namespace bd.webapprm.entidades
 
         [Required(ErrorMessage = "Debe introducir la {0}")]
         [Display(Name = "Dirección:")]
-        [StringLength(20, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
+        [StringLength(200, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
         public string Direccion { get; set; }
+
+        [Required(ErrorMessage = "Debe introducir el {0}")]
+        [Display(Name = "Código:")]
+        [StringLength(200, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
+        public string Codigo { get; set; }
+
+        [Display(Name = "Línea de servicio:")]
+        [StringLength(200, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
+        public string LineaServicio { get; set; }
+
+        [Required(ErrorMessage = "Debe introducir la {0}")]
+        [Display(Name = "Razón social:")]
+        [StringLength(200, MinimumLength = 2, ErrorMessage = "La {0} no puede tener más de {1} y menos de {2}")]
+        public string RazonSocial { get; set; }
+
+        [Display(Name = "Teléfono:")]
+        [StringLength(200, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
+        public string Telefono { get; set; }
+
+        [Display(Name = "Correo electrónico:")]
+        [StringLength(200, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
+        [EmailAddress(ErrorMessage = "El {0} es inválido")]
+        public string Email { get; set; }
+
+        [Display(Name = "Cargo:")]
+        [StringLength(200, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
+        public string Cargo { get; set; }
+
+        [Display(Name = "Observaciones:")]
+        [StringLength(200, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
+        public string Observaciones { get; set; }
+
+        [Display(Name = "Emisión:")]
+        [StringLength(200, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
+        public string Emision { get; set; }
+
+        [Required(ErrorMessage = "Debe introducir el {0}")]
+        [Display(Name = "¿Activo?")]
+        public bool Activo { get; set; }
 
         //Propiedades Virtuales Referencias a otras clases
 

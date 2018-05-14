@@ -19,12 +19,12 @@
 
     <div id="divDatosEspecificosBodega" class="row margin-top-10 @{await ViewContext.Writer.WriteAsync(idTipoUbicacion == 1 ? "" : "hide");}">
         <section class="col col-4">
-            <label asp-for="UbicacionActivoFijo.FirstOrDefault().IdBodega"></label>
+            <label>@Html.DisplayNameFor(model => model.UbicacionActivoFijo.FirstOrDefault().IdBodega)</label>
         </section>
 
         <section class="col col-8">
             <label class="input">
-                <select asp-for="UbicacionActivoFijo.FirstOrDefault().IdBodega" class="form-control" asp-items="ViewBag.Bodega"></select>
+                <select id="IdBodega" class="form-control" asp-items="ViewBag.Bodega"></select>
                 <span id="valIdBodega" class="text-danger validationDatosEspecificos"></span>
             </label>
             <div class="inline-group margin-top-10">
@@ -38,12 +38,12 @@
 
     <div id="divDatosEspecificosEmpleado" class="row margin-top-10 @{await ViewContext.Writer.WriteAsync(idTipoUbicacion == 2 ? "" : "hide");}">
         <section class="col col-4">
-            <label asp-for="UbicacionActivoFijo.FirstOrDefault().IdEmpleado"></label>
+            <label>@Html.DisplayNameFor(model => model.UbicacionActivoFijo.FirstOrDefault().IdEmpleado)</label>
         </section>
 
         <section class="col col-8">
             <label class="input">
-                <select asp-for="UbicacionActivoFijo.FirstOrDefault().IdEmpleado" class="form-control" asp-items="ViewBag.Empleado"></select>
+                <select id="IdEmpleado" class="form-control" asp-items="ViewBag.Empleado"></select>
                 <span id="valIdEmpleado" class="text-danger validationDatosEspecificos"></span>
             </label>
             <div class="inline-group margin-top-10">

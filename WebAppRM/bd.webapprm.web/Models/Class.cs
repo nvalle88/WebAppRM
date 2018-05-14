@@ -37,7 +37,7 @@ namespace bd.webapprm.web.Models
                     Usuario=NombreUsuario,
                 };
 
-               var respuesta=  apiServicio.ObtenerElementoAsync1<Response>(permiso, new Uri(WebApp.BaseAddressSeguridad), "/api/Adscpassws/TienePermiso");
+               var respuesta=  apiServicio.ObtenerElementoAsync<Response>(permiso, new Uri(WebApp.BaseAddressSeguridad), "/api/Adscpassws/TienePermiso");
 
                 //respuesta.Result.IsSuccess = true;
                 if (respuesta.Result.IsSuccess)

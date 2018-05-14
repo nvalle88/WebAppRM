@@ -18,7 +18,7 @@ namespace bd.webapprm.entidades
         public DateTime FechaBaja { get; set; }
 
         [Display(Name = "Número de memo, oficio o resolución:")]
-        [StringLength(50, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
+        [StringLength(200, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
         public string MemoOficioResolucion { get; set; }
 
         //Propiedades Virtuales Referencias a otras clases

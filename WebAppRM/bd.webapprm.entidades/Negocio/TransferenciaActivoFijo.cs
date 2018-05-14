@@ -58,5 +58,17 @@ namespace bd.webapprm.entidades
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar la {0} ")]
         public int IdUbicacionActivoFijoDestino { get; set; }
         public virtual UbicacionActivoFijo UbicacionActivoFijoDestino { get; set; }
+
+        [Display(Name = "Código de Activo fijo:")]
+        [Required(ErrorMessage = "Debe seleccionar el {0} ")]
+        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
+        public int IdCodigoActivoFijo { get; set; }
+        public virtual CodigoActivoFijo CodigoActivoFijo { get; set; }
+
+        [Display(Name = "Estado:")]
+        [Required(ErrorMessage = "Debe seleccionar el {0} ")]
+        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
+        public int IdEstado { get; set; }
+        public virtual Estado Estado { get; set; }
     }
 }

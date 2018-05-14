@@ -35,9 +35,9 @@
                     <li class="@Html.RouteIf("FondoFinanciamiento", "active")">
                         <a href="@Url.Action("Index", "FondoFinanciamiento")">Fondo de Financiamiento</a>
                     </li>
-                    <li class="@Html.RouteIf("Genero", "active")">
+                    @*<li class="@Html.RouteIf("Genero", "active")">
                         <a href="@Url.Action("Index", "Genero")">G&eacute;nero</a>
-                    </li>
+                    </li>*@
                     <li class="@Html.RouteIf("Marca", "active")">
                         <a href="@Url.Action("Index", "Marca")">Marca</a>
                     </li>
@@ -71,9 +71,9 @@
                     <li class="@Html.RouteIf("Subramo", "active")">
                         <a href="@Url.Action("Index", "Subramo")">Subramo</a>
                     </li>
-                    <li class="@Html.RouteIf("TablaDepreciacion", "active")">
+                    @*<li class="@Html.RouteIf("TablaDepreciacion", "active")">
                         <a href="@Url.Action("Index", "TablaDepreciacion")">Tabla de Depreciaci&oacute;n</a>
-                    </li>
+                    </li>*@
                     <li class="@Html.RouteIf("TipoActivoFijo", "active")">
                         <a href="@Url.Action("Index", "TipoActivoFijo")">Tipo de Activo Fijo</a>
                     </li>
@@ -94,8 +94,8 @@
                             <li class="@Html.RouteIf("Recepcion", "active")">
                                 <a href="@Url.Action("Recepcion", "ActivoFijo")">Recepcionar Activo Fijo</a>
                             </li>
-                            <li class="@Html.RouteIf("ActivoValidacionTecnica", "active")">
-                                <a href="@Url.Action("ActivoValidacionTecnica", "ActivoFijo")">Activos Fijos que requieren Validaci&oacute;n T&eacute;cnica</a>
+                            <li class="@Html.RouteIf("ActivosFijosValidacionTecnica", "active")">
+                                <a href="@Url.Action("ActivosFijosValidacionTecnica", "ActivoFijo")">Activos Fijos que requieren Validaci&oacute;n T&eacute;cnica</a>
                             </li>
                             <li class="@Html.RouteIf("ActivosFijosRecepcionados", "active")">
                                 <a href="@Url.Action("ActivosFijosRecepcionados", "ActivoFijo")">Activos Fijos Recepcionados</a>

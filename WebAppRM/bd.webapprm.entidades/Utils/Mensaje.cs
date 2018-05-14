@@ -19,4 +19,16 @@ namespace bd.webapprm.entidades.Utils
         public static string Error { get { return "Error"; } }
         public static string Aviso { get { return "Aviso"; } }
     }
+
+    public static class Estados
+    {
+        public static string Recepcionado { get { return "Recepcionado"; } }
+        public static string ValidacionTecnica { get { return "Validación Técnica"; } }
+        public static string Desaprobado { get { return "Desaprobado"; } }
+        public static string Alta { get { return "Alta"; } }
+        public static string Baja { get { return "Baja"; } }
+        public static string Creada { get { return "Creado"; } }
+        public static string Aceptada { get { return "Aceptada"; } }
+        public static string Rechazada { get { return "Rechazada"; } }
+    }
 }

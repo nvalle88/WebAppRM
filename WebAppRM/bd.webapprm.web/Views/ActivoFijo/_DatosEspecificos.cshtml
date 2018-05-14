@@ -16,7 +16,7 @@
 
 <div class="row">
     <section class="col col-12 width100">
-        <table id="tbDatosEspecificos" class="table table-hover">
+        <table id="tbDatosEspecificos" class="table table-striped table-bordered table-hover">
         <thead>
             <tr id="trHeadDatosEspecificos">
                 @{
@@ -102,11 +102,12 @@
                                 <input type="hidden" id="hIdRecepcionActivoFijoDetalle_@i" name="hIdRecepcionActivoFijoDetalle_@i" value="@Model[i].IdRecepcionActivoFijoDetalle" />
                                 <input type="hidden" id="hUbicacion_@i" name="hUbicacion_@i" value="@Model[i].UbicacionActivoFijo.FirstOrDefault().IdUbicacionActivoFijo" />
                                 <a href="javascript:void(0);" onclick="cargarFormularioDatosEspecificos(@i)" class="btnEditarDatosEspecificos" data-idfila="@i" data-toggle="modal" data-target="#myModal">Editar</a>
+                                <span>| </span><a href="javascript:void(0);" onclick="cargarFormularioComponentesDatosEspecificos(@i)" class="btnComponentesDatosEspecificos" data-idfila="@i" data-toggle="modal" data-target="#myModalComponente">Componentes</a>
                                 @{ 
                                     if (Model.Count > 1)
                                     {
                                         <div id="divEliminarDatosEspecificos_@i" class="btnEliminarDatosEspecificos" style="display:inline;">
-                                            <span>| </span><a href="javascript:void(0);" id="btnEliminarDatosEspecifico_@i" onclick="abrirVentanaConfirmacionEliminar(@i)" data-titulo="Eliminar" data-descripcion="&#191;Desea eliminar el Dato Espec&iacute;fico... ?">Eliminar</a>
+                                            <span>| </span><a href="javascript:void(0);" id="btnEliminarDatosEspecifico_@i" onclick="abrirVentanaConfirmacion('btnEliminarDatosEspecifico_@i')" data-titulo="Eliminar" data-descripcion="&#191;Desea eliminar el Dato Espec&iacute;fico... ?">Eliminar</a>
                                         </div>
                                     }
                                 }
@@ -133,8 +134,9 @@
                             <input type="hidden" id="hIdRecepcionActivoFijoDetalle_0" name="hIdRecepcionActivoFijoDetalle_0" />
                             <input type="hidden" id="hUbicacion_0" name="hUbicacion_0" />
                             <a href="javascript:void(0);" onclick="cargarFormularioDatosEspecificos(0)" class="btnEditarDatosEspecificos" data-idfila="0" data-toggle="modal" data-target="#myModal">Editar</a>
+                            <span>| </span><a href="javascript:void(0);" onclick="cargarFormularioComponentesDatosEspecificos(0)" class="btnComponentesDatosEspecificos" data-idfila="0" data-toggle="modal" data-target="#myModalComponente">Componentes</a>
                             <div id="divEliminarDatosEspecificos_0" class="hide btnEliminarDatosEspecificos" style="display:inline;">
-                                <span>| </span><a href="javascript:void(0);" id="btnEliminarDatosEspecifico_0" onclick="abrirVentanaConfirmacionEliminar(0)" data-titulo="Eliminar" data-descripcion="&#191;Desea eliminar el Dato Espec&iacute;fico... ?">Eliminar</a>
+                                <span>| </span><a href="javascript:void(0);" id="btnEliminarDatosEspecifico_0" onclick="abrirVentanaConfirmacion('btnEliminarDatosEspecifico_0')" data-titulo="Eliminar" data-descripcion="&#191;Desea eliminar el Dato Espec&iacute;fico... ?">Eliminar</a>
                             </div>
                         </td>
                     </tr>
@@ -142,26 +144,26 @@
             }
         </tbody>
     </table>
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog" style="margin-left:28% !important;margin-top:30px !important;">
-            <div class="modal-content" id="modalContentDatosEspecificos">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="padding:10px !important;">
-                        &times;
-                    </button>
-                    <h4 class="modal-title" id="myModalLabel" style="padding:12px !important;">Editar</h4>
-                    <input type="hidden" id="hIdFilaModalDatosEspecificos" />
-                    <input type="hidden" id="hIdRecepcionActivoFijoDetalle" />
-                    <input type="hidden" id="hIdUbicacionActivoFijo" />
-                </div>
-                <div class="modal-body" style="padding:15px !important;padding-top:10px !important;" id="modalBodyDatosEspecificos"></div>
-                <div class="modal-footer" style="padding:15px !important;">
-                    <button type="button" class="btn btn-default" id="btnCancelarDatosEspecificos" data-dismiss="modal" style="padding:7px !important;">Cancelar</button>
-                    <button type="button" class="btn btn-primary" id="btnGuardarDatosEspecificos" style="padding:7px !important;padding-left:15px !important;padding-right:15px !important;">Guardar</button>
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog" style="margin-left:28% !important;margin-top:30px !important;">
+                <div class="modal-content" id="modalContentDatosEspecificos">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="padding:10px !important;">
+                            &times;
+                        </button>
+                        <h4 class="modal-title" id="myModalLabel" style="padding:12px !important;">Editar</h4>
+                        <input type="hidden" id="hIdFilaModalDatosEspecificos" />
+                        <input type="hidden" id="hIdRecepcionActivoFijoDetalle" />
+                        <input type="hidden" id="hIdUbicacionActivoFijo" />
+                    </div>
+                    <div class="modal-body" style="padding:15px !important;padding-top:10px !important;" id="modalBodyDatosEspecificos"></div>
+                    <div class="modal-footer" style="padding:15px !important;">
+                        <button type="button" class="btn btn-default" id="btnCancelarDatosEspecificos" data-dismiss="modal" style="padding:7px !important;">Cancelar</button>
+                        <button type="button" class="btn btn-primary" id="btnGuardarDatosEspecificos" style="padding:7px !important;padding-left:15px !important;padding-right:15px !important;">Guardar</button>
+                    </div>
                 </div>
             </div>
-        </div>
-	</div>
+	    </div>
     </section>
 </div>
 <script>

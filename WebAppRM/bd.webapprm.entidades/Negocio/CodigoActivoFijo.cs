@@ -7,6 +7,12 @@ namespace bd.webapprm.entidades
 
     public partial class CodigoActivoFijo
     {
+        public CodigoActivoFijo()
+        {
+            ActivoFijo = new HashSet<ActivoFijo>();
+            TransferenciaActivoFijo = new HashSet<TransferenciaActivoFijo>();
+        }
+
         [Key]
         public int IdCodigoActivoFijo { get; set; }
 
@@ -37,5 +43,7 @@ namespace bd.webapprm.entidades
 
         //Propiedades Virtuales Referencias a otras clases
         public virtual ICollection<ActivoFijo> ActivoFijo { get; set; }
+
+        public virtual ICollection<TransferenciaActivoFijo> TransferenciaActivoFijo { get; set; }
     }
 }

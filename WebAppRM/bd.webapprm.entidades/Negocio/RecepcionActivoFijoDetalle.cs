@@ -18,30 +18,25 @@ namespace bd.webapprm.entidades
 
         [Key]
         public int IdRecepcionActivoFijoDetalle { get; set; }
-
-        [Display(Name = "Número de póliza:")]
-        [StringLength(50, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
-        [RegularExpression(@"^\d*$", ErrorMessage = "El {0} solo puede contener números.")]
-        public string NumeroPoliza { get; set; }
         
         [Display(Name = "Serie:")]
-        [StringLength(50, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
+        [StringLength(200, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
         public string Serie { get; set; }
 
         [Display(Name = "Número de chasis:")]
-        [StringLength(50, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
+        [StringLength(200, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
         public string NumeroChasis { get; set; }
 
         [Display(Name = "Número de motor:")]
-        [StringLength(50, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
+        [StringLength(200, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
         public string NumeroMotor { get; set; }
 
         [Display(Name = "Placa:")]
-        [StringLength(50, MinimumLength = 2, ErrorMessage = "La {0} no puede tener más de {1} y menos de {2}")]
+        [StringLength(200, MinimumLength = 2, ErrorMessage = "La {0} no puede tener más de {1} y menos de {2}")]
         public string Placa { get; set; }
 
         [Display(Name = "Número de clave catastral:")]
-        [StringLength(50, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
+        [StringLength(200, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
         public string NumeroClaveCatastral { get; set; }
 
         //Propiedades Virtuales Referencias a otras clases
