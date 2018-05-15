@@ -1,7 +1,8 @@
 @model List<ActivoFijo>
 @{
     bool isConfiguracionRecepcion = ViewBag.IsConfiguracionRecepcion ?? false;
-    bool isConfiguracionComponentes = ViewBag.IsConfiguracionComponentes ?? false;
+    bool isConfiguracionSeleccion = ViewBag.IsConfiguracionSeleccion ?? false;
+    bool isConfiguracionMantenimiento = ViewBag.IsConfiguracionMantenimiento ?? false;
 }
 <div id="content">
     <section id="widget-grid" class="">
@@ -17,7 +18,7 @@
                         <div class="widget-body no-padding">
                             <table id="tableActivosFijos" class="table table-striped table-bordered table-hover" style="width:100%;">
                                 <thead>
-                                    @{ await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", 8);}
+                                    @{ await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", isConfiguracionRecepcion ? 9 : 6);}
                                     <tr>
                                         <th>@Html.DisplayNameFor(model => model.FirstOrDefault().SubClaseActivoFijo.ClaseActivoFijo.IdTipoActivoFijo)</th>
                                         <th>@Html.DisplayNameFor(model => model.FirstOrDefault().SubClaseActivoFijo.IdClaseActivoFijo)</th>
@@ -25,8 +26,9 @@
                                         @{
                                             if (isConfiguracionRecepcion)
                                             {
-                                                <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijo.FechaRecepcion)</th>
+                                                <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijoActual.Bodega.IdSucursal)</th>
                                                 <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijo.IdProveedor)</th>
+                                                <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijo.FechaRecepcion)</th>
                                             }
                                         }
                                         <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Nombre)</th>
@@ -48,8 +50,9 @@
                                             @{
                                                 if (isConfiguracionRecepcion)
                                                 {
+                                                    <td>@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.FirstOrDefault()?.UbicacionActivoFijoActual?.Bodega?.Sucursal?.Nombre ?? "-");}</td>
+                                                    <td>@{await ViewContext.Writer.WriteAsync($"{item.RecepcionActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijo.Proveedor.Nombre} {item.RecepcionActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijo.Proveedor.Apellidos}"); }</td>
                                                     <td>@Html.DisplayFor(modelItem => item.RecepcionActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijo.FechaRecepcion)</td>
-                                                    <td>@{ await ViewContext.Writer.WriteAsync($"{item.RecepcionActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijo.Proveedor.Nombre} {item.RecepcionActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijo.Proveedor.Apellidos}"); }</td>
                                                 }
                                             }
                                             <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
@@ -57,7 +60,7 @@
                                             {
                                                 <td>@Html.DisplayFor(modelItem => item.PolizaSeguroActivoFijo.NumeroPoliza)</td>
                                             }
-                                            <td>@Html.DisplayFor(modelItem => item.RecepcionActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijo.Cantidad)</td>
+                                            <td>@item.RecepcionActivoFijoDetalle.Count</td>
                                             <td>
                                                 @{
                                                     if (isConfiguracionRecepcion)
@@ -71,7 +74,12 @@
                                                         {
                                                             @Html.ActionLink("Editar", ViewData["UrlEditar"].ToString(), new { id = item.IdActivoFijo })
                                                         }
-                                                        <span>| </span><a href="javascript:void(0);" class="btnDetallesActivosFijos" id="btnDetallesActivoFijo_@item.IdActivoFijo" onclick="abrirVentanaDetallesActivoFijo('@item.IdActivoFijo')" data-ids="@String.Join(",", item.RecepcionActivoFijoDetalle.Select(c=> c.IdRecepcionActivoFijoDetalle))" data-url="@Url.Action("DetallesActivoFijoResult", "ActivoFijo")" data-toggle="modal" data-target="#myModalTableActivosFijos">Detalles</a>
+                                                        <span>| </span>
+                                                    }
+                                                    <a href="javascript:void(0);" class="btnDetallesActivosFijos" id="btnDetallesActivoFijo_@item.IdActivoFijo" onclick="abrirVentanaDetallesActivoFijo('@item.IdActivoFijo')" data-ids="@String.Join(",", item.RecepcionActivoFijoDetalle.Select(c => c.IdRecepcionActivoFijoDetalle))" data-url="@Url.Action("DetallesActivoFijoResult", "ActivoFijo")" data-toggle="modal" data-target="#myModalTableActivosFijos">Detalles</a>
+
+                                                    if (isConfiguracionRecepcion)
+                                                    {
                                                         <span>| </span><a href="javascript:void(0);" id="@item.IdActivoFijo" onclick="abrirVentanaConfirmacion('@item.IdActivoFijo')" data-url="@Url.Action("DeleteRecepcion", values: new { id = item.IdActivoFijo, activoFijoRecepcionado = item.RecepcionActivoFijoDetalle.FirstOrDefault().Estado.Nombre == Estados.Recepcionado })" data-titulo="Eliminar" data-descripcion="&#191;Desea eliminar la recepci&oacute;n del Activo Fijo... ?">Eliminar</a>
                                                     }
                                                 }
@@ -103,3 +111,10 @@
         </div>
     </div>
 </div>
+<script>
+    var arrConfiguraciones = [
+        { propiedad: "IsConfiguracionRecepcion", valor: ("@isConfiguracionRecepcion".toLowerCase() === 'true') },
+        { propiedad: "IsConfiguracionSeleccion", valor: ("@isConfiguracionSeleccion".toLowerCase() === 'true') },
+        { propiedad: "IsConfiguracionMantenimiento", valor: ("@isConfiguracionMantenimiento".toLowerCase() === 'true') }
+    ];
+</script>

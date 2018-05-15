@@ -1,8 +1,21 @@
 @model List<RecepcionActivoFijoDetalleSeleccionado>
+@{ 
+    List<PropiedadValor> arrConfiguraciones = ViewBag.Configuraciones;
+
+    Func<string, bool> ExisteConfiguracion = x =>
+    {
+        var propiedadValor = arrConfiguraciones.FirstOrDefault(c => c.Propiedad == x);
+        return propiedadValor != null ? bool.Parse(propiedadValor.Valor) : false;
+    };
+
+    bool isConfiguracionRecepcion = ExisteConfiguracion("IsConfiguracionRecepcion");
+    bool isConfiguracionSeleccion = ExisteConfiguracion("IsConfiguracionSeleccion");
+    bool isConfiguracionMantenimiento = ExisteConfiguracion("IsConfiguracionMantenimiento");
+}
 <div class="table-responsive">
     <table id="tableDetallesActivoFijo" class="table table- striped table-bordered table-hover" style="width:100%;">
         <thead>
-            @{ await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", 18);}
+            @{ await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", isConfiguracionRecepcion ? 17 : 18);}
             <tr>
                 <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.Serie)</th>
                 <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.NumeroChasis)</th>
@@ -12,8 +25,8 @@
                 <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.UbicacionActivoFijoActual.Bodega.IdSucursal)</th>
                 <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.UbicacionActivoFijoActual.IdBodega)</th>
                 <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.UbicacionActivoFijoActual.IdEmpleado)</th>
-                <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.RecepcionActivoFijo.Proveedor.Nombre)</th>
-                <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.RecepcionActivoFijo.MotivoRecepcion.Descripcion)</th>
+                <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.RecepcionActivoFijo.IdProveedor)</th>
+                <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.RecepcionActivoFijo.IdMotivoRecepcion)</th>
                 <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.RecepcionActivoFijo.FechaRecepcion)</th>
                 <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.RecepcionActivoFijo.OrdenCompra)</th>
                 <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.RecepcionActivoFijo.IdFondoFinanciamiento)</th>
@@ -21,7 +34,12 @@
                 <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.AltaActivoFijo.Factura.Numero)</th>
                 <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.BajaActivoFijo.FechaBaja)</th>
                 <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.BajaActivoFijo.IdMotivoBaja)</th>
-                <th>Opciones</th>
+                @{ 
+                    if (!isConfiguracionRecepcion)
+                    {
+                        <th>Opciones</th>
+                    }
+                }
             </tr>
         </thead>
         <tbody>
@@ -36,7 +54,7 @@
                         <td>@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.NumeroClaveCatastral ?? "-");}</td>
                         <td>@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.UbicacionActivoFijoActual?.Bodega?.Sucursal?.Nombre ?? "-");}</td>
                         <td>@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.UbicacionActivoFijoActual?.Bodega?.Nombre ?? "-");}</td>
-                        <td>@{ await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.UbicacionActivoFijoActual?.Empleado != null ? $"{item?.RecepcionActivoFijoDetalle?.UbicacionActivoFijoActual?.Empleado?.Persona?.Nombres} {item?.RecepcionActivoFijoDetalle?.UbicacionActivoFijoActual?.Empleado?.Persona?.Apellidos}" : "-"); }</td>
+                        <td>@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.UbicacionActivoFijoActual?.Empleado != null ? $"{item?.RecepcionActivoFijoDetalle?.UbicacionActivoFijoActual?.Empleado?.Persona?.Nombres} {item?.RecepcionActivoFijoDetalle?.UbicacionActivoFijoActual?.Empleado?.Persona?.Apellidos}" : "-"); }</td>
                         <td>@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.RecepcionActivoFijo?.Proveedor?.Nombre ?? "-");}</td>
                         <td>@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.RecepcionActivoFijo?.MotivoRecepcion?.Descripcion ?? "-");}</td>
                         <td>@Html.DisplayFor(modelItem => item.RecepcionActivoFijoDetalle.RecepcionActivoFijo.FechaRecepcion)</td>
@@ -46,7 +64,19 @@
                         <td>@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.AltaActivoFijo?.Factura?.Numero ?? "-");}</td>
                         <td>@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.BajaActivoFijo?.FechaBaja != null ? Html.DisplayFor(modelItem=> item.RecepcionActivoFijoDetalle.BajaActivoFijo.FechaBaja).ToString() : "-");}</td>
                         <td>@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.BajaActivoFijo?.MotivoBaja?.Nombre ?? "-");}</td>
-                        <td></td>
+                        @{ 
+                            if (!isConfiguracionRecepcion)
+                            {
+                                <td>
+                                    @{ 
+                                        if (isConfiguracionMantenimiento)
+                                        {
+                                            @Html.ActionLink("Ver mantenimientos", "ListarMantenimientos", new { id = item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle })
+                                        }
+                                    }
+                                </td>
+                            }
+                        }
                     </tr>
                 }
             }
