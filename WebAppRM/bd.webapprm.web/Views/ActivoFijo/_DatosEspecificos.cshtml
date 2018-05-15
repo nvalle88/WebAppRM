@@ -41,8 +41,8 @@
                             }
                     }
                 }
-                <th id="tdDatosEspecificosBodega">@Html.DisplayNameFor(model => model.FirstOrDefault().UbicacionActivoFijo.FirstOrDefault().IdBodega)</th>
-                <th id="tdDatosEspecificosEmpleado">@Html.DisplayNameFor(model => model.FirstOrDefault().UbicacionActivoFijo.FirstOrDefault().IdEmpleado)</th>
+                <th id="tdDatosEspecificosBodega">@Html.DisplayNameFor(model => model.FirstOrDefault().UbicacionActivoFijoActual.IdBodega)</th>
+                <th id="tdDatosEspecificosEmpleado">@Html.DisplayNameFor(model => model.FirstOrDefault().UbicacionActivoFijoActual.IdEmpleado)</th>
                 <th>Opciones</th>
             </tr>
         </thead>
@@ -91,16 +91,16 @@
                                 }
                             }
                             <td id="tdBodega_@i">
-                                <span id="spanBodega_@i">@{await ViewContext.Writer.WriteAsync(Model[i].UbicacionActivoFijo.FirstOrDefault().Bodega?.Nombre ?? "-");}</span>
-                                <input type="hidden" id="hBodega_@i" name="hBodega_@i" value="@Model[i].UbicacionActivoFijo.FirstOrDefault().IdBodega" />
+                                <span id="spanBodega_@i">@{await ViewContext.Writer.WriteAsync(Model[i].UbicacionActivoFijoActual.Bodega?.Nombre ?? "-");}</span>
+                                <input type="hidden" id="hBodega_@i" name="hBodega_@i" value="@Model[i].UbicacionActivoFijoActual.IdBodega" />
                             </td>
                             <td id="tdEmpleado_@i">
-                                <span id="spanEmpleado_@i">@{await ViewContext.Writer.WriteAsync(Model[i].UbicacionActivoFijo.FirstOrDefault().Empleado != null ? $"{Model[i].UbicacionActivoFijo.FirstOrDefault().Empleado?.Persona?.Nombres} {Model[i].UbicacionActivoFijo.FirstOrDefault().Empleado?.Persona?.Apellidos}" : "-");}</span>
-                                <input type="hidden" id="hEmpleado_@i" name="hEmpleado_@i" value="@Model[i].UbicacionActivoFijo.FirstOrDefault().IdEmpleado" />
+                                <span id="spanEmpleado_@i">@{await ViewContext.Writer.WriteAsync(Model[i].UbicacionActivoFijoActual.Empleado != null ? $"{Model[i].UbicacionActivoFijoActual.Empleado?.Persona?.Nombres} {Model[i].UbicacionActivoFijoActual.Empleado?.Persona?.Apellidos}" : "-");}</span>
+                                <input type="hidden" id="hEmpleado_@i" name="hEmpleado_@i" value="@Model[i].UbicacionActivoFijoActual.IdEmpleado" />
                             </td>
                             <td>
                                 <input type="hidden" id="hIdRecepcionActivoFijoDetalle_@i" name="hIdRecepcionActivoFijoDetalle_@i" value="@Model[i].IdRecepcionActivoFijoDetalle" />
-                                <input type="hidden" id="hUbicacion_@i" name="hUbicacion_@i" value="@Model[i].UbicacionActivoFijo.FirstOrDefault().IdUbicacionActivoFijo" />
+                                <input type="hidden" id="hUbicacion_@i" name="hUbicacion_@i" value="@Model[i].UbicacionActivoFijoActual.IdUbicacionActivoFijo" />
                                 <a href="javascript:void(0);" onclick="cargarFormularioDatosEspecificos(@i)" class="btnEditarDatosEspecificos" data-idfila="@i" data-toggle="modal" data-target="#myModal">Editar</a>
                                 <span>| </span><a href="javascript:void(0);" onclick="cargarFormularioComponentesDatosEspecificos(@i)" class="btnComponentesDatosEspecificos" data-idfila="@i" data-toggle="modal" data-target="#myModalComponente">Componentes</a>
                                 @{ 

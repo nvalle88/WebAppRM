@@ -59,6 +59,9 @@ namespace bd.webapprm.entidades
         public int IdEstado { get; set; }
         public virtual Estado Estado { get; set; }
 
+        [NotMapped]
+        public UbicacionActivoFijo UbicacionActivoFijoActual { get; set; }
+
         public virtual AltaActivoFijo AltaActivoFijo { get; set; }
         public virtual BajaActivoFijo BajaActivoFijo { get; set; }
         public virtual ICollection<ComponenteActivoFijo> ComponentesActivoFijoComponente { get; set; }
