@@ -23,5 +23,6 @@
         Gestionar_Msg();
         initLoadingForm();
         $.sound_path = "@Url.Content("~/sound/")";
+        $('.modal-body').attr('style', 'max-height:' + (($(window).height() - $(window).height() / 4)) + 'px;overflow-y:auto;');
     });
 </script>

@@ -8,18 +8,18 @@
         <div class="inline-group">
             <label class="radio">
                 <input type="radio" name="radio-inline" id="radioBodegaDatosEspecificos" data-ubicacion="Bodega" class="radioDatosEspecificos" @{await ViewContext.Writer.WriteAsync(idTipoUbicacion == 1 ? "checked='checked'" : "");}>
-                <i></i>@Html.DisplayNameFor(model => model.UbicacionActivoFijo.FirstOrDefault().IdBodega)
+                <i></i>@Html.DisplayNameFor(model => model.UbicacionActivoFijoActual.IdBodega)
             </label>
             <label class="radio">
                 <input type="radio" name="radio-inline" id="radioEmpleadoDatosEspecificos" data-ubicacion="Empleado" class="radioDatosEspecificos" @{await ViewContext.Writer.WriteAsync(idTipoUbicacion == 2 ? "checked='checked'" : "");}>
-                <i></i>@Html.DisplayNameFor(model => model.UbicacionActivoFijo.FirstOrDefault().IdEmpleado)
+                <i></i>@Html.DisplayNameFor(model => model.UbicacionActivoFijoActual.IdEmpleado)
             </label>
         </div>
     </section>
 
     <div id="divDatosEspecificosBodega" class="row margin-top-10 @{await ViewContext.Writer.WriteAsync(idTipoUbicacion == 1 ? "" : "hide");}">
         <section class="col col-4">
-            <label>@Html.DisplayNameFor(model => model.UbicacionActivoFijo.FirstOrDefault().IdBodega)</label>
+            <label>@Html.DisplayNameFor(model => model.UbicacionActivoFijoActual.IdBodega)</label>
         </section>
 
         <section class="col col-8">
@@ -38,7 +38,7 @@
 
     <div id="divDatosEspecificosEmpleado" class="row margin-top-10 @{await ViewContext.Writer.WriteAsync(idTipoUbicacion == 2 ? "" : "hide");}">
         <section class="col col-4">
-            <label>@Html.DisplayNameFor(model => model.UbicacionActivoFijo.FirstOrDefault().IdEmpleado)</label>
+            <label>@Html.DisplayNameFor(model => model.UbicacionActivoFijoActual.IdEmpleado)</label>
         </section>
 
         <section class="col col-8">

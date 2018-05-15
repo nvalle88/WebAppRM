@@ -180,21 +180,3 @@ function initDataTableFiltrado(idTabla, arrColumnHidden)
         otable.column(arrColumnHidden[i]).visible(false);
     }
 }
-
-function abrirVentanaDetallesActivoFijo(id)
-{
-    mostrarLoadingPanel("modalContentTableActivosFijos", "Cargando detalles de activo fijo...");
-    var btn_detalles = $("#btnDetallesActivoFijo_" + id);
-    var arrIdsRecepcionActivoFijoDetalle = btn_detalles.data("ids").toString().split(",");
-    $.ajax({
-        url: btn_detalles.data("url"),
-        method: "POST",
-        data: { idsRecepcionActivoFijoDetalle: arrIdsRecepcionActivoFijoDetalle },
-        success: function (data) {
-            $("#modalBodyTableActivosFijos").html(data);
-        },
-        complete: function (data) {
-            $("#modalContentTableActivosFijos").waitMe("hide");
-        }
-    });
-}
