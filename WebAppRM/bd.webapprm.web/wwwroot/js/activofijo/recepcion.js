@@ -541,23 +541,23 @@ function eventoGuardarDatosEspecificos()
                         var idFila = $("#hIdFilaModalDatosEspecificos").val();
                         switch (categoria) {
                             case 1: {
-                                $("#spanNumeroClaveCatastral_" + idFila).html(objData.NumeroClaveCatastral);
+                                $("#spanNumeroClaveCatastral_" + idFila).html(formatearDatosEspecifico(objData.NumeroClaveCatastral));
                                 $("#hNumeroClaveCatastral_" + idFila).val(objData.NumeroClaveCatastral);
                                 break;
                             }
                             case 2: {
-                                $("#spanNumeroChasis_" + idFila).html(objData.NumeroChasis);
+                                $("#spanNumeroChasis_" + idFila).html(formatearDatosEspecifico(objData.NumeroChasis));
                                 $("#hNumeroChasis_" + idFila).val(objData.NumeroChasis);
 
-                                $("#spanNumeroMotor_" + idFila).html(objData.NumeroMotor);
+                                $("#spanNumeroMotor_" + idFila).html(formatearDatosEspecifico(objData.NumeroMotor));
                                 $("#hNumeroMotor_" + idFila).val(objData.NumeroMotor);
 
-                                $("#spanPlaca_" + idFila).html(objData.Placa);
+                                $("#spanPlaca_" + idFila).html(formatearDatosEspecifico(objData.Placa));
                                 $("#hPlaca_" + idFila).val(objData.Placa);
                                 break;
                             }
                             default: {
-                                $("#spanSerie_" + idFila).html(objData.Serie);
+                                $("#spanSerie_" + idFila).html(formatearDatosEspecifico(objData.Serie));
                                 $("#hSerie_" + idFila).val(objData.Serie);
                                 break;
                             }
@@ -602,6 +602,14 @@ function eventoGuardarDatosEspecificos()
         else
             $("#modalContentDatosEspecificos").waitMe("hide");
     });
+}
+
+function formatearDatosEspecifico(valor)
+{
+    valor = valor.toString().trim();
+    if (valor == "")
+        valor = "-";
+    return valor;
 }
 
 function clearDatosEspecificosBodegaEmpleado()
