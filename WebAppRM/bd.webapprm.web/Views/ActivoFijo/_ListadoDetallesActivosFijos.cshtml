@@ -11,12 +11,31 @@
     bool isConfiguracionRecepcion = ExisteConfiguracion("IsConfiguracionRecepcion");
     bool isConfiguracionSeleccion = ExisteConfiguracion("IsConfiguracionSeleccion");
     bool isConfiguracionMantenimiento = ExisteConfiguracion("IsConfiguracionMantenimiento");
+    int cantidadTotal = isConfiguracionRecepcion ? 17 : 18;
+
+    if (isConfiguracionSeleccion)
+    {
+        cantidadTotal++;
+    }
 }
 <div class="table-responsive">
-    <table id="tableDetallesActivoFijo" class="table table- striped table-bordered table-hover" style="width:100%;">
+    <table id="tableDetallesActivoFijo" class="table table-striped table-bordered table-hover" style="width:100%;">
         <thead>
-            @{ await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", isConfiguracionRecepcion ? 17 : 18);}
+            @{ await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", cantidadTotal);}
             <tr>
+                @{ 
+                    if (isConfiguracionSeleccion)
+                    {
+                        <th>
+                            <div class="checkbox">
+                                <label>
+                                    <input class="checkbox style-0  chkSeleccionarTodoDetallesActivoFijo" type="checkbox">
+                                    <span>&nbsp;</span>
+                                </label>
+                            </div>
+                        </th>
+                    }
+                }
                 <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.Serie)</th>
                 <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.NumeroChasis)</th>
                 <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.NumeroMotor)</th>
@@ -47,6 +66,19 @@
                 foreach (var item in Model)
                 {
                     <tr>
+                        @{ 
+                            if (isConfiguracionSeleccion)
+                            {
+                                <td>
+                                    <div class="checkbox">
+								        <label>
+									        <input class="checkbox style-0 chkDetallesActivoFijo" type="checkbox" id="chkDetalleActivoFijo_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle">
+									        <span>&nbsp;</span>
+								        </label>
+							        </div>
+                                </td>
+                            }
+                        }
                         <td>@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.Serie ?? "-");}</td>
                         <td>@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.NumeroChasis ?? "-");}</td>
                         <td>@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.NumeroMotor ?? "-");}</td>
