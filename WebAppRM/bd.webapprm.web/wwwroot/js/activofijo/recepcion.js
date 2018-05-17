@@ -306,11 +306,12 @@ function crearFilas(cantidad)
         }
         var tdBodega = "<td id='tdBodega_" + nuevoIdFila + "'>" + "<span id='spanBodega_" + nuevoIdFila + "'>-</span>" + "<input type='hidden' id='hBodega_" + nuevoIdFila + "'" + "name='hBodega_" + nuevoIdFila + "'" + "/></td>";
         var tdEmpleado = "<td id='tdEmpleado_" + nuevoIdFila + "'>" + "<span id='spanEmpleado_" + nuevoIdFila + "'>-</span>" + "<input type='hidden' id='hEmpleado_" + nuevoIdFila + "'" + "name='hEmpleado_" + nuevoIdFila + "'" + "/></td>";
-        var btnEditarDatosEspecificos = "<td><input type='hidden' id='hIdRecepcionActivoFijoDetalle_" + nuevoIdFila + "' name='hIdRecepcionActivoFijoDetalle_" + nuevoIdFila + "' /><input type='hidden' id='hUbicacion_" + nuevoIdFila + "' name='hUbicacion_" + nuevoIdFila + "' /><a href='javascript: void(0);' onclick='cargarFormularioDatosEspecificos(" + nuevoIdFila + ")' class='btnEditarDatosEspecificos' data-idfila='" + nuevoIdFila + "' data-toggle='modal' data-target='#myModal'>" + "Editar</a>";
-        var btnComponentesDatosEspecificos = "<span> | </span><a href='javascript: void(0);' onclick='cargarFormularioComponentesDatosEspecificos(" + nuevoIdFila + ")' class='btnComponentesDatosEspecificos' data-idfila='" + nuevoIdFila + "' data-toggle='modal' data-target='#myModalComponente'>" + "Componentes</a>";
-        var btnEliminarDatosEspecificos = "<div id='divEliminarDatosEspecificos_" + nuevoIdFila + "' class='btnEliminarDatosEspecificos' style='display:inline;'><span>| </span><a href='javascript: void(0);' id='btnEliminarDatosEspecifico_" + nuevoIdFila + "' onclick=abrirVentanaConfirmacion('btnEliminarDatosEspecifico_" + nuevoIdFila + "') data-titulo='Eliminar' data-descripcion='&#191; Desea eliminar el Dato Espec&iacute; fico... ?'>Eliminar</a></div>";
+        var btnEditarDatosEspecificos = "<td><input type='hidden' id='hIdRecepcionActivoFijoDetalle_" + nuevoIdFila + "' name='hIdRecepcionActivoFijoDetalle_" + nuevoIdFila + "' /><input type='hidden' id='hUbicacion_" + nuevoIdFila + "' name='hUbicacion_" + nuevoIdFila + "' /><input type='hidden' id='hComponentes_" + nuevoIdFila + "' name='hComponentes_" + nuevoIdFila + "' /><a href='javascript: void(0);' onclick='cargarFormularioDatosEspecificos(" + nuevoIdFila + ")' class='btnEditarDatosEspecificos' data-idfila='" + nuevoIdFila + "' data-toggle='modal' data-target='#myModal'>" + "Editar</a>";
+        var btnComponentesDatosEspecificos = "<span> | </span><a href='javascript: void(0);' onclick='cargarFormularioComponentesDatosEspecificos(" + nuevoIdFila + ")' class='btnComponentesDatosEspecificos' data-idfila='" + nuevoIdFila + "' data-idorigen='' data-idscomponentes='' data-toggle='modal' data-target='#myModalComponente'>" + "Componentes</a>";
+        var btnEliminarDatosEspecificos = "<div id='divEliminarDatosEspecificos_" + nuevoIdFila + "' class='btnEliminarDatosEspecificos' style='display:inline;'><span> | </span><a href='javascript: void(0);' id='btnEliminarDatosEspecifico_" + nuevoIdFila + "' onclick=abrirVentanaConfirmacion('btnEliminarDatosEspecifico_" + nuevoIdFila + "') data-funcioncallback='callBackFunctionEliminarDatoEspecifico(" + nuevoIdFila + ")' data-titulo='Eliminar' data-descripcion='&#191; Desea eliminar el Dato Espec&iacute; fico... ?'>Eliminar</a></div>";
         $("#tBodyDatosEspecificos").append("<tr id='trDatosEspecificos_" + nuevoIdFila + "'>" + tdRecepcionActivoFijoDetalle + tdBodega + tdEmpleado + btnEditarDatosEspecificos + btnComponentesDatosEspecificos + btnEliminarDatosEspecificos + "</td></tr>");
         arrIdsfilas.push(nuevoIdFila);
+        addComponenteToArray(nuevoIdFila, 0, []);
     }
 }
 
@@ -321,6 +322,7 @@ function eliminarFilas(cantidad)
         var idFila = arrIdsfilas[pos];
         $("#trDatosEspecificos_" + idFila).remove();
         arrIdsfilas.splice(pos, 1);
+        eliminarComponente(idFila);
         pos--;
         cantidad--;
     }
@@ -435,6 +437,7 @@ function cargarFormularioDatosEspecificos(idFila)
     $("#hIdFilaModalDatosEspecificos").val(idFila);
     $("#hIdRecepcionActivoFijoDetalle").val($("#hIdRecepcionActivoFijoDetalle_" + idFila).val());
     $("#hIdUbicacionActivoFijo").val($("#hUbicacion_" + idFila).val());
+    $("#myModalLabel").html("Editar");
     obtenerCategoria();
 
     var objData = new Object();
@@ -684,12 +687,12 @@ function validarDatosEspecificosExisten(objData)
     return true;
 }
 
-function callBackFunctionEliminar(id)
+function callBackFunctionEliminarDatoEspecifico(idFila)
 {
-    var idFila = id.split("_")[1];
     var posFila = obtenerPosIdFila(idFila);
     $("#trDatosEspecificos_" + arrIdsfilas[posFila]).remove();
     arrIdsfilas.splice(posFila, 1);
+    eliminarComponente(idFila);
     $("#RecepcionActivoFijo_Cantidad").val(arrIdsfilas.length);
 
     if (arrIdsfilas.length == 1) {

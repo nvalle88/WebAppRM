@@ -1,7 +1,11 @@
 ﻿var arrRecepcionActivoFijoDetalleSeleccionado = Array();
 jQuery(document).ready(function () {
     initDataTableFiltrado("tableActivosFijos", []);
+    inicializarDetallesActivo();
+});
 
+function inicializarDetallesActivo()
+{
     $.each($(".btnDetallesActivosFijos"), function (index, value) {
         var ids = $(value);
         var arrIds = ids.data("ids").toString().split(",");
@@ -12,7 +16,7 @@ jQuery(document).ready(function () {
             });
         });
     });
-});
+}
 
 function abrirVentanaDetallesActivoFijo(id) {
     mostrarLoadingPanel("modalContentTableActivosFijos", "Cargando detalles de activo fijo...");
@@ -32,12 +36,15 @@ function abrirVentanaDetallesActivoFijo(id) {
         data: { listadoRecepcionActivoFijoDetalleSeleccionado: arrAux, arrConfiguraciones: arrConfiguraciones },
         success: function (data) {
             $("#modalBodyTableActivosFijos").html(data);
+            eventoCheckboxDetallesActivoFijo();
         },
         complete: function (data) {
             if (existeConfiguracion("IsConfiguracionRecepcion"))
-                initDataTableFiltrado("tableDetallesActivoFijo", [5, 8, 10, 13, 14, 15, 16]);
+                initDataTableFiltrado("tableDetallesActivoFijo", []);
+
             else if (existeConfiguracion("IsConfiguracionMantenimiento"))
-                initDataTableFiltrado("tableDetallesActivoFijo", [15, 16]);
+                initDataTableFiltrado("tableDetallesActivoFijo", []);
+
             $("#modalContentTableActivosFijos").waitMe("hide");
         }
     });
@@ -64,4 +71,44 @@ function obtenerConfiguracion(propiedad)
             return arrConfiguraciones[i];
     }
     return null;
+}
+
+function eventoCheckboxDetallesActivoFijo()
+{
+    $(".chkDetallesActivoFijo").on("change", function (e) {
+        var chk = $(e.currentTarget);
+        try {
+            var idRecepcionActivoFijoDetalle = chk.data("idrecepcionactivofijodetalle");
+            var rafdSeleccionado = obtenerRecepcionActivoFijoDetalleSeleccionado(idRecepcionActivoFijoDetalle);
+            rafdSeleccionado.seleccionado = chk.prop("checked");
+        }
+        catch (e) { }
+        try {
+            var nombreFuncionCallback = chk.data("funcioncallback");
+            eval(nombreFuncionCallback + "(" + idRecepcionActivoFijoDetalle + "," + chk.prop("checked") + ")");
+        } catch (e) { }
+    });
+}
+
+function addRowDetallesActivosFijos(idTableACopiar, idTableCopiando, idRecepcionActivoFijoDetalle, arrCeldasCopiando, isOpcionesUltimaColumna) {
+    var table = $('#' + idTableACopiar).DataTable();
+    var arrValores = [];
+    for (var i = 0; i < arrCeldasCopiando.length; i++) {
+        if (i == (arrCeldasCopiando.length - 1)) {
+            if (isOpcionesUltimaColumna) {
+                arrValores.push(arrCeldasCopiando[i]);
+            }
+            else
+                arrValores.push($("#" + idTableCopiando + idRecepcionActivoFijoDetalle + arrCeldasCopiando[i]).html());
+        }
+        else
+            arrValores.push($("#" + idTableCopiando + idRecepcionActivoFijoDetalle + arrCeldasCopiando[i]).html());
+    }
+    var rowNode = table.row.add(arrValores).draw().node();
+    $(rowNode).prop("id", idTableACopiar + idRecepcionActivoFijoDetalle);
+}
+
+function deleteRowDetallesActivosFijos(idTableEliminar, idRecepcionActivoFijoDetalle) {
+    var row = $("#" + idTableEliminar + idRecepcionActivoFijoDetalle);
+    $('#' + idTableEliminar).dataTable().fnDeleteRow(row);
 }

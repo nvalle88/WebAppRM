@@ -62,6 +62,9 @@ namespace bd.webapprm.entidades
         [NotMapped]
         public UbicacionActivoFijo UbicacionActivoFijoActual { get; set; }
 
+        [NotMapped]
+        public Sucursal SucursalActual { get; set; }
+
         public virtual AltaActivoFijo AltaActivoFijo { get; set; }
         public virtual BajaActivoFijo BajaActivoFijo { get; set; }
         public virtual ICollection<ComponenteActivoFijo> ComponentesActivoFijoComponente { get; set; }
