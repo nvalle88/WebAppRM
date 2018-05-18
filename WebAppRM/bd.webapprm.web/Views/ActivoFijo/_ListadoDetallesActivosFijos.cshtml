@@ -84,8 +84,8 @@
                 @{
                     if (isConfiguracionAlta || isConfiguracionListadoComponentes || isConfiguracionComponentes)
                     {
-                        <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.AltaActivoFijo.FechaAlta)</th>
-                        <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.AltaActivoFijo.Factura.Numero)</th>
+                        <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.AltaActivoFijoActual.FechaAlta)</th>
+                        <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.AltaActivoFijoActual.FacturaActivoFijo.NumeroFactura)</th>
                     }
                     if (isConfiguracionBaja)
                     {
@@ -138,8 +138,8 @@
                         @{
                             if (isConfiguracionAlta || isConfiguracionListadoComponentes || isConfiguracionComponentes)
                             {
-                                <td id="@nombreTabla@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle@{await ViewContext.Writer.WriteAsync("FechaAlta");}">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.AltaActivoFijo?.FechaAlta != null ? Html.DisplayFor(modelItem => item.RecepcionActivoFijoDetalle.AltaActivoFijo.FechaAlta).ToString() : "-");}</td>
-                                <td id="@nombreTabla@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle@{await ViewContext.Writer.WriteAsync("NumeroFactura");}">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.AltaActivoFijo?.Factura?.Numero ?? "-");}</td>
+                                <td id="@nombreTabla@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle@{await ViewContext.Writer.WriteAsync("FechaAlta");}">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.AltaActivoFijoActual?.FechaAlta != null ? Html.DisplayFor(modelItem => item.RecepcionActivoFijoDetalle.AltaActivoFijoActual.FechaAlta).ToString() : "-");}</td>
+                                <td id="@nombreTabla@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle@{await ViewContext.Writer.WriteAsync("NumeroFactura");}">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.AltaActivoFijoActual?.FacturaActivoFijo?.NumeroFactura ?? "-");}</td>
                             }
                             if (isConfiguracionBaja)
                             {
