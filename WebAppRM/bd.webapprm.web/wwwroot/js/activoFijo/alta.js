@@ -2,6 +2,7 @@
     Init_Select2();
     Init_DatetimePicker("FacturaActivoFijo_FechaFactura");
     eventoMotivoAlta();
+    initDataTableFiltrado("tableDetallesActivoFijoSeleccionados", []);
 });
 
 function eventoMotivoAlta() {
@@ -24,5 +25,25 @@ function eventoMotivoAlta() {
         }
         else
             $("#divOpcionCompra").html("");
+    });
+}
+
+function cargarListadoActivosFijosParaSeleccion()
+{
+    mostrarLoadingPanel("modalContentDatosEspecificos", "Cargando listado de activos fijos, por favor espere...");
+    $.ajax({
+        url: urlListadoActivosFijosResult,
+        method: "POST",
+        data: { /*componentesActivo: obtenerRecepcionActivoFijoDetalleComponente()*/ },
+        success: function (data) {
+            $("#modalBodyDatosEspecificos").html(data);
+            initDataTableFiltrado("tableDetallesActivoFijoAltas", []);
+        },
+        error: function (errorMessage) {
+            mostrarNotificacion("Error", "Ocurrió un error al cargar el formulario.");
+        },
+        complete: function (data) {
+            $("#modalContentDatosEspecificos").waitMe("hide");
+        }
     });
 }

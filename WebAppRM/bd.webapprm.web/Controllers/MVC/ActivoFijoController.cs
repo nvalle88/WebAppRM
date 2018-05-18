@@ -361,7 +361,7 @@ namespace bd.webapprm.web.Controllers.MVC
         public async Task<IActionResult> ActivosFijosRecepcionados()
         {
             var lista = new List<ActivoFijo>();
-            ViewData["IsConfiguracionRecepcion"] = true;
+            ViewData["IsConfiguracionDetallesRecepcion"] = true;
             ViewData["Titulo"] = "Activos Fijos Recepcionados";
             ViewData["UrlEditar"] = nameof(EditarRecepcionAR);
             try
@@ -379,7 +379,7 @@ namespace bd.webapprm.web.Controllers.MVC
         public async Task<IActionResult> ActivosFijosValidacionTecnica()
         {
             var lista = new List<ActivoFijo>();
-            ViewData["IsConfiguracionRecepcion"] = true;
+            ViewData["IsConfiguracionDetallesRecepcion"] = true;
             ViewData["Titulo"] = "Activos Fijos que requieren Validación Técnica";
             ViewData["UrlEditar"] = nameof(EditarRecepcionVT);
             ViewData["UrlRevision"] = nameof(RevisionActivoFijo);
@@ -484,7 +484,12 @@ namespace bd.webapprm.web.Controllers.MVC
         public async Task<IActionResult> ComponentesActivosFijosResult(RecepcionActivoFijoDetalleComponentes componentesActivo, List<int> idsComponentesExcluir)
         {
             var lista = new List<RecepcionActivoFijoDetalleSeleccionado>();
-            ViewData["Configuraciones"] = new List<PropiedadValor>() { new PropiedadValor { Propiedad = "IsConfiguracionSeleccion", Valor = "true" }, new PropiedadValor { Propiedad = "IsConfiguracionComponentes", Valor = "true" } };
+            ViewData["Configuraciones"] = new List<PropiedadValor>()
+            {
+                new PropiedadValor { Propiedad = "IsConfiguracionSeleccion", Valor = "true" },
+                new PropiedadValor { Propiedad = "IsConfiguracionSeleccionComponentes", Valor = "true" },
+                new PropiedadValor { Propiedad = "IsConfiguracionDatosActivo", Valor = "true" }
+            };
             try
             {
                 lista = await apiServicio.ObtenerElementoAsync<List<RecepcionActivoFijoDetalleSeleccionado>>(new IdRecepcionActivoFijoDetalleSeleccionadoIdsComponentesExcluir
@@ -594,6 +599,11 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 ViewData["MotivoAlta"] = new SelectList(await apiServicio.Listar<MotivoAlta>(new Uri(WebApp.BaseAddressRM), "api/MotivoAlta/ListarMotivoAlta"), "IdMotivoAlta", "Descripcion");
                 ViewData["TipoUtilizacionAlta"] = new SelectList(await apiServicio.Listar<TipoUtilizacionAlta>(new Uri(WebApp.BaseAddressRM), "api/TipoUtilizacionAlta/ListarTipoUtilizacionAlta"), "IdTipoUtilizacionAlta", "Nombre");
+                ViewData["Configuraciones"] = new List<PropiedadValor>()
+                {
+                    new PropiedadValor { Propiedad = "IsConfiguracionListadoAltas", Valor = "true" },
+                    new PropiedadValor { Propiedad = "IsConfiguracionDatosActivo", Valor = "true" }
+                };
                 if (id != null)
                 {
                     var response = await apiServicio.SeleccionarAsync<Response>(id.ToString(), new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ObtenerAltaActivosFijos");
@@ -601,14 +611,35 @@ namespace bd.webapprm.web.Controllers.MVC
                         return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}", nameof(ActivosFijosAlta));
 
                     var altaActivoFijo = JsonConvert.DeserializeObject<AltaActivoFijo>(response.Resultado.ToString());
+                    ViewData["ListadoRecepcionActivoFijoDetalleSeleccionado"] = new List<RecepcionActivoFijoDetalleSeleccionado>();//Este es el listado de los Activos que están escogidos en el Alta
                     return View(altaActivoFijo);
                 }
+                ViewData["ListadoRecepcionActivoFijoDetalleSeleccionado"] = new List<RecepcionActivoFijoDetalleSeleccionado>();
                 return View();
             }
             catch (Exception)
             {
                 return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorCargarDatos}", nameof(ActivosFijosAlta));
             }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ListadoActivosFijosResult(List<IdRecepcionActivoFijoDetalleSeleccionado> listadoRecepcionActivoFijoDetalleSeleccionado)
+        {
+            var lista = new List<RecepcionActivoFijoDetalleSeleccionado>();
+            ViewData["Configuraciones"] = new List<PropiedadValor>()
+            {
+                new PropiedadValor { Propiedad = "IsConfiguracionSeleccion", Valor = "true" },
+                new PropiedadValor { Propiedad = "IsConfiguracionDatosActivo", Valor = "true" },
+                new PropiedadValor { Propiedad = "IsConfiguracionSeleccionAltas", Valor = "true" }
+            };
+            try
+            {
+                
+            }
+            catch (Exception)
+            { }
+            return PartialView("_ListadoDetallesActivosFijos", lista);
         }
 
         [HttpPost]
@@ -802,7 +833,7 @@ namespace bd.webapprm.web.Controllers.MVC
             var lista = new List<ActivoFijo>();
             try
             {
-                ViewData["IsConfiguracionMantenimiento"] = true;
+                ViewData["IsConfiguracionListadoMantenimientos"] = true;
                 ViewData["Titulo"] = "Activos Fijos en Alta";
                 ViewData["UrlEditar"] = nameof(EditarMantenimiento);
                 lista = await apiServicio.ObtenerElementoAsync<List<ActivoFijo>>(Estados.Alta, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ListarActivosFijosPorAgrupacionPorEstado");

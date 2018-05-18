@@ -1,13 +1,17 @@
 @model AltaActivoFijo
+@{
+    List<RecepcionActivoFijoDetalleSeleccionado> listadoRecepcionActivoFijoDetalleSeleccionado = ViewBag.ListadoRecepcionActivoFijoDetalleSeleccionado;
+}
 
 @section css{
     <link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
     <link rel="stylesheet" href="~/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/tableSmartForm.min.css" />
 }
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
-            <article class="col-sm-12 col-md-12 col-lg-6">
+            <article class="col-sm-12 col-md-12 col-lg-12">
                 <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
                     <header>
                         <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
@@ -40,7 +44,7 @@
                                     </div>
 
                                     <div id="divOpcionCompra">
-                                        @{ 
+                                        @{
                                             if (Model == null || Model?.MotivoAlta?.Descripcion == "Compra")
                                             {
                                                 await Html.RenderPartialAsync("_DetalleFacturaAltaActivos", Model);
@@ -50,14 +54,41 @@
 
                                     <div class="row">
                                         <section class="col col-4">
-                                            <label asp-for="IdMotivoAlta"></label>
+                                            <label asp-for="RecepcionActivoFijoDetalleAltaActivoFijo.FirstOrDefault().IdTipoUtilizacionAlta"></label>
                                         </section>
 
                                         <section class="col col-8">
                                             <label class="input">
-                                                <select asp-for="RecepcionActivoFijoDetalleAltaActivoFijo.FirstOrDefault().IdTipoUtilizacionAlta" class="form-control" asp-items="ViewBag.TipoUtilizacion"></select>
+                                                <select asp-for="RecepcionActivoFijoDetalleAltaActivoFijo.FirstOrDefault().IdTipoUtilizacionAlta" class="form-control" asp-items="ViewBag.TipoUtilizacionAlta"></select>
                                                 <span asp-validation-for="RecepcionActivoFijoDetalleAltaActivoFijo.FirstOrDefault().IdTipoUtilizacionAlta" class="text-danger"></span>
                                             </label>
+                                        </section>
+                                    </div>
+
+                                    <legend>Activos Fijos seleccionados</legend>
+                                    <div class="row margin-top-10">
+                                        <section class="col col-12">
+                                            <p>
+                                                <button type="button" class="btn btn-primary" style="padding:7px !important;margin-left:7px !important;" onclick="cargarListadoActivosFijosParaSeleccion()" id="btnAdicionarActivosFijos" data-toggle="modal" data-target="#myModal">Adicionar / Eliminar Activos Fijos</button>
+                                            </p>
+                                            @{await Html.RenderPartialAsync("_ListadoDetallesActivosFijos", listadoRecepcionActivoFijoDetalleSeleccionado);}
+                                            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog  modal-lg" style="margin-left:8% !important;margin-top:30px !important;width:85% !important;">
+                                                    <div class="modal-content" id="modalContentDatosEspecificos">
+                                                        <div class="modal-header">
+                                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="padding:10px !important;">
+                                                                &times;
+                                                            </button>
+                                                            <h4 class="modal-title" id="myModalLabel" style="padding:12px !important;">Listado de Activos Fijos</h4>
+                                                        </div>
+                                                        <div class="modal-body" style="padding:15px !important;padding-top:10px !important;" id="modalBodyDatosEspecificos"></div>
+                                                        <div class="modal-footer" style="padding:15px !important;">
+                                                            <button type="button" class="btn btn-default" id="btnCancelarDatosEspecificos" data-dismiss="modal" style="padding:7px !important;">Cancelar</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @{await Html.RenderPartialAsync("_ModalComponentes", listadoRecepcionActivoFijoDetalleSeleccionado);}
                                         </section>
                                     </div>
                                 </fieldset>
@@ -78,8 +109,11 @@
     @{await Html.RenderPartialAsync("_Select2ScriptsPartial");}
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     @{await Html.RenderPartialAsync("_DatetimePickerScriptsPartial");}
+    @*<script src='~/js/activoFijo/listadoSeleccion.min.js'></script>*@
+    <script src='~/js/activoFijo/componentes.min.js'></script>
     <script src="~/js/activoFijo/alta.js"></script>
     <script>
         var urlDetalleFacturaAltaActivos = "@Url.Action("DetalleFacturaAltaActivosResult")";
+        var urlListadoActivosFijosResult = "@Url.Action("ListadoActivosFijosResult")";
     </script>
 }
