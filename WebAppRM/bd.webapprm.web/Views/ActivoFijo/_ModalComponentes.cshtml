@@ -1,0 +1,40 @@
+<div class="modal fade" id="myModalComponente" tabindex="-1" role="dialog" aria-labelledby="myModalComponenteLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="margin-left:8% !important;margin-top:30px !important;width:85% !important;">
+        <div class="modal-content" id="modalContentComponente" style="padding:15px !important;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="padding:10px !important;">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalComponenteLabel">Componentes</h4>
+            </div>
+            <div class="modal-body" style="padding:15px !important;padding-top:10px !important;">
+                <p>
+                    <button type="button" class="btn btn-primary" style="padding:7px !important;margin-top:7px !important;margin-left:7px !important;" onclick="cargarListadoActivosFijosParaComponentes()" id="btnAdicionarComponentes" data-toggle="modal" data-target="#myModalComponenteActivoFijo">Adicionar / Eliminar Componentes</button>
+                </p>
+                <div id="modalBodyComponente"></div>
+            </div>
+            <div class="modal-footer" style="padding:15px !important;">
+                <button type="button" class="btn btn-default" id="btnCancelarDatosEspecificos" data-dismiss="modal" style="padding:7px !important;">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModalComponenteActivoFijo" tabindex="-2" role="dialog" aria-labelledby="myModalComponenteLabelActivoFijo" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="margin-left:8% !important;margin-top:30px !important;width:85% !important;">
+        <div class="modal-content" id="modalContentComponenteActivoFijo" style="padding:15px !important;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="padding:10px !important;">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalComponenteLabelActivoFijo">Listado de Activos Fijos</h4>
+            </div>
+            <div class="modal-body" style="padding:15px !important;padding-top:10px !important;">
+                <div id="modalBodyComponenteActivoFijo"></div>
+            </div>
+            <div class="modal-footer" style="padding:15px !important;">
+                <button type="button" class="btn btn-default" id="btnCancelarDatosEspecificos" data-dismiss="modal" style="padding:7px !important;">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>

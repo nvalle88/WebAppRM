@@ -15,4 +15,10 @@ namespace bd.webapprm.entidades.ObjectTransfer
         public RecepcionActivoFijoDetalle RecepcionActivoFijoDetalle { get; set; }
         public bool Seleccionado { get; set; }
     }
+
+    public class IdRecepcionActivoFijoDetalleSeleccionadoIdsComponentesExcluir
+    {
+        public List<IdRecepcionActivoFijoDetalleSeleccionado> ListaIdRecepcionActivoFijoDetalleSeleccionado { get; set; }
+        public List<int> IdsComponentesExcluir { get; set; }
+    }
 }

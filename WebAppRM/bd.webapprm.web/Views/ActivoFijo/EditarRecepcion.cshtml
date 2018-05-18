@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="~/lib/jquery.spinner-master/dist/css/bootstrap-spinner.min.css" />
     <link rel="stylesheet" type="text/css" href="~/lib/bootstrap-fileinput/css/fileinput.min.css">
     <link rel="stylesheet" type="text/css" href="~/css/activoFijo/recepcion.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/tableSmartForm.min.css" />
 }
 
 <div id="content">
@@ -342,6 +343,8 @@
     <script src='~/lib/bootstrap-fileinput/js/fileinput.min.js'></script>
     <script src='~/lib/bootstrap-fileinput/js/locales/es.js'></script>
     <script src='~/js/activoFijo/recepcion.min.js'></script>
+    <script src='~/js/activoFijo/listadoSeleccion.min.js'></script>
+    <script src='~/js/activoFijo/componentes.min.js'></script>
     <script>
         var urlEliminarActivoFijo = "@Url.Action("EliminarArchivo")";
         var urlModeloSelectResult = "@Url.Action("Modelo_SelectResult")";
@@ -354,6 +357,8 @@
         var urlSubramoSelectResult = "@Url.Action("Subramo_SelectResult")";
         var urlModalDatosEspecificosResult = "@Url.Action("ModalDatosEspecificosResult")";
         var urlValidacionDatosEspecificosResult = "@Url.Action("ValidacionDatosEspecificosResult")";
+        var urlModalComponentesResult = "@Url.Action("ModalComponentesResult")";
+        var urlComponentesActivosFijos = "@Url.Action("ComponentesActivosFijosResult")";
         var isEditar = true;
     </script>
 }

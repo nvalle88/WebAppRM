@@ -136,7 +136,7 @@ function abrirVentanaConfirmacion(id) {
                 window.location.href = btn_eliminar.data("url");
             else {
                 try {
-                    callBackFunctionEliminar(id);
+                    eval(btn_eliminar.data("funcioncallback"));
                 } catch (e) { }
             }
         }
