@@ -14,6 +14,7 @@ namespace bd.webapprm.entidades
             DocumentoActivoFijo = new HashSet<DocumentoActivoFijo>();
             MantenimientoActivoFijo = new HashSet<MantenimientoActivoFijo>();
             UbicacionActivoFijo = new HashSet<UbicacionActivoFijo>();
+            RecepcionActivoFijoDetalleAltaActivoFijo = new HashSet<RecepcionActivoFijoDetalleAltaActivoFijo>();
         }
 
         [Key]
@@ -65,7 +66,9 @@ namespace bd.webapprm.entidades
         [NotMapped]
         public Sucursal SucursalActual { get; set; }
 
-        public virtual AltaActivoFijo AltaActivoFijo { get; set; }
+        [NotMapped]
+        public AltaActivoFijo AltaActivoFijoActual { get; set; }
+
         public virtual BajaActivoFijo BajaActivoFijo { get; set; }
         public virtual ICollection<ComponenteActivoFijo> ComponentesActivoFijoComponente { get; set; }
         public virtual ICollection<ComponenteActivoFijo> ComponentesActivoFijoOrigen { get; set; }
@@ -73,5 +76,6 @@ namespace bd.webapprm.entidades
         public virtual ICollection<DocumentoActivoFijo> DocumentoActivoFijo { get; set; }
         public virtual ICollection<MantenimientoActivoFijo> MantenimientoActivoFijo { get; set; }
         public virtual ICollection<UbicacionActivoFijo> UbicacionActivoFijo { get; set; }
+        public virtual ICollection<RecepcionActivoFijoDetalleAltaActivoFijo> RecepcionActivoFijoDetalleAltaActivoFijo { get; set; }
     }
 }

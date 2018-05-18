@@ -44,6 +44,9 @@
                     <li class="@Html.RouteIf("Modelo", "active")">
                         <a href="@Url.Action("Index", "Modelo")">Modelo</a>
                     </li>
+                    <li class="@Html.RouteIf("MotivoAlta", "active")">
+                        <a href="@Url.Action("Index", "MotivoAlta")">Motivo de Alta</a>
+                    </li>
                     <li class="@Html.RouteIf("MotivoAsiento", "active")">
                         <a href="@Url.Action("Index", "MotivoAsiento")">Motivo de Asiento</a>
                     </li>
@@ -80,6 +83,9 @@
                     <li class="@Html.RouteIf("TipoArticulo", "active")">
                         <a href="@Url.Action("Index", "TipoArticulo")">Tipo de Art&iacute;culo</a>
                     </li>
+                    <li class="@Html.RouteIf("TipoUtilizacionAlta", "active")">
+                        <a href="@Url.Action("Index", "TipoUtilizacionAlta")">Tipo de Utilizaci&oacute;n</a>
+                    </li>
                     <li class="@Html.RouteIf("UnidadMedida", "active")">
                         <a href="@Url.Action("Index", "UnidadMedida")">Unidad de Medida</a>
                     </li>
@@ -113,28 +119,17 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="@Html.RouteIf("altas", "active")">
-                        <a href="#"><span class="menu-item-parent">Altas</span></a>
-                        <ul>
-                            <li class="@Html.RouteIf("ActivosFijosRecepcionados", "active")">
-                                <a href="@Url.Action("ActivosFijosRecepcionados", "ActivoFijo")">Dar Altas</a>
-                            </li>
-                            <li class="@Html.RouteIf("ActivosFijosAltas", "active")">
-                                <a href="@Url.Action("ActivosFijosAltas", "ActivoFijo")">Listado de Altas</a>
-                            </li>
-                            <li class="@Html.RouteIf("AddComponentes", "active")">
-                                <a href="@Url.Action("AddComponentes", "ActivoFijo")">Adicionar Componentes</a>
-                            </li>
-                        </ul>
+                    <li class="@Html.RouteIf("ActivosFijosAlta", "active")">
+                        <a href="@Url.Action("ActivosFijosAlta", "ActivoFijo")">Altas</a>
                     </li>
                     <li class="@Html.RouteIf("ActivosFijosATransferir", "active")">
-                        <a href="@Url.Action("ActivosFijosATransferir", "ActivoFijo")">Transferencia</a>
+                        <a href="@Url.Action("ActivosFijosATransferir", "ActivoFijo")">Transferencias</a>
                     </li>
                     <li class="@Html.RouteIf("bajas", "active")">
                         <a href="#"><span class="menu-item-parent">Bajas</span></a>
                         <ul>
                             <li class="@Html.RouteIf("ActivosFijosRecepcionadosBaja", "active")">
-                                <a href="@Url.Action("ActivosFijosRecepcionadosBaja", "ActivoFijo")">Dar Bajas</a>
+                                <a href="@Url.Action("ActivosFijosRecepcionadosBaja", "ActivoFijo")">Gestionar Baja de Activos Fijos</a>
                             </li>
                             <li class="@Html.RouteIf("ActivosFijosBajas", "active")">
                                 <a href="@Url.Action("ActivosFijosBajas", "ActivoFijo")">Listado de Bajas</a>
@@ -142,7 +137,7 @@
                         </ul>
                     </li>
                     <li class="@Html.RouteIf("ListarMantenimientosActivosFijos", "active")">
-                        <a href="@Url.Action("ListarMantenimientosActivosFijos", "ActivoFijo")">Mantenimientos</a>                                              
+                        <a href="@Url.Action("ListarMantenimientosActivosFijos", "ActivoFijo")">Mantenimientos</a>
                     </li>
                     <li class="@Html.RouteIf("reportes", "active")">
                         <a href="#"><i class="fa fa-file-text-o"></i> <span class="menu-item-parent">Reportes</span></a>
