@@ -76,7 +76,7 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    var respuesta = await apiServicio.SeleccionarAsync<Response>($"{id}/{estado}", new Uri(WebApp.BaseAddressRM), "api/ActivosFijos");
+                    var respuesta = await apiServicio.ObtenerElementoAsync<Response>(new IdEstadosTransfer { Id = int.Parse(id), Estados = new List<string> { estado } }, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ObtenerActivoFijoPorEstado");
                     if (!respuesta.IsSuccess)
                         return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}", nombreVistaError);
 
@@ -337,13 +337,13 @@ namespace bd.webapprm.web.Controllers.MVC
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditarRecepcionVT(RecepcionActivoFijoDetalle recepcionActivoFijoDetalle, LibroActivoFijo libroActivoFijo) => await GestionRecepcionActivoFijoDetalle(recepcionActivoFijoDetalle, libroActivoFijo);
 
-        public async Task<IActionResult> ObtenerRecepcionActivoFijo(string id, string estado, string nombreVistaError)
+        public async Task<IActionResult> ObtenerRecepcionActivoFijo(string id, List<string> estados, string nombreVistaError)
         {
             try
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    var respuesta = await apiServicio.SeleccionarAsync<Response>($"{id}/{estado}", new Uri(WebApp.BaseAddressRM), "api/ActivosFijos");
+                    var respuesta = await apiServicio.ObtenerElementoAsync<Response>(new IdEstadosTransfer { Id = int.Parse(id), Estados = estados }, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ObtenerActivoFijoPorEstado");
                     if (respuesta.IsSuccess)
                     {
                         var activoFijo = JsonConvert.DeserializeObject<ActivoFijo>(respuesta.Resultado.ToString());
@@ -366,7 +366,7 @@ namespace bd.webapprm.web.Controllers.MVC
             ViewData["UrlEditar"] = nameof(EditarRecepcionAR);
             try
             {
-                lista = await apiServicio.ObtenerElementoAsync<List<ActivoFijo>>(Estados.Recepcionado, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ListarActivoFijoPorEstado");
+                lista = await apiServicio.ObtenerElementoAsync<List<ActivoFijo>>(new List<string> { Estados.Recepcionado }, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ListarActivoFijoPorEstado");
             }
             catch (Exception ex)
             {
@@ -385,7 +385,7 @@ namespace bd.webapprm.web.Controllers.MVC
             ViewData["UrlRevision"] = nameof(RevisionActivoFijo);
             try
             {
-                lista = await apiServicio.ObtenerElementoAsync<List<ActivoFijo>>(Estados.ValidacionTecnica, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ListarActivoFijoPorEstado");
+                lista = await apiServicio.ObtenerElementoAsync<List<ActivoFijo>>(new List<string> { Estados.ValidacionTecnica }, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ListarActivoFijoPorEstado");
             }
             catch (Exception ex)
             {
@@ -419,7 +419,7 @@ namespace bd.webapprm.web.Controllers.MVC
             }
         }
 
-        public async Task<IActionResult> RevisionActivoFijo(string id) => await ObtenerRecepcionActivoFijo(id, Estados.ValidacionTecnica, nameof(ActivosFijosValidacionTecnica));
+        public async Task<IActionResult> RevisionActivoFijo(string id) => await ObtenerRecepcionActivoFijo(id, new List<string> { Estados.ValidacionTecnica }, nameof(ActivosFijosValidacionTecnica));
 
         [HttpPost]
         public async Task<IActionResult> ModalDatosEspecificosResult(RecepcionActivoFijoDetalle rafd, int categoria, int idSucursal, int? idBodega, int? idEmpleado)
@@ -484,11 +484,7 @@ namespace bd.webapprm.web.Controllers.MVC
         public async Task<IActionResult> ComponentesActivosFijosResult(RecepcionActivoFijoDetalleComponentes componentesActivo, List<int> idsComponentesExcluir)
         {
             var lista = new List<RecepcionActivoFijoDetalleSeleccionado>();
-            ViewData["Configuraciones"] = new List<PropiedadValor>()
-            {
-                new PropiedadValor { Propiedad = "IsConfiguracionSeleccion", Valor = "true" },
-                new PropiedadValor { Propiedad = "IsConfiguracionComponentes", Valor = "true" }
-            };
+            ViewData["Configuraciones"] = new List<PropiedadValor>() { new PropiedadValor { Propiedad = "IsConfiguracionSeleccion", Valor = "true" }, new PropiedadValor { Propiedad = "IsConfiguracionComponentes", Valor = "true" } };
             try
             {
                 lista = await apiServicio.ObtenerElementoAsync<List<RecepcionActivoFijoDetalleSeleccionado>>(new IdRecepcionActivoFijoDetalleSeleccionadoIdsComponentesExcluir
@@ -553,7 +549,7 @@ namespace bd.webapprm.web.Controllers.MVC
             return View("ListadoActivoFijo", lista);
         }
 
-        public async Task<IActionResult> AsignarPoliza(string id) => await ObtenerRecepcionActivoFijo(id, Estados.Recepcionado, nameof(ActivosFijosRecepcionadosSinPoliza));
+        public async Task<IActionResult> AsignarPoliza(string id) => await ObtenerRecepcionActivoFijo(id, new List<string> { Estados.Recepcionado }, nameof(ActivosFijosRecepcionadosSinPoliza));
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -579,7 +575,40 @@ namespace bd.webapprm.web.Controllers.MVC
         #endregion
 
         #region Alta de Activos
-        
+        public IActionResult ActivosFijosAlta()
+        {
+            var lista = new List<RecepcionActivoFijoDetalleSeleccionado>();
+            ViewData["Configuraciones"] = new List<PropiedadValor>() { new PropiedadValor { Propiedad = "IsConfiguracionListadoAltas", Valor = "true" } };
+            try
+            {
+                //lista = await apiServicio.ObtenerElementoAsync<List<ActivoFijo>>(new List<string> { Estados.Alta }, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ListarActivoFijoPorEstado");
+            }
+            catch (Exception)
+            { }
+            return View(lista);
+        }
+
+        public async Task<IActionResult> GestionarAlta(int? id)
+        {
+            try
+            {
+                if (id != null)
+                {
+                    var response = await apiServicio.SeleccionarAsync<Response>($"{id}/Alta", new Uri(WebApp.BaseAddressRM), "api/ActivosFijos");
+                    if (!response.IsSuccess)
+                        return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}", nameof(ActivosFijosAlta));
+
+                    var altaActivoFijo = JsonConvert.DeserializeObject<AltaActivoFijo>(response.Resultado.ToString());
+                    return View(altaActivoFijo);
+                }
+                ViewData["MotivoAlta"] = new SelectList(await apiServicio.Listar<MotivoAlta>(new Uri(WebApp.BaseAddressRM), "api/MotivoAlta/ListarMotivoAlta"), "IdMotivoAlta", "Descripcion");
+                return View();
+            }
+            catch (Exception)
+            {
+                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorCargarDatos}", nameof(ActivosFijosAlta));
+            }
+        }
         #endregion
 
         #region Transferencias
@@ -694,7 +723,7 @@ namespace bd.webapprm.web.Controllers.MVC
         public async Task<IActionResult> ActivoFijoBaja(string id)
         {
             ViewData["MotivoActivoFijoBaja"] = new SelectList(await apiServicio.Listar<MotivoBaja>(new Uri(WebApp.BaseAddressRM), "api/ActivoFijoMotivoBaja/ListarActivoFijoMotivoBaja"), "IdActivoFijoMotivoBaja", "Nombre");
-            return await ObtenerRecepcionActivoFijo(id, Estados.Alta, nameof(ActivosFijosBajas));
+            return await ObtenerRecepcionActivoFijo(id, new List<string> { Estados.Alta }, nameof(ActivosFijosBajas));
         }
 
         [HttpPost]
@@ -731,7 +760,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var lista = await apiServicio.ObtenerElementoAsync<List<ActivoFijo>>(Estados.Baja, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ListarActivoFijoPorEstado");
+                var lista = await apiServicio.ObtenerElementoAsync<List<ActivoFijo>>(new List<string> { Estados.Baja }, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ListarActivoFijoPorEstado");
                 ViewData["Titulo"] = "Activos Fijos con Estado Baja";
                 return View("ListadoActivoFijoBaja", lista);
             }
@@ -746,7 +775,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var lista = await apiServicio.Listar<RecepcionActivoFijoDetalle>(new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ListarActivoFijoPorEstado/Alta");
+                var lista = await apiServicio.ObtenerElementoAsync<List<ActivoFijo>>(new List<string> { Estados.Alta }, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ListarActivoFijoPorEstado");
                 ViewData["Titulo"] = "Activos Fijos de Alta";
                 ViewData["textoColumna"] = "Dar Baja";
                 ViewData["url"] = "ActivoFijoBaja";
@@ -923,7 +952,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var lista = await apiServicio.ObtenerElementoAsync<List<ActivoFijo>>(Estados.Alta, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ListarActivoFijoPorEstado");
+                var lista = await apiServicio.ObtenerElementoAsync<List<ActivoFijo>>(new List<string> { Estados.Alta }, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ListarActivoFijoPorEstado");
                 ViewData["Titulo"] = "Activos Fijos";
                 ViewData["textoColumna"] = "Ver Hoja de Vida";
                 ViewData["url"] = "HojaVidaActivoFijo";

@@ -15,11 +15,11 @@ using bd.webapprm.servicios.Extensores;
 
 namespace bd.webapprm.web.Controllers.MVC
 {
-    public class MotivoBajaController : Controller
+    public class MotivoAltaController : Controller
     {
         private readonly IApiServicio apiServicio;
 
-        public MotivoBajaController(IApiServicio apiServicio)
+        public MotivoAltaController(IApiServicio apiServicio)
         {
             this.apiServicio = apiServicio;
         }
@@ -31,22 +31,22 @@ namespace bd.webapprm.web.Controllers.MVC
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(MotivoBaja motivoBaja)
+        public async Task<IActionResult> Create(MotivoAlta motivoAlta)
         {
             try
             {
-                var response = await apiServicio.InsertarAsync(motivoBaja, new Uri(WebApp.BaseAddressRM), "api/MotivoBaja/InsertarMotivoBaja");
+                var response = await apiServicio.InsertarAsync(motivoAlta, new Uri(WebApp.BaseAddressRM), "api/MotivoAlta/InsertarMotivoAlta");
                 if (response.IsSuccess)
                 {
-                    await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), ExceptionTrace = null, Message = "Se ha creado un Activo Fijo Motivo Baja", UserName = "Usuario 1", LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ADV), EntityID = string.Format("{0} {1}", "Motivo de Baja:", motivoBaja.IdMotivoBaja) });
+                    await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), ExceptionTrace = null, Message = "Se ha creado un Activo Fijo Motivo Alta", UserName = "Usuario 1", LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ADV), EntityID = string.Format("{0} {1}", "Motivo de Alta:", motivoAlta.IdMotivoAlta) });
                     return this.Redireccionar($"{Mensaje.Informacion}|{Mensaje.Satisfactorio}");
                 }
                 ViewData["Error"] = response.Message;
-                return View(motivoBaja);
+                return View(motivoAlta);
             }
             catch (Exception ex)
             {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Creando Activo Fijo Motivo Baja", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP WebAppRM" });
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Creando Activo Fijo Motivo Alta", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP WebAppRM" });
                 return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorCrear}");
             }
         }
@@ -57,11 +57,11 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddressRM), "api/MotivoBaja");
+                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddressRM), "api/MotivoAlta");
                     if (!respuesta.IsSuccess)
                         return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}");
 
-                    respuesta.Resultado = JsonConvert.DeserializeObject<MotivoBaja>(respuesta.Resultado.ToString());
+                    respuesta.Resultado = JsonConvert.DeserializeObject<MotivoAlta>(respuesta.Resultado.ToString());
                     return View(respuesta.Resultado);
                 }
                 return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}");
@@ -74,41 +74,41 @@ namespace bd.webapprm.web.Controllers.MVC
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, MotivoBaja motivoBaja)
+        public async Task<IActionResult> Edit(string id, MotivoAlta motivoAlta)
         {
             try
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    var response = await apiServicio.EditarAsync(id, motivoBaja, new Uri(WebApp.BaseAddressRM), "api/MotivoBaja");
+                    var response = await apiServicio.EditarAsync(id, motivoAlta, new Uri(WebApp.BaseAddressRM), "api/MotivoAlta");
                     if (response.IsSuccess)
                     {
                         await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), EntityID = string.Format("{0} : {1}", "Sistema", id), LogCategoryParametre = Convert.ToString(LogCategoryParameter.Edit), LogLevelShortName = Convert.ToString(LogLevelParameter.ADV), Message = "Se ha actualizado un registro sistema", UserName = "Usuario 1" });
                         return this.Redireccionar($"{Mensaje.Informacion}|{Mensaje.Satisfactorio}");
                     }
                     ViewData["Error"] = response.Message;
-                    return View(motivoBaja);
+                    return View(motivoAlta);
                 }
                 return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}");
             }
             catch (Exception ex)
             {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Editando un Motivo de Baja", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Edit), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP WebAppRM" });
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Editando un Motivo de Alta", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Edit), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP WebAppRM" });
                 return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorEditar}");
             }
         }
 
         public async Task<IActionResult> Index()
         {
-            var lista = new List<MotivoBaja>();
+            var lista = new List<MotivoAlta>();
             try
             {
-                lista = await apiServicio.Listar<MotivoBaja>(new Uri(WebApp.BaseAddressRM), "api/MotivoBaja/ListarMotivoBaja");
+                lista = await apiServicio.Listar<MotivoAlta>(new Uri(WebApp.BaseAddressRM), "api/MotivoAlta/ListarMotivoAlta");
                 return View(lista);
             }
             catch (Exception ex)
             {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Listando Motivo Baja", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP WebAppRM" });
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Listando Motivo Alta", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP WebAppRM" });
                 TempData["Mensaje"] = $"{Mensaje.Error}|{Mensaje.ErrorListado}";
             }
             return View(lista);
@@ -118,7 +118,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddressRM), "api/MotivoBaja");
+                var response = await apiServicio.EliminarAsync(id, new Uri(WebApp.BaseAddressRM), "api/MotivoAlta");
                 if (response.IsSuccess)
                 {
                     await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), EntityID = string.Format("{0} : {1}", "Sistema", id), Message = "Registro eliminado", LogCategoryParametre = Convert.ToString(LogCategoryParameter.Delete), LogLevelShortName = Convert.ToString(LogLevelParameter.ADV), UserName = "Usuario APP WebAppRM" });
@@ -128,7 +128,7 @@ namespace bd.webapprm.web.Controllers.MVC
             }
             catch (Exception ex)
             {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Eliminar Activo Fijo Motivo Baja", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Delete), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP WebAppRM" });
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Eliminar Activo Fijo Motivo Alta", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Delete), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP WebAppRM" });
                 return this.Redireccionar($"{Mensaje.Error}|{Mensaje.Excepcion}");
             }
         }
