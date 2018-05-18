@@ -592,22 +592,29 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
+                ViewData["MotivoAlta"] = new SelectList(await apiServicio.Listar<MotivoAlta>(new Uri(WebApp.BaseAddressRM), "api/MotivoAlta/ListarMotivoAlta"), "IdMotivoAlta", "Descripcion");
+                ViewData["TipoUtilizacionAlta"] = new SelectList(await apiServicio.Listar<TipoUtilizacionAlta>(new Uri(WebApp.BaseAddressRM), "api/TipoUtilizacionAlta/ListarTipoUtilizacionAlta"), "IdTipoUtilizacionAlta", "Nombre");
                 if (id != null)
                 {
-                    var response = await apiServicio.SeleccionarAsync<Response>($"{id}/Alta", new Uri(WebApp.BaseAddressRM), "api/ActivosFijos");
+                    var response = await apiServicio.SeleccionarAsync<Response>(id.ToString(), new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ObtenerAltaActivosFijos");
                     if (!response.IsSuccess)
                         return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}", nameof(ActivosFijosAlta));
 
                     var altaActivoFijo = JsonConvert.DeserializeObject<AltaActivoFijo>(response.Resultado.ToString());
                     return View(altaActivoFijo);
                 }
-                ViewData["MotivoAlta"] = new SelectList(await apiServicio.Listar<MotivoAlta>(new Uri(WebApp.BaseAddressRM), "api/MotivoAlta/ListarMotivoAlta"), "IdMotivoAlta", "Descripcion");
                 return View();
             }
             catch (Exception)
             {
                 return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorCargarDatos}", nameof(ActivosFijosAlta));
             }
+        }
+
+        [HttpPost]
+        public IActionResult DetalleFacturaAltaActivosResult()
+        {
+            return PartialView("_DetalleFacturaAltaActivos", new AltaActivoFijo());
         }
         #endregion
 

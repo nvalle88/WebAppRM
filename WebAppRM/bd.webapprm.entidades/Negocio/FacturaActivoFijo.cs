@@ -18,6 +18,7 @@ namespace bd.webapprm.entidades
         [Display(Name = "Número de factura:")]
         [Required(ErrorMessage = "Debe introducir el {0}")]
         [StringLength(200, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
+        [RegularExpression(@"^\d*$", ErrorMessage = "El {0} solo puede contener números.")]
         public string NumeroFactura { get; set; }
 
         [Required(ErrorMessage = "Debe introducir la {0}")]
