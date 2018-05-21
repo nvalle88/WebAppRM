@@ -8,8 +8,7 @@ namespace bd.webapprm.entidades
     public partial class BajaActivoFijo
     {
         [Key]
-        public int IdRecepcionActivoFijoDetalle { get; set; }
-        public virtual RecepcionActivoFijoDetalle RecepcionActivoFijoDetalle { get; set; }
+        public int IdBajaActivoFijo { get; set; }
 
         [Required(ErrorMessage = "Debe introducir la {0}")]
         [Display(Name = "Fecha de Baja:")]
@@ -18,6 +17,7 @@ namespace bd.webapprm.entidades
         public DateTime FechaBaja { get; set; }
 
         [Display(Name = "Número de memo, oficio o resolución:")]
+        [Required(ErrorMessage = "Debe introducir el {0}")]
         [StringLength(200, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
         public string MemoOficioResolucion { get; set; }
 
@@ -28,5 +28,7 @@ namespace bd.webapprm.entidades
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
         public int IdMotivoBaja { get; set; }
         public virtual MotivoBaja MotivoBaja { get; set; }
+
+        public virtual ICollection<RecepcionActivoFijoDetalleBajaActivoFijo> RecepcionActivoFijoDetalleBajaActivoFijo { get; set; }
     }
 }

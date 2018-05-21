@@ -60,10 +60,11 @@ function callBackFunctionSeleccionAlta(idRecepcionActivoFijoDetalle, seleccionad
         addComponenteToArray(idRecepcionActivoFijoDetalle, idRecepcionActivoFijoDetalle, []);
         var idSucursal = $("#tableDetallesActivoFijoAltas" + idRecepcionActivoFijoDetalle + "Sucursal").data("idsucursal");
         var idLibroActivoFijo = $("#tableDetallesActivoFijoAltas" + idRecepcionActivoFijoDetalle + "Sucursal").data("idlibroactivofijo");
+        var idEmpleado = $("#tableDetallesActivoFijoAltas" + idRecepcionActivoFijoDetalle + "Empleado").data("idempleado");
 
         var hComponentes = '<input type="hidden" id="hComponentes_' + idRecepcionActivoFijoDetalle + '" name="hComponentes_' + idRecepcionActivoFijoDetalle + '" />';
         var hIdRecepcionActivoFijoDetalle = '<input type="hidden" class="hiddenIdRecepcionActivoFijoDetalle" id="hIdRecepcionActivoFijoDetalle_' + idRecepcionActivoFijoDetalle + '" name="hIdRecepcionActivoFijoDetalle_' + idRecepcionActivoFijoDetalle + '" value="' + idRecepcionActivoFijoDetalle + '" />';
-        var hEmpleado = '<input type="hidden" class="hiddenHEmpleado" id="hEmpleado_' + idRecepcionActivoFijoDetalle + '" name="hEmpleado_' + idRecepcionActivoFijoDetalle + '" value="' + idRecepcionActivoFijoDetalle + '" />';
+        var hEmpleado = '<input type="hidden" class="hiddenHEmpleado" id="hEmpleado_' + idRecepcionActivoFijoDetalle + '" name="hEmpleado_' + idRecepcionActivoFijoDetalle + '" value="' + idEmpleado + '" />';
         var hSucursal = '<input type="hidden" id="hSucursal_' + idRecepcionActivoFijoDetalle + '" name="hSucursal_' + idRecepcionActivoFijoDetalle + '" value="' + idSucursal + '" />';
         var hLibroActivoFijo = '<input type="hidden" id="hLibroActivoFijo_' + idRecepcionActivoFijoDetalle + '" name="hLibroActivoFijo_' + idRecepcionActivoFijoDetalle + '" value="' + idLibroActivoFijo + '" />';
         var btnEmpleado = '<a href="javascript:void(0);" onclick="cargarFormularioDatosEmpleado(' + idRecepcionActivoFijoDetalle + ')" class="btnDatosEmpleado" data-idfila="' + idRecepcionActivoFijoDetalle + '" data-toggle="modal" data-target="#myModalEmpleado">Custodio</a>';
