@@ -1,9 +1,21 @@
 @model List<ActivoFijo>
 @{
-    bool isConfiguracionDetallesRecepcion = ViewBag.IsConfiguracionDetallesRecepcion ?? false;
     bool isConfiguracionSeleccion = ViewBag.IsConfiguracionSeleccion ?? false;
-    bool isConfiguracionSeleccionComponentes = ViewBag.IsConfiguracionSeleccionComponentes ?? false;
+    bool isConfiguracionDatosActivo = ViewBag.IsConfiguracionDatosActivo ?? false;
     bool isConfiguracionSmartForm = ViewBag.IsConfiguracionSmartForm ?? false;
+
+    bool isConfiguracionDetallesRecepcion = ViewBag.IsConfiguracionDetallesRecepcion ?? false;
+
+    bool isConfiguracionSeleccionComponentes = ViewBag.IsConfiguracionSeleccionComponentes ?? false;
+    bool isConfiguracionListadoComponentes = ViewBag.IsConfiguracionListadoComponentes ?? false;
+
+    bool isConfiguracionListadoMantenimientos = ViewBag.IsConfiguracionListadoMantenimientos ?? false;
+
+    bool isConfiguracionSeleccionAltas = ViewBag.IsConfiguracionSeleccionAltas ?? false;
+    bool isConfiguracionListadoAltasGestionar = ViewBag.IsConfiguracionListadoAltasGestionar ?? false;
+    bool isConfiguracionListadoAltas = ViewBag.IsConfiguracionListadoAltas ?? false;
+
+    bool isConfiguracionBaja = ViewBag.IsConfiguracionBaja ?? false;
 }
 <div id="content">
     <section id="widget-grid" class="">
@@ -131,9 +143,16 @@
 </div>
 <script>
     var arrConfiguraciones = [
-        { propiedad: "IsConfiguracionDetallesRecepcion", valor: ("@isConfiguracionDetallesRecepcion".toLowerCase() === 'true') },
         { propiedad: "IsConfiguracionSeleccion", valor: ("@isConfiguracionSeleccion".toLowerCase() === 'true') },
-        { propiedad: "IsConfiguracionComponentes", valor: ("@isConfiguracionSeleccionComponentes".toLowerCase() === 'true') },
+        { propiedad: "IsConfiguracionDatosActivo", valor: ("@isConfiguracionDatosActivo".toLowerCase() === 'true') },
         { propiedad: "IsConfiguracionSmartForm", valor: ("@isConfiguracionSmartForm".toLowerCase() === 'true') },
+        { propiedad: "IsConfiguracionDetallesRecepcion", valor: ("@isConfiguracionDetallesRecepcion".toLowerCase() === 'true') },
+        { propiedad: "IsConfiguracionSeleccionComponentes", valor: ("@isConfiguracionSeleccionComponentes".toLowerCase() === 'true') },
+        { propiedad: "IsConfiguracionListadoComponentes", valor: ("@isConfiguracionListadoComponentes".toLowerCase() === 'true') },
+        { propiedad: "IsConfiguracionListadoMantenimientos", valor: ("@isConfiguracionListadoMantenimientos".toLowerCase() === 'true') },
+        { propiedad: "IsConfiguracionSeleccionAltas", valor: ("@isConfiguracionSeleccionAltas".toLowerCase() === 'true') },
+        { propiedad: "IsConfiguracionListadoAltasGestionar", valor: ("@isConfiguracionListadoAltasGestionar".toLowerCase() === 'true') },
+        { propiedad: "IsConfiguracionListadoAltas", valor: ("@isConfiguracionListadoAltas".toLowerCase() === 'true') },
+        { propiedad: "IsConfiguracionBaja", valor: ("@isConfiguracionBaja".toLowerCase() === 'true') },
     ];
 </script>

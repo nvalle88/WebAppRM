@@ -10,6 +10,7 @@ namespace bd.webapprm.entidades
         public FacturaActivoFijo()
         {
             AltaActivoFijo = new HashSet<AltaActivoFijo>();
+            DocumentoActivoFijo = new HashSet<DocumentoActivoFijo>();
         }
 
         [Key]
@@ -28,5 +29,6 @@ namespace bd.webapprm.entidades
         public DateTime FechaFactura { get; set; }
 
         public virtual ICollection<AltaActivoFijo> AltaActivoFijo { get; set; }
+        public virtual ICollection<DocumentoActivoFijo> DocumentoActivoFijo { get; set; }
     }
 }

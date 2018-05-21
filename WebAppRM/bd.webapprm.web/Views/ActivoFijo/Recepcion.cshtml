@@ -16,8 +16,8 @@
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
-            <article class="col-sm-12 col-md-12 col-lg-8">
-                <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+            <article class="col-sm-12 col-md-12 col-lg-12">
+                <div class="jarviswidget jarviswidget-color-red" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
                     <header>
                         <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
                         <h2>Recepci&oacute;n de Activo Fijo</h2>
@@ -340,8 +340,7 @@
     <script src='~/lib/bootstrap-touchspin-master/src/jquery.bootstrap-touchspin.js'></script>
     @{await Html.RenderPartialAsync("_DatetimePickerScriptsPartial");}
     <script src='~/lib/jquery.spinner-master/dist/js/jquery.spinner.min.js'></script>
-    <script src='~/lib/bootstrap-fileinput/js/fileinput.min.js'></script>
-    <script src='~/lib/bootstrap-fileinput/js/locales/es.js'></script>
+    @{await Html.RenderPartialAsync("_FileInputScriptsPartial");}
     <script src="~/lib/JsBarcode-master/dist/JsBarcode.all.min.js"></script>
     <script src='~/js/activoFijo/recepcion.min.js'></script>
     <script src='~/js/activoFijo/codificacion.min.js'></script>

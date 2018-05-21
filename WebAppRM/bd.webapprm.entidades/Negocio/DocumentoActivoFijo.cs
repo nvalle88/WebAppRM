@@ -35,5 +35,15 @@ namespace bd.webapprm.entidades
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
         public int? IdRecepcionActivoFijoDetalle { get; set; }
         public virtual RecepcionActivoFijoDetalle RecepcionActivoFijoDetalle { get; set; }
+
+        [Display(Name = "Alta de Activo Fijo:")]
+        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
+        public int? IdAltaActivoFijo { get; set; }
+        public virtual AltaActivoFijo AltaActivoFijo { get; set; }
+
+        [Display(Name = "Factura de Alta de Activo Fijo:")]
+        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
+        public int? IdFacturaActivoFijo { get; set; }
+        public virtual FacturaActivoFijo FacturaActivoFijo { get; set; }
     }
 }

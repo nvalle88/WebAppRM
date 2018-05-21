@@ -21,4 +21,10 @@ namespace bd.webapprm.entidades.ObjectTransfer
         public List<IdRecepcionActivoFijoDetalleSeleccionado> ListaIdRecepcionActivoFijoDetalleSeleccionado { get; set; }
         public List<int> IdsComponentesExcluir { get; set; }
     }
+
+    public class IdRecepcionActivoFijoDetalleSeleccionadoIdsInicialesAltaBaja
+    {
+        public List<IdRecepcionActivoFijoDetalleSeleccionado> ListaIdRecepcionActivoFijoDetalleSeleccionado { get; set; }
+        public List<IdRecepcionActivoFijoDetalleSeleccionado> ListaIdRecepcionActivoFijoDetalleSeleccionadoInicialesAltaBaja { get; set; }
+    }
 }

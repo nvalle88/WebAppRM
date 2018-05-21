@@ -10,5 +10,7 @@ namespace bd.webapprm.entidades.ObjectTransfer
         public byte[] Fichero { get; set; }
         public int? IdActivoFijo { get; set; }
         public int? IdRecepcionActivoFijoDetalle { get; set; }
+        public int? IdAltaActivoFijo { get; set; }
+        public int? IdFacturaActivoFijo { get; set; }
     }
 }

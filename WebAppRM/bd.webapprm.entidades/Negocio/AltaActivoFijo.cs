@@ -7,6 +7,11 @@ namespace bd.webapprm.entidades
 
     public partial class AltaActivoFijo
     {
+        public AltaActivoFijo()
+        {
+            DocumentoActivoFijo = new HashSet<DocumentoActivoFijo>();
+        }
+
         [Key]
         public int IdAltaActivoFijo { get; set; }
 
@@ -28,5 +33,6 @@ namespace bd.webapprm.entidades
         public virtual FacturaActivoFijo FacturaActivoFijo { get; set; }
 
         public virtual ICollection<RecepcionActivoFijoDetalleAltaActivoFijo> RecepcionActivoFijoDetalleAltaActivoFijo { get; set; }
+        public virtual ICollection<DocumentoActivoFijo> DocumentoActivoFijo { get; set; }
     }
 }
