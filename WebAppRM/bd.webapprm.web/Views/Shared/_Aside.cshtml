@@ -121,11 +121,11 @@
                         </ul>
                     </li>
 
-                    <li class="@Html.RouteIf("bajas", "active")">
+                    <li class="@Html.RouteIf("altas", "active")">
                         <a href="#"><span class="menu-item-parent">Altas</span></a>
                         <ul>
                             <li class="@Html.RouteIf("GestionarAlta", "active")">
-                                <a href="@Url.Action("GestionarAlta", "ActivoFijo")">Crear Alta de Activos Fijos</a>
+                                <a href="@Url.Action("GestionarAlta", "ActivoFijo")">Gestionar Alta de Activos Fijos</a>
                             </li>
                             <li class="@Html.RouteIf("ListadoAltaActivosFijos", "active")">
                                 <a href="@Url.Action("ListadoAltaActivosFijos", "ActivoFijo")">Listado de Altas</a>
@@ -143,11 +143,14 @@
                     <li class="@Html.RouteIf("bajas", "active")">
                         <a href="#"><span class="menu-item-parent">Bajas</span></a>
                         <ul>
-                            <li class="@Html.RouteIf("ActivosFijosRecepcionadosBaja", "active")">
-                                <a href="@Url.Action("ActivosFijosRecepcionadosBaja", "ActivoFijo")">Gestionar Baja de Activos Fijos</a>
+                            <li class="@Html.RouteIf("GestionarBaja", "active")">
+                                <a href="@Url.Action("GestionarBaja", "ActivoFijo")">Gestionar Baja de Activos Fijos</a>
                             </li>
-                            <li class="@Html.RouteIf("ActivosFijosBajas", "active")">
-                                <a href="@Url.Action("ActivosFijosBajas", "ActivoFijo")">Listado de Bajas</a>
+                            <li class="@Html.RouteIf("ListadoBajaActivosFijos", "active")">
+                                <a href="@Url.Action("ListadoBajaActivosFijos", "ActivoFijo")">Listado de Bajas</a>
+                            </li>
+                            <li class="@Html.RouteIf("ListadoActivosFijosBaja", "active")">
+                                <a href="@Url.Action("ListadoActivosFijosBaja", "ActivoFijo")">Listado de Activos Fijos en Baja</a>
                             </li>
                         </ul>
                     </li>

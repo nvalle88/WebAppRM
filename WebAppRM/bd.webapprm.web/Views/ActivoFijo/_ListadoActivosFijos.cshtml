@@ -15,7 +15,9 @@
     bool isConfiguracionListadoAltasGestionar = ViewBag.IsConfiguracionListadoAltasGestionar ?? false;
     bool isConfiguracionListadoAltas = ViewBag.IsConfiguracionListadoAltas ?? false;
 
-    bool isConfiguracionBaja = ViewBag.IsConfiguracionBaja ?? false;
+    bool isConfiguracionSeleccionBajas = ViewBag.IsConfiguracionSeleccionBajas ?? false;
+    bool isConfiguracionListadoBajasGestionar = ViewBag.IsConfiguracionListadoBajasGestionar ?? false;
+    bool isConfiguracionListadoBajas = ViewBag.IsConfiguracionListadoBajas ?? false;
 }
 <div id="content">
     <section id="widget-grid" class="">
@@ -153,6 +155,8 @@
         { propiedad: "IsConfiguracionSeleccionAltas", valor: ("@isConfiguracionSeleccionAltas".toLowerCase() === 'true') },
         { propiedad: "IsConfiguracionListadoAltasGestionar", valor: ("@isConfiguracionListadoAltasGestionar".toLowerCase() === 'true') },
         { propiedad: "IsConfiguracionListadoAltas", valor: ("@isConfiguracionListadoAltas".toLowerCase() === 'true') },
-        { propiedad: "IsConfiguracionBaja", valor: ("@isConfiguracionBaja".toLowerCase() === 'true') },
+        { propiedad: "IsConfiguracionSeleccionBajas", valor: ("@isConfiguracionSeleccionBajas".toLowerCase() === 'true') },
+        { propiedad: "IsConfiguracionListadoBajasGestionar", valor: ("@isConfiguracionListadoBajasGestionar".toLowerCase() === 'true') },
+        { propiedad: "IsConfiguracionListadoBajas", valor: ("@isConfiguracionListadoBajas".toLowerCase() === 'true') },
     ];
 </script>
