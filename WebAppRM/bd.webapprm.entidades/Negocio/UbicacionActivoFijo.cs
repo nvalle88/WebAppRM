@@ -16,7 +16,7 @@ namespace bd.webapprm.entidades
         [Key]
         public int IdUbicacionActivoFijo { get; set; }
 
-        [Display(Name = "Empleado:")]
+        [Display(Name = "Custodio:")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
         public int? IdEmpleado { get; set; }
         public virtual Empleado Empleado { get; set; }

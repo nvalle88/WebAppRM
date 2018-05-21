@@ -108,6 +108,7 @@
                             </li>
                         </ul>
                     </li>
+
                     <li class="@Html.RouteIf("PolizaSeguro", "active")">
                         <a href="#"><span class="menu-item-parent">P&oacute;liza de Seguro</span></a>
                         <ul>
@@ -119,12 +120,26 @@
                             </li>
                         </ul>
                     </li>
-                    <li class="@Html.RouteIf("ActivosFijosAlta", "active")">
-                        <a href="@Url.Action("ActivosFijosAlta", "ActivoFijo")">Altas</a>
+
+                    <li class="@Html.RouteIf("bajas", "active")">
+                        <a href="#"><span class="menu-item-parent">Altas</span></a>
+                        <ul>
+                            <li class="@Html.RouteIf("GestionarAlta", "active")">
+                                <a href="@Url.Action("GestionarAlta", "ActivoFijo")">Crear Alta de Activos Fijos</a>
+                            </li>
+                            <li class="@Html.RouteIf("ListadoAltaActivosFijos", "active")">
+                                <a href="@Url.Action("ListadoAltaActivosFijos", "ActivoFijo")">Listado de Altas</a>
+                            </li>
+                            <li class="@Html.RouteIf("ListadoActivosFijosAlta", "active")">
+                                <a href="@Url.Action("ListadoActivosFijosAlta", "ActivoFijo")">Listado de Activos Fijos en Alta</a>
+                            </li>
+                        </ul>
                     </li>
+
                     <li class="@Html.RouteIf("ActivosFijosATransferir", "active")">
                         <a href="@Url.Action("ActivosFijosATransferir", "ActivoFijo")">Transferencias</a>
                     </li>
+
                     <li class="@Html.RouteIf("bajas", "active")">
                         <a href="#"><span class="menu-item-parent">Bajas</span></a>
                         <ul>
@@ -136,9 +151,11 @@
                             </li>
                         </ul>
                     </li>
+
                     <li class="@Html.RouteIf("ListarMantenimientosActivosFijos", "active")">
                         <a href="@Url.Action("ListarMantenimientosActivosFijos", "ActivoFijo")">Mantenimientos</a>
                     </li>
+
                     <li class="@Html.RouteIf("reportes", "active")">
                         <a href="#"><i class="fa fa-file-text-o"></i> <span class="menu-item-parent">Reportes</span></a>
                         <ul>

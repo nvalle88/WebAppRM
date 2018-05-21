@@ -1,4 +1,5 @@
-﻿var arrRecepcionActivoFijoDetalleSeleccionado = Array();
+﻿var arrRecepcionActivoFijoDetalleSeleccionado = [];
+var objAdicional = [];
 jQuery(document).ready(function () {
     initDataTableFiltrado("tableActivosFijos", []);
     inicializarDetallesActivo();
@@ -10,11 +11,36 @@ function inicializarDetallesActivo()
         var ids = $(value);
         var arrIds = ids.data("ids").toString().split(",");
         $.each(arrIds, function (index, value) {
-            arrRecepcionActivoFijoDetalleSeleccionado.push({
-                idRecepcionActivoFijoDetalle: value,
-                seleccionado: false
-            });
+            adicionarRecepcionActivoFijoDetalleSeleccionado(value, false);
         });
+    });
+}
+
+function inicializarDetallesActivoSeleccion() {
+    $.each($(".hiddenIdRecepcionActivoFijoDetalle"), function (index, value) {
+        var ids = $(value);
+        var arrIds = ids.val().toString().split(",");
+        $.each(arrIds, function (index, value) {
+            adicionarRecepcionActivoFijoDetalleSeleccionado(value, true);
+        });
+    });
+}
+
+function inicializarObjetoAdicional()
+{
+    $.each(arrRecepcionActivoFijoDetalleSeleccionado, function (index, value) {
+        objAdicional.push({
+            idRecepcionActivoFijoDetalle: value.idRecepcionActivoFijoDetalle,
+            seleccionado: value.seleccionado
+        });
+    });
+}
+
+function adicionarRecepcionActivoFijoDetalleSeleccionado(idRecepcionActivoFijoDetalle, seleccionado)
+{
+    arrRecepcionActivoFijoDetalleSeleccionado.push({
+        idRecepcionActivoFijoDetalle: idRecepcionActivoFijoDetalle,
+        seleccionado: seleccionado
     });
 }
 
@@ -36,16 +62,32 @@ function abrirVentanaDetallesActivoFijo(id) {
         data: { listadoRecepcionActivoFijoDetalleSeleccionado: arrAux, arrConfiguraciones: arrConfiguraciones },
         success: function (data) {
             $("#modalBodyTableActivosFijos").html(data);
-            eventoCheckboxDetallesActivoFijo();
         },
         complete: function (data) {
-            if (existeConfiguracion("IsConfiguracionRecepcion"))
-                initDataTableFiltrado("tableDetallesActivoFijo", []);
-
-            else if (existeConfiguracion("IsConfiguracionMantenimiento"))
-                initDataTableFiltrado("tableDetallesActivoFijo", []);
-
+            initDataTableFiltrado("tableDetallesActivoFijo", []);
             $("#modalContentTableActivosFijos").waitMe("hide");
+        }
+    });
+}
+
+function cargarListadoActivosFijosParaSeleccion(objeto) {
+    mostrarLoadingPanel("modalContentDatosEspecificos", "Cargando listado de activos fijos, por favor espere...");
+    $.ajax({
+        url: urlListadoActivosFijosSeleccionResult,
+        method: "POST",
+        data: { listadoRecepcionActivoFijoDetalleSeleccionado: arrRecepcionActivoFijoDetalleSeleccionado, objAdicional: objAdicional },
+        success: function (data) {
+            $("#modalBodyDatosEspecificos").html(data);
+            try {
+                var nombreFuncionCallback = $(objeto).data("funcioncallback");
+                eval(nombreFuncionCallback + "()");
+            } catch (e) { }
+        },
+        error: function (errorMessage) {
+            mostrarNotificacion("Error", "Ocurrió un error al cargar el formulario.");
+        },
+        complete: function (data) {
+            $("#modalContentDatosEspecificos").waitMe("hide");
         }
     });
 }
@@ -73,21 +115,30 @@ function obtenerConfiguracion(propiedad)
     return null;
 }
 
-function eventoCheckboxDetallesActivoFijo()
+function eliminarRecepcionActivoFijoDetalleSeleccionado(idRecepcionActivoFijoDetalle)
 {
-    $(".chkDetallesActivoFijo").on("change", function (e) {
-        var chk = $(e.currentTarget);
-        try {
-            var idRecepcionActivoFijoDetalle = chk.data("idrecepcionactivofijodetalle");
-            var rafdSeleccionado = obtenerRecepcionActivoFijoDetalleSeleccionado(idRecepcionActivoFijoDetalle);
-            rafdSeleccionado.seleccionado = chk.prop("checked");
+    for (var i = 0; i < arrRecepcionActivoFijoDetalleSeleccionado.length; i++) {
+        if (arrRecepcionActivoFijoDetalleSeleccionado[i].idRecepcionActivoFijoDetalle == idRecepcionActivoFijoDetalle)
+        {
+            arrRecepcionActivoFijoDetalleSeleccionado.splice(i, 1);
+            return;
         }
-        catch (e) { }
-        try {
-            var nombreFuncionCallback = chk.data("funcioncallback");
-            eval(nombreFuncionCallback + "(" + idRecepcionActivoFijoDetalle + "," + chk.prop("checked") + ")");
-        } catch (e) { }
-    });
+    }
+}
+
+function eventoCheckboxDetallesActivoFijo(checkbox)
+{
+    var chk = $(checkbox);
+    try {
+        var idRecepcionActivoFijoDetalle = chk.data("idrecepcionactivofijodetalle");
+        var rafdSeleccionado = obtenerRecepcionActivoFijoDetalleSeleccionado(idRecepcionActivoFijoDetalle);
+        rafdSeleccionado.seleccionado = chk.prop("checked");
+    }
+    catch (e) { }
+    try {
+        var nombreFuncionCallback = chk.data("funcioncallback");
+        eval(nombreFuncionCallback + "(" + idRecepcionActivoFijoDetalle + "," + chk.prop("checked") + ")");
+    } catch (e) { }
 }
 
 function addRowDetallesActivosFijos(idTableACopiar, idTableCopiando, idRecepcionActivoFijoDetalle, arrCeldasCopiando, isOpcionesUltimaColumna) {
@@ -106,6 +157,9 @@ function addRowDetallesActivosFijos(idTableACopiar, idTableCopiando, idRecepcion
     }
     var rowNode = table.row.add(arrValores).draw().node();
     $(rowNode).prop("id", idTableACopiar + idRecepcionActivoFijoDetalle);
+    $.each($(rowNode).children(), function (index, value) {
+        $(value).prop("id", idTableACopiar + idRecepcionActivoFijoDetalle + arrCeldasCopiando[index]);
+    });
 }
 
 function deleteRowDetallesActivosFijos(idTableEliminar, idRecepcionActivoFijoDetalle) {

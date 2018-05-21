@@ -6,13 +6,15 @@
 @section css{
     <link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
     <link rel="stylesheet" href="~/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/lib/bootstrap-fileinput/css/fileinput.min.css">
+    <link rel="stylesheet" type="text/css" href="~/css/activoFijo/recepcion.min.css" />
     <link rel="stylesheet" type="text/css" href="~/css/tableSmartForm.min.css" />
 }
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
             <article class="col-sm-12 col-md-12 col-lg-12">
-                <div class="jarviswidget" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+                <div class="jarviswidget jarviswidget-color-red" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
                     <header>
                         <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
                         <h2>Alta de Activos Fijos</h2>
@@ -20,12 +22,13 @@
                     <div>
                         <div class="jarviswidget-editbox"></div>
                         <div class="widget-body no-padding">
-                            <form asp-action="GestionarAlta" id="checkout-form" class="smart-form" novalidate="novalidate">
+                            <form asp-action="GestionarAlta" id="checkout-form" class="smart-form" novalidate="novalidate" enctype="multipart/form-data">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 @{
                                     if (Model != null)
                                     {
                                         <input type="hidden" asp-for="IdAltaActivoFijo" />
+                                        <input type="hidden" asp-for="IdFacturaActivoFijo" />
                                     }
                                 }
                                 <fieldset>
@@ -43,13 +46,17 @@
                                         </section>
                                     </div>
 
-                                    <div id="divOpcionCompra">
-                                        @{
-                                            if (Model == null || Model?.MotivoAlta?.Descripcion == "Compra")
-                                            {
-                                                await Html.RenderPartialAsync("_DetalleFacturaAltaActivos", Model);
-                                            }
-                                        }
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="FechaAlta"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <input asp-for="FechaAlta" class="form-control" />
+                                                <span asp-validation-for="FechaAlta" class="text-danger"></span>
+                                            </label>
+                                        </section>
                                     </div>
 
                                     <div class="row">
@@ -65,15 +72,30 @@
                                         </section>
                                     </div>
 
+                                    <div id="divOpcionCompra"></div>
+
+                                    <legend>Documentaci&oacute;n Adicional de los Bienes</legend>
+                                    <div class="row margin-top-25">
+                                        <section class="col col-12 width100">
+                                            <input type="file" id="file" name="file" multiple="multiple" />
+                                        </section>
+                                    </div>
+
                                     <legend>Activos Fijos seleccionados</legend>
-                                    <div class="row margin-top-10">
-                                        <section class="col col-12">
-                                            <p>
-                                                <button type="button" class="btn btn-primary" style="padding:7px !important;margin-left:7px !important;" onclick="cargarListadoActivosFijosParaSeleccion()" id="btnAdicionarActivosFijos" data-toggle="modal" data-target="#myModal">Adicionar / Eliminar Activos Fijos</button>
+                                    @{ 
+                                        if (Model == null)
+                                        {
+                                            <p class="margin-top-10">
+                                                <button type="button" class="btn btn-primary" style="padding:7px !important;margin-left:7px !important;" onclick="cargarListadoActivosFijosParaSeleccion(this)" data-funcioncallback="callBackInicializarTableListadoSeleccion" id="btnAdicionarActivosFijos" data-toggle="modal" data-target="#myModal">Adicionar / Eliminar Activos Fijos</button>
                                             </p>
-                                            @{await Html.RenderPartialAsync("_ListadoDetallesActivosFijos", listadoRecepcionActivoFijoDetalleSeleccionado);}
+                                        }
+                                    }
+                                    @{await Html.RenderPartialAsync("_ListadoDetallesActivosFijos", listadoRecepcionActivoFijoDetalleSeleccionado);}
+                                    @{ 
+                                        if (Model == null)
+                                        {
                                             <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog  modal-lg" style="margin-left:8% !important;margin-top:30px !important;width:85% !important;">
+                                                <div class="modal-dialog modal-lg" style="margin-left:8% !important;margin-top:30px !important;width:85% !important;">
                                                     <div class="modal-content" id="modalContentDatosEspecificos">
                                                         <div class="modal-header">
                                                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="padding:10px !important;">
@@ -88,14 +110,54 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            @{await Html.RenderPartialAsync("_ModalComponentes", listadoRecepcionActivoFijoDetalleSeleccionado);}
-                                        </section>
+                                        }
+                                    }
+                                    <div class="modal fade" id="myModalEmpleado" tabindex="-1" role="dialog" aria-labelledby="myModalEmpleadoLabel" aria-hidden="true">
+                                        <div class="modal-dialog" style="margin-left:28% !important;margin-top:30px !important;">
+                                            <div class="modal-content" id="modalContentEmpleado">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="padding:10px !important;">
+                                                        &times;
+                                                    </button>
+                                                    <h4 class="modal-title" id="myModalEmpleadoLabel" style="padding:12px !important;">Selecci&oacute;n de Custodio</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="row" style="margin:0px !important;padding:20px !important;">
+                                                        <section class="col col-4">
+                                                            <label>@Html.DisplayNameFor(model => model.RecepcionActivoFijoDetalleAltaActivoFijo.FirstOrDefault().RecepcionActivoFijoDetalle.UbicacionActivoFijoActual.IdEmpleado)</label>
+                                                        </section>
+
+                                                        <section class="col col-8">
+                                                            <label class="input" id="inputEmpleado">
+
+                                                            </label>
+                                                            <div class="inline-group margin-top-10">
+                                                                <label class="checkbox">
+                                                                    <input name="checkbox-inline" type="checkbox" id="chkTodosEmpleadosDatosEspecificos">
+                                                                    <i></i>Asignar este Empleado a todos los Activos Fijos pertenecientes a la misma Sucursal.
+                                                                </label>
+                                                            </div>
+                                                        </section>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer" style="padding:15px !important;">
+                                                    <button type="button" class="btn btn-default" id="btnCancelarDatosEmpleado" data-dismiss="modal" style="padding:7px !important;">Cancelar</button>
+                                                    <button type="button" class="btn btn-primary" id="btnGuardarDatosEmpleado" style="padding:7px !important;padding-left:15px !important;padding-right:15px !important;">Guardar</button>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
+                                    @{ 
+                                        if (Model == null)
+                                        {
+                                            await Html.RenderPartialAsync("_ModalComponentes", listadoRecepcionActivoFijoDetalleSeleccionado);
+                                        }
+                                    }
                                 </fieldset>
                                 <footer>
                                     <span class="text-danger">@ViewData["Error"]</span>
-                                    <button type="submit" class="btn btn-primary" id="btn-guardar">Guardar</button>
-                                    <a asp-action="Index" class="btn btn-default">Cancelar</a>
+                                    <button type="button" class="btn btn-primary" id="btn-guardar">Guardar</button>
+                                    <a asp-action="ListadoActivosFijosAlta" class="btn btn-default">Cancelar</a>
                                 </footer>
                             </form>
                         </div>
@@ -109,11 +171,15 @@
     @{await Html.RenderPartialAsync("_Select2ScriptsPartial");}
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     @{await Html.RenderPartialAsync("_DatetimePickerScriptsPartial");}
-    @*<script src='~/js/activoFijo/listadoSeleccion.min.js'></script>*@
+    @{await Html.RenderPartialAsync("_FileInputScriptsPartial");}
+    <script src='~/js/activoFijo/listadoSeleccion.min.js'></script>
     <script src='~/js/activoFijo/componentes.min.js'></script>
-    <script src="~/js/activoFijo/alta.js"></script>
+    <script src="~/js/activoFijo/alta.min.js"></script>
     <script>
         var urlDetalleFacturaAltaActivos = "@Url.Action("DetalleFacturaAltaActivosResult")";
-        var urlListadoActivosFijosResult = "@Url.Action("ListadoActivosFijosResult")";
+        var urlListadoActivosFijosSeleccionResult = "@Url.Action("ListadoActivosFijosSeleccionAltaResult")";
+        var urlModalComponentesResult = "@Url.Action("ModalComponentesResult")";
+        var urlComponentesActivosFijos = "@Url.Action("ComponentesActivosFijosResult")";
+        var urlModalEmpleadosResult = "@Url.Action("ModalEmpleadosResult")";
     </script>
 }

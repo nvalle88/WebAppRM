@@ -42,10 +42,15 @@ function cargarListadoActivosFijosParaComponentes()
 {
     mostrarLoadingPanel("modalContentComponenteActivoFijo", "Cargando listado de activos fijos, por favor espere...");
     var idFila = $("#btnAdicionarComponentes").data("idFila");
+
+    var componentesActivo = obtenerRecepcionActivoFijoDetalleComponente();
+    var idsComponentesExcluir = obtenerIdsComponentesExcluir(idFila);
+    idsComponentesExcluir.push(componentesActivo.idRecepcionActivoDetalleOrigen);
+    
     $.ajax({
         url: urlComponentesActivosFijos,
         method: "POST",
-        data: { componentesActivo: obtenerRecepcionActivoFijoDetalleComponente(), idsComponentesExcluir: obtenerIdsComponentesExcluir(idFila) },
+        data: { componentesActivo: componentesActivo, idsComponentesExcluir: idsComponentesExcluir },
         success: function (data) {
             $("#modalBodyComponenteActivoFijo").html(data);
             initDataTableFiltrado("tableDetallesActivoFijoComponentes", []);

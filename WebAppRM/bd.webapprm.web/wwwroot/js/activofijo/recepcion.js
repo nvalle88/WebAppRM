@@ -58,9 +58,9 @@ function gestionarWizard()
                     $("#ActivoFijo_CodigoActivoFijo_SUBCAF").val($("#ActivoFijo_IdSubClaseActivoFijo").val());
                     $("#ActivoFijo_CodigoActivoFijo_CAF").val($("#ActivoFijo_SubClaseActivoFijo_IdClaseActivoFijo").val());
                     $("#ActivoFijo_CodigoActivoFijo_SUC").val($("#LibroActivoFijo_IdSucursal").val());
-                    var idSucursal = $("#LibroActivoFijo_IdSucursal").val() + ". ";
-                    var idClase = agregarCeros($("#ActivoFijo_SubClaseActivoFijo_IdClaseActivoFijo").val(), 3) + ". ";
-                    var idSubClase = agregarCeros($("#ActivoFijo_IdSubClaseActivoFijo").val(), 3) + ". ";
+                    var idSucursal = $("#LibroActivoFijo_IdSucursal").val() + ".";
+                    var idClase = agregarCeros($("#ActivoFijo_SubClaseActivoFijo_IdClaseActivoFijo").val(), 3) + ".";
+                    var idSubClase = agregarCeros($("#ActivoFijo_IdSubClaseActivoFijo").val(), 3) + ".";
                     $("#spanCodigoSecuencial").html(idSucursal + idClase + idSubClase);
                     generarNumeroConsecutivo();
                 }
