@@ -10,18 +10,28 @@ namespace bd.webapprm.entidades.ObjectTransfer
         public int IdRecepcionActivoFijoDetalle { get; set; }
 
         [Display(Name = "Serie:")]
+        [StringLength(200, MinimumLength = 2, ErrorMessage = "La {0} no puede tener más de {1} y menos de {2}")]
+        [RegularExpression(@"^\d*$", ErrorMessage = "La {0} solo puede contener números.")]
         public string Serie { get; set; }
 
         [Display(Name = "Número de chasis:")]
+        [StringLength(200, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
+        [RegularExpression(@"^\d*$", ErrorMessage = "El {0} solo puede contener números.")]
         public string NumeroChasis { get; set; }
 
         [Display(Name = "Número de motor:")]
+        [StringLength(200, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
+        [RegularExpression(@"^\d*$", ErrorMessage = "El {0} solo puede contener números.")]
         public string NumeroMotor { get; set; }
 
         [Display(Name = "Placa:")]
+        [StringLength(200, MinimumLength = 2, ErrorMessage = "La {0} no puede tener más de {1} y menos de {2}")]
+        [RegularExpression(@"^\d*$", ErrorMessage = "La {0} solo puede contener números.")]
         public string Placa { get; set; }
 
         [Display(Name = "Número de clave catastral:")]
+        [StringLength(200, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
+        [RegularExpression(@"^\d*$", ErrorMessage = "El {0} solo puede contener números.")]
         public string NumeroClaveCatastral { get; set; }
 
         [Display(Name = "Empleado:")]
@@ -48,36 +58,6 @@ namespace bd.webapprm.entidades.ObjectTransfer
             {
                 if (IdEmpleado == null)
                     errores.Add(new PropiedadValor { Propiedad = "IdEmpleado", Valor = "Tiene que seleccionar un Empleado." });
-            }
-
-            if (Serie != null)
-            {
-                if (Serie.Length < 2 || Serie.Length > 200)
-                    errores.Add(new PropiedadValor { Propiedad = "Serie", Valor = "La Serie: no puede tener más de 200 y menos de 2." });
-            }
-
-            if (NumeroChasis != null)
-            {
-                if (NumeroChasis.Length < 2 || NumeroChasis.Length > 200)
-                    errores.Add(new PropiedadValor { Propiedad = "NumeroChasis", Valor = "El Número de chasis: no puede tener más de 200 y menos de 2." });
-            }
-
-            if (NumeroMotor != null)
-            {
-                if (NumeroMotor.Length < 2 || NumeroMotor.Length > 200)
-                    errores.Add(new PropiedadValor { Propiedad = "NumeroMotor", Valor = "El Número de motor: no puede tener más de 200 y menos de 2." });
-            }
-
-            if (Placa != null)
-            {
-                if (Placa.Length < 2 || Placa.Length > 200)
-                    errores.Add(new PropiedadValor { Propiedad = "Placa", Valor = "La Placa: no puede tener más de 200 y menos de 2." });
-            }
-
-            if (NumeroClaveCatastral != null)
-            {
-                if (NumeroClaveCatastral.Length < 2 || NumeroClaveCatastral.Length > 200)
-                    errores.Add(new PropiedadValor { Propiedad = "NumeroClaveCatastral", Valor = "El Número de clave catastral: no puede tener más de 200 y menos de 2." });
             }
             return errores;
         }

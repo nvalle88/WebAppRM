@@ -55,85 +55,81 @@
         </section>
     </div>
 
-    <legend>Datos Espec&iacute;ficos</legend>
     @{
-        int categoria = ViewBag.Categoria;
-        switch (categoria)
+        string categoria = ViewBag.Categoria;
+        if (categoria == Categorias.Edificio)
         {
-            case 1:
-                {
-                    <div class="row margin-top-25">
-                        <section class="col col-4">
-                            <label asp-for="NumeroClaveCatastral"></label>
-                        </section>
+            <legend>Datos Espec&iacute;ficos</legend>
+            <div class="row margin-top-25">
+                <section class="col col-4">
+                    <label asp-for="NumeroClaveCatastral"></label>
+                </section>
 
-                        <section class="col col-8">
-                            <label class="input">
-                                <input asp-for="NumeroClaveCatastral" class="form-control" />
-                                <span id="valNumeroClaveCatastral" class="text-danger validationDatosEspecificos"></span>
-                            </label>
-                        </section>
-                    </div>
-                    break;
-                }
-            case 2:
-                {
-                    <div class="row margin-top-25">
-                        <section class="col col-4">
-                            <label asp-for="NumeroChasis"></label>
-                        </section>
+                <section class="col col-8">
+                    <label class="input">
+                        <input asp-for="NumeroClaveCatastral" class="form-control" />
+                        <span id="valNumeroClaveCatastral" class="text-danger validationDatosEspecificos"></span>
+                    </label>
+                </section>
+            </div>
+        }
+        else if (categoria == Categorias.Vehiculo)
+        {
+            <legend>Datos Espec&iacute;ficos</legend>
+            <div class="row margin-top-25">
+                <section class="col col-4">
+                    <label asp-for="NumeroChasis"></label>
+                </section>
 
-                        <section class="col col-8">
-                            <label class="input">
-                                <input asp-for="NumeroChasis" class="form-control" />
-                                <span id="valNumeroChasis" class="text-danger validationDatosEspecificos"></span>
-                            </label>
-                        </section>
-                    </div>
+                <section class="col col-8">
+                    <label class="input">
+                        <input asp-for="NumeroChasis" class="form-control" />
+                        <span id="valNumeroChasis" class="text-danger validationDatosEspecificos"></span>
+                    </label>
+                </section>
+            </div>
 
-                    <div class="row">
-                        <section class="col col-4">
-                            <label asp-for="NumeroMotor"></label>
-                        </section>
+            <div class="row">
+                <section class="col col-4">
+                    <label asp-for="NumeroMotor"></label>
+                </section>
 
-                        <section class="col col-8">
-                            <label class="input">
-                                <input asp-for="NumeroMotor" class="form-control" />
-                                <span id="valNumeroMotor" class="text-danger validationDatosEspecificos"></span>
-                            </label>
-                        </section>
-                    </div>
+                <section class="col col-8">
+                    <label class="input">
+                        <input asp-for="NumeroMotor" class="form-control" />
+                        <span id="valNumeroMotor" class="text-danger validationDatosEspecificos"></span>
+                    </label>
+                </section>
+            </div>
 
-                    <div class="row">
-                        <section class="col col-4">
-                            <label asp-for="Placa"></label>
-                        </section>
+            <div class="row">
+                <section class="col col-4">
+                    <label asp-for="Placa"></label>
+                </section>
 
-                        <section class="col col-8">
-                            <label class="input">
-                                <input asp-for="Placa" class="form-control" />
-                                <span id="valPlaca" class="text-danger validationDatosEspecificos"></span>
-                            </label>
-                        </section>
-                    </div>
-                    break;
-                }
-            default:
-                {
-                    <div class="row margin-top-25">
-                        <section class="col col-4">
-                            <label asp-for="Serie"></label>
-                        </section>
+                <section class="col col-8">
+                    <label class="input">
+                        <input asp-for="Placa" class="form-control" />
+                        <span id="valPlaca" class="text-danger validationDatosEspecificos"></span>
+                    </label>
+                </section>
+            </div>
+        }
+        else if (categoria == Categorias.EquiposComputoSoftware)
+        {
+            <legend>Datos Espec&iacute;ficos</legend>
+            <div class="row margin-top-25">
+                <section class="col col-4">
+                    <label asp-for="Serie"></label>
+                </section>
 
-                        <section class="col col-8">
-                            <label class="input">
-                                <input asp-for="Serie" class="form-control" />
-                                <span id="valSerie" class="text-danger validationDatosEspecificos"></span>
-                            </label>
-                        </section>
-                    </div>
-                    break;
-                }
+                <section class="col col-8">
+                    <label class="input">
+                        <input asp-for="Serie" class="form-control" />
+                        <span id="valSerie" class="text-danger validationDatosEspecificos"></span>
+                    </label>
+                </section>
+            </div>
         }
     }
 </fieldset>

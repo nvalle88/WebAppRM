@@ -17,6 +17,9 @@
                     <li class="@Html.RouteIf("CatalogoCuenta", "active")">
                         <a href="@Url.Action("Index", "CatalogoCuenta")">Cat&aacute;logo de Cuenta</a>
                     </li>
+                    <li class="@Html.RouteIf("CategoriaActivoFijo", "active")">
+                        <a href="@Url.Action("Index", "CategoriaActivoFijo")">Categor&iacute;a de Activo Fijo</a>
+                    </li>
                     <li class="@Html.RouteIf("ClaseActivoFijo", "active")">
                         <a href="@Url.Action("Index", "ClaseActivoFijo")">Clase de Activo Fijo</a>
                     </li>
@@ -35,9 +38,9 @@
                     <li class="@Html.RouteIf("FondoFinanciamiento", "active")">
                         <a href="@Url.Action("Index", "FondoFinanciamiento")">Fondo de Financiamiento</a>
                     </li>
-                    @*<li class="@Html.RouteIf("Genero", "active")">
-                        <a href="@Url.Action("Index", "Genero")">G&eacute;nero</a>
-                    </li>*@
+                    <li class="@Html.RouteIf("LineaServicio", "active")">
+                        <a href="@Url.Action("Index", "LineaServicio")">L&iacute;nea de Servicio</a>
+                    </li>
                     <li class="@Html.RouteIf("Marca", "active")">
                         <a href="@Url.Action("Index", "Marca")">Marca</a>
                     </li>
@@ -74,9 +77,6 @@
                     <li class="@Html.RouteIf("Subramo", "active")">
                         <a href="@Url.Action("Index", "Subramo")">Subramo</a>
                     </li>
-                    @*<li class="@Html.RouteIf("TablaDepreciacion", "active")">
-                        <a href="@Url.Action("Index", "TablaDepreciacion")">Tabla de Depreciaci&oacute;n</a>
-                    </li>*@
                     <li class="@Html.RouteIf("TipoActivoFijo", "active")">
                         <a href="@Url.Action("Index", "TipoActivoFijo")">Tipo de Activo Fijo</a>
                     </li>

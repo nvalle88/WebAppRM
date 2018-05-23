@@ -45,7 +45,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 ViewData["SubClaseActivoFijo"] = await ObtenerSelectListSubClaseActivoFijo((ViewData["ClaseActivoFijo"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["ClaseActivoFijo"] as SelectList).FirstOrDefault().Value) : -1);
                 ViewData["MotivoRecepcion"] = new SelectList(await apiServicio.Listar<MotivoRecepcion>(new Uri(WebApp.BaseAddressRM), "api/MotivoRecepcion/ListarMotivoRecepcion"), "IdMotivoRecepcion", "Descripcion");
                 ViewData["FondoFinanciamiento"] = new SelectList(await apiServicio.Listar<FondoFinanciamiento>(new Uri(WebApp.BaseAddressRM), "api/FondoFinanciamiento/ListarFondoFinanciamiento"), "IdFondoFinanciamiento", "Nombre");
-                ViewData["Proveedor"] = new SelectList((await apiServicio.Listar<Proveedor>(new Uri(WebApp.BaseAddressRM), "api/Proveedor/ListarProveedores")).Select(c => new { c.IdProveedor, NombreApellidos = $"{c.Nombre} {c.Apellidos}" }), "IdProveedor", "NombreApellidos");
+                ViewData["Proveedor"] = new SelectList((await apiServicio.ObtenerElementoAsync<List<Proveedor>> (new ProveedorTransfer { LineaServicio = LineasServicio.ActivosFijos, Activo = true }, new Uri(WebApp.BaseAddressRM), "api/Proveedor/ListarProveedoresPorLineaServicioEstado")).Select(c => new { c.IdProveedor, NombreApellidos = $"{c.Nombre} {c.Apellidos}" }), "IdProveedor", "NombreApellidos");
 
                 ViewData["Sucursal"] = new SelectList(await apiServicio.Listar<Sucursal>(new Uri(WebApp.BaseAddressTH), "api/Sucursal/ListarSucursal"), "IdSucursal", "Nombre");
                 ViewData["LibroActivoFijo"] = await ObtenerSelectListLibroActivoFijo((ViewData["Sucursal"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Sucursal"] as SelectList).FirstOrDefault().Value) : -1);
@@ -56,10 +56,11 @@ namespace bd.webapprm.web.Controllers.MVC
                 ViewData["Ramo"] = new SelectList(await apiServicio.Listar<Ramo>(new Uri(WebApp.BaseAddressRM), "api/Ramo/ListarRamo"), "IdRamo", "Nombre");
                 ViewData["Subramo"] = await ObtenerSelectListSubramo((ViewData["Ramo"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Ramo"] as SelectList).FirstOrDefault().Value) : -1);
                 ViewData["CompaniaSeguro"] = new SelectList(await apiServicio.Listar<CompaniaSeguro>(new Uri(WebApp.BaseAddressRM), "api/CompaniaSeguro/ListarCompaniaSeguro"), "IdCompaniaSeguro", "Nombre");
-
-                ViewData["IdCategoria"] = 3;
-                ViewData["Categoria"] = new SelectList(new[] { new { Id = 1, Valor = "Inmueble" }, new { Id = 2, Valor = "Vehículo" }, new { Id = 3, Valor = "Equipo de Cómputo y Software" } }, "Id", "Valor", ViewData["IdCategoria"]);
+                
                 ViewData["ListadoRecepcionActivoFijoDetalle"] = new List<RecepcionActivoFijoDetalle>();
+
+                var primeraCategoria = await apiServicio.ObtenerElementoAsync<CategoriaActivoFijo>(null, new Uri(WebApp.BaseAddressRM), "api/CategoriaActivoFijo/ObtenerPrimeraCategoria");
+                ViewData["Categoria"] = primeraCategoria?.Nombre ?? Categorias.Edificio;
                 return View();
             }
             catch (Exception)
@@ -93,22 +94,17 @@ namespace bd.webapprm.web.Controllers.MVC
                     ViewData["Sucursal"] = new SelectList(await apiServicio.Listar<Sucursal>(new Uri(WebApp.BaseAddressTH), "api/Sucursal/ListarSucursal"), "IdSucursal", "Nombre");
                     ViewData["LibroActivoFijo"] = await ObtenerSelectListLibroActivoFijo(recepcionActivoFijoDetalle?.UbicacionActivoFijoActual?.LibroActivoFijo?.IdSucursal ?? -1);
 
-                    ViewData["Proveedor"] = new SelectList((await apiServicio.Listar<Proveedor>(new Uri(WebApp.BaseAddressRM), "api/Proveedor/ListarProveedores")).Select(c => new { c.IdProveedor, NombreApellidos = $"{c.Nombre} {c.Apellidos}" }), "IdProveedor", "NombreApellidos");
+                    ViewData["Proveedor"] = new SelectList((await apiServicio.ObtenerElementoAsync<List<Proveedor>>(new ProveedorTransfer { LineaServicio = LineasServicio.ActivosFijos, Activo = true }, new Uri(WebApp.BaseAddressRM), "api/Proveedor/ListarProveedoresPorLineaServicioEstado")).Select(c => new { c.IdProveedor, NombreApellidos = $"{c.Nombre} {c.Apellidos}" }), "IdProveedor", "NombreApellidos");
                     ViewData["Marca"] = new SelectList(await apiServicio.Listar<Marca>(new Uri(WebApp.BaseAddressRM), "api/Marca/ListarMarca"), "IdMarca", "Nombre");
                     ViewData["Modelo"] = await ObtenerSelectListModelo(activoFijo?.Modelo?.IdMarca ?? -1);
 
                     ViewData["Ramo"] = new SelectList(await apiServicio.Listar<Ramo>(new Uri(WebApp.BaseAddressRM), "api/Ramo/ListarRamo"), "IdRamo", "Nombre");
                     ViewData["Subramo"] = await ObtenerSelectListSubramo(activoFijo?.PolizaSeguroActivoFijo?.Subramo?.IdRamo ?? -1);
                     ViewData["CompaniaSeguro"] = new SelectList(await apiServicio.Listar<CompaniaSeguro>(new Uri(WebApp.BaseAddressRM), "api/CompaniaSeguro/ListarCompaniaSeguro"), "IdCompaniaSeguro", "Nombre");
-
-                    if (!recepcionActivoFijoDetalle.RecepcionActivoFijo.ValidacionTecnica)
-                        try { recepcionActivoFijoDetalle.ActivoFijo.CodigoActivoFijo.Consecutivo = int.Parse(String.Join("", activoFijo.CodigoActivoFijo.Codigosecuencial.Except(ObtenerCodigoSecuencial(recepcionActivoFijoDetalle?.UbicacionActivoFijoActual?.LibroActivoFijo?.IdSucursal?.ToString(), activoFijo?.SubClaseActivoFijo?.ClaseActivoFijo?.Nombre, activoFijo?.SubClaseActivoFijo?.ClaseActivoFijo?.TipoActivoFijo?.Nombre)))); } catch (Exception) { activoFijo.CodigoActivoFijo.Consecutivo = 1; }
-
-                    ViewData["IdCategoria"] = recepcionActivoFijoDetalle.NumeroChasis != null || recepcionActivoFijoDetalle.NumeroMotor != null || recepcionActivoFijoDetalle.Placa != null ? 2 : recepcionActivoFijoDetalle.NumeroClaveCatastral != null ? 1 : 3;
-                    ViewData["Categoria"] = new SelectList(new[] { new { Id = 1, Valor = "Inmueble" }, new { Id = 2, Valor = "Vehículo" }, new { Id = 3, Valor = "Equipo de Cómputo y Software" } }, "Id", "Valor", ViewData["IdCategoria"]);
-
+                    
                     ViewData["ListadoRecepcionActivoFijoDetalle"] = activoFijo.RecepcionActivoFijoDetalle.ToList();
                     ViewData["UbicacionActivoFijo"] = recepcionActivoFijoDetalle?.UbicacionActivoFijoActual;
+                    ViewData["Categoria"] = activoFijo.SubClaseActivoFijo.ClaseActivoFijo.CategoriaActivoFijo.Nombre;
                     ViewData["AccionVistaEditar"] = accionVistaEditar;
                     return View("EditarRecepcion", recepcionActivoFijoDetalle);
                 }
@@ -130,9 +126,6 @@ namespace bd.webapprm.web.Controllers.MVC
                 recepcionActivoFijoDetalle.Estado = listaEstado.SingleOrDefault(c => c.Nombre == (!recepcionActivoFijoDetalle.RecepcionActivoFijo.ValidacionTecnica ? Estados.Recepcionado : Estados.ValidacionTecnica));
                 recepcionActivoFijoDetalle.IdEstado = recepcionActivoFijoDetalle.Estado.IdEstado;
 
-                if (recepcionActivoFijoDetalle.IdRecepcionActivoFijo == 0)
-                    recepcionActivoFijoDetalle.ActivoFijo.CodigoActivoFijo.Codigosecuencial = ObtenerCodigoSecuencial(libroActivoFijo.IdSucursal.ToString(), recepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.IdClaseActivoFijo.ToString(), recepcionActivoFijoDetalle.ActivoFijo.IdSubClaseActivoFijo.ToString(), recepcionActivoFijoDetalle.ActivoFijo.CodigoActivoFijo.Consecutivo);
-
                 var response = new Response();
                 int idActivoFijo = 0;
                 var listaRecepcionActivoFijoUbicacionTransfer = new List<RecepcionActivoFijoDetalle>();
@@ -144,6 +137,8 @@ namespace bd.webapprm.web.Controllers.MVC
                     int? idEmpleado = Utiles.TryParseInt(Request.Form[$"hEmpleado_{posFormDatoEspecifico}"]);
                     int? idRecepcionActivoFijoDetalle = Utiles.TryParseInt(Request.Form[$"hIdRecepcionActivoFijoDetalle_{posFormDatoEspecifico}"]);
                     int? idUbicacionActivoFijo = Utiles.TryParseInt(Request.Form[$"hUbicacion_{posFormDatoEspecifico}"]);
+                    string codigoSecuencial = Request.Form[$"hCodigoSecuencial_{posFormDatoEspecifico}"].ToString();
+                    int? idCodigoActivoFijo = Utiles.TryParseInt(Request.Form[$"hIdCodigoActivoFijo_{posFormDatoEspecifico}"]);
                     string[] arrComponentes = Request.Form[$"hComponentes_{posFormDatoEspecifico}"].ToString().Trim().Split(',');
 
                     var rafd = new RecepcionActivoFijoDetalle
@@ -155,11 +150,8 @@ namespace bd.webapprm.web.Controllers.MVC
                         ActivoFijo = recepcionActivoFijoDetalle.ActivoFijo,
                         RecepcionActivoFijo = recepcionActivoFijoDetalle.RecepcionActivoFijo,
                         Estado = recepcionActivoFijoDetalle.Estado,
-                        Serie = !String.IsNullOrEmpty(Request.Form[$"hSerie_{posFormDatoEspecifico}"].ToString()) ? Request.Form[$"hSerie_{posFormDatoEspecifico}"].ToString() : null,
-                        NumeroChasis = !String.IsNullOrEmpty(Request.Form[$"hNumeroChasis_{posFormDatoEspecifico}"].ToString()) ? Request.Form[$"hNumeroChasis_{posFormDatoEspecifico}"].ToString() : null,
-                        NumeroMotor = !String.IsNullOrEmpty(Request.Form[$"hNumeroMotor_{posFormDatoEspecifico}"].ToString()) ? Request.Form[$"hNumeroMotor_{posFormDatoEspecifico}"].ToString() : null,
-                        Placa = !String.IsNullOrEmpty(Request.Form[$"hPlaca_{posFormDatoEspecifico}"].ToString()) ? Request.Form[$"hPlaca_{posFormDatoEspecifico}"].ToString() : null,
-                        NumeroClaveCatastral = !String.IsNullOrEmpty(Request.Form[$"hNumeroClaveCatastral_{posFormDatoEspecifico}"].ToString()) ? Request.Form[$"hNumeroClaveCatastral_{posFormDatoEspecifico}"].ToString() : null,
+                        IdCodigoActivoFijo = idCodigoActivoFijo ?? 0,
+                        CodigoActivoFijo = new CodigoActivoFijo { Codigosecuencial = codigoSecuencial },
                         UbicacionActivoFijoActual = new UbicacionActivoFijo
                         {
                             IdUbicacionActivoFijo = idUbicacionActivoFijo ?? 0,
@@ -172,6 +164,17 @@ namespace bd.webapprm.web.Controllers.MVC
                             LibroActivoFijo = JsonConvert.DeserializeObject<LibroActivoFijo>((await apiServicio.SeleccionarAsync<Response>(Request.Form["IdLibroActivoFijo"].ToString(), new Uri(WebApp.BaseAddressRM), "api/LibroActivoFijo")).Resultado.ToString())
                         }
                     };
+                    if (recepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.CategoriaActivoFijo.Nombre == Categorias.Edificio)
+                        rafd.NumeroClaveCatastral = !String.IsNullOrEmpty(Request.Form[$"hNumeroClaveCatastral_{posFormDatoEspecifico}"].ToString()) ? Request.Form[$"hNumeroClaveCatastral_{posFormDatoEspecifico}"].ToString() : null;
+                    else if (recepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.CategoriaActivoFijo.Nombre == Categorias.Vehiculo)
+                    {
+                        rafd.NumeroChasis = !String.IsNullOrEmpty(Request.Form[$"hNumeroChasis_{posFormDatoEspecifico}"].ToString()) ? Request.Form[$"hNumeroChasis_{posFormDatoEspecifico}"].ToString() : null;
+                        rafd.NumeroMotor = !String.IsNullOrEmpty(Request.Form[$"hNumeroMotor_{posFormDatoEspecifico}"].ToString()) ? Request.Form[$"hNumeroMotor_{posFormDatoEspecifico}"].ToString() : null;
+                        rafd.Placa = !String.IsNullOrEmpty(Request.Form[$"hPlaca_{posFormDatoEspecifico}"].ToString()) ? Request.Form[$"hPlaca_{posFormDatoEspecifico}"].ToString() : null;
+                    }
+                    else if (recepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.CategoriaActivoFijo.Nombre == Categorias.EquiposComputoSoftware)
+                        rafd.Serie = !String.IsNullOrEmpty(Request.Form[$"hSerie_{posFormDatoEspecifico}"].ToString()) ? Request.Form[$"hSerie_{posFormDatoEspecifico}"].ToString() : null;
+
                     foreach (var comp in arrComponentes)
                     {
                         if (!String.IsNullOrEmpty(comp))
@@ -234,16 +237,14 @@ namespace bd.webapprm.web.Controllers.MVC
                 ViewData["Sucursal"] = new SelectList(await apiServicio.Listar<Sucursal>(new Uri(WebApp.BaseAddressTH), "api/Sucursal/ListarSucursal"), "IdSucursal", "Nombre");
                 ViewData["LibroActivoFijo"] = await ObtenerSelectListLibroActivoFijo(libroActivoFijo?.IdSucursal ?? -1);
 
-                ViewData["Proveedor"] = new SelectList((await apiServicio.Listar<Proveedor>(new Uri(WebApp.BaseAddressRM), "api/Proveedor/ListarProveedores")).Select(c => new { c.IdProveedor, NombreApellidos = $"{c.Nombre} {c.Apellidos}" }), "IdProveedor", "NombreApellidos");
+                ViewData["Proveedor"] = new SelectList((await apiServicio.ObtenerElementoAsync<List<Proveedor>>(new ProveedorTransfer { LineaServicio = LineasServicio.ActivosFijos, Activo = true }, new Uri(WebApp.BaseAddressRM), "api/Proveedor/ListarProveedoresPorLineaServicioEstado")).Select(c => new { c.IdProveedor, NombreApellidos = $"{c.Nombre} {c.Apellidos}" }), "IdProveedor", "NombreApellidos");
                 ViewData["Marca"] = new SelectList(await apiServicio.Listar<Marca>(new Uri(WebApp.BaseAddressRM), "api/Marca/ListarMarca"), "IdMarca", "Nombre");
                 ViewData["Modelo"] = await ObtenerSelectListModelo(recepcionActivoFijoDetalle?.ActivoFijo?.Modelo?.IdMarca ?? -1);
 
                 ViewData["Ramo"] = new SelectList(await apiServicio.Listar<Ramo>(new Uri(WebApp.BaseAddressRM), "api/Ramo/ListarRamo"), "IdRamo", "Nombre");
                 ViewData["Subramo"] = await ObtenerSelectListSubramo(recepcionActivoFijoDetalle?.ActivoFijo?.PolizaSeguroActivoFijo?.Subramo?.IdRamo ?? -1);
                 ViewData["CompaniaSeguro"] = new SelectList(await apiServicio.Listar<CompaniaSeguro>(new Uri(WebApp.BaseAddressRM), "api/CompaniaSeguro/ListarCompaniaSeguro"), "IdCompaniaSeguro", "Nombre");
-
-                ViewData["IdCategoria"] = int.Parse(Request.Form["IdCategoria"].ToString());
-                ViewData["Categoria"] = new SelectList(new[] { new { Id = 1, Valor = "Inmueble" }, new { Id = 2, Valor = "Vehículo" }, new { Id = 3, Valor = "Equipo de Cómputo y Software" } }, "Id", "Valor", ViewData["IdCategoria"]);
+                ViewData["Categoria"] = recepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.CategoriaActivoFijo.Nombre;
                 return recepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle == 0 ? View(recepcionActivoFijoDetalle) : View("EditarRecepcion", recepcionActivoFijoDetalle);
             }
             catch (Exception ex)
@@ -272,19 +273,6 @@ namespace bd.webapprm.web.Controllers.MVC
             }
         }
 
-        private string ObtenerCodigoSecuencial(string idSucursal, string idClaseActivoFijo, string idSubClaseActivoFijo, int? numeroConsecutivo = null)
-        {
-            try
-            {
-                string codigoSecuencial = $"{idSucursal}.{AgregarCeros(idClaseActivoFijo, 3)}.{AgregarCeros(idSubClaseActivoFijo, 3)}";
-                return numeroConsecutivo != null ? $"{codigoSecuencial}.{numeroConsecutivo}" : codigoSecuencial;
-            }
-            catch (Exception)
-            {
-                return null;
-            }
-        }
-
         private string AgregarCeros(string valor, int cantidadCeros)
         {
             if (valor.Length < cantidadCeros)
@@ -297,27 +285,12 @@ namespace bd.webapprm.web.Controllers.MVC
         }
 
         [HttpPost]
-        public async Task<JsonResult> ValidarCodigoBarras(ActivoFijo activoFijo)
+        public async Task<JsonResult> ValidarCodigoUnico(int idCodigoActivoFijo, string codigoSecuencial)
         {
             try
             {
                 var listaCodigoActivoFijo = await apiServicio.Listar<CodigoActivoFijo>(new Uri(WebApp.BaseAddressRM), "api/CodigoActivoFijo/ListarCodigosActivoFijo");
-                return Json(!(activoFijo.CodigoActivoFijo.IdCodigoActivoFijo == 0 ? listaCodigoActivoFijo.Any(c => c.CodigoBarras == activoFijo.CodigoActivoFijo.CodigoBarras.Trim()) : listaCodigoActivoFijo.Where(c => c.CodigoBarras == activoFijo.CodigoActivoFijo.CodigoBarras.Trim()).Any(c => c.IdCodigoActivoFijo != activoFijo.CodigoActivoFijo.IdCodigoActivoFijo)));
-            }
-            catch (Exception)
-            {
-                return Json(false);
-            }
-        }
-
-        [HttpPost]
-        public async Task<JsonResult> ValidarCodigoUnico(ActivoFijo activoFijo)
-        {
-            try
-            {
-                var listaCodigoActivoFijo = await apiServicio.Listar<CodigoActivoFijo>(new Uri(WebApp.BaseAddressRM), "api/CodigoActivoFijo/ListarCodigosActivoFijo");
-                string codigoSecuencial = ObtenerCodigoSecuencial(activoFijo.CodigoActivoFijo.SUC, activoFijo.CodigoActivoFijo.CAF, activoFijo.CodigoActivoFijo.SUBCAF, activoFijo.CodigoActivoFijo.Consecutivo);
-                return Json(!(activoFijo.CodigoActivoFijo.IdCodigoActivoFijo == 0 ? listaCodigoActivoFijo.Any(c => c.Codigosecuencial == codigoSecuencial.Trim()) : listaCodigoActivoFijo.Where(c => c.Codigosecuencial == codigoSecuencial.Trim()).Any(c => c.IdCodigoActivoFijo != activoFijo.CodigoActivoFijo.IdCodigoActivoFijo)));
+                return Json((idCodigoActivoFijo == 0 ? listaCodigoActivoFijo.Any(c => c.Codigosecuencial == codigoSecuencial.Trim()) : listaCodigoActivoFijo.Where(c => c.Codigosecuencial == codigoSecuencial.Trim()).Any(c => c.IdCodigoActivoFijo != idCodigoActivoFijo)));
             }
             catch (Exception)
             {
@@ -422,7 +395,7 @@ namespace bd.webapprm.web.Controllers.MVC
         public async Task<IActionResult> RevisionActivoFijo(string id) => await ObtenerRecepcionActivoFijo(id, new List<string> { Estados.ValidacionTecnica }, nameof(ActivosFijosValidacionTecnica));
 
         [HttpPost]
-        public async Task<IActionResult> ModalDatosEspecificosResult(RecepcionActivoFijoDetalle rafd, int categoria, int idSucursal, int? idBodega, int? idEmpleado)
+        public async Task<IActionResult> ModalDatosEspecificosResult(RecepcionActivoFijoDetalle rafd, string categoria, int idSucursal, int? idBodega, int? idEmpleado)
         {
             ViewData["Categoria"] = categoria;
             ViewData["Empleado"] = await ObtenerSelectListEmpleado(idSucursal);
@@ -436,6 +409,21 @@ namespace bd.webapprm.web.Controllers.MVC
         public async Task<IActionResult> ValidacionDatosEspecificosResult(RecepcionActivoFijoDetalleDatosEspecificosViewModel rafd)
         {
             var listaPropiedadValorErrores = rafd.Validar();
+            if (!ModelState.IsValid)
+            {
+                foreach (var modelStateKey in ModelState.Keys)
+                {
+                    var value = ViewData.ModelState[modelStateKey];
+                    foreach (var error in value.Errors)
+                    {
+                        listaPropiedadValorErrores.Add(new PropiedadValor
+                        {
+                            Propiedad = modelStateKey.Replace("rafd.", ""),
+                            Valor = error.ErrorMessage
+                        });
+                    }
+                }
+            }
             try
             {
                 if (listaPropiedadValorErrores.Count == 0)
@@ -513,6 +501,30 @@ namespace bd.webapprm.web.Controllers.MVC
             catch (Exception)
             { }
             return listaIdRecepcionActivoFijoDetalleSeleccionado;
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CategoriaResult(int? idClaseActivoFijo)
+        {
+            try
+            {
+                if (idClaseActivoFijo == null)
+                    return Json("");
+
+                var categoria = await apiServicio.ObtenerElementoAsync<CategoriaActivoFijo>(idClaseActivoFijo, new Uri(WebApp.BaseAddressRM), "api/CategoriaActivoFijo/ObtenerCategoriaPorClaseActivoFijo");
+                return Json(categoria?.Nombre ?? "");
+            }
+            catch (Exception)
+            {
+                return Json("");
+            }
+        }
+
+        [HttpPost]
+        public IActionResult CodificacionResult(string Codigosecuencial)
+        {
+            ViewData["IsSmartAdmin"] = true;
+            return PartialView("_Codificacion", new RecepcionActivoFijoDetalle { CodigoActivoFijo = new CodigoActivoFijo { Codigosecuencial = Codigosecuencial } });
         }
         #endregion
 

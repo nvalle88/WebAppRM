@@ -47,7 +47,7 @@
                         <div class="widget-body no-padding">
                             <table id="tableActivosFijos" class="table table-striped table-bordered table-hover" style="width:100%;">
                                 <thead>
-                                    @{await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", isConfiguracionDetallesRecepcion ? 10 : 7);}
+                                    @{await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", isConfiguracionDetallesRecepcion ? 9 : 7);}
                                     <tr>
                                         <th>@Html.DisplayNameFor(model => model.FirstOrDefault().SubClaseActivoFijo.ClaseActivoFijo.IdTipoActivoFijo)</th>
                                         <th>@Html.DisplayNameFor(model => model.FirstOrDefault().SubClaseActivoFijo.IdClaseActivoFijo)</th>
@@ -59,7 +59,6 @@
                                             {
                                                 <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijo.IdProveedor)</th>
                                                 <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijo.FechaRecepcion)</th>
-                                                <th>@Html.DisplayNameFor(model => model.FirstOrDefault().IdCodigoActivoFijo)</th>
                                             }
                                         }
                                         <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Nombre)</th>
@@ -84,7 +83,6 @@
                                                 {
                                                     <td>@{await ViewContext.Writer.WriteAsync($"{item.RecepcionActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijo.Proveedor.Nombre} {item.RecepcionActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijo.Proveedor.Apellidos}"); }</td>
                                                     <td>@Html.DisplayFor(modelItem => item.RecepcionActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijo.FechaRecepcion)</td>
-                                                    <td>@Html.DisplayFor(modelItem => item.CodigoActivoFijo.Codigosecuencial)</td>
                                                 }
                                             }
                                             <td>@Html.DisplayFor(modelItem => item.Nombre)</td>

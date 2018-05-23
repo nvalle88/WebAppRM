@@ -1,4 +1,17 @@
-﻿var categoria = 3;
+﻿var objName = {
+    nameNumeroClaveCatastral: "NumeroClaveCatastral",
+    nameNumeroChasis: "NumeroChasis",
+    nameNumeroMotor: "NumeroMotor",
+    namePlaca: "Placa",
+    nameSerie: "Serie"
+};
+var objCategorias = {
+    Edificio: "Edificios",
+    MueblesEnseres: "Muebles y enseres",
+    EquiposOficina: "Equipos de oficina",
+    Vehiculo: "Vehículos",
+    EquiposComputoSoftware: "Equipos de cómputo y software",
+};
 var arrIdsfilas = Array();
 $(document).ready(function () {
     Init_Select2();
@@ -11,13 +24,20 @@ $(document).ready(function () {
     gestionarWizard();
     Init_DatetimePicker("RecepcionActivoFijo_FechaRecepcion");
     Init_FileInput("file");
-    eventoSpinnerNumeroConsecutivo();
     eventoSpinnerCantidad();
     initArrIdFilas();
-    eventoCategoria();
-    obtenerCategoria();
     eventoRadioDatosEspecificos();
     eventoGuardarDatosEspecificos();
+    initDataTableFiltrado("tbDatosEspecificos", []);
+    if (!isEditar) {
+        obtenerCategoria(function () {
+            crearFilas(1);
+            eventoCambiarCategoria();
+        });
+    }
+    else
+        eventoCambiarCategoria();
+    $(".ColVis").hide();
 });
 
 function gestionarWizard()
@@ -40,9 +60,9 @@ function gestionarWizard()
         {
             if (data.step == 2)
             {
-                var validar = validarDatosEspecificosPertenecenBodegaoEmpleado();
+                var validar = validarDatosEspecificosPertenecenBodegaEmpleadoCodigosecuencial();
                 if (!validar) {
-                    mostrarNotificacion("Error", "Tiene que asignar cada dato específico al menos a una Bodega o Empleado.");
+                    mostrarNotificacion("Error", "Tiene que asignar cada dato específico a una Bodega o Empleado y a un Código secuencial.");
                     $("#spanError").html("El modelo es inválido.");
                 }
             }
@@ -51,35 +71,20 @@ function gestionarWizard()
                 $("#checkout-form").submit();
                 return false;
             }
-            else
-            {
-                if (data.step == 1)
-                {
-                    $("#ActivoFijo_CodigoActivoFijo_SUBCAF").val($("#ActivoFijo_IdSubClaseActivoFijo").val());
-                    $("#ActivoFijo_CodigoActivoFijo_CAF").val($("#ActivoFijo_SubClaseActivoFijo_IdClaseActivoFijo").val());
-                    $("#ActivoFijo_CodigoActivoFijo_SUC").val($("#LibroActivoFijo_IdSucursal").val());
-                    var idSucursal = $("#LibroActivoFijo_IdSucursal").val() + ".";
-                    var idClase = agregarCeros($("#ActivoFijo_SubClaseActivoFijo_IdClaseActivoFijo").val(), 3) + ".";
-                    var idSubClase = agregarCeros($("#ActivoFijo_IdSubClaseActivoFijo").val(), 3) + ".";
-                    $("#spanCodigoSecuencial").html(idSucursal + idClase + idSubClase);
-                    generarNumeroConsecutivo();
-                }
-            }
         }
         return validar;
     });
 }
 
-function generarNumeroConsecutivo()
+function generarCodigosecuencial()
 {
-    var numeroConsecutivo = $("#ActivoFijo_CodigoActivoFijo_Consecutivo").val();
-    $("#spanNumeroConsecutivo").html(numeroConsecutivo);
-}
-
-function eventoSpinnerNumeroConsecutivo() {
-    $(".spinnerNumeroConsecutivo").spinner('delay', 200).spinner('changed', function (e, newVal, oldVal) {
-        generarNumeroConsecutivo();
-    });
+    $("#CodigoActivoFijo_SUBCAF").val($("#ActivoFijo_IdSubClaseActivoFijo").val());
+    $("#CodigoActivoFijo_CAF").val($("#ActivoFijo_SubClaseActivoFijo_IdClaseActivoFijo").val());
+    $("#CodigoActivoFijo_SUC").val($("#LibroActivoFijo_IdSucursal").val());
+    var idSucursal = $("#LibroActivoFijo_IdSucursal").val() + ".";
+    var idClase = agregarCeros($("#ActivoFijo_SubClaseActivoFijo_IdClaseActivoFijo").val(), 3) + ".";
+    var idSubClase = agregarCeros($("#ActivoFijo_IdSubClaseActivoFijo").val(), 3) + ".";
+    return idSucursal + idClase + idSubClase;
 }
 
 function validarWizard()
@@ -93,57 +98,6 @@ function validarWizard()
     else
         $("#spanError").html("");
     return true;
-}
-
-function configurarDropzone()
-{
-    var acceptedFiles = 'image/*,.pdf,.xlsx,.xls,.txt,.docx,.doc';
-    $("#spanExtensionesPermitidas").html(acceptedFiles);
-
-    Dropzone.autoDiscover = false;
-    $("#mydropzone").dropzone({
-        acceptedFiles: acceptedFiles,
-        addRemoveLinks: true,
-        uploadMultiple: true,
-        parallelUploads: 100,
-        paramName: "file",
-        autoProcessQueue: false,
-        createImageThumbnails: true,
-        maxThumbnailFilesize: 10,
-        maxFilesize: 10,
-        dictDefaultMessage: '<span class="text-center"><span class="font-lg visible-xs-block visible-sm-block visible-lg-block"><span class="font-xs"><i class="fa fa-caret-right text-danger"></i> Guardar documentaci&oacute;n o fotograf&iacute;as </span><span>&nbsp&nbsp<h4 class="display-inline"> (Haga clic)</h4></span>',
-        dictResponseError: '¡Error subiendo archivo!',
-        dictRemoveFile: 'Eliminar archivo',
-        dictFileTooBig: 'El archivo es muy grande ({{filesize}} MB). Tamaño máximo permitido: {{maxFilesize}} MB.',
-        dictInvalidFileType: 'El archivo no está permitido.',
-        dictResponseError: 'Error {{statusCode}} al intentar subir el archivo.',
-        dictCancelUpload: 'Cancelar archivo',
-        dictCancelUploadConfirmation: '¿Desea cancelar la subida del archivo?',
-        dictMaxFilesExceeded: 'Ha excedido el número de archivos a subir ({{maxFiles}} ficheros).',
-        init: function () {
-            this.on("removedfile", function (file, data) {
-                $.ajax({
-                    url: urlEliminarActivoFijo,
-                    method: "POST",
-                    data: { fileName: file.name, dir: $("#dir").val() },
-                    error: function (errorMessage)
-                    {
-                        mostrarNotificacion("Error", "No se pudo eliminar o no se encontró el archivo " + file.name + ".");
-                    }
-                });
-            });
-
-            this.on("success", function (file, data) {
-                $("#dir").val(data.value);
-                $("#nombreCarpeta").val(data.value);
-            });
-
-            this.on("error", function (file, data) {
-                this.removeFile(file);
-                mostrarNotificacion("Error", "El sistema no tiene permisos suficientes para guardar la información.");
-            });
-        }
-    });
 }
 
 function eventoTipoActivoFijo() {
@@ -251,13 +205,15 @@ function partialViewClaseActivoFijo(idClaseActivoFijo) {
         },
         complete: function (data) {
             $("#checkout-form").waitMe("hide");
+            obtenerCategoria(function () {
+                eventoCambiarCategoria();
+            });
         }
     });
 }
 
 function eventoSpinnerCantidad() {
     $(".spinnerCantidad").spinner('delay', 200).spinner('changed', function (e, newVal, oldVal) {
-
         if (newVal > arrIdsfilas.length)
         {
             crearFilas(newVal - arrIdsfilas.length);
@@ -270,10 +226,26 @@ function eventoSpinnerCantidad() {
     });
 }
 
-function obtenerCategoria()
+function obtenerCategoria(callbackFunctionCategoria)
 {
-    categoria = parseInt($("#IdCategoria").val());
-    return categoria;
+    mostrarLoadingPanel("tbDatosEspecificos", "Cargando datos por categoría...");
+    $.ajax({
+        url: urlCategoria,
+        method: "POST",
+        data: { idClaseActivoFijo: $("#ActivoFijo_SubClaseActivoFijo_IdClaseActivoFijo").val() },
+        success: function (data) {
+            categoria = data;
+        },
+        error: function ()
+        {
+            categoria = "";
+        },
+        complete: function (data) {
+            if (callbackFunctionCategoria)
+                callbackFunctionCategoria();
+            $("#tbDatosEspecificos").waitMe("hide");
+        }
+    });
 }
 
 function initArrIdFilas()
@@ -285,34 +257,51 @@ function initArrIdFilas()
 
 function crearFilas(cantidad)
 {
-    obtenerCategoria();
     for (var i = 0; i < cantidad; i++)
     {
-        var tdRecepcionActivoFijoDetalle = "";
         var nuevoIdFila = arrIdsfilas.length;
-        switch (categoria) {
-            case 1: {
-                tdRecepcionActivoFijoDetalle = crearColumnaVaciaInmueble();
-                break;
-            }
-            case 2: {
-                tdRecepcionActivoFijoDetalle = crearColumnaVaciaVehiculo(nuevoIdFila);
-                break;
-            }
-            default: {
-                tdRecepcionActivoFijoDetalle = crearColumnaVaciaOtro(nuevoIdFila);
-                break;
-            }
-        }
-        var tdBodega = "<td id='tdBodega_" + nuevoIdFila + "'>" + "<span id='spanBodega_" + nuevoIdFila + "'>-</span>" + "<input type='hidden' id='hBodega_" + nuevoIdFila + "'" + "name='hBodega_" + nuevoIdFila + "'" + "/></td>";
-        var tdEmpleado = "<td id='tdEmpleado_" + nuevoIdFila + "'>" + "<span id='spanEmpleado_" + nuevoIdFila + "'>-</span>" + "<input type='hidden' id='hEmpleado_" + nuevoIdFila + "'" + "name='hEmpleado_" + nuevoIdFila + "'" + "/></td>";
-        var btnEditarDatosEspecificos = "<td><input type='hidden' id='hIdRecepcionActivoFijoDetalle_" + nuevoIdFila + "' name='hIdRecepcionActivoFijoDetalle_" + nuevoIdFila + "' /><input type='hidden' id='hUbicacion_" + nuevoIdFila + "' name='hUbicacion_" + nuevoIdFila + "' /><input type='hidden' id='hComponentes_" + nuevoIdFila + "' name='hComponentes_" + nuevoIdFila + "' /><a href='javascript: void(0);' onclick='cargarFormularioDatosEspecificos(" + nuevoIdFila + ")' class='btnEditarDatosEspecificos' data-idfila='" + nuevoIdFila + "' data-toggle='modal' data-target='#myModal'>" + "Editar</a>";
+        var hNumeroClaveCatastral = "<input type='hidden' id='h" + objName.nameNumeroClaveCatastral + "_" + nuevoIdFila + "'" + "name='h" + objName.nameNumeroClaveCatastral + "_" + nuevoIdFila + "'" + "/>";
+        var hNumeroChasis = "<input type='hidden' id='h" + objName.nameNumeroChasis + "_" + nuevoIdFila + "'" + "name='h" + objName.nameNumeroChasis + "_" + nuevoIdFila + "'" + "/>";
+        var hNumeroMotor = "<input type='hidden' id='h" + objName.nameNumeroMotor + "_" + nuevoIdFila + "'" + "name='h" + objName.nameNumeroMotor + "_" + nuevoIdFila + "'" + "/>";
+        var hPlaca = "<input type='hidden' id='h" + objName.namePlaca + "_" + nuevoIdFila + "'" + "name='h" + objName.namePlaca + "_" + nuevoIdFila + "'" + "/>";
+        var hSerie = "<input type='hidden' id='h" + objName.nameSerie + "_" + nuevoIdFila + "'" + "name='h" + objName.nameSerie + "_" + nuevoIdFila + "'" + "/>";
+        var hBodega = "<input type='hidden' id='hBodega_" + nuevoIdFila + "'" + "name='hBodega_" + nuevoIdFila + "'" + "/>";
+        var hEmpleado = "<input type='hidden' id='hEmpleado_" + nuevoIdFila + "'" + "name='hEmpleado_" + nuevoIdFila + "'" + "/>";
+        var hRecepcionActivoFijoDetalle = "<input type='hidden' id='hIdRecepcionActivoFijoDetalle_" + nuevoIdFila + "' name='hIdRecepcionActivoFijoDetalle_" + nuevoIdFila + "' />";
+        var hUbicacion = "<input type='hidden' id='hUbicacion_" + nuevoIdFila + "' name='hUbicacion_" + nuevoIdFila + "' />";
+        var hComponentes = "<input type='hidden' id='hComponentes_" + nuevoIdFila + "' name='hComponentes_" + nuevoIdFila + "' />";
+        var hCodigoSecuencial = "<input type='hidden' id='hCodigoSecuencial_" + nuevoIdFila + "' name='hCodigoSecuencial_" + nuevoIdFila + "' />";
+        var hIdCodigoActivoFijo = "<input type='hidden' id='hIdCodigoActivoFijo_" + nuevoIdFila + "' name='hIdCodigoActivoFijo_" + nuevoIdFila + "' />";
+        var btnEditarDatosEspecificos = "<a href='javascript: void(0);' onclick='cargarFormularioDatosEspecificos(" + nuevoIdFila + ")' class='btnEditarDatosEspecificos' data-idfila='" + nuevoIdFila + "' data-toggle='modal' data-target='#myModal'>" + "Editar</a>";
+        var btnEditarCodificacion = "<span> | </span><a href='javascript: void(0);' onclick='cargarFormularioCodificacion(" + nuevoIdFila + ")' class='btnEditarCodificacion' data-idfila='" + nuevoIdFila + "' data-toggle='modal' data-target='#myModal'>" + "Codificaci&oacute;n</a>";
         var btnComponentesDatosEspecificos = "<span> | </span><a href='javascript: void(0);' onclick='cargarFormularioComponentesDatosEspecificos(" + nuevoIdFila + ")' class='btnComponentesDatosEspecificos' data-idfila='" + nuevoIdFila + "' data-idorigen='' data-idscomponentes='' data-toggle='modal' data-target='#myModalComponente'>" + "Componentes</a>";
-        var btnEliminarDatosEspecificos = "<div id='divEliminarDatosEspecificos_" + nuevoIdFila + "' class='btnEliminarDatosEspecificos' style='display:inline;'><span> | </span><a href='javascript: void(0);' id='btnEliminarDatosEspecifico_" + nuevoIdFila + "' onclick=abrirVentanaConfirmacion('btnEliminarDatosEspecifico_" + nuevoIdFila + "') data-funcioncallback='callBackFunctionEliminarDatoEspecifico(" + nuevoIdFila + ")' data-titulo='Eliminar' data-descripcion='&#191; Desea eliminar el Dato Espec&iacute; fico... ?'>Eliminar</a></div>";
-        $("#tBodyDatosEspecificos").append("<tr id='trDatosEspecificos_" + nuevoIdFila + "'>" + tdRecepcionActivoFijoDetalle + tdBodega + tdEmpleado + btnEditarDatosEspecificos + btnComponentesDatosEspecificos + btnEliminarDatosEspecificos + "</td></tr>");
+        var btnEliminarDatosEspecificos = "<div id='divEliminarDatosEspecificos_" + nuevoIdFila + "' class='btnEliminarDatosEspecificos" + (arrIdsfilas.length == 0 ? " hide" : "") + "' style='display:inline;'><span> | </span><a href='javascript: void(0);' id='btnEliminarDatosEspecifico_" + nuevoIdFila + "' onclick=abrirVentanaConfirmacion('btnEliminarDatosEspecifico_" + nuevoIdFila + "') data-funcioncallback='callBackFunctionEliminarDatoEspecifico(" + nuevoIdFila + ")' data-titulo='Eliminar' data-descripcion='&#191; Desea eliminar el Dato Espec&iacute; fico... ?'>Eliminar</a>";
+
+        mostrarOcultarColumnas([true, true, true, true, true]);
+        addRowTableDatosEspecificos(['-', '-', '-', '-', '-', '-', '-', '-',
+            hNumeroClaveCatastral + hNumeroChasis + hNumeroMotor + hPlaca + hSerie + hBodega + hEmpleado + hRecepcionActivoFijoDetalle + hUbicacion + hComponentes + hCodigoSecuencial + btnEditarDatosEspecificos + btnEditarCodificacion + btnComponentesDatosEspecificos + btnEliminarDatosEspecificos],
+            nuevoIdFila, [objName.nameNumeroClaveCatastral, objName.nameNumeroChasis, objName.nameNumeroMotor, objName.namePlaca, objName.nameSerie, "Bodega", "Empleado", "Codificacion"]);
+        eventoCambiarCategoria();
+
         arrIdsfilas.push(nuevoIdFila);
         addComponenteToArray(nuevoIdFila, 0, []);
     }
+}
+
+function addRowTableDatosEspecificos(arrColumnas, idFila, arrNames)
+{
+    var table = $('#tbDatosEspecificos').DataTable();
+    var rowNode = table.row.add(arrColumnas).draw().node();
+    $(rowNode).prop("id", "trDatosEspecificos_" + idFila);
+    $.each($(rowNode).children(), function (index, value) {
+        if (index < arrNames.length)
+            $(value).prop("id", "td" + arrNames[index] + "_" + idFila);
+    });
+}
+
+function deleteRowTableDatosEspecificos(idFila) {
+    var row = $("#trDatosEspecificos_" + idFila);
+    $('#tbDatosEspecificos').dataTable().fnDeleteRow(row);
 }
 
 function eliminarFilas(cantidad)
@@ -320,7 +309,7 @@ function eliminarFilas(cantidad)
     var pos = arrIdsfilas.length - 1;
     while (cantidad > 0) {
         var idFila = arrIdsfilas[pos];
-        $("#trDatosEspecificos_" + idFila).remove();
+        deleteRowTableDatosEspecificos(idFila);
         arrIdsfilas.splice(pos, 1);
         eliminarComponente(idFila);
         pos--;
@@ -336,99 +325,24 @@ function obtenerPosIdFila(idFila)
     }
 }
 
-function eventoCategoria()
+function eventoCambiarCategoria()
 {
-    $("#IdCategoria").on("change", function (e) {
-        var nuevaCategoria = parseInt($("#IdCategoria").val());
-        switch (categoria) {
-            case 1: {
-                $("#tdDatosEspecificosNumeroClaveCatastral").remove();
-                break;
-            }
-            case 2: {
-                $("#tdDatosEspecificosNumeroChasis").remove();
-                $("#tdDatosEspecificosNumeroMotor").remove();
-                $("#tdDatosEspecificosPlaca").remove();
-                break;
-            }
-            default: {
-                $("#tdDatosEspecificosSerie").remove();
-                break;
-            }
-        }
-        for (var i = 0; i < arrIdsfilas.length; i++)
-        {
-            try {
-                switch (categoria) {
-                    case 1: {
-                        $("#tdNumeroClaveCatastral_" + i).remove();
-                        break;
-                    }
-                    case 2: {
-                        $("#tdNumeroChasis_" + i).remove();
-                        $("#tdNumeroMotor_" + i).remove();
-                        $("#tdPlaca_" + i).remove();
-                        break;
-                    }
-                    default: {
-                        $("#tdSerie_" + i).remove();
-                        break;
-                    }
-                }
-            } catch (e) { }
-        }
-        switch (nuevaCategoria) {
-            case 1: {
-                $("<th id='tdDatosEspecificosNumeroClaveCatastral'>" + headerNumeroClaveCatastral + "</th>").insertBefore("#tdDatosEspecificosBodega");
-                break;
-            }
-            case 2: {
-                $("<th id='tdDatosEspecificosPlaca'>" + headerPlaca + "</th>").insertBefore("#tdDatosEspecificosBodega");
-                $("<th id='tdDatosEspecificosNumeroMotor'>" + headerNumeroMotor + "</th>").insertBefore("#tdDatosEspecificosPlaca");
-                $("<th id='tdDatosEspecificosNumeroChasis'>" + headerNumeroChasis + "</th>").insertBefore("#tdDatosEspecificosNumeroMotor");
-                break;
-            }
-            default: {
-                $("<th id='tdDatosEspecificosSerie'>" + headerSerie + "</th>").insertBefore("#tdDatosEspecificosBodega");
-                break;
-            }
-        }
-        for (var i = 0; i < arrIdsfilas.length; i++) {
-            try {
-                switch (nuevaCategoria) {
-                    case 1: {
-                        $(crearColumnaVaciaInmueble(i)).insertBefore("#tdBodega_" + i);
-                        break;
-                    }
-                    case 2: {
-                        $(crearColumnaVaciaVehiculo(i)).insertBefore("#tdBodega_" + i);
-                        break;
-                    }
-                    default: {
-                        $(crearColumnaVaciaOtro(i)).insertBefore("#tdBodega_" + i);
-                        break;
-                    }
-                }
-            } catch (e) { }
-        }
-        categoria = nuevaCategoria;
-    });
+    if (categoria == objCategorias.Edificio)
+        mostrarOcultarColumnas([true, false, false, false, false]);
+    else if (categoria == objCategorias.Vehiculo)
+        mostrarOcultarColumnas([false, true, true, true, false]);
+    else if (categoria == objCategorias.EquiposComputoSoftware)
+        mostrarOcultarColumnas([false, false, false, false, true]);
+    else
+        mostrarOcultarColumnas([false, false, false, false, false]);
 }
 
-function crearColumnaVaciaInmueble(idColumna) {
-    return "<td id='tdNumeroClaveCatastral_" + idColumna + "'>" + "<span id='spanNumeroClaveCatastral_" + idColumna + "'>-</span>" + "<input type='hidden' id='hNumeroClaveCatastral_" + idColumna + "'" + "name='hNumeroClaveCatastral_" + idColumna + "'" + "/></td>";
-}
-
-function crearColumnaVaciaVehiculo(idColumna)
+function mostrarOcultarColumnas(arrObj)
 {
-    return "<td id='tdNumeroChasis_" + idColumna + "'>" + "<span id='spanNumeroChasis_" + idColumna + "'>-</span>" + "<input type='hidden' id='hNumeroChasis_" + idColumna + "'" + "name='hNumeroChasis_" + idColumna + "'" + "/></td>" +
-        "<td id='tdNumeroMotor_" + idColumna + "'>" + "<span id='spanNumeroMotor_" + idColumna + "'>-</span>" + "<input type='hidden' id='hNumeroMotor_" + idColumna + "'" + "name='hNumeroMotor_" + idColumna + "'" + "/></td>" +
-        "<td id='tdPlaca_" + idColumna + "'>" + "<span id='spanPlaca_" + idColumna + "'>-</span>" + "<input type='hidden' id='hPlaca_" + idColumna + "'" + "name='hPlaca_" + idColumna + "'" + "/></td>";
-}
-
-function crearColumnaVaciaOtro(idColumna)
-{
-    return "<td id='tdSerie_" + idColumna + "'>" + "<span id='spanSerie_" + idColumna + "'>-</span>" + "<input type='hidden' id='hSerie_" + idColumna + "'" + "name='hSerie_" + idColumna + "'" + "/></td>";
+    var otable = $('#tbDatosEspecificos').DataTable();
+    for (var i = 0; i < arrObj.length; i++) {
+        otable.column(i).visible(arrObj[i]);
+    }
 }
 
 function cargarFormularioDatosEspecificos(idFila)
@@ -438,25 +352,20 @@ function cargarFormularioDatosEspecificos(idFila)
     $("#hIdRecepcionActivoFijoDetalle").val($("#hIdRecepcionActivoFijoDetalle_" + idFila).val());
     $("#hIdUbicacionActivoFijo").val($("#hUbicacion_" + idFila).val());
     $("#myModalLabel").html("Editar");
-    obtenerCategoria();
+    $("#btnGuardarDatosEspecificos").data("funcioncallback", "guardarDatosEspecificos()");
 
     var objData = new Object();
-    switch (categoria) {
-        case 1: {
-            objData.NumeroClaveCatastral = $("#hNumeroClaveCatastral_" + idFila).val();
-            break;
-        }
-        case 2: {
-            objData.NumeroChasis = $("#hNumeroChasis_" + idFila).val();
-            objData.NumeroMotor = $("#hNumeroMotor_" + idFila).val();
-            objData.Placa = $("#hPlaca_" + idFila).val();
-            break;
-        }
-        default: {
-            objData.Serie = $("#hSerie_" + idFila).val();
-            break;
-        }
+    if (categoria == objCategorias.Edificio)
+        objData.NumeroClaveCatastral = $("#h" + objName.nameNumeroClaveCatastral + "_" + idFila).val();
+    else if (categoria == objCategorias.Vehiculo)
+    {
+        objData.NumeroChasis = $("#h" + objName.nameNumeroChasis + "_" + idFila).val();
+        objData.NumeroMotor = $("#h" + objName.nameNumeroMotor + "_" + idFila).val();
+        objData.Placa = $("#h" + objName.namePlaca + "_" + idFila).val();
     }
+    else if (categoria == objCategorias.EquiposComputoSoftware)
+        objData.Serie = $("#h" + objName.nameSerie + "_" + idFila).val();
+
     objData.IdBodega = $("#hBodega_" + idFila).val();
     objData.IdEmpleado = $("#hEmpleado_" + idFila).val();
 
@@ -500,111 +409,106 @@ function eventoRadioDatosEspecificos()
 function eventoGuardarDatosEspecificos()
 {
     $("#btnGuardarDatosEspecificos").on("click", function (e) {
-        mostrarLoadingPanel("modalContentDatosEspecificos", "Validando datos, por favor espere...");
-        $.each($(".validationDatosEspecificos"), function (index, value) {
-            $(value).html("");
-        });
+        var funcionCallback = $("#btnGuardarDatosEspecificos").data("funcioncallback");
+        eval(funcionCallback);
+    });
+}
 
-        var objData = new Object();
-        switch (categoria) {
-            case 1: {
-                objData.NumeroClaveCatastral = $("#NumeroClaveCatastral").val();
-                break;
-            }
-            case 2: {
-                objData.NumeroChasis = $("#NumeroChasis").val();
-                objData.NumeroMotor = $("#NumeroMotor").val();
-                objData.Placa = $("#Placa").val();
-                break;
-            }
-            default: {
-                objData.Serie = $("#Serie").val();
-                break;
-            }
-        }
-        objData.IdFila = $("#hIdFilaModalDatosEspecificos").val();
-        objData.IdRecepcionActivoFijoDetalle = $("#hIdRecepcionActivoFijoDetalle").val();
-        objData.IdBodega = $("#IdBodega").val();
-        objData.IdEmpleado = $("#IdEmpleado").val();
-        objData.IsBodega = $("#radioBodegaDatosEspecificos").prop("checked");
+function guardarDatosEspecificos()
+{
+    mostrarLoadingPanel("modalContentDatosEspecificos", "Validando datos, por favor espere...");
+    $.each($(".validationDatosEspecificos"), function (index, value) {
+        $(value).html("");
+    });
 
-        if (validarDatosEspecificosExisten(objData))
-        {
-            $.ajax({
-                url: urlValidacionDatosEspecificosResult,
-                method: "POST",
-                data: { rafd: objData },
-                success: function (data) {
-                    if (data.length > 0) {
-                        $.each(data, function (index, value) {
-                            $("#val" + value.propiedad).html(value.valor);
-                        });
+    var objData = new Object();
+    if (categoria == objCategorias.Edificio)
+        objData.NumeroClaveCatastral = $("#" + objName.nameNumeroClaveCatastral).val();
+    else if (categoria == objCategorias.Vehiculo) {
+        objData.NumeroChasis = $("#" + objName.nameNumeroChasis).val();
+        objData.NumeroMotor = $("#" + objName.nameNumeroMotor).val();
+        objData.Placa = $("#" + objName.namePlaca).val();
+    }
+    else if (categoria == objCategorias.EquiposComputoSoftware)
+        objData.Serie = $("#" + objName.nameSerie).val();
+
+    objData.IdFila = $("#hIdFilaModalDatosEspecificos").val();
+    objData.IdRecepcionActivoFijoDetalle = $("#hIdRecepcionActivoFijoDetalle").val();
+    objData.IdBodega = $("#IdBodega").val();
+    objData.IdEmpleado = $("#IdEmpleado").val();
+    objData.IsBodega = $("#radioBodegaDatosEspecificos").prop("checked");
+
+    if (validarDatosEspecificosExisten(objData)) {
+        $.ajax({
+            url: urlValidacionDatosEspecificosResult,
+            method: "POST",
+            data: { rafd: objData },
+            success: function (data) {
+                if (data.length > 0) {
+                    $.each(data, function (index, value) {
+                        $("#val" + value.propiedad).html(value.valor);
+                    });
+                }
+                else {
+                    var idFila = $("#hIdFilaModalDatosEspecificos").val();
+                    var table = $('#tbDatosEspecificos').DataTable();
+                    if (categoria == objCategorias.Edificio) {
+                        table.cell($('#td' + objName.nameNumeroClaveCatastral + "_" + idFila)).data(formatearDatosEspecifico(objData.NumeroClaveCatastral)).draw();
+                        $("#h" + objName.nameNumeroClaveCatastral + "_" + idFila).val(objData.NumeroClaveCatastral);
                     }
-                    else {
-                        var idFila = $("#hIdFilaModalDatosEspecificos").val();
-                        switch (categoria) {
-                            case 1: {
-                                $("#spanNumeroClaveCatastral_" + idFila).html(formatearDatosEspecifico(objData.NumeroClaveCatastral));
-                                $("#hNumeroClaveCatastral_" + idFila).val(objData.NumeroClaveCatastral);
-                                break;
-                            }
-                            case 2: {
-                                $("#spanNumeroChasis_" + idFila).html(formatearDatosEspecifico(objData.NumeroChasis));
-                                $("#hNumeroChasis_" + idFila).val(objData.NumeroChasis);
+                    else if (categoria == objCategorias.Vehiculo) {
+                        table.cell($('#td' + objName.nameNumeroChasis + "_" + idFila)).data(formatearDatosEspecifico(objData.NumeroChasis)).draw();
+                        $("#h" + objName.nameNumeroChasis + "_" + idFila).val(objData.NumeroChasis);
 
-                                $("#spanNumeroMotor_" + idFila).html(formatearDatosEspecifico(objData.NumeroMotor));
-                                $("#hNumeroMotor_" + idFila).val(objData.NumeroMotor);
+                        table.cell($('#td' + objName.nameNumeroMotor + "_" + idFila)).data(formatearDatosEspecifico(objData.NumeroMotor)).draw();
+                        $("#h" + objName.nameNumeroMotor + "_" + idFila).val(objData.NumeroMotor);
 
-                                $("#spanPlaca_" + idFila).html(formatearDatosEspecifico(objData.Placa));
-                                $("#hPlaca_" + idFila).val(objData.Placa);
-                                break;
-                            }
-                            default: {
-                                $("#spanSerie_" + idFila).html(formatearDatosEspecifico(objData.Serie));
-                                $("#hSerie_" + idFila).val(objData.Serie);
-                                break;
-                            }
-                        }
-                        if (objData.IsBodega) {
-                            var isTodosBodegasDatosEspecificos = $("#chkTodosBodegasDatosEspecificos").prop("checked");
-                            if (isTodosBodegasDatosEspecificos) {
-                                for (var i = 0; i < arrIdsfilas.length; i++) {
-                                    putDatoBodegaEmpleadoFila(arrIdsfilas[i], "Bodega", $("#IdBodega option:selected").text(), $("#IdBodega").val());
-                                    putDatoBodegaEmpleadoFila(arrIdsfilas[i], "Empleado", "-", "");
-                                }
-                            }
-                            else {
-                                putDatoBodegaEmpleadoFila(idFila, "Bodega", $("#IdBodega option:selected").text(), $("#IdBodega").val());
-                                putDatoBodegaEmpleadoFila(idFila, "Empleado", "-", "");
+                        table.cell($('#td' + objName.namePlaca + "_" + idFila)).data(formatearDatosEspecifico(objData.Placa)).draw();
+                        $("#h" + objName.namePlaca + "_" + idFila).val(objData.Placa);
+                    }
+                    else if (categoria == objCategorias.EquiposComputoSoftware) {
+                        table.cell($('#td' + objName.nameSerie + "_" + idFila)).data(formatearDatosEspecifico(objData.Serie)).draw();
+                        $("#h" + objName.nameSerie + "_" + idFila).val(objData.Serie);
+                    }
+                    if (objData.IsBodega) {
+                        var isTodosBodegasDatosEspecificos = $("#chkTodosBodegasDatosEspecificos").prop("checked");
+                        if (isTodosBodegasDatosEspecificos) {
+                            for (var i = 0; i < arrIdsfilas.length; i++) {
+                                putDatoBodegaEmpleadoFila(arrIdsfilas[i], "Bodega", $("#IdBodega option:selected").text(), $("#IdBodega").val());
+                                putDatoBodegaEmpleadoFila(arrIdsfilas[i], "Empleado", "-", "");
                             }
                         }
                         else {
-                            var isTodosEmpleadosDatosEspecificos = $("#chkTodosEmpleadosDatosEspecificos").prop("checked");
-                            if (isTodosEmpleadosDatosEspecificos) {
-                                for (var i = 0; i < arrIdsfilas.length; i++) {
-                                    putDatoBodegaEmpleadoFila(arrIdsfilas[i], "Empleado", $("#IdEmpleado option:selected").text(), $("#IdEmpleado").val());
-                                    putDatoBodegaEmpleadoFila(arrIdsfilas[i], "Bodega", "-", "");
-                                }
-                            }
-                            else {
-                                putDatoBodegaEmpleadoFila(idFila, "Empleado", $("#IdEmpleado option:selected").text(), $("#IdEmpleado").val());
-                                putDatoBodegaEmpleadoFila(idFila, "Bodega", "-", "");
+                            putDatoBodegaEmpleadoFila(idFila, "Bodega", $("#IdBodega option:selected").text(), $("#IdBodega").val());
+                            putDatoBodegaEmpleadoFila(idFila, "Empleado", "-", "");
+                        }
+                    }
+                    else {
+                        var isTodosEmpleadosDatosEspecificos = $("#chkTodosEmpleadosDatosEspecificos").prop("checked");
+                        if (isTodosEmpleadosDatosEspecificos) {
+                            for (var i = 0; i < arrIdsfilas.length; i++) {
+                                putDatoBodegaEmpleadoFila(arrIdsfilas[i], "Empleado", $("#IdEmpleado option:selected").text(), $("#IdEmpleado").val());
+                                putDatoBodegaEmpleadoFila(arrIdsfilas[i], "Bodega", "-", "");
                             }
                         }
-                        $("#btnCancelarDatosEspecificos").click();
+                        else {
+                            putDatoBodegaEmpleadoFila(idFila, "Empleado", $("#IdEmpleado option:selected").text(), $("#IdEmpleado").val());
+                            putDatoBodegaEmpleadoFila(idFila, "Bodega", "-", "");
+                        }
                     }
-                },
-                error: function (errorMessage) {
-                    mostrarNotificacion("Error", "Ocurrió un error al validar el formulario.");
-                },
-                complete: function (data) {
-                    $("#modalContentDatosEspecificos").waitMe("hide");
+                    $("#btnCancelarDatosEspecificos").click();
                 }
-            });
-        }
-        else
-            $("#modalContentDatosEspecificos").waitMe("hide");
-    });
+            },
+            error: function (errorMessage) {
+                mostrarNotificacion("Error", "Ocurrió un error al validar el formulario.");
+            },
+            complete: function (data) {
+                $("#modalContentDatosEspecificos").waitMe("hide");
+            }
+        });
+    }
+    else
+        $("#modalContentDatosEspecificos").waitMe("hide");
 }
 
 function formatearDatosEspecifico(valor)
@@ -625,18 +529,19 @@ function clearDatosEspecificosBodegaEmpleado()
 
 function putDatoBodegaEmpleadoFila(idFila, selector, datoSpan, datoHiddeh)
 {
-    $("#span" + selector + "_" + idFila).html(datoSpan);
+    $('#tbDatosEspecificos').DataTable().cell($('#td' + selector + "_" + idFila)).data(datoSpan).draw();
     $("#h" + selector + "_" + idFila).val(datoHiddeh);
 }
 
-function validarDatosEspecificosPertenecenBodegaoEmpleado()
+function validarDatosEspecificosPertenecenBodegaEmpleadoCodigosecuencial()
 {
     for (var i = 0; i < arrIdsfilas.length; i++) {
         var idFila = arrIdsfilas[i];
         var idBodega = $("#hBodega_" + idFila).val();
         var idEmpleado = $("#hEmpleado_" + idFila).val();
+        var codigoSecuencial = $("#hCodigoSecuencial_" + idFila).val();
 
-        if ((idBodega == "" || idBodega == null) && (idEmpleado == "" || idEmpleado == null))
+        if ((idBodega == "" || idBodega == null) && (idEmpleado == "" || idEmpleado == null) || (codigoSecuencial == "" || codigoSecuencial == null))
             return false;
     }
     return true;
@@ -646,40 +551,38 @@ function validarDatosEspecificosExisten(objData)
 {
     for (var i = 0; i < arrIdsfilas.length; i++) {
         var idFila = arrIdsfilas[i];
-        if (objData.IdFila != idFila) {
-            switch (categoria) {
-                case 1: {
-                    if (objData.NumeroClaveCatastral == $("#spanNumeroClaveCatastral_" + idFila).html()) {
-                        $("#valNumeroClaveCatastral").html("El Número de clave catastral: ya existe.");
-                        return false;
-                    }
-                    break;
+        if (objData.IdFila != idFila)
+        {
+            if (categoria == objCategorias.Edificio)
+            {
+                if (objData.NumeroClaveCatastral == $("#td" + objName.nameNumeroClaveCatastral + "_" + idFila).html()) {
+                    $("#val" + objName.nameNumeroClaveCatastral).html("El Número de clave catastral: ya existe.");
+                    return false;
                 }
-                case 2: {
-                    var validar = true;
-                    if (objData.NumeroChasis == $("#spanNumeroChasis_" + idFila).html()) {
-                        $("#valNumeroChasis").html("El Número de chasis: ya existe.");
-                        validar = false;
-                    }
-                    if (objData.NumeroMotor == $("#spanNumeroMotor_" + idFila).html()) {
-                        $("#valNumeroMotor").html("El Número de motor: ya existe.");
-                        validar = false;
-                    }
-                    if (objData.Placa == $("#spanPlaca_" + idFila).html()) {
-                        $("#valPlaca").html("La Placa: ya existe.");
-                        validar = false;
-                    }
-
-                    if (!validar)
-                        return false;
-                    break;
+            }
+            else if (categoria == objCategorias.Vehiculo)
+            {
+                var validar = true;
+                if (objData.NumeroChasis == $("#td" + objName.nameNumeroChasis + "_" + idFila).html()) {
+                    $("#val" + objName.nameNumeroChasis).html("El Número de chasis: ya existe.");
+                    validar = false;
                 }
-                default: {
-                    if (objData.Serie == $("#spanSerie_" + idFila).html()) {
-                        $("#valSerie").html("La Serie: ya existe.");
-                        return false;
-                    }
-                    break;
+                if (objData.NumeroMotor == $("#td" + objName.nameNumeroMotor + "_" + idFila).html()) {
+                    $("#val" + objName.nameNumeroMotor).html("El Número de motor: ya existe.");
+                    validar = false;
+                }
+                if (objData.Placa == $("#td" + objName.namePlaca + "_" + idFila).html()) {
+                    $("#val" + objName.namePlaca).html("La Placa: ya existe.");
+                    validar = false;
+                }
+                if (!validar)
+                    return false;
+            }
+            else if (categoria == objCategorias.EquiposComputoSoftware)
+            {
+                if (objData.Serie == $("#td" + objName.nameSerie + "_" + idFila).html()) {
+                    $("#val" + objName. nameSerie).html("La Serie: ya existe.");
+                    return false;
                 }
             }
         }
@@ -690,12 +593,107 @@ function validarDatosEspecificosExisten(objData)
 function callBackFunctionEliminarDatoEspecifico(idFila)
 {
     var posFila = obtenerPosIdFila(idFila);
-    $("#trDatosEspecificos_" + arrIdsfilas[posFila]).remove();
+    deleteRowTableDatosEspecificos(posFila);
     arrIdsfilas.splice(posFila, 1);
     eliminarComponente(idFila);
     $("#RecepcionActivoFijo_Cantidad").val(arrIdsfilas.length);
 
-    if (arrIdsfilas.length == 1) {
+    if (arrIdsfilas.length == 1)
         $("#divEliminarDatosEspecificos_" + arrIdsfilas[0]).addClass("hide");
+}
+
+function cargarFormularioCodificacion(idFila)
+{
+    mostrarLoadingPanel("modalContentDatosEspecificos", "Cargando datos, por favor espere...");
+    $("#hIdFilaModalDatosEspecificos").val(idFila);
+    $("#hIdRecepcionActivoFijoDetalle").val($("#hIdRecepcionActivoFijoDetalle_" + idFila).val());
+    $("#myModalLabel").html("Codificaci&oacute;n");
+    $("#btnGuardarDatosEspecificos").data("funcioncallback", "guardarCodificacion()");
+
+    var hCodificacion = $("#hCodigoSecuencial_" + idFila).val();
+    var numeroConsecutivo = 1;
+    if (hCodificacion != "" && hCodificacion != null) {
+        try {
+            var arrCodificacion = hCodificacion.split(".");
+            numeroConsecutivo = arrCodificacion[arrCodificacion.length - 1];
+        } catch (e) { }
     }
+
+    $.ajax({
+        url: urlCodificacion,
+        method: "POST",
+        data: { Codigosecuencial: $("#hCodigoSecuencial_" + idFila).val() },
+        success: function (data) {
+            $("#modalBodyDatosEspecificos").html(data);
+            $("#CodigoActivoFijo_Consecutivo").val(numeroConsecutivo);
+            $(".spinnerNumeroConsecutivo").spinner();
+            $("#spanCodigoSecuencial").html(generarCodigosecuencial());
+            generarNumeroConsecutivo();
+            asignarCodigoBarras();
+            eventoSpinnerNumeroConsecutivo();
+        },
+        error: function (errorMessage) {
+            mostrarNotificacion("Error", "Ocurrió un error al cargar el formulario.");
+        },
+        complete: function (data) {
+            $("#modalContentDatosEspecificos").waitMe("hide");
+        }
+    });
+}
+
+function guardarCodificacion()
+{
+    mostrarLoadingPanel("modalContentDatosEspecificos", "Validando datos, por favor espere...");
+    $.each($(".validationCodificacion"), function (index, value) {
+        $(value).html("");
+    });
+
+    var objData = {
+        IdFila: $("#hIdFilaModalDatosEspecificos").val(),
+        IdRecepcionActivoFijoDetalle: $("#hIdRecepcionActivoFijoDetalle").val(),
+        Codigosecuencial: $("#spanCodigoSecuencial").html() + $("#spanNumeroConsecutivo").html(),
+        IdCodigoActivoFijo: $("#hIdCodigoActivoFijo_").val()
+    };
+    if (validarCodificacionNoExiste(objData))
+    {
+        $.ajax({
+            url: urlValidarCodigoUnico,
+            method: "POST",
+            data: { idCodigoActivoFijo: objData.IdCodigoActivoFijo, codigoSecuencial: objData.Codigosecuencial },
+            success: function (data)
+            {
+                if (data.toString().toLowerCase() == "false")
+                {
+                    $('#tbDatosEspecificos').DataTable().cell($('#tdCodificacion_' + objData.IdFila)).data(objData.Codigosecuencial).draw();
+                    $("#hCodigoSecuencial_" + objData.IdFila).val(objData.Codigosecuencial);
+                    $("#btnCancelarDatosEspecificos").click();
+                }
+                else
+                    $("#valConsecutivo").html("El Código secuencial: ya existe.");
+            },
+            error: function (errorMessage) {
+                mostrarNotificacion("Error", "Ocurrió un error al validar el formulario.");
+            },
+            complete: function (data) {
+                $("#modalContentDatosEspecificos").waitMe("hide");
+            }
+        });
+    }
+    else
+        $("#modalContentDatosEspecificos").waitMe("hide");
+}
+
+function validarCodificacionNoExiste(objData)
+{
+    for (var i = 0; i < arrIdsfilas.length; i++) {
+        var idFila = arrIdsfilas[i];
+        if (objData.IdFila != idFila)
+        {
+            if (objData.Codigosecuencial == $("#hCodigoSecuencial_" + idFila).val()) {
+                $("#valConsecutivo").html("El Código secuencial: ya existe.");
+                return false;
+            }
+        }
+    }
+    return true;
 }

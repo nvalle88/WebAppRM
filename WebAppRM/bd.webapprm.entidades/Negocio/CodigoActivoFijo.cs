@@ -9,7 +9,7 @@ namespace bd.webapprm.entidades
     {
         public CodigoActivoFijo()
         {
-            ActivoFijo = new HashSet<ActivoFijo>();
+            RecepcionActivoFijoDetalle = new HashSet<RecepcionActivoFijoDetalle>();
             TransferenciaActivoFijo = new HashSet<TransferenciaActivoFijo>();
         }
 
@@ -18,13 +18,11 @@ namespace bd.webapprm.entidades
 
         [Required(ErrorMessage = "Debe introducir el {0}")]
         [Display(Name = "Código secuencial:")]
-        [StringLength(20, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
+        [StringLength(100, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
         public string Codigosecuencial { get; set; }
 
-        [Required(ErrorMessage = "Debe introducir el {0}")]
+        [NotMapped]
         [Display(Name = "Código de barras:")]
-        [StringLength(20, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
-        [Remote("ValidarCodigoBarras", "ActivoFijo", AdditionalFields = "IdCodigoActivoFijo", ErrorMessage = "El {0} ya existe.", HttpMethod = "POST")]
         public string CodigoBarras { get; set; }
 
         [NotMapped]
@@ -32,17 +30,8 @@ namespace bd.webapprm.entidades
         [Remote("ValidarCodigoUnico", "ActivoFijo", AdditionalFields = "IdCodigoActivoFijo,SUBCAF,CAF,SUC", ErrorMessage = "El {0} ya existe.", HttpMethod = "POST")]
         public int Consecutivo { get; set; }
 
-        [NotMapped]
-        public string CAF { get; set; }
-
-        [NotMapped]
-        public string SUBCAF { get; set; }
-
-        [NotMapped]
-        public string SUC { get; set; }
-
         //Propiedades Virtuales Referencias a otras clases
-        public virtual ICollection<ActivoFijo> ActivoFijo { get; set; }
+        public virtual ICollection<RecepcionActivoFijoDetalle> RecepcionActivoFijoDetalle { get; set; }
 
         public virtual ICollection<TransferenciaActivoFijo> TransferenciaActivoFijo { get; set; }
     }

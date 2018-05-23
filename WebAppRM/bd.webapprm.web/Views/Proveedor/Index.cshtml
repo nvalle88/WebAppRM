@@ -17,7 +17,6 @@
                         <div class="widget-body no-padding">
                             <table id="dt_basic" class="table table-striped table-bordered table-hover" style="width:100%;">
                                 <thead>
-                                    @{ await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", 14);}
                                     <tr>
                                         <th>
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().Codigo)
@@ -32,7 +31,7 @@
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().Identificacion)
                                         </th>
                                         <th>
-                                            @Html.DisplayNameFor(model => model.FirstOrDefault().LineaServicio)
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().IdLineaServicio)
                                         </th>
                                         <th>
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().RazonSocial)
@@ -45,9 +44,6 @@
                                         </th>
                                         <th>
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().Cargo)
-                                        </th>
-                                        <th>
-                                            @Html.DisplayNameFor(model => model.FirstOrDefault().Emision)
                                         </th>
                                         <th>
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().Direccion)
@@ -78,7 +74,7 @@
                                                 @Html.DisplayFor(modelItem => item.Identificacion)
                                             </td>
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.LineaServicio)
+                                                @Html.DisplayFor(modelItem => item.LineaServicio.Nombre)
                                             </td>
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.RazonSocial)
@@ -91,9 +87,6 @@
                                             </td>
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.Cargo)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Emision)
                                             </td>
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.Direccion)
@@ -120,5 +113,5 @@
     </section>
 </div>
 @section Scripts {
-    <script src='~/js/proveedor/listado.min.js'></script>
+    <script src='~/js/datatables/init.min.js'></script>
 }

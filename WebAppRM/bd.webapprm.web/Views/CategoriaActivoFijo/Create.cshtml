@@ -1,7 +1,8 @@
-﻿@model bd.webapprm.entidades.SubClaseArticulo
+@model bd.webapprm.entidades.CategoriaActivoFijo
 
 @section css{
-    <link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap-touchspin-master/src/jquery.bootstrap-touchspin.css" />
+    <link rel="stylesheet" href="~/lib/jquery.spinner-master/dist/css/bootstrap-spinner.min.css" />
 }
 <div id="content">
     <section id="widget-grid" class="">
@@ -10,7 +11,7 @@
                 <div class="jarviswidget jarviswidget-color-red" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
                     <header>
                         <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
-                        <h2>Subclase Artículo</h2>
+                        <h2>Categor&iacute;a de Activo Fijo</h2>
                     </header>
                     <div>
                         <div class="jarviswidget-editbox"></div>
@@ -20,29 +21,6 @@
                                 <fieldset>
                                     <div class="row">
                                         <section class="col col-4">
-                                            <label asp-for="ClaseArticulo.TipoArticulo.Nombre"></label>
-                                        </section>
-
-                                        <section class="col col-8">
-                                            <label class="input">
-                                                <select asp-for="ClaseArticulo.IdTipoArticulo" class="form-control" asp-items="ViewBag.TipoArticulo"></select>
-                                                <span asp-validation-for="ClaseArticulo.IdTipoArticulo" class="text-danger"></span>
-                                            </label>
-                                        </section>
-                                    </div>
-
-                                    <div class="row">
-                                        <section class="col col-4">
-                                            <label asp-for="ClaseArticulo.Nombre"></label>
-                                        </section>
-
-                                        <div id="div_claseArticulo">
-                                            @{ await Html.RenderPartialAsync("_ClaseArticuloSelect", Model ?? new bd.webapprm.entidades.SubClaseArticulo()); }
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <section class="col col-4">
                                             <label asp-for="Nombre"></label>
                                         </section>
 
@@ -50,6 +28,36 @@
                                             <label class="input">
                                                 <input asp-for="Nombre" class="form-control" />
                                                 <span asp-validation-for="Nombre" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="AnosVidaUtil"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <div class="input-group spinner spinnerCantidad" data-trigger="spinner">
+                                                <input asp-for="AnosVidaUtil" type="text" class="form-control" data-rule="quantity" style="padding-left:10px !important;" />
+                                                <div class="input-group-addon" style="padding-left:23px !important;">
+                                                    <a href="javascript:;" class="spin-up" data-spin="up"><i class="fa fa-caret-up"></i></a>
+                                                    <a href="javascript:;" class="spin-down" data-spin="down"><i class="fa fa-caret-down"></i></a>
+                                                </div>
+                                            </div>
+                                            <span asp-validation-for="AnosVidaUtil" class="text-danger"></span>
+                                        </section>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="PorCientoDepreciacionAnual"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <input asp-for="PorCientoDepreciacionAnual" class="form-control touchspin_tasa" />
+                                                <span asp-validation-for="PorCientoDepreciacionAnual" class="text-danger"></span>
                                             </label>
                                         </section>
                                     </div>
@@ -67,12 +75,9 @@
         </div>
     </section>
 </div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_Select2ScriptsPartial");}
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src='~/js/subClaseArticulo/subClaseArticulo.min.js'></script>
-    <script>
-        var claseArticuloSelectResult = "@Url.Action("ClaseArticulo_SelectResult")";
-    </script>
+    <script src='~/lib/bootstrap-touchspin-master/src/jquery.bootstrap-touchspin.js'></script>
+    <script src='~/lib/jquery.spinner-master/dist/js/jquery.spinner.min.js'></script>
+    <script src="~/js/categoriaActivoFijo/categoriaActivoFijo.min.js"></script>
 }

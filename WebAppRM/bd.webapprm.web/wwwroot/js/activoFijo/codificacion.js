@@ -1,15 +1,19 @@
-﻿$(document).ready(function () {
-    asignarCodigoBarras();
+﻿function generarNumeroConsecutivo() {
+    var numeroConsecutivo = $("#CodigoActivoFijo_Consecutivo").val();
+    $("#spanNumeroConsecutivo").html(numeroConsecutivo);
+}
 
-    $("#ActivoFijo_CodigoActivoFijo_CodigoBarras").bind('keydown keyup', function (event) {
+function eventoSpinnerNumeroConsecutivo() {
+    $(".spinnerNumeroConsecutivo").spinner('delay', 200).spinner('changed', function (e, newVal, oldVal) {
+        generarNumeroConsecutivo();
         asignarCodigoBarras();
     });
-});
+}
 
 function asignarCodigoBarras()
 {
     try {
-        var codigoBarras = document.getElementById("ActivoFijo_CodigoActivoFijo_CodigoBarras").value;
+        var codigoBarras = $("#spanCodigoSecuencial").html() + $("#spanNumeroConsecutivo").html();
         if (codigoBarras != "") {
             Asignar_Codigo_Barras(codigoBarras);
             document.getElementById("barcode1").style.display = "";
