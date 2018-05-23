@@ -30,9 +30,7 @@
                                 <input type="hidden" asp-for="IdRecepcionActivoFijoDetalle" />
                                 <input type="hidden" asp-for="IdRecepcionActivoFijo" />
                                 <input type="hidden" asp-for="IdActivoFijo" />
-                                <input type="hidden" asp-for="ActivoFijo.CodigoActivoFijo.IdCodigoActivoFijo" />
-                                <input type="hidden" asp-for="ActivoFijo.CodigoActivoFijo.CodigoBarras" />
-                                <input type="hidden" asp-for="ActivoFijo.CodigoActivoFijo.Codigosecuencial" />
+                                <input type="hidden" asp-for="ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.CategoriaActivoFijo.Nombre" value="@ViewBag.Categoria" />
                                 <fieldset>
                                     <div class="widget-body fuelux">
                                         <div class="wizard">
@@ -279,7 +277,7 @@
                                                     </fieldset>
                                                 </div>
                                                 <div class="step-pane" id="step2">
-                                                    @{ await Html.RenderPartialAsync("_DatosEspecificos", ViewBag.ListadoRecepcionActivoFijoDetalle as List<RecepcionActivoFijoDetalle>); }
+                                                    @{ await Html.RenderPartialAsync("_DatosEspecificos", ViewBag.ListadoRecepcionActivoFijoDetalle as List<RecepcionActivoFijoDetalle>, new ViewDataDictionary(ViewData) { { "IsEditar", true } }); }
                                                 </div>
                                                 <div class="step-pane" id="step3">
                                                     <div class="row margin-top-25">
@@ -341,6 +339,8 @@
     @{await Html.RenderPartialAsync("_DatetimePickerScriptsPartial");}
     <script src='~/lib/jquery.spinner-master/dist/js/jquery.spinner.min.js'></script>
     @{await Html.RenderPartialAsync("_FileInputScriptsPartial");}
+    <script src="~/lib/JsBarcode-master/dist/JsBarcode.all.min.js"></script>
+    <script src='~/js/activoFijo/codificacion.min.js'></script>
     <script src='~/js/activoFijo/recepcion.min.js'></script>
     <script src='~/js/activoFijo/listadoSeleccion.min.js'></script>
     <script src='~/js/activoFijo/componentes.min.js'></script>
@@ -358,6 +358,9 @@
         var urlValidacionDatosEspecificosResult = "@Url.Action("ValidacionDatosEspecificosResult")";
         var urlModalComponentesResult = "@Url.Action("ModalComponentesResult")";
         var urlComponentesActivosFijos = "@Url.Action("ComponentesActivosFijosResult")";
+        var urlCategoria = "@Url.Action("CategoriaResult")";
+        var urlCodificacion = "@Url.Action("CodificacionResult")";
+        var urlValidarCodigoUnico = "@Url.Action("ValidarCodigoUnico")";
         var isEditar = true;
     </script>
 }

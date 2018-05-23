@@ -1,8 +1,8 @@
-@model List<bd.webapprm.entidades.ClaseActivoFijo>
+@model List<bd.webapprm.entidades.CategoriaActivoFijo>
 
 <div id="content">
     <p>
-        <a asp-action="Create" class="btn btn-success">Nueva Clase de Activo Fijo</a>
+        <a asp-action="Create" class="btn btn-success">Nueva Categor&iacute;a de Activo Fijo</a>
     </p>
     <section id="widget-grid" class="">
         <div class="row">
@@ -10,24 +10,25 @@
                 <div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
                     <header>
                         <span class="widget-icon"> <i class="fa fa-table"></i> </span>
-                        <h2>Clases de Activo Fijo</h2>
+                        <h2>Listado de Categor&iacute;as de Activo Fijo</h2>
                     </header>
                     <div>
-                        <div class="jarviswidget-editbox"></div>
+                        <div class="jarviswidget-editbox">
+                        </div>
                         <div class="widget-body no-padding">
-                            <table id="dt_basic" class="table table-striped table-bordered table-hover" style="width:100%;">
+                            <table id="dt_basic" class="table table-striped table-bordered table-hover">
                                 <thead>
                                     <tr>
                                         <th>
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().Nombre)
                                         </th>
                                         <th>
-                                            @Html.DisplayNameFor(model => model.FirstOrDefault().IdTipoActivoFijo)
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().AnosVidaUtil)
                                         </th>
                                         <th>
-                                            @Html.DisplayNameFor(model => model.FirstOrDefault().IdCategoriaActivoFijo)
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().PorCientoDepreciacionAnual)
                                         </th>
-                                        <th>Opciones</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -37,18 +38,15 @@
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.Nombre)
                                             </td>
-
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.TipoActivoFijo.Nombre)
+                                                @Html.DisplayFor(modelItem => item.AnosVidaUtil)
                                             </td>
-
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.CategoriaActivoFijo.Nombre)
+                                                @Html.DisplayFor(modelItem => item.PorCientoDepreciacionAnual)<span>%</span>
                                             </td>
-
                                             <td>
-                                                @Html.ActionLink("Editar", "Edit", new { id = item.IdClaseActivoFijo }) |
-                                                <a href="javascript:void(0);" id="@item.IdClaseActivoFijo" onclick="abrirVentanaConfirmacion('@item.IdClaseActivoFijo')" data-url="@Url.Action("Delete", values: new { id = item.IdClaseActivoFijo })" data-titulo="Eliminar" data-descripcion="&#191;Desea eliminar la Clase de Activo Fijo... ?">Eliminar</a>
+                                                @Html.ActionLink("Editar", "Edit", new { id = item.IdCategoriaActivoFijo }) |
+                                                <a href="javascript:void(0);" id="@item.IdCategoriaActivoFijo" onclick="abrirVentanaConfirmacion('@item.IdCategoriaActivoFijo')" data-url="@Url.Action("Delete", values: new { id = item.IdCategoriaActivoFijo })" data-titulo="Eliminar" data-descripcion="&#191;Desea eliminar la Categor&iacute;a de Activo Fijo... ?">Eliminar</a>
                                             </td>
                                         </tr>
                                     }
@@ -61,6 +59,7 @@
         </div>
     </section>
 </div>
+
 @section Scripts {
     <script src='~/js/datatables/init.min.js'></script>
 }

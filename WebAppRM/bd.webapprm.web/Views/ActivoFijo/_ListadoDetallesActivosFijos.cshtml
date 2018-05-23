@@ -36,54 +36,54 @@
 
     if (isConfiguracionDetallesRecepcion)
     {
-        cantidadTotal = 13;
+        cantidadTotal = 14;
     }
     else if (isConfiguracionListadoComponentes)
     {
-        cantidadTotal = 17;
+        cantidadTotal = 18;
     }
     else if (isConfiguracionSeleccionComponentes)
     {
-        cantidadTotal = 16;
+        cantidadTotal = 17;
         nombreTabla += "Componentes";
         callbackFunctionCheckBox = "callBackFunctionSeleccionComponente";
     }
     else if (isConfiguracionListadoAltasGestionar)
     {
-        cantidadTotal = 14;
+        cantidadTotal = 15;
         nombreTabla += "Seleccionados";
     }
     else if (isConfiguracionSeleccionAltas)
     {
-        cantidadTotal = 13;
+        cantidadTotal = 14;
         nombreTabla += "Altas";
         callbackFunctionCheckBox = "callBackFunctionSeleccionAlta";
     }
     else if (isConfiguracionListadoAltas)
     {
-        cantidadTotal = 16;
+        cantidadTotal = 17;
     }
     else if (isConfiguracionListadoBajasGestionar || isConfiguracionBajasGestionarEditar)
     {
         if (isConfiguracionListadoBajasGestionar && !isConfiguracionBajasGestionarEditar)
         {
-            cantidadTotal = 17;
+            cantidadTotal = 18;
         }
         else
         {
-            cantidadTotal = 16;
+            cantidadTotal = 17;
         }
         nombreTabla += "Seleccionados";
     }
     else if (isConfiguracionSeleccionBajas)
     {
-        cantidadTotal = 16;
+        cantidadTotal = 17;
         nombreTabla += "Bajas";
         callbackFunctionCheckBox = "callBackFunctionSeleccionBaja";
     }
     else if (isConfiguracionListadoBajas)
     {
-        cantidadTotal = 18;
+        cantidadTotal = 19;
     }
 
     if (isConfiguracionSeleccion)
@@ -117,14 +117,14 @@
                     {
                         <th></th>
                     }
-
+                    <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.CodigoActivoFijo.Codigosecuencial)</th>
                     if (isConfiguracionDatosActivo)
                     {
                         <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.IdTipoActivoFijo)</th>
                         <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.IdClaseActivoFijo)</th>
                         <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.IdSubClaseActivoFijo)</th>
                         <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.Nombre)</th>
-                        <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.IdCodigoActivoFijo)</th>
+                        <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.IdCodigoActivoFijo)</th>
                     }
                 }
                 <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.Serie)</th>
@@ -176,14 +176,14 @@
                                     </div>
                                 </td>
                             }
-
+                            <td id="@String.Format("{0}{1}CodigoSecuencial", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.CodigoActivoFijo?.Codigosecuencial ?? "-");}</td>
                             if (isConfiguracionDatosActivo)
                             {
                                 <td id="@String.Format("{0}{1}TipoActivoFijo", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@Html.DisplayFor(c=> item.RecepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.Nombre)</td>
                                 <td id="@String.Format("{0}{1}ClaseActivoFijo", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@Html.DisplayFor(c=> item.RecepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.Nombre)</td>
                                 <td id="@String.Format("{0}{1}SubclaseActivoFijo", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@Html.DisplayFor(c=> item.RecepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.Nombre)</td>
                                 <td id="@String.Format("{0}{1}NombreActivoFijo", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@Html.DisplayFor(c=> item.RecepcionActivoFijoDetalle.ActivoFijo.Nombre)</td>
-                                <td id="@String.Format("{0}{1}Codigosecuencial", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@Html.DisplayFor(c=> item.RecepcionActivoFijoDetalle.ActivoFijo.CodigoActivoFijo.Codigosecuencial)</td>
+                                <td id="@String.Format("{0}{1}Codigosecuencial", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@Html.DisplayFor(c=> item.RecepcionActivoFijoDetalle.CodigoActivoFijo.Codigosecuencial)</td>
                             }
                         }
                         <td id="@String.Format("{0}{1}Serie", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.Serie ?? "-");}</td>

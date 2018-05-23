@@ -5,6 +5,11 @@ namespace bd.webapprm.entidades
 
     public partial class ClaseActivoFijo
     {
+        public ClaseActivoFijo()
+        {
+            SubClaseActivoFijo = new HashSet<SubClaseActivoFijo>();
+        }
+
         [Key]
         public int IdClaseActivoFijo { get; set; }
 
@@ -19,15 +24,13 @@ namespace bd.webapprm.entidades
         [Required(ErrorMessage = "Debe seleccionar el {0}")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
         public int IdTipoActivoFijo { get; set; }
-
         public virtual TipoActivoFijo TipoActivoFijo { get; set; }
 
-        [Display(Name = "Depreciación")]
+        [Display(Name = "Categoría de activo fijo")]
         [Required(ErrorMessage = "Debe seleccionar la {0}")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar la {0} ")]
-        public int IdTablaDepreciacion { get; set; }
-
-        public virtual TablaDepreciacion TablaDepreciacion { get; set; }
+        public int IdCategoriaActivoFijo { get; set; }
+        public virtual CategoriaActivoFijo CategoriaActivoFijo { get; set; }
 
         public virtual ICollection<SubClaseActivoFijo> SubClaseActivoFijo { get; set; }
     }

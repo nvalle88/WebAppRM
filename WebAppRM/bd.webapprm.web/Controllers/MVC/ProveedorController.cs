@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using bd.webapprm.entidades;
 using bbd.webapprm.servicios.Enumeradores;
 using bd.webapprm.servicios.Extensores;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace bd.webapprm.web.Controllers.MVC
 {
@@ -24,9 +25,17 @@ namespace bd.webapprm.web.Controllers.MVC
             this.apiServicio = apiServicio;
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            try
+            {
+                ViewData["LineaServicio"] = new SelectList(await apiServicio.Listar<LineaServicio>(new Uri(WebApp.BaseAddressRM), "api/LineaServicio/ListarLineaServicio"), "IdLineaServicio", "Nombre");
+                return View();
+            }
+            catch (Exception)
+            {
+                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorCargarDatos}");
+            }
         }
 
         [HttpPost]
@@ -42,6 +51,7 @@ namespace bd.webapprm.web.Controllers.MVC
                     return this.Redireccionar($"{Mensaje.Informacion}|{Mensaje.Satisfactorio}");
                 }
                 ViewData["Error"] = response.Message;
+                ViewData["LineaServicio"] = new SelectList(await apiServicio.Listar<LineaServicio>(new Uri(WebApp.BaseAddressRM), "api/LineaServicio/ListarLineaServicio"), "IdLineaServicio", "Nombre");
                 return View(Proveedor);
             }
             catch (Exception ex)
@@ -62,6 +72,7 @@ namespace bd.webapprm.web.Controllers.MVC
                         return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}");
 
                     respuesta.Resultado = JsonConvert.DeserializeObject<Proveedor>(respuesta.Resultado.ToString());
+                    ViewData["LineaServicio"] = new SelectList(await apiServicio.Listar<LineaServicio>(new Uri(WebApp.BaseAddressRM), "api/LineaServicio/ListarLineaServicio"), "IdLineaServicio", "Nombre");
                     return View(respuesta.Resultado);
                 }
                 return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}");
@@ -87,6 +98,7 @@ namespace bd.webapprm.web.Controllers.MVC
                         return this.Redireccionar($"{Mensaje.Informacion}|{Mensaje.Satisfactorio}");
                     }
                     ViewData["Error"] = response.Message;
+                    ViewData["LineaServicio"] = new SelectList(await apiServicio.Listar<LineaServicio>(new Uri(WebApp.BaseAddressRM), "api/LineaServicio/ListarLineaServicio"), "IdLineaServicio", "Nombre");
                     return View(proveedor);
                 }
                 return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}");

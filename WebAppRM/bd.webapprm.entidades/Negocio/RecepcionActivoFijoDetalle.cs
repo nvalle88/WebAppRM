@@ -22,23 +22,28 @@ namespace bd.webapprm.entidades
         public int IdRecepcionActivoFijoDetalle { get; set; }
         
         [Display(Name = "Serie:")]
-        [StringLength(200, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
+        [StringLength(200, MinimumLength = 2, ErrorMessage = "La {0} no puede tener más de {1} y menos de {2}")]
+        [RegularExpression(@"^\d*$", ErrorMessage = "La {0} solo puede contener números.")]
         public string Serie { get; set; }
 
         [Display(Name = "Número de chasis:")]
         [StringLength(200, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
+        [RegularExpression(@"^\d*$", ErrorMessage = "El {0} solo puede contener números.")]
         public string NumeroChasis { get; set; }
 
         [Display(Name = "Número de motor:")]
         [StringLength(200, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
+        [RegularExpression(@"^\d*$", ErrorMessage = "El {0} solo puede contener números.")]
         public string NumeroMotor { get; set; }
 
         [Display(Name = "Placa:")]
         [StringLength(200, MinimumLength = 2, ErrorMessage = "La {0} no puede tener más de {1} y menos de {2}")]
+        [RegularExpression(@"^\d*$", ErrorMessage = "La {0} solo puede contener números.")]
         public string Placa { get; set; }
 
         [Display(Name = "Número de clave catastral:")]
         [StringLength(200, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
+        [RegularExpression(@"^\d*$", ErrorMessage = "El {0} solo puede contener números.")]
         public string NumeroClaveCatastral { get; set; }
 
         //Propiedades Virtuales Referencias a otras clases
@@ -60,6 +65,12 @@ namespace bd.webapprm.entidades
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
         public int IdEstado { get; set; }
         public virtual Estado Estado { get; set; }
+
+        [Display(Name = "Código de activo fijo")]
+        [Required(ErrorMessage = "Debe seleccionar el {0}")]
+        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
+        public int IdCodigoActivoFijo { get; set; }
+        public virtual CodigoActivoFijo CodigoActivoFijo { get; set; }
 
         [NotMapped]
         public UbicacionActivoFijo UbicacionActivoFijoActual { get; set; }

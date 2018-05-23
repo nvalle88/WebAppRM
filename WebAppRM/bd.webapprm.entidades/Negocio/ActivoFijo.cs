@@ -37,12 +37,6 @@ namespace bd.webapprm.entidades
         public int IdSubClaseActivoFijo { get; set; }
         public virtual SubClaseActivoFijo SubClaseActivoFijo { get; set; }
 
-        [Display(Name = "Código de activo fijo")]
-        [Required(ErrorMessage = "Debe seleccionar el {0}")]
-        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
-        public int IdCodigoActivoFijo { get; set; }
-        public virtual CodigoActivoFijo CodigoActivoFijo { get; set; }
-
         [Display(Name = "Modelo:")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
         public int IdModelo { get; set; }

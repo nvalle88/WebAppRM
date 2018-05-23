@@ -1,8 +1,5 @@
-﻿@model bd.webapprm.entidades.TablaDepreciacion
+@model bd.webapprm.entidades.LineaServicio
 
-@section css{
-    <link rel="stylesheet" href="~/lib/bootstrap-touchspin-master/src/jquery.bootstrap-touchspin.css" />
-}
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
@@ -10,24 +7,23 @@
                 <div class="jarviswidget jarviswidget-color-red" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
                     <header>
                         <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
-                        <h2>Tabla de Depreciaci&oacute;n</h2>
+                        <h2>L&iacute;nea de Servicio</h2>
                     </header>
                     <div>
-                        <div class="jarviswidget-editbox">
-                        </div>
+                        <div class="jarviswidget-editbox"></div>
                         <div class="widget-body no-padding">
                             <form asp-action="Create" id="checkout-form" class="smart-form" novalidate="novalidate">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <fieldset>
                                     <div class="row">
                                         <section class="col col-4">
-                                            <label asp-for="IndiceDepreciacion"></label>
+                                            <label asp-for="Nombre"></label>
                                         </section>
 
                                         <section class="col col-8">
                                             <label class="input">
-                                                <input asp-for="IndiceDepreciacion" class="form-control touchspin_tasa" />
-                                                <span asp-validation-for="IndiceDepreciacion" class="text-danger"></span>
+                                                <input asp-for="Nombre" class="form-control" />
+                                                <span asp-validation-for="Nombre" class="text-danger"></span>
                                             </label>
                                         </section>
                                     </div>
@@ -46,11 +42,5 @@
     </section>
 </div>
 @section Scripts {
-    <script src='~/lib/bootstrap-touchspin-master/src/jquery.bootstrap-touchspin.js'></script>
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script>
-        jQuery(document).ready(function () {
-            Init_Touchspin();
-        });
-    </script>
 }

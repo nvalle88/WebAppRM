@@ -31,4 +31,19 @@ namespace bd.webapprm.entidades.Utils
         public static string Aceptada { get { return "Aceptada"; } }
         public static string Rechazada { get { return "Rechazada"; } }
     }
+
+    public static class LineasServicio
+    {
+        public static string ActivosFijos { get { return "Activos Fijos"; } }
+        public static string Proveeduria { get { return "Proveeduría"; } }
+    }
+
+    public static class Categorias
+    {
+        public static string Edificio { get { return "Edificios"; } }
+        public static string MueblesEnseres { get { return "Muebles y enseres"; } }
+        public static string EquiposOficina { get { return "Equipos de oficina"; } }
+        public static string Vehiculo { get { return "Vehículos"; } }
+        public static string EquiposComputoSoftware { get { return "Equipos de cómputo y software"; } }
+    }
 }

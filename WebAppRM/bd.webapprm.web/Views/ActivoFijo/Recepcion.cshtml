@@ -26,6 +26,7 @@
                         <div class="jarviswidget-editbox"></div>
                         <div class="widget-body no-padding">
                             <form asp-action="Recepcion" id="checkout-form" class="smart-form" novalidate="novalidate" enctype="multipart/form-data">
+                                <input type="hidden" asp-for="ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.CategoriaActivoFijo.Nombre" value="@ViewBag.Categoria" />
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <fieldset>
                                     <div class="widget-body fuelux">
@@ -39,9 +40,6 @@
                                                 </li>
                                                 <li data-target="#step3">
                                                     <span class="badge badge-info" style="padding:3px 4px !important;">3</span>P&oacute;liza de Seguro<span class="chevron"></span>
-                                                </li>
-                                                <li data-target="#step4" id="li_codificacion">
-                                                    <span class="badge" style="padding:3px 4px !important;">4</span>Codificaci&oacute;n<span class="chevron"></span>
                                                 </li>
                                             </ul>
                                             <div class="actions">
@@ -314,9 +312,6 @@
                                                         </section>
                                                     </div>
                                                 </div>
-                                                <div class="step-pane" id="step4">
-                                                    @{ await Html.RenderPartialAsync("_Codificacion", Model); }
-                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -342,8 +337,8 @@
     <script src='~/lib/jquery.spinner-master/dist/js/jquery.spinner.min.js'></script>
     @{await Html.RenderPartialAsync("_FileInputScriptsPartial");}
     <script src="~/lib/JsBarcode-master/dist/JsBarcode.all.min.js"></script>
-    <script src='~/js/activoFijo/recepcion.min.js'></script>
     <script src='~/js/activoFijo/codificacion.min.js'></script>
+    <script src='~/js/activoFijo/recepcion.min.js'></script>
     <script src='~/js/activoFijo/listadoSeleccion.min.js'></script>
     <script src='~/js/activoFijo/componentes.min.js'></script>
     <script>
@@ -360,6 +355,9 @@
         var urlValidacionDatosEspecificosResult = "@Url.Action("ValidacionDatosEspecificosResult")";
         var urlModalComponentesResult = "@Url.Action("ModalComponentesResult")";
         var urlComponentesActivosFijos = "@Url.Action("ComponentesActivosFijosResult")";
+        var urlCategoria = "@Url.Action("CategoriaResult")";
+        var urlCodificacion = "@Url.Action("CodificacionResult")";
+        var urlValidarCodigoUnico = "@Url.Action("ValidarCodigoUnico")";
         var isEditar = false;
     </script>
 }

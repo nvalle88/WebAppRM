@@ -45,7 +45,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 ViewData["IdTipoActivoFijo"] = new SelectList(await apiServicio.Listar<TipoActivoFijo>(new Uri(WebApp.BaseAddressRM), "api/TipoActivoFijo/ListarTipoActivoFijos"), "IdTipoActivoFijo", "Nombre");
-                ViewData["IdTablaDepreciacion"] = new SelectList(await apiServicio.Listar<TablaDepreciacion>(new Uri(WebApp.BaseAddressRM), "api/TablaDepreciacion/ListarTablaDepreciacion"), "IdTablaDepreciacion", "IndiceDepreciacion");
+                ViewData["CategoriaActivoFijo"] = new SelectList(await apiServicio.Listar<CategoriaActivoFijo>(new Uri(WebApp.BaseAddressRM), "api/CategoriaActivoFijo/ListarCategoriaActivoFijo"), "IdCategoriaActivoFijo", "Nombre");
                 return View();
             }
             catch (Exception)
@@ -68,7 +68,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 }
                 ViewData["Error"] = response.Message;
                 ViewData["IdTipoActivoFijo"] = new SelectList(await apiServicio.Listar<TipoActivoFijo>(new Uri(WebApp.BaseAddressRM), "api/TipoActivoFijo/ListarTipoActivoFijos"), "IdTipoActivoFijo", "Nombre");
-                ViewData["IdTablaDepreciacion"] = new SelectList(await apiServicio.Listar<TablaDepreciacion>(new Uri(WebApp.BaseAddressRM), "api/TablaDepreciacion/ListarTablaDepreciacion"), "IdTablaDepreciacion", "IndiceDepreciacion");
+                ViewData["CategoriaActivoFijo"] = new SelectList(await apiServicio.Listar<CategoriaActivoFijo>(new Uri(WebApp.BaseAddressRM), "api/CategoriaActivoFijo/ListarCategoriaActivoFijo"), "IdCategoriaActivoFijo", "Nombre");
                 return View(claseActivoFijo);
             }
             catch (Exception ex)
@@ -90,7 +90,7 @@ namespace bd.webapprm.web.Controllers.MVC
 
                     respuesta.Resultado = JsonConvert.DeserializeObject<ClaseActivoFijo>(respuesta.Resultado.ToString());
                     ViewData["IdTipoActivoFijo"] = new SelectList(await apiServicio.Listar<TipoActivoFijo>(new Uri(WebApp.BaseAddressRM), "api/TipoActivoFijo/ListarTipoActivoFijos"), "IdTipoActivoFijo", "Nombre");
-                    ViewData["IdTablaDepreciacion"] = new SelectList(await apiServicio.Listar<TablaDepreciacion>(new Uri(WebApp.BaseAddressRM), "api/TablaDepreciacion/ListarTablaDepreciacion"), "IdTablaDepreciacion", "IndiceDepreciacion");
+                    ViewData["CategoriaActivoFijo"] = new SelectList(await apiServicio.Listar<CategoriaActivoFijo>(new Uri(WebApp.BaseAddressRM), "api/CategoriaActivoFijo/ListarCategoriaActivoFijo"), "IdCategoriaActivoFijo", "Nombre");
                     return View(respuesta.Resultado);
                 }
                 return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}");
@@ -117,7 +117,7 @@ namespace bd.webapprm.web.Controllers.MVC
                     }
                     ViewData["Error"] = response.Message;
                     ViewData["IdTipoActivoFijo"] = new SelectList(await apiServicio.Listar<TipoActivoFijo>(new Uri(WebApp.BaseAddressRM), "api/TipoActivoFijo/ListarTipoActivoFijos"), "IdTipoActivoFijo", "Nombre");
-                    ViewData["IdTablaDepreciacion"] = new SelectList(await apiServicio.Listar<TablaDepreciacion>(new Uri(WebApp.BaseAddressRM), "api/TablaDepreciacion/ListarTablaDepreciacion"), "IdTablaDepreciacion", "IndiceDepreciacion");
+                    ViewData["CategoriaActivoFijo"] = new SelectList(await apiServicio.Listar<CategoriaActivoFijo>(new Uri(WebApp.BaseAddressRM), "api/CategoriaActivoFijo/ListarCategoriaActivoFijo"), "IdCategoriaActivoFijo", "Nombre");
                     return View(claseActivoFijo);
                 }
                 return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}");

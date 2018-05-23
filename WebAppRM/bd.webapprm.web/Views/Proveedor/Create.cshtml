@@ -1,5 +1,8 @@
 ﻿@model bd.webapprm.entidades.Proveedor
 
+@section css{
+    <link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
+}
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
@@ -67,12 +70,12 @@
 
                                     <div class="row">
                                         <section class="col col-4">
-                                            <label asp-for="LineaServicio"></label>
+                                            <label asp-for="IdLineaServicio"></label>
                                         </section>
                                         <section class="col col-8">
                                             <label class="input">
-                                                <input asp-for="LineaServicio" class="form-control" />
-                                                <span asp-validation-for="LineaServicio" class="text-danger"></span>
+                                                <select asp-for="IdLineaServicio" class="form-control" asp-items="ViewBag.LineaServicio"></select>
+                                                <span asp-validation-for="IdLineaServicio" class="text-danger"></span>
                                             </label>
                                         </section>
                                     </div>
@@ -121,18 +124,6 @@
                                             <label class="input">
                                                 <input asp-for="Cargo" class="form-control" />
                                                 <span asp-validation-for="Cargo" class="text-danger"></span>
-                                            </label>
-                                        </section>
-                                    </div>
-
-                                    <div class="row">
-                                        <section class="col col-4">
-                                            <label asp-for="Emision"></label>
-                                        </section>
-                                        <section class="col col-8">
-                                            <label class="input">
-                                                <input asp-for="Emision" class="form-control" />
-                                                <span asp-validation-for="Emision" class="text-danger"></span>
                                             </label>
                                         </section>
                                     </div>
@@ -191,4 +182,6 @@
 </div>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{await Html.RenderPartialAsync("_Select2ScriptsPartial");}
+    <script src="~/js/proveedor/proveedor.min.js"></script>
 }
