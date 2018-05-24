@@ -352,7 +352,7 @@ function cargarFormularioDatosEspecificos(idFila)
     $("#hIdRecepcionActivoFijoDetalle").val($("#hIdRecepcionActivoFijoDetalle_" + idFila).val());
     $("#hIdUbicacionActivoFijo").val($("#hUbicacion_" + idFila).val());
     $("#myModalLabel").html("Editar");
-    $("#btnGuardarDatosEspecificos").data("funcioncallback", "guardarDatosEspecificos()");
+    $("#mFuncionCallbak").val("guardarDatosEspecificos");
 
     var objData = new Object();
     if (categoria == objCategorias.Edificio)
@@ -409,8 +409,8 @@ function eventoRadioDatosEspecificos()
 function eventoGuardarDatosEspecificos()
 {
     $("#btnGuardarDatosEspecificos").on("click", function (e) {
-        var funcionCallback = $("#btnGuardarDatosEspecificos").data("funcioncallback");
-        eval(funcionCallback);
+        var funcionCallback = $("#mFuncionCallbak").val();
+        eval(funcionCallback + "()");
     });
 }
 
@@ -608,7 +608,7 @@ function cargarFormularioCodificacion(idFila)
     $("#hIdFilaModalDatosEspecificos").val(idFila);
     $("#hIdRecepcionActivoFijoDetalle").val($("#hIdRecepcionActivoFijoDetalle_" + idFila).val());
     $("#myModalLabel").html("Codificaci&oacute;n");
-    $("#btnGuardarDatosEspecificos").data("funcioncallback", "guardarCodificacion()");
+    $("#mFuncionCallbak").val("guardarCodificacion");
 
     var hCodificacion = $("#hCodigoSecuencial_" + idFila).val();
     var numeroConsecutivo = 1;

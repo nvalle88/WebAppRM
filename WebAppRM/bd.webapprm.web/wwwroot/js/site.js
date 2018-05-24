@@ -180,3 +180,19 @@ function initDataTableFiltrado(idTabla, arrColumnHidden)
         otable.column(arrColumnHidden[i]).visible(false);
     }
 }
+
+function initTreeView()
+{
+    $('.tree > ul').attr('role', 'tree').find('ul').attr('role', 'group');
+    $('.tree').find('li:has(ul)').addClass('parent_li').attr('role', 'treeitem').find(' > span').attr('title', 'Cerrar').on('click', function (e) {
+        var children = $(this).parent('li.parent_li').find(' > ul > li');
+        if (children.is(':visible')) {
+            children.hide('fast');
+            $(this).attr('title', 'Expandir').find(' > i').removeClass().addClass('fa fa-lg fa-filter');
+        } else {
+            children.show('fast');
+            $(this).attr('title', 'Cerrar').find(' > i').removeClass().addClass('fa fa-lg fa-minus-circle');
+        }
+        e.stopPropagation();
+    });
+}

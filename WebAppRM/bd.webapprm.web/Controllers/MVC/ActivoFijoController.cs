@@ -337,6 +337,7 @@ namespace bd.webapprm.web.Controllers.MVC
             ViewData["IsConfiguracionDetallesRecepcion"] = true;
             ViewData["Titulo"] = "Activos Fijos Recepcionados";
             ViewData["UrlEditar"] = nameof(EditarRecepcionAR);
+            ViewData["EstadoFiltrado"] = Estados.Recepcionado;
             try
             {
                 lista = await apiServicio.ObtenerElementoAsync<List<ActivoFijo>>(new List<string> { Estados.Recepcionado }, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ListarActivoFijoPorEstado");
@@ -356,6 +357,7 @@ namespace bd.webapprm.web.Controllers.MVC
             ViewData["Titulo"] = "Activos Fijos que requieren Validación Técnica";
             ViewData["UrlEditar"] = nameof(EditarRecepcionVT);
             ViewData["UrlRevision"] = nameof(RevisionActivoFijo);
+            ViewData["EstadoFiltrado"] = Estados.ValidacionTecnica;
             try
             {
                 lista = await apiServicio.ObtenerElementoAsync<List<ActivoFijo>>(new List<string> { Estados.ValidacionTecnica }, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ListarActivoFijoPorEstado");
@@ -398,8 +400,8 @@ namespace bd.webapprm.web.Controllers.MVC
         public async Task<IActionResult> ModalDatosEspecificosResult(RecepcionActivoFijoDetalle rafd, string categoria, int idSucursal, int? idBodega, int? idEmpleado)
         {
             ViewData["Categoria"] = categoria;
-            ViewData["Empleado"] = await ObtenerSelectListEmpleado(idSucursal);
-            ViewData["Bodega"] = await ObtenerSelectListBodega(idSucursal);
+            ViewData["Empleado"] = await ObtenerSelectListEmpleado(idSucursal, idEmpleado);
+            ViewData["Bodega"] = await ObtenerSelectListBodega(idSucursal, idBodega);
             ViewData["IdTipoUbicacion"] = idBodega != null ? 1 : idEmpleado != null ? 2 : 1;
             ViewData["TipoUbicacion"] = new SelectList(new[] { new { Id = 1, Valor = "Bodega" }, new { Id = 2, Valor = "Custodio" } }, "Id", "Valor", ViewData["IdTipoUbicacion"]);
             return PartialView("_ModalDatosEspecificos", rafd);
@@ -423,6 +425,7 @@ namespace bd.webapprm.web.Controllers.MVC
                         });
                     }
                 }
+                listaPropiedadValorErrores.RemoveAll(c => c.Propiedad == "IdRecepcionActivoFijoDetalle");
             }
             try
             {
@@ -598,6 +601,7 @@ namespace bd.webapprm.web.Controllers.MVC
             ViewData["IsConfiguracionListadoAltas"] = true;
             ViewData["Titulo"] = "Activos Fijos en Alta";
             ViewData["UrlEditar"] = nameof(GestionarAlta);
+            ViewData["EstadoFiltrado"] = Estados.Alta;
             try
             {
                 lista = await apiServicio.ObtenerElementoAsync<List<ActivoFijo>>(Estados.Alta, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ListarActivosFijosPorAgrupacionPorEstado");
@@ -610,10 +614,19 @@ namespace bd.webapprm.web.Controllers.MVC
             return View("ListadoActivoFijo", lista);
         }
 
-        public IActionResult ListadoAltaActivosFijos()
+        public async Task<IActionResult> ListadoAltaActivosFijos()
         {
-            //Implementar aquí....
-            return View();
+            var lista = new List<AltaActivoFijo>();
+            try
+            {
+                lista = await apiServicio.Listar<AltaActivoFijo>(new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ListarAltasActivosFijos");
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Listando altas de activos fijos", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webappth" });
+                TempData["Mensaje"] = $"{Mensaje.Error}|{Mensaje.ErrorListado}";
+            }
+            return View(lista);
         }
 
         public async Task<IActionResult> GestionarAlta(int? id)
@@ -937,6 +950,7 @@ namespace bd.webapprm.web.Controllers.MVC
             ViewData["IsConfiguracionListadoBajas"] = true;
             ViewData["Titulo"] = "Activos Fijos en Baja";
             ViewData["UrlEditar"] = nameof(GestionarBaja);
+            ViewData["EstadoFiltrado"] = Estados.Baja;
             try
             {
                 lista = await apiServicio.ObtenerElementoAsync<List<ActivoFijo>>(Estados.Baja, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ListarActivosFijosPorAgrupacionPorEstado");
@@ -947,6 +961,21 @@ namespace bd.webapprm.web.Controllers.MVC
                 TempData["Mensaje"] = $"{Mensaje.Error}|{Mensaje.ErrorListado}";
             }
             return View("ListadoActivoFijo", lista);
+        }
+
+        public async Task<IActionResult> ListadoBajaActivosFijos()
+        {
+            var lista = new List<BajaActivoFijo>();
+            try
+            {
+                lista = await apiServicio.Listar<BajaActivoFijo>(new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ListarBajasActivosFijos");
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Listando bajas de activos fijos", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webappth" });
+                TempData["Mensaje"] = $"{Mensaje.Error}|{Mensaje.ErrorListado}";
+            }
+            return View(lista);
         }
 
         public async Task<IActionResult> GestionarBaja(int? id)
@@ -1081,6 +1110,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 ViewData["IsConfiguracionListadoMantenimientos"] = true;
                 ViewData["Titulo"] = "Activos Fijos en Alta";
                 ViewData["UrlEditar"] = nameof(EditarMantenimiento);
+                ViewData["EstadoFiltrado"] = Estados.Mantenimiento;
                 lista = await apiServicio.ObtenerElementoAsync<List<ActivoFijo>>(Estados.Alta, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ListarActivosFijosPorAgrupacionPorEstado");
             }
             catch (Exception ex)
@@ -1468,12 +1498,12 @@ namespace bd.webapprm.web.Controllers.MVC
         #endregion
 
         #region AJAX_Bodega
-        public async Task<SelectList> ObtenerSelectListBodega(int idSucursal)
+        public async Task<SelectList> ObtenerSelectListBodega(int idSucursal, int? idBodega = null)
         {
             try
             {
                 var listaBodega = idSucursal != -1 ? await apiServicio.Listar<Bodega>(new Uri(WebApp.BaseAddressRM), $"api/Bodega/ListarBodegaPorSucursal/{idSucursal}") : new List<Bodega>();
-                return new SelectList(listaBodega, "IdBodega", "Nombre");
+                return new SelectList(listaBodega, "IdBodega", "Nombre", idBodega);
             }
             catch (Exception)
             {

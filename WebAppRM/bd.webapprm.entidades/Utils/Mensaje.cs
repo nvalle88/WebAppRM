@@ -30,6 +30,7 @@ namespace bd.webapprm.entidades.Utils
         public static string Creada { get { return "Creado"; } }
         public static string Aceptada { get { return "Aceptada"; } }
         public static string Rechazada { get { return "Rechazada"; } }
+        public static string Mantenimiento { get { return "Mantenimiento"; } }
     }
 
     public static class LineasServicio
