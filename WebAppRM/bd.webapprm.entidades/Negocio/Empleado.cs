@@ -8,10 +8,8 @@ namespace bd.webapprm.entidades
     {
         public Empleado()
         {
-            TransferenciaActivoFijoIdEmpleadoReciboNavigation = new HashSet<TransferenciaActivoFijo>();
-            TransferenciaActivoFijoIdEmpleadoRegistraNavigation = new HashSet<TransferenciaActivoFijo>();
-            TransferenciaActivoFijoIdEmpleadoResponsableEnvioNavigation = new HashSet<TransferenciaActivoFijo>();
-            TransferenciaActivoFijoIdEmpleadoResponsableReciboNavigation = new HashSet<TransferenciaActivoFijo>();
+            TransferenciasActivoFijoEmpleadoResponsableEnvio = new HashSet<TransferenciaActivoFijo>();
+            TransferenciasActivoFijoEmpleadoResponsableRecibo = new HashSet<TransferenciaActivoFijo>();
             UbicacionActivoFijo = new HashSet<UbicacionActivoFijo>();
             MantenimientoActivoFijo = new HashSet<MantenimientoActivoFijo>();
         }
@@ -77,10 +75,8 @@ namespace bd.webapprm.entidades
         public int? IdDependencia { get; set; }
         public virtual Dependencia Dependencia { get; set; }
 
-        public virtual ICollection<TransferenciaActivoFijo> TransferenciaActivoFijoIdEmpleadoReciboNavigation { get; set; }
-        public virtual ICollection<TransferenciaActivoFijo> TransferenciaActivoFijoIdEmpleadoRegistraNavigation { get; set; }
-        public virtual ICollection<TransferenciaActivoFijo> TransferenciaActivoFijoIdEmpleadoResponsableEnvioNavigation { get; set; }
-        public virtual ICollection<TransferenciaActivoFijo> TransferenciaActivoFijoIdEmpleadoResponsableReciboNavigation { get; set; }
+        public virtual ICollection<TransferenciaActivoFijo> TransferenciasActivoFijoEmpleadoResponsableEnvio { get; set; }
+        public virtual ICollection<TransferenciaActivoFijo> TransferenciasActivoFijoEmpleadoResponsableRecibo { get; set; }
         public virtual ICollection<UbicacionActivoFijo> UbicacionActivoFijo { get; set; }
         public virtual ICollection<MantenimientoActivoFijo> MantenimientoActivoFijo { get; set; }
     }

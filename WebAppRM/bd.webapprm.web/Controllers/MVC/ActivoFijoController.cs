@@ -836,9 +836,97 @@ namespace bd.webapprm.web.Controllers.MVC
         #endregion
 
         #region Transferencias
+        #region Cambio de Custodio
+        public async Task<IActionResult> ListadoCambioCustodio()
+        {
+            var lista = new List<TransferenciaActivoFijo>();
+            try
+            {
+                lista = await apiServicio.Listar<TransferenciaActivoFijo>(new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ListarCambiosCustodio");
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Listando cambios de custodio de activos fijos", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webappth" });
+                TempData["Mensaje"] = $"{Mensaje.Error}|{Mensaje.ErrorListado}";
+            }
+            return View(lista);
+        }
 
+        public async Task<IActionResult> GestionarCambioCustodio()
+        {
+            try
+            {
+                ViewData["Configuraciones"] = new List<PropiedadValor>()
+                {
+                    new PropiedadValor { Propiedad = "IsConfiguracionSeleccion", Valor = "true" },
+                    new PropiedadValor { Propiedad = "IsConfiguracionDatosActivo", Valor = "true" },
+                    new PropiedadValor { Propiedad = "IsConfiguracionSeleccionBajas", Valor = "true" }
+                };
+                ViewData["Empleado"] = new SelectList(await apiServicio.Listar<ListaEmpleadoViewModel>(new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleados"), "IdEmpleado", "NombreApellido");
+                ViewData["ListadoRecepcionActivoFijoDetalleSeleccionado"] = await apiServicio.ObtenerElementoAsync<List<RecepcionActivoFijoDetalleSeleccionado>>(new CambioCustodioViewModel { IdEmpleadoEntrega = (ViewData["Empleado"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Empleado"] as SelectList).FirstOrDefault().Value) : -1, ListadoIdRecepcionActivoFijoDetalle = new List<int>() }, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/DetallesActivoFijoSeleccionadoPorEmpleado");
+                return View();
+            }
+            catch (Exception)
+            {
+                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorCargarDatos}", nameof(ListadoCambioCustodio));
+            }
+        }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> GestionarCambioCustodio(CambioCustodioViewModel cambioCustodioModel)
+        {
+            try
+            {
+                await apiServicio.InsertarAsync(new Estado { Nombre = Estados.Aceptada }, new Uri(WebApp.BaseAddressTH), "api/Estados/InsertarEstado");
+                var arrIdsRecepcionActivoFijoDetalle = Request.Form["idsRecepcionActivoFijoDetalle"].ToString().Split(',');
+                cambioCustodioModel.ListadoIdRecepcionActivoFijoDetalle = arrIdsRecepcionActivoFijoDetalle.Select(c => int.Parse(c)).ToList();
+                var response = await apiServicio.InsertarAsync(cambioCustodioModel, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/InsertarCambioCustodioActivoFijo");
+                if (response.IsSuccess)
+                {
+                    await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), ExceptionTrace = null, Message = "Se ha creado un cambio de custodio de activo fijo", UserName = "Usuario 1", LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ADV), EntityID = string.Format("{0} {1}", "Custodio de Activo Fijo que recibe:", cambioCustodioModel.IdEmpleadoRecibe) });
+                    return this.Redireccionar($"{Mensaje.Informacion}|{Mensaje.Satisfactorio}", nameof(ListadoCambioCustodio));
+                }
+                var listaRecepcionActivoFijoDetalleSeleccionado = await apiServicio.ObtenerElementoAsync<List<RecepcionActivoFijoDetalleSeleccionado>>(cambioCustodioModel, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/DetallesActivoFijoSeleccionadoPorEmpleado");
+                ViewData["Error"] = response.Message;
+                ViewData["Configuraciones"] = new List<PropiedadValor>()
+                {
+                    new PropiedadValor { Propiedad = "IsConfiguracionSeleccion", Valor = "true" },
+                    new PropiedadValor { Propiedad = "IsConfiguracionDatosActivo", Valor = "true" },
+                    new PropiedadValor { Propiedad = "IsConfiguracionSeleccionBajas", Valor = "true" }
+                };
+                ViewData["Empleado"] = new SelectList(await apiServicio.Listar<ListaEmpleadoViewModel>(new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleados"), "IdEmpleado", "NombreApellido");
+                ViewData["ListadoRecepcionActivoFijoDetalleSeleccionado"] = listaRecepcionActivoFijoDetalleSeleccionado;
+                return View(cambioCustodioModel);
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Creando cambio de custodio de Activo Fijo", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP WebAppTh" });
+                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorCrear}", nameof(ListadoCambioCustodio));
+            }
+        }
 
+        [HttpPost]
+        public async Task<IActionResult> ListadoActivosFijosCustodioResult(int idEmpleado)
+        {
+            var lista = new List<RecepcionActivoFijoDetalleSeleccionado>();
+            try
+            {
+                ViewData["Configuraciones"] = new List<PropiedadValor>()
+                {
+                    new PropiedadValor { Propiedad = "IsConfiguracionSeleccion", Valor = "true" },
+                    new PropiedadValor { Propiedad = "IsConfiguracionDatosActivo", Valor = "true" },
+                    new PropiedadValor { Propiedad = "IsConfiguracionSeleccionBajas", Valor = "true" }
+                };
+                lista = await apiServicio.ObtenerElementoAsync<List<RecepcionActivoFijoDetalleSeleccionado>>(new CambioCustodioViewModel { IdEmpleadoEntrega = idEmpleado, ListadoIdRecepcionActivoFijoDetalle = new List<int>() }, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/DetallesActivoFijoSeleccionadoPorEmpleado");
+            }
+            catch (Exception)
+            { }
+            return PartialView("_ListadoDetallesActivosFijos", lista);
+        }
+        #endregion
+
+        #region Cambio de Ubicación
         public async Task<IActionResult> TransferirActivoFijo(string id)
         {
             try
@@ -929,6 +1017,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorCrear}"/*, nameof(ActivosFijosATransferir)*/);
             }
         }
+        #endregion
         #endregion
 
         #region Baja de Activos
@@ -1243,82 +1332,6 @@ namespace bd.webapprm.web.Controllers.MVC
                 await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Eliminar Mantenimiento Activo Fijo", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Delete), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webappth" });
                 return this.Redireccionar($"{Mensaje.Error}|{Mensaje.Excepcion}", nameof(ListarMantenimientos), routeValues: new { id });
             }
-        }
-        #endregion
-
-        #region Cambio de Custodio
-        public async Task<IActionResult> GestionarCambioCustodio()
-        {
-            try
-            {
-                ViewData["Configuraciones"] = new List<PropiedadValor>()
-                {
-                    new PropiedadValor { Propiedad = "IsConfiguracionSeleccion", Valor = "true" },
-                    new PropiedadValor { Propiedad = "IsConfiguracionDatosActivo", Valor = "true" },
-                    new PropiedadValor { Propiedad = "IsConfiguracionSeleccionBajas", Valor = "true" }
-                };
-                ViewData["Empleado"] = new SelectList(await apiServicio.Listar<ListaEmpleadoViewModel>(new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleados"), "IdEmpleado", "NombreApellido");
-                ViewData["ListadoRecepcionActivoFijoDetalleSeleccionado"] = await apiServicio.ObtenerElementoAsync<List<RecepcionActivoFijoDetalleSeleccionado>>(new CambioCustodioViewModel { IdEmpleadoEntrega = (ViewData["Empleado"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Empleado"] as SelectList).FirstOrDefault().Value) : -1, ListadoIdRecepcionActivoFijoDetalle = new List<int>() }, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/DetallesActivoFijoSeleccionadoPorEmpleado");
-            }
-            catch (Exception ex)
-            {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Listando empleados para cambio de custodio", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webappth" });
-                TempData["Mensaje"] = $"{Mensaje.Error}|{Mensaje.ErrorListado}";
-            }
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> GestionarCambioCustodio(CambioCustodioViewModel cambioCustodioModel)
-        {
-            try
-            {
-                var arrIdsRecepcionActivoFijoDetalle = Request.Form["idsRecepcionActivoFijoDetalle"].ToString().Split(',');
-                cambioCustodioModel.ListadoIdRecepcionActivoFijoDetalle = arrIdsRecepcionActivoFijoDetalle.Select(c => int.Parse(c)).ToList();
-                var response = await apiServicio.InsertarAsync(cambioCustodioModel, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/InsertarCambioCustodioActivoFijo");
-                if (response.IsSuccess)
-                {
-                    await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), ExceptionTrace = null, Message = "Se ha creado un cambio de custodio de activo fijo", UserName = "Usuario 1", LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ADV), EntityID = string.Format("{0} {1}", "Custodio de Activo Fijo que recibe:", cambioCustodioModel.IdEmpleadoRecibe) });
-                    return this.Redireccionar($"{Mensaje.Informacion}|{Mensaje.Satisfactorio}", nameof(GestionarCambioCustodio));
-                }
-                var listaRecepcionActivoFijoDetalleSeleccionado = await apiServicio.ObtenerElementoAsync<List<RecepcionActivoFijoDetalleSeleccionado>>(cambioCustodioModel, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/DetallesActivoFijoSeleccionadoPorEmpleado");
-                ViewData["Error"] = response.Message;
-                ViewData["Configuraciones"] = new List<PropiedadValor>()
-                {
-                    new PropiedadValor { Propiedad = "IsConfiguracionSeleccion", Valor = "true" },
-                    new PropiedadValor { Propiedad = "IsConfiguracionDatosActivo", Valor = "true" },
-                    new PropiedadValor { Propiedad = "IsConfiguracionSeleccionBajas", Valor = "true" }
-                };
-                ViewData["Empleado"] = new SelectList(await apiServicio.Listar<ListaEmpleadoViewModel>(new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleados"), "IdEmpleado", "NombreApellido");
-                ViewData["ListadoRecepcionActivoFijoDetalleSeleccionado"] = listaRecepcionActivoFijoDetalleSeleccionado;
-                return View();
-            }
-            catch (Exception ex)
-            {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Creando cambio de custodio de Activo Fijo", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP WebAppTh" });
-                TempData["Mensaje"] = $"{Mensaje.Error}|{Mensaje.Excepcion}";
-            }
-            return View(cambioCustodioModel);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> ListadoActivosFijosCustodioResult(int idEmpleado)
-        {
-            var lista = new List<RecepcionActivoFijoDetalleSeleccionado>();
-            try
-            {
-                ViewData["Configuraciones"] = new List<PropiedadValor>()
-                {
-                    new PropiedadValor { Propiedad = "IsConfiguracionSeleccion", Valor = "true" },
-                    new PropiedadValor { Propiedad = "IsConfiguracionDatosActivo", Valor = "true" },
-                    new PropiedadValor { Propiedad = "IsConfiguracionSeleccionBajas", Valor = "true" }
-                };
-                lista = await apiServicio.ObtenerElementoAsync<List<RecepcionActivoFijoDetalleSeleccionado>>(new CambioCustodioViewModel { IdEmpleadoEntrega = idEmpleado, ListadoIdRecepcionActivoFijoDetalle = new List<int>() }, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/DetallesActivoFijoSeleccionadoPorEmpleado");
-            }
-            catch (Exception)
-            { }
-            return PartialView("_ListadoDetallesActivosFijos", lista);
         }
         #endregion
 

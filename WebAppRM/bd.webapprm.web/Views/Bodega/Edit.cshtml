@@ -21,45 +21,15 @@
                                 <fieldset>
                                     <div class="row">
                                         <section class="col col-4">
-                                            <label asp-for="Sucursal.Ciudad.Provincia.Pais.Nombre"></label>
+                                            <label asp-for="IdSucursal"></label>
                                         </section>
 
                                         <section class="col col-8">
                                             <label class="input">
-                                                <select asp-for="Sucursal.Ciudad.Provincia.IdPais" class="form-control" asp-items="ViewBag.Pais"></select>
-                                                <span asp-validation-for="Sucursal.Ciudad.Provincia.IdPais" class="text-danger"></span>
+                                                <select asp-for="IdSucursal" class="form-control" asp-items="ViewBag.Sucursal"></select>
+                                                <span asp-validation-for="IdSucursal" class="text-danger"></span>
                                             </label>
                                         </section>
-                                    </div>
-
-                                    <div class="row">
-                                        <section class="col col-4">
-                                            <label asp-for="Sucursal.Ciudad.Provincia.Nombre"></label>
-                                        </section>
-
-                                        <div id="div_provincia">
-                                            @{ await Html.RenderPartialAsync("_ProvinciaSelect", Model); }
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <section class="col col-4">
-                                            <label asp-for="Sucursal.Ciudad.Nombre"></label>
-                                        </section>
-
-                                        <div id="div_ciudad">
-                                            @{ await Html.RenderPartialAsync("_CiudadSelect", Model); }
-                                        </div>
-                                    </div>
-
-                                    <div class="row">
-                                        <section class="col col-4">
-                                            <label asp-for="Sucursal.Nombre"></label>
-                                        </section>
-
-                                        <div id="div_sucursal">
-                                            @{ await Html.RenderPartialAsync("_SucursalSelect", Model); }
-                                        </div>
                                     </div>
 
                                     <div class="row">
@@ -92,9 +62,4 @@
     @{await Html.RenderPartialAsync("_Select2ScriptsPartial");}
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script src='~/js/bodega/bodega.min.js'></script>
-    <script>
-        var provinciaSelectResult = "@Url.Action("Provincia_SelectResult")";
-        var ciudadSelectResult = "@Url.Action("Ciudad_SelectResult")";
-        var sucursalSelectResult = "@Url.Action("Sucursal_SelectResult")";
-    </script>
 }

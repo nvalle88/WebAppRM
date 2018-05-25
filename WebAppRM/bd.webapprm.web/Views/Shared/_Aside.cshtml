@@ -5,7 +5,7 @@
             <li class="@Html.RouteIf("Home", "active")">
                 <a href="@Url.Action("Index", "Home")"><i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">Principal</span></a>
             </li>
-            <li class="@Html.RouteIf("nomencladores", "active")">
+            <li>
                 <a href="#"><i class="fa fa-lg fa-fw fa-edit"></i> <span class="menu-item-parent">Configuraci&oacute;n</span></a>
                 <ul>
                     <li class="@Html.RouteIf("Articulo", "active")">
@@ -137,10 +137,6 @@
                     </li>
 
                     <li>
-                        <a href="@Url.Action("GestionarCambioCustodio", "ActivoFijo")">Cambio de Custodio</a>
-                    </li>
-
-                    <li>
                         <a href="#"><span class="menu-item-parent">Bajas</span></a>
                         <ul>
                             <li class="@Html.RouteIf("GestionarBaja", "active")">
@@ -158,14 +154,22 @@
                     <li>
                         <a href="#"><span class="menu-item-parent">Transferencias</span></a>
                         <ul>
-                            <li class="@Html.RouteIf("GestionarTransferencia", "active")">
-                                <a href="@Url.Action("GestionarTransferencia", "ActivoFijo")">Gestionar Transferencia de Activos Fijos</a>
+                            <li class="@Html.RouteIf(new[] { "ListadoCambioCustodio", "GestionarCambioCustodio" }, "ActivoFijo", "active")">
+                                <a href="@Url.Action("ListadoCambioCustodio", "ActivoFijo")">Cambio de Custodio</a>
                             </li>
-                            <li class="@Html.RouteIf("ListadoTransferenciasCreadas", "active")">
-                                <a href="@Url.Action("ListadoTransferenciasCreadas", "ActivoFijo")">Listado de Transferencias Creadas</a>
-                            </li>
-                            <li class="@Html.RouteIf("ListadoTransferenciasAceptadas", "active")">
-                                <a href="@Url.Action("ListadoTransferenciasAceptadas", "ActivoFijo")">Listado de Transferencias Aceptadas</a>
+                            <li>
+                                <a href="#"> Cambio de Ubicaci&oacute;n entre Sucursales</a>
+                                <ul>
+                                    <li class="@Html.RouteIf("GestionarTransferencia", "active")">
+                                        <a href="@Url.Action("GestionarTransferencia", "ActivoFijo")">Gestionar Transferencia de Activos Fijos</a>
+                                    </li>
+                                    <li class="@Html.RouteIf("ListadoTransferenciasCreadas", "active")">
+                                        <a href="@Url.Action("ListadoTransferenciasCreadas", "ActivoFijo")">Listado de Transferencias Creadas</a>
+                                    </li>
+                                    <li class="@Html.RouteIf("ListadoTransferenciasAceptadas", "active")">
+                                        <a href="@Url.Action("ListadoTransferenciasAceptadas", "ActivoFijo")">Listado de Transferencias Aceptadas</a>
+                                    </li>
+                                </ul>
                             </li>
                         </ul>
                     </li>
