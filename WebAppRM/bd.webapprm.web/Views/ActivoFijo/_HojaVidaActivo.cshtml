@@ -140,27 +140,18 @@
     <table class="table table-hover margin-top-25">
         <thead>
             <tr>
-                <th style="width:50%">Propiedad</th>
-                <th style="width:50%">Descripci&oacute;n</th>
+                <th style="width:50%">@Html.DisplayNameFor(m=> m.RecepcionActivoFijoDetalle.FirstOrDefault().IdCodigoActivoFijo)</th>
+                <th style="width:50%">@Html.DisplayNameFor(m => m.RecepcionActivoFijoDetalle.FirstOrDefault().CodigoActivoFijo.CodigoBarras)</th>
             </tr>
         </thead>
         <tbody>
             @{
-                if (Model.CodigoActivoFijo.Codigosecuencial != null)
+                foreach (var item in Model.RecepcionActivoFijoDetalle)
                 {
                     <tr>
-                        <td><a href="javascript:void(0);"><label asp-for="CodigoActivoFijo.Codigosecuencial"></label></a></td>
-                        <td>@Html.DisplayFor(m => m.CodigoActivoFijo.Codigosecuencial)</td>
-                    </tr>
-                }
-
-                if (Model.CodigoActivoFijo.CodigoBarras != null)
-                {
-                    <tr>
-                        <td><a href="javascript:void(0);"><label asp-for="CodigoActivoFijo.CodigoBarras"></label></a></td>
+                        <td>@Html.DisplayFor(m => item.CodigoActivoFijo.Codigosecuencial)</td>
                         <td>
-                            <img class="imgBarCode" id="barcode_@Model.CodigoActivoFijo.IdCodigoActivoFijo" />
-                            <input type="hidden" asp-for="CodigoActivoFijo.CodigoBarras" />
+                            <img class="imgBarCode" id="barcode_@item.IdCodigoActivoFijo" data-idrecepcionactivofijodetalle="@item.IdCodigoActivoFijo" data-codigosecuencial="@item.CodigoActivoFijo.Codigosecuencial" />
                         </td>
                     </tr>
                 }

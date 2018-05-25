@@ -21,10 +21,10 @@
                                     @{await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", 7);}
                                     <tr>
                                         <th>
-                                            @Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalleAltaActivoFijo.FirstOrDefault().UbicacionActivoFijo.LibroActivoFijo.IdSucursal)
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().AltaActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijo.LibroActivoFijo.IdSucursal)
                                         </th>
                                         <th>
-                                            @Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalleAltaActivoFijo.FirstOrDefault().IdTipoUtilizacionAlta)
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().AltaActivoFijoDetalle.FirstOrDefault().IdTipoUtilizacionAlta)
                                         </th>
                                         <th>
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().FechaAlta)
@@ -46,10 +46,10 @@
                                     {
                                         <tr>
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.RecepcionActivoFijoDetalleAltaActivoFijo.FirstOrDefault().UbicacionActivoFijo.LibroActivoFijo.Sucursal.Nombre)
+                                                @Html.DisplayFor(modelItem => item.AltaActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijo.LibroActivoFijo.Sucursal.Nombre)
                                             </td>
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.RecepcionActivoFijoDetalleAltaActivoFijo.FirstOrDefault().TipoUtilizacionAlta.Nombre)
+                                                @Html.DisplayFor(modelItem => item.AltaActivoFijoDetalle.FirstOrDefault().TipoUtilizacionAlta.Nombre)
                                             </td>
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.FechaAlta)
@@ -65,7 +65,7 @@
                                             </td>
                                             <td>
                                                 @Html.ActionLink("Editar", "GestionarAlta", new { id = item.IdAltaActivoFijo }) |
-                                                <a href="javascript:void(0);" class="btnDetallesActivosFijos" id="btnDetallesActivoFijo_@item.IdAltaActivoFijo" onclick="abrirVentanaDetallesActivoFijo('@item.IdAltaActivoFijo')" data-ids="@String.Join(",", item.RecepcionActivoFijoDetalleAltaActivoFijo.Select(c => c.IdRecepcionActivoFijoDetalle))" data-url="@Url.Action("DetallesActivoFijoResult", "ActivoFijo")" data-toggle="modal" data-target="#myModalTableActivosFijos">Detalles</a>
+                                                <a href="javascript:void(0);" class="btnDetallesActivosFijos" id="btnDetallesActivoFijo_@item.IdAltaActivoFijo" onclick="abrirVentanaDetallesActivoFijo('@item.IdAltaActivoFijo')" data-ids="@String.Join(",", item.AltaActivoFijoDetalle.Select(c => c.IdRecepcionActivoFijoDetalle))" data-url="@Url.Action("DetallesActivoFijoResult", "ActivoFijo")" data-toggle="modal" data-target="#myModalTableActivosFijos">Detalles</a>
                                             </td>
                                         </tr>
                                     }

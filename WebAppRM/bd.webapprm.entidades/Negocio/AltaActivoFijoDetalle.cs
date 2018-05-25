@@ -6,7 +6,7 @@ using System.Text;
 
 namespace bd.webapprm.entidades
 {
-    public partial class RecepcionActivoFijoDetalleAltaActivoFijo
+    public partial class AltaActivoFijoDetalle
     {
         [Key]
         [Column(Order = 0)]

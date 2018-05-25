@@ -1,0 +1,87 @@
+@model CambioCustodioViewModel
+@{
+    List<RecepcionActivoFijoDetalleSeleccionado> listadoRecepcionActivoFijoDetalleSeleccionado = ViewBag.ListadoRecepcionActivoFijoDetalleSeleccionado;
+}
+
+@section css{
+    <link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/tableSmartForm.min.css" />
+}
+<div id="content">
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-sm-12 col-md-12 col-lg-12">
+                <div class="jarviswidget jarviswidget-color-red" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+                        <h2>Cambio de Custodio de Activos Fijos</h2>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox"></div>
+                        <div class="widget-body no-padding">
+                            <form asp-action="GestionarCambioCustodio" id="checkout-form" class="smart-form" novalidate="novalidate" enctype="multipart/form-data">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <input type="hidden" id="idsRecepcionActivoFijoDetalle" name="idsRecepcionActivoFijoDetalle" />
+                                <fieldset>
+                                    <legend>Custodio que entrega</legend>
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="IdEmpleadoEntrega"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <select asp-for="IdEmpleadoEntrega" class="form-control" asp-items="ViewBag.Empleado"></select>
+                                                <span asp-validation-for="IdEmpleadoEntrega" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="IdEmpleadoRecibe"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <select asp-for="IdEmpleadoRecibe" class="form-control" asp-items="ViewBag.Empleado"></select>
+                                                <span asp-validation-for="IdEmpleadoRecibe" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    <div class="row" style="padding-left:15px !important;padding-right:15px !important;">
+                                        <div class="alert alert-info alert-block" style="border-left-width:5px !important;">
+                                            <h4 class="alert-heading">Informaci&oacute;n</h4>
+                                            Seleccione los Activos Fijos que desea transferir marcando las casillas de selecci&oacute;n.
+                                        </div>
+                                    </div>
+
+                                    <legend>Activos Fijos a transferir</legend>
+                                    <div class="margin-top-10" id="divActivosFijosATransferir">
+                                        @{
+                                            await Html.RenderPartialAsync("_ListadoDetallesActivosFijos", listadoRecepcionActivoFijoDetalleSeleccionado);
+                                        }
+                                    </div>
+                                </fieldset>
+                                <footer>
+                                    <span class="text-danger">@ViewData["Error"]</span>
+                                    <button type="button" class="btn btn-primary" id="btn-guardar">Guardar</button>
+                                </footer>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_Select2ScriptsPartial");}
+    <script src='~/js/activoFijo/listadoSeleccion.min.js'></script>
+    <script src="~/js/activoFijo/cambioCustodio.min.js"></script>
+    <script>
+        var urlListadoActivosFijosCustodioResult = "@Url.Action("ListadoActivosFijosCustodioResult")";
+        var idsRecepcionActivoFijoDetalle = "@String.Join(",", listadoRecepcionActivoFijoDetalleSeleccionado.Where(c=> c.Seleccionado).Select(c=> c.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle))";
+    </script>
+}
