@@ -35,6 +35,7 @@ function partialViewActivosFijosPorCustodio()
         data: { idEmpleado: $("#IdEmpleadoEntrega").val() },
         success: function (data) {
             $("#divActivosFijosATransferir").html(data);
+            initDataTableFiltrado("tableDetallesActivoFijoBajas", []);
             arrRecepcionActivoFijoDetalleSeleccionado = [];
         },
         complete: function (data) {

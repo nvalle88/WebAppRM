@@ -16,6 +16,7 @@ namespace bd.webapprm.entidades
             UbicacionActivoFijo = new HashSet<UbicacionActivoFijo>();
             AltaActivoFijoDetalle = new HashSet<AltaActivoFijoDetalle>();
             BajaActivoFijoDetalle = new HashSet<BajaActivoFijoDetalle>();
+            TransferenciaActivoFijoDetalle = new HashSet<TransferenciaActivoFijoDetalle>();
         }
 
         [Key]
@@ -92,5 +93,6 @@ namespace bd.webapprm.entidades
         public virtual ICollection<UbicacionActivoFijo> UbicacionActivoFijo { get; set; }
         public virtual ICollection<AltaActivoFijoDetalle> AltaActivoFijoDetalle { get; set; }
         public virtual ICollection<BajaActivoFijoDetalle> BajaActivoFijoDetalle { get; set; }
+        public virtual ICollection<TransferenciaActivoFijoDetalle> TransferenciaActivoFijoDetalle { get; set; }
     }
 }
