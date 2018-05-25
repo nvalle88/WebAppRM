@@ -21,7 +21,7 @@
                                     @{await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", 5);}
                                     <tr>
                                         <th>
-                                            @Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalleBajaActivoFijo.FirstOrDefault().RecepcionActivoFijoDetalle.UbicacionActivoFijoActual.LibroActivoFijo.IdSucursal)
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().BajaActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijoDetalle.UbicacionActivoFijoActual.LibroActivoFijo.IdSucursal)
                                         </th>
                                         <th>
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().FechaBaja)
@@ -40,7 +40,7 @@
                                     {
                                         <tr>
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.RecepcionActivoFijoDetalleBajaActivoFijo.FirstOrDefault().RecepcionActivoFijoDetalle.UbicacionActivoFijoActual.LibroActivoFijo.Sucursal.Nombre)
+                                                @Html.DisplayFor(modelItem => item.BajaActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijoDetalle.UbicacionActivoFijoActual.LibroActivoFijo.Sucursal.Nombre)
                                             </td>
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.FechaBaja)
@@ -53,7 +53,7 @@
                                             </td>
                                             <td>
                                                 @Html.ActionLink("Editar", "GestionarBaja", new { id = item.IdBajaActivoFijo }) |
-                                                <a href="javascript:void(0);" class="btnDetallesActivosFijos" id="btnDetallesActivoFijo_@item.IdBajaActivoFijo" onclick="abrirVentanaDetallesActivoFijo('@item.IdBajaActivoFijo')" data-ids="@String.Join(",", item.RecepcionActivoFijoDetalleBajaActivoFijo.Select(c => c.IdRecepcionActivoFijoDetalle))" data-url="@Url.Action("DetallesActivoFijoResult", "ActivoFijo")" data-toggle="modal" data-target="#myModalTableActivosFijos">Detalles</a>
+                                                <a href="javascript:void(0);" class="btnDetallesActivosFijos" id="btnDetallesActivoFijo_@item.IdBajaActivoFijo" onclick="abrirVentanaDetallesActivoFijo('@item.IdBajaActivoFijo')" data-ids="@String.Join(",", item.BajaActivoFijoDetalle.Select(c => c.IdRecepcionActivoFijoDetalle))" data-url="@Url.Action("DetallesActivoFijoResult", "ActivoFijo")" data-toggle="modal" data-target="#myModalTableActivosFijos">Detalles</a>
                                             </td>
                                         </tr>
                                     }

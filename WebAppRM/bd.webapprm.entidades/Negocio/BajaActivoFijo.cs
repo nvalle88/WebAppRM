@@ -29,6 +29,6 @@ namespace bd.webapprm.entidades
         public int IdMotivoBaja { get; set; }
         public virtual MotivoBaja MotivoBaja { get; set; }
 
-        public virtual ICollection<RecepcionActivoFijoDetalleBajaActivoFijo> RecepcionActivoFijoDetalleBajaActivoFijo { get; set; }
+        public virtual ICollection<BajaActivoFijoDetalle> BajaActivoFijoDetalle { get; set; }
     }
 }

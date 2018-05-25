@@ -1,5 +1,4 @@
 ﻿#region Using
-
 using System;
 using System.Reflection;
 using System.Text;
@@ -8,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using bd.webapprm.web;
-
+using System.Linq;
 #endregion
 
 namespace bd.webapprm.web.Helpers
@@ -65,6 +64,17 @@ namespace bd.webapprm.web.Helpers
             var hasAction = value.Equals(currentAction, StringComparison.OrdinalIgnoreCase);
 
             return hasAction || hasController ? new HtmlString(attribute) : new HtmlString(string.Empty);
+        }
+
+        public static IHtmlContent RouteIf(this IHtmlHelper helper, string[] accion, string controlador, string attribute)
+        {
+            var currentController = (helper.ViewContext.RouteData.Values["controller"] ?? string.Empty).ToString().UnDash();
+            var currentAction = (helper.ViewContext.RouteData.Values["action"] ?? string.Empty).ToString().UnDash();
+
+            var hasController = controlador.Equals(currentController, StringComparison.OrdinalIgnoreCase);
+            var hasAction = accion.Contains(currentAction);
+
+            return hasAction && hasController ? new HtmlString(attribute) : new HtmlString(string.Empty);
         }
 
         /// <summary>

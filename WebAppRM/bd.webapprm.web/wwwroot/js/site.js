@@ -84,6 +84,16 @@ function Asignar_Codigo_Barras(valor) {
     } catch (e) { }
 }
 
+function Asignar_Codigo_Barras(idElemento, valor) {
+    try {
+        JsBarcode("#" + idElemento, valor, {
+            format: "CODE128",
+            displayValue: true,
+            fontSize: 20
+        });
+    } catch (e) { }
+}
+
 function obtenerIdAjax(id)
 {
     try {

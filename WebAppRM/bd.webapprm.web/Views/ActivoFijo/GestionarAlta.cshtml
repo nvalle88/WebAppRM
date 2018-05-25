@@ -61,13 +61,13 @@
 
                                     <div class="row">
                                         <section class="col col-4">
-                                            <label asp-for="RecepcionActivoFijoDetalleAltaActivoFijo.FirstOrDefault().IdTipoUtilizacionAlta"></label>
+                                            <label asp-for="AltaActivoFijoDetalle.FirstOrDefault().IdTipoUtilizacionAlta"></label>
                                         </section>
 
                                         <section class="col col-8">
                                             <label class="input">
-                                                <select asp-for="RecepcionActivoFijoDetalleAltaActivoFijo.FirstOrDefault().IdTipoUtilizacionAlta" class="form-control" asp-items="ViewBag.TipoUtilizacionAlta"></select>
-                                                <span asp-validation-for="RecepcionActivoFijoDetalleAltaActivoFijo.FirstOrDefault().IdTipoUtilizacionAlta" class="text-danger"></span>
+                                                <select asp-for="AltaActivoFijoDetalle.FirstOrDefault().IdTipoUtilizacionAlta" class="form-control" asp-items="ViewBag.TipoUtilizacionAlta"></select>
+                                                <span asp-validation-for="AltaActivoFijoDetalle.FirstOrDefault().IdTipoUtilizacionAlta" class="text-danger"></span>
                                             </label>
                                         </section>
                                     </div>
@@ -124,7 +124,7 @@
                                                 <div class="modal-body">
                                                     <div class="row" style="margin:0px !important;padding:20px !important;">
                                                         <section class="col col-4">
-                                                            <label>@Html.DisplayNameFor(model => model.RecepcionActivoFijoDetalleAltaActivoFijo.FirstOrDefault().RecepcionActivoFijoDetalle.UbicacionActivoFijoActual.IdEmpleado)</label>
+                                                            <label>@Html.DisplayNameFor(model => model.AltaActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijoDetalle.UbicacionActivoFijoActual.IdEmpleado)</label>
                                                         </section>
 
                                                         <section class="col col-8">
