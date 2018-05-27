@@ -18,6 +18,7 @@ namespace bd.webapprm.entidades.Utils
         public static string Informacion { get { return "Información"; } }
         public static string Error { get { return "Error"; } }
         public static string Aviso { get { return "Aviso"; } }
+        public static string ErrorRecursoSolicitado { get { return "No puede acceder al recurso solicitado."; } }
     }
 
     public static class Estados
@@ -28,8 +29,7 @@ namespace bd.webapprm.entidades.Utils
         public static string Alta { get { return "Alta"; } }
         public static string Baja { get { return "Baja"; } }
         public static string Creada { get { return "Creado"; } }
-        public static string Aceptada { get { return "Aceptada"; } }
-        public static string Rechazada { get { return "Rechazada"; } }
+        public static string Aceptada { get { return "Aceptado"; } }
         public static string Mantenimiento { get { return "Mantenimiento"; } }
     }
 
@@ -46,5 +46,14 @@ namespace bd.webapprm.entidades.Utils
         public static string EquiposOficina { get { return "Equipos de oficina"; } }
         public static string Vehiculo { get { return "Vehículos"; } }
         public static string EquiposComputoSoftware { get { return "Equipos de cómputo y software"; } }
+    }
+
+    public static class MotivosTransferencia
+    {
+        public static string CambioCustodio { get { return "Cambio de Custodio"; } }
+        public static string CambioUbicacion { get { return "Cambio de Ubicación"; } }
+        public static string PrestamoUsoExterno { get { return "Préstamo de Uso Externo"; } }
+        public static string PrestamoUsoInterno { get { return "Préstamo de Uso Interno"; } }
+        public static string TransferenciaBodegas { get { return "Transferencia entre Bodegas"; } }
     }
 }

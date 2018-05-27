@@ -1,7 +1,5 @@
 ﻿$(document).ready(function () {
     Init_Select2();
-    initDataTableFiltrado("tableDetallesActivoFijoSeleccionados", []);
-    inicializarDetallesActivoSeleccion();
     eventoCustodioEntrega();
     eventoGuardar();
     initDataTableFiltrado("tableDetallesActivoFijoBajas", []);

@@ -18,6 +18,7 @@ using bd.webapprm.entidades.ObjectTransfer;
 using bd.webapprm.servicios.Extensores;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Mvc.Filters;
+using MoreLinq;
 
 namespace bd.webapprm.web.Controllers.MVC
 {
@@ -840,16 +841,17 @@ namespace bd.webapprm.web.Controllers.MVC
         public async Task<IActionResult> ListadoCambioCustodio()
         {
             var lista = new List<TransferenciaActivoFijo>();
+            ViewData["IsCambioCustodio"] = true;
             try
             {
-                lista = await apiServicio.Listar<TransferenciaActivoFijo>(new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ListarCambiosCustodio");
+                lista = await apiServicio.Listar<TransferenciaActivoFijo>(new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ListarTransferenciasCambiosCustodioActivosFijos");
             }
             catch (Exception ex)
             {
                 await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Listando cambios de custodio de activos fijos", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webappth" });
                 TempData["Mensaje"] = $"{Mensaje.Error}|{Mensaje.ErrorListado}";
             }
-            return View(lista);
+            return View("ListadoTransferenciasSucursales", lista);
         }
 
         public async Task<IActionResult> GestionarCambioCustodio()
@@ -926,95 +928,221 @@ namespace bd.webapprm.web.Controllers.MVC
         }
         #endregion
 
-        #region Cambio de Ubicación
-        public async Task<IActionResult> TransferirActivoFijo(string id)
+        #region Cambio de Ubicación entre Sucursales
+        public async Task<IActionResult> ListadoSolicitudesTransferencia()
         {
+            var lista = new List<TransferenciaActivoFijo>();
+            ViewData["IsSolicitudesTransferencia"] = true;
             try
             {
-                if (!string.IsNullOrEmpty(id))
-                {
-                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddressRM), "api/RecepcionActivoFijo");
-                    if (!respuesta.IsSuccess)
-                        return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}"/*, nameof(ActivosFijosATransferir)*/);
-
-                    var recepcionActivoFijoDetalle = JsonConvert.DeserializeObject<RecepcionActivoFijoDetalle>(respuesta.Resultado.ToString());
-                    ViewData["MotivoTransferencia"] = new SelectList(await apiServicio.Listar<MotivoTransferencia>(new Uri(WebApp.BaseAddressRM), "api/MotivoTransferencia/ListarMotivoTransferencia"), "IdMotivoTransferencia", "Motivo_Transferencia");
-
-                    var listaPais = await apiServicio.Listar<Pais>(new Uri(WebApp.BaseAddressTH), "api/Pais/ListarPais");
-                    ViewData["Pais"] = new SelectList(listaPais, "IdPais", "Nombre");
-                    ViewData["Provincia"] = await ObtenerSelectListProvincia((ViewData["Pais"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Pais"] as SelectList).FirstOrDefault().Value) : -1);
-                    ViewData["Ciudad"] = await ObtenerSelectListCiudad((ViewData["Provincia"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Provincia"] as SelectList).FirstOrDefault().Value) : -1);
-                    ViewData["Sucursal"] = await ObtenerSelectListSucursal((ViewData["Ciudad"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Ciudad"] as SelectList).FirstOrDefault().Value) : -1);
-                    ViewData["LibroActivoFijo"] = await ObtenerSelectListLibroActivoFijo((ViewData["Sucursal"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Sucursal"] as SelectList).FirstOrDefault().Value) : -1);
-
-                    //ViewData["PaisOrigen"] = new SelectList(listaPais, "IdPais", "Nombre", recepcionActivoFijoDetalle?.ActivoFijo?.LibroActivoFijo?.Sucursal?.Ciudad?.Provincia?.IdPais ?? -1);
-                    //ViewData["ProvinciaOrigen"] = await ObtenerSelectListProvincia(recepcionActivoFijoDetalle?.ActivoFijo?.LibroActivoFijo?.Sucursal?.Ciudad?.Provincia?.IdPais ?? -1);
-                    //ViewData["CiudadOrigen"] = await ObtenerSelectListCiudad(recepcionActivoFijoDetalle?.ActivoFijo?.LibroActivoFijo?.Sucursal?.Ciudad?.IdProvincia ?? -1);
-                    //ViewData["SucursalOrigen"] = await ObtenerSelectListSucursal(recepcionActivoFijoDetalle?.ActivoFijo?.LibroActivoFijo?.Sucursal?.IdCiudad ?? -1);
-                    //ViewData["LibroActivoFijoOrigen"] = await ObtenerSelectListLibroActivoFijo(recepcionActivoFijoDetalle?.ActivoFijo?.LibroActivoFijo?.IdSucursal ?? -1);
-
-                    ViewData["Empleado"] = new SelectList(await apiServicio.Listar<ListaEmpleadoViewModel>(new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleados"), "IdEmpleado", "NombreApellido");
-                    ViewData["IdActivoFijo"] = recepcionActivoFijoDetalle.IdActivoFijo;
-                    return View();
-                }
-                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}"/*, nameof(ActivosFijosATransferir)*/);
+                lista = await apiServicio.Listar<TransferenciaActivoFijo>(new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ListarTransferenciasCambiosUbicacionCreadasSolicitudActivosFijos");
             }
             catch (Exception ex)
             {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Creando Transferencia de Activo Fijo", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP WebAppTh" });
-                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorCargarDatos}"/*, nameof(ActivosFijosATransferir)*/);
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Listando solicitudes de transferencia de activos fijos", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webappth" });
+                TempData["Mensaje"] = $"{Mensaje.Error}|{Mensaje.ErrorListado}";
+            }
+            return View("ListadoTransferenciasSucursales", lista);
+        }
+
+        public async Task<IActionResult> ListadoTransferenciasCreadas()
+        {
+            var lista = new List<TransferenciaActivoFijo>();
+            ViewData["IsTransferenciasCreadas"] = true;
+            try
+            {
+                lista = await apiServicio.Listar<TransferenciaActivoFijo>(new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ListarTransferenciasCambiosUbicacionCreadasSolicitudActivosFijos");
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Listando transferencias creadas de activos fijos", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webappth" });
+                TempData["Mensaje"] = $"{Mensaje.Error}|{Mensaje.ErrorListado}";
+            }
+            return View("ListadoTransferenciasSucursales", lista);
+        }
+
+        public async Task<IActionResult> ListadoTransferenciasAceptadas()
+        {
+            var lista = new List<TransferenciaActivoFijo>();
+            ViewData["IsTransferenciasAceptadas"] = true;
+            try
+            {
+                lista = await apiServicio.Listar<TransferenciaActivoFijo>(new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ListarTransferenciasCambiosUbicacionAceptadasActivosFijos");
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Listando transferencias aceptadas de activos fijos", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webappth" });
+                TempData["Mensaje"] = $"{Mensaje.Error}|{Mensaje.ErrorListado}";
+            }
+            return View("ListadoTransferenciasSucursales", lista);
+        }
+
+        public async Task<IActionResult> GestionarTransferenciaSucursal(int? id)
+        {
+            try
+            {
+                var listaSucursales = await apiServicio.Listar<Sucursal>(new Uri(WebApp.BaseAddressTH), "api/Sucursal/ListarSucursal");
+                if (id != null)
+                {
+                    var response = await apiServicio.SeleccionarAsync<Response>(id.ToString(), new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ObtenerTransferenciaActivoFijo");
+                    if (!response.IsSuccess)
+                        return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}", nameof(ListadoTransferenciasCreadas));
+
+                    var transferenciaActivoFijo = JsonConvert.DeserializeObject<TransferenciaActivoFijo>(response.Resultado.ToString());
+                    if (transferenciaActivoFijo.Estado.Nombre == Estados.Creada && transferenciaActivoFijo.MotivoTransferencia.Motivo_Transferencia == MotivosTransferencia.CambioUbicacion)
+                    {
+                        var cambioUbicacionSucursalViewModel = new CambioUbicacionSucursalViewModel
+                        {
+                            IdTransferenciaActivoFijo = (int)id,
+                            IdSucursalOrigen = (int)transferenciaActivoFijo.TransferenciaActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijoOrigen.LibroActivoFijo.IdSucursal,
+                            IdEmpleadoEntrega = (int)transferenciaActivoFijo.TransferenciaActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijoOrigen.IdEmpleado,
+                            IdEmpleadoResponsableEnvio = (int)transferenciaActivoFijo.IdEmpleadoResponsableEnvio,
+                            IdSucursalDestino = (int)transferenciaActivoFijo.TransferenciaActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijoDestino.LibroActivoFijo.IdSucursal,
+                            IdEmpleadoRecibe = (int)transferenciaActivoFijo.TransferenciaActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijoDestino.IdEmpleado,
+                            IdEmpleadoResponsableRecibo = (int)transferenciaActivoFijo.IdEmpleadoResponsableRecibo,
+                            IdLibroActivoFijoDestino = transferenciaActivoFijo.TransferenciaActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijoDestino.IdLibroActivoFijo,
+                            FechaTransferencia = transferenciaActivoFijo.FechaTransferencia,
+                            Observaciones = transferenciaActivoFijo.Observaciones
+                        };
+                        ViewData["SucursalOrigen"] = new SelectList(listaSucursales, "IdSucursal", "Nombre", cambioUbicacionSucursalViewModel.IdSucursalOrigen);
+                        ViewData["SucursalDestino"] = new SelectList(listaSucursales.Exclude(listaSucursales.FindIndex(c => c.IdSucursal == cambioUbicacionSucursalViewModel.IdSucursalOrigen), 1), "IdSucursal", "Nombre", cambioUbicacionSucursalViewModel.IdSucursalDestino);
+                        ViewData["LibroActivoFijo"] = await ObtenerSelectListLibroActivoFijo(cambioUbicacionSucursalViewModel.IdSucursalDestino, cambioUbicacionSucursalViewModel.IdLibroActivoFijoDestino);
+
+                        var listadoEmpleadoSucursalOrigen = (await apiServicio.ObtenerElementoAsync<List<DatosBasicosEmpleadoViewModel>>(new EmpleadosPorSucursalViewModel { IdSucursal = cambioUbicacionSucursalViewModel.IdSucursalOrigen, EmpleadosActivos = true }, new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleadosPorSucursal")).Select(c => new ListaEmpleadoViewModel { IdEmpleado = c.IdEmpleado, NombreApellido = $"{c.Nombres} {c.Apellidos}" });
+                        ViewData["EmpleadoEntrega"] = new SelectList(listadoEmpleadoSucursalOrigen, "IdEmpleado", "NombreApellido", cambioUbicacionSucursalViewModel.IdEmpleadoEntrega);
+                        ViewData["EmpleadoResponsableEnvio"] = new SelectList(listadoEmpleadoSucursalOrigen, "IdEmpleado", "NombreApellido", cambioUbicacionSucursalViewModel.IdEmpleadoResponsableEnvio);
+
+                        var listadoEmpleadoSucursalDestino = (await apiServicio.ObtenerElementoAsync<List<DatosBasicosEmpleadoViewModel>>(new EmpleadosPorSucursalViewModel { IdSucursal = cambioUbicacionSucursalViewModel.IdSucursalDestino, EmpleadosActivos = true }, new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleadosPorSucursal")).Select(c => new ListaEmpleadoViewModel { IdEmpleado = c.IdEmpleado, NombreApellido = $"{c.Nombres} {c.Apellidos}" });
+                        ViewData["EmpleadoRecibe"] = new SelectList(listadoEmpleadoSucursalDestino, "IdEmpleado", "NombreApellido", cambioUbicacionSucursalViewModel.IdEmpleadoRecibe);
+                        ViewData["EmpleadoResponsableRecibo"] = new SelectList(listadoEmpleadoSucursalDestino, "IdEmpleado", "NombreApellido", cambioUbicacionSucursalViewModel.IdEmpleadoResponsableRecibo);
+
+                        ViewData["ListadoRecepcionActivoFijoDetalleSeleccionado"] = transferenciaActivoFijo.TransferenciaActivoFijoDetalle.Select(c => new RecepcionActivoFijoDetalleSeleccionado { RecepcionActivoFijoDetalle = c.RecepcionActivoFijoDetalle, Seleccionado = true }).ToList();
+                        ViewData["Configuraciones"] = new List<PropiedadValor>() { new PropiedadValor { Propiedad = "IsConfiguracionDatosActivo", Valor = "true" }, new PropiedadValor { Propiedad = "IsConfiguracionSeleccionBajas", Valor = "true" } };
+                        return View(cambioUbicacionSucursalViewModel);
+                    }
+                    else
+                        return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorRecursoSolicitado}", nameof(ListadoTransferenciasCreadas));
+                }
+                ViewData["SucursalOrigen"] = new SelectList(listaSucursales, "IdSucursal", "Nombre");
+                int idSucursalOrigen = (ViewData["SucursalOrigen"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["SucursalOrigen"] as SelectList).FirstOrDefault().Value) : -1;
+                
+                ViewData["SucursalDestino"] = new SelectList(listaSucursales.Exclude(0, 1), "IdSucursal", "Nombre");
+                int idSucursalDestino = (ViewData["SucursalDestino"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["SucursalDestino"] as SelectList).FirstOrDefault().Value) : -1;
+                ViewData["LibroActivoFijo"] = await ObtenerSelectListLibroActivoFijo((ViewData["SucursalDestino"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["SucursalDestino"] as SelectList).FirstOrDefault().Value) : -1);
+
+                var listaEmpleadoSucursalOrigen = idSucursalOrigen != -1 ? await apiServicio.ObtenerElementoAsync<List<DatosBasicosEmpleadoViewModel>>(new EmpleadosPorSucursalViewModel { IdSucursal = idSucursalOrigen, EmpleadosActivos = true }, new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleadosPorSucursal") : new List<DatosBasicosEmpleadoViewModel>();
+                ViewData["EmpleadoEntrega"] = new SelectList(listaEmpleadoSucursalOrigen.Select(c => new ListaEmpleadoViewModel { IdEmpleado = c.IdEmpleado, NombreApellido = $"{c.Nombres} {c.Apellidos}" }), "IdEmpleado", "NombreApellido");
+                ViewData["EmpleadoResponsableEnvio"] = ViewData["EmpleadoEntrega"];
+
+                var listaEmpleadoSucursalDestino = idSucursalDestino != -1 ? await apiServicio.ObtenerElementoAsync<List<DatosBasicosEmpleadoViewModel>>(new EmpleadosPorSucursalViewModel { IdSucursal = idSucursalDestino, EmpleadosActivos = true }, new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleadosPorSucursal") : new List<DatosBasicosEmpleadoViewModel>();
+                ViewData["EmpleadoRecibe"] = new SelectList(listaEmpleadoSucursalDestino.Select(c => new ListaEmpleadoViewModel { IdEmpleado = c.IdEmpleado, NombreApellido = $"{c.Nombres} {c.Apellidos}" }), "IdEmpleado", "NombreApellido");
+                ViewData["EmpleadoResponsableRecibo"] = ViewData["EmpleadoRecibe"];
+
+                int idEmpleadoEntrega = (ViewData["EmpleadoEntrega"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["EmpleadoEntrega"] as SelectList).FirstOrDefault().Value) : -1;
+                ViewData["ListadoRecepcionActivoFijoDetalleSeleccionado"] = idEmpleadoEntrega != -1 ? await apiServicio.ObtenerElementoAsync<List<RecepcionActivoFijoDetalleSeleccionado>>(new CambioCustodioViewModel { IdEmpleadoEntrega = idEmpleadoEntrega, ListadoIdRecepcionActivoFijoDetalle = new List<int>() }, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/DetallesActivoFijoSeleccionadoPorEmpleado") : new List<RecepcionActivoFijoDetalleSeleccionado>();
+                ViewData["Configuraciones"] = new List<PropiedadValor>() { new PropiedadValor { Propiedad = "IsConfiguracionSeleccion", Valor = "true" }, new PropiedadValor { Propiedad = "IsConfiguracionDatosActivo", Valor = "true" }, new PropiedadValor { Propiedad = "IsConfiguracionSeleccionBajas", Valor = "true" } };
+                return View();
+            }
+            catch (Exception)
+            {
+                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorCargarDatos}", nameof(ListadoTransferenciasCreadas));
             }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> TransferirActivoFijo(int IdActivoFijo, TransferenciaActivoFijo transferenciaActivoFijo)
+        public async Task<IActionResult> GestionarTransferenciaSucursal(CambioUbicacionSucursalViewModel cambioUbicacionSucursalViewModel)
         {
             try
             {
-                var activoFijoOrigen = JsonConvert.DeserializeObject<ActivoFijo>((await apiServicio.SeleccionarAsync<Response>(IdActivoFijo.ToString(), new Uri(WebApp.BaseAddressRM), "api/ActivosFijos")).Resultado.ToString());
-                //transferenciaActivoFijoDetalle.TransferenciaActivoFijo.Origen = activoFijoOrigen?.LibroActivoFijo?.Sucursal?.Nombre ?? activoFijoOrigen?.Ciudad?.Nombre;
+                await apiServicio.InsertarAsync(new Estado { Nombre = Estados.Creada }, new Uri(WebApp.BaseAddressTH), "api/Estados/InsertarEstado");
+                var arrIdsRecepcionActivoFijoDetalle = Request.Form["idsRecepcionActivoFijoDetalle"].ToString().Split(',');
+                cambioUbicacionSucursalViewModel.ListadoIdRecepcionActivoFijoDetalle = arrIdsRecepcionActivoFijoDetalle.Select(c => int.Parse(c)).ToList();
 
-                //var libroActivoFijoDestino = JsonConvert.DeserializeObject<LibroActivoFijo>((await apiServicio.SeleccionarAsync<Response>(transferenciaActivoFijoDetalle.ActivoFijo.IdLibroActivoFijo.ToString(), new Uri(WebApp.BaseAddressRM), "api/LibroActivoFijo")).Resultado.ToString());
-                //transferenciaActivoFijoDetalle.TransferenciaActivoFijo.Destino = libroActivoFijoDestino.Sucursal.Nombre;
-                
-                //int idPaisDestino = transferenciaActivoFijoDetalle.ActivoFijo?.LibroActivoFijo?.Sucursal?.Ciudad?.Provincia?.IdPais ?? -1;
-                //int idProvinciaDestino = transferenciaActivoFijoDetalle.ActivoFijo?.LibroActivoFijo?.Sucursal?.Ciudad?.IdProvincia ?? -1;
-                //int idCiudadDestino = transferenciaActivoFijoDetalle.ActivoFijo?.LibroActivoFijo?.Sucursal?.IdCiudad ?? -1;
-                //int idSucursalDestino = transferenciaActivoFijoDetalle.ActivoFijo?.LibroActivoFijo?.IdSucursal ?? -1;
-
-                //transferenciaActivoFijo.ActivoFijo.IdActivoFijo = IdActivoFijo;
-                //transferenciaActivoFijoDetalle.ActivoFijo.LibroActivoFijo = libroActivoFijoDestino;
-                var response = await apiServicio.InsertarAsync(transferenciaActivoFijo, new Uri(WebApp.BaseAddressRM), "api/TransferenciaActivoFijoDetalle/InsertarTransferenciaActivoFijoDetalle");
-                if (response.IsSuccess)
+                var response = new Response();
+                if (cambioUbicacionSucursalViewModel.IdTransferenciaActivoFijo == 0)
                 {
-                    await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), ExceptionTrace = null, Message = "Se ha creado una transferencia de Activo Fijo", UserName = "Usuario 1", LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ADV), EntityID = string.Format("{0} {1}", "Detalle de Transferencia:", transferenciaActivoFijo.IdTransferenciaActivoFijo) });
-                    return this.Redireccionar($"{Mensaje.Informacion}|{Mensaje.Satisfactorio}"/*, nameof(ActivosFijosATransferir)*/);
+                    response = await apiServicio.InsertarAsync(cambioUbicacionSucursalViewModel, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/InsertarCambioUbicacionSucursalActivoFijo");
+                    if (response.IsSuccess)
+                        await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), ExceptionTrace = null, Message = "Se ha creado un cambio de ubicación entre sucursales de activo fijo", UserName = "Usuario 1", LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ADV), EntityID = string.Format("{0} {1}", "Custodio de Activo Fijo que recibe:", cambioUbicacionSucursalViewModel.IdEmpleadoRecibe) });
                 }
+                else
+                {
+                    response = await apiServicio.EditarAsync(cambioUbicacionSucursalViewModel.IdTransferenciaActivoFijo.ToString(), cambioUbicacionSucursalViewModel, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/EditarCambioUbicacionSucursalActivoFijo");
+                    if (response.IsSuccess)
+                        await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), ExceptionTrace = null, Message = "Se ha editado un cambio de ubicación entre sucursales de activo fijo", UserName = "Usuario 1", LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ADV), EntityID = string.Format("{0} {1}", "Cambio de ubicación entre sucursales de Activo Fijo:", cambioUbicacionSucursalViewModel.IdTransferenciaActivoFijo) });
+                }
+
+                if (response.IsSuccess)
+                    return this.Redireccionar($"{Mensaje.Informacion}|{Mensaje.Satisfactorio}", nameof(ListadoTransferenciasCreadas));
+
+                ViewData["Configuraciones"] = new List<PropiedadValor>()
+                {
+                    new PropiedadValor { Propiedad = "IsConfiguracionSeleccion", Valor = "true" },
+                    new PropiedadValor { Propiedad = "IsConfiguracionDatosActivo", Valor = "true" },
+                    new PropiedadValor { Propiedad = "IsConfiguracionSeleccionBajas", Valor = "true" }
+                };
+                var listaSucursales = await apiServicio.Listar<Sucursal>(new Uri(WebApp.BaseAddressTH), "api/Sucursal/ListarSucursal");
+                ViewData["SucursalOrigen"] = new SelectList(listaSucursales, "IdSucursal", "Nombre", cambioUbicacionSucursalViewModel.IdSucursalOrigen);
+                ViewData["SucursalDestino"] = new SelectList(listaSucursales.Exclude(listaSucursales.FindIndex(c => c.IdSucursal == cambioUbicacionSucursalViewModel.IdSucursalOrigen), 1), "IdSucursal", "Nombre", cambioUbicacionSucursalViewModel.IdSucursalDestino);
+                ViewData["LibroActivoFijo"] = await ObtenerSelectListLibroActivoFijo(cambioUbicacionSucursalViewModel.IdSucursalDestino, cambioUbicacionSucursalViewModel.IdLibroActivoFijoDestino);
+
+                var listadoEmpleadoSucursalOrigen = (await apiServicio.ObtenerElementoAsync<List<DatosBasicosEmpleadoViewModel>>(new EmpleadosPorSucursalViewModel { IdSucursal = cambioUbicacionSucursalViewModel.IdSucursalOrigen, EmpleadosActivos = true }, new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleadosPorSucursal")).Select(c => new ListaEmpleadoViewModel { IdEmpleado = c.IdEmpleado, NombreApellido = $"{c.Nombres} {c.Apellidos}" });
+                ViewData["EmpleadoEntrega"] = new SelectList(listadoEmpleadoSucursalOrigen, "IdEmpleado", "NombreApellido", cambioUbicacionSucursalViewModel.IdEmpleadoEntrega);
+                ViewData["EmpleadoResponsableEnvio"] = new SelectList(listadoEmpleadoSucursalOrigen, "IdEmpleado", "NombreApellido", cambioUbicacionSucursalViewModel.IdEmpleadoResponsableEnvio);
+
+                var listadoEmpleadoSucursalDestino = (await apiServicio.ObtenerElementoAsync<List<DatosBasicosEmpleadoViewModel>>(new EmpleadosPorSucursalViewModel { IdSucursal = cambioUbicacionSucursalViewModel.IdSucursalDestino, EmpleadosActivos = true }, new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleadosPorSucursal")).Select(c => new ListaEmpleadoViewModel { IdEmpleado = c.IdEmpleado, NombreApellido = $"{c.Nombres} {c.Apellidos}" });
+                ViewData["EmpleadoRecibe"] = new SelectList(listadoEmpleadoSucursalDestino, "IdEmpleado", "NombreApellido", cambioUbicacionSucursalViewModel.IdEmpleadoRecibe);
+                ViewData["EmpleadoResponsableRecibo"] = new SelectList(listadoEmpleadoSucursalDestino, "IdEmpleado", "NombreApellido", cambioUbicacionSucursalViewModel.IdEmpleadoResponsableRecibo);
+
+                ViewData["ListadoRecepcionActivoFijoDetalleSeleccionado"] = await apiServicio.ObtenerElementoAsync<List<RecepcionActivoFijoDetalleSeleccionado>>(new CambioCustodioViewModel {
+                    IdEmpleadoEntrega = cambioUbicacionSucursalViewModel.IdEmpleadoEntrega,
+                    ListadoIdRecepcionActivoFijoDetalle = cambioUbicacionSucursalViewModel.ListadoIdRecepcionActivoFijoDetalle
+                }, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/DetallesActivoFijoSeleccionadoPorEmpleado");
                 ViewData["Error"] = response.Message;
-                ViewData["MotivoTransferencia"] = new SelectList(await apiServicio.Listar<MotivoTransferencia>(new Uri(WebApp.BaseAddressRM), "api/MotivoTransferencia/ListarMotivoTransferencia"), "IdMotivoTransferencia", "Motivo_Transferencia");
-
-                var listaPais = await apiServicio.Listar<Pais>(new Uri(WebApp.BaseAddressTH), "api/Pais/ListarPais");
-                //ViewData["Pais"] = new SelectList(listaPais, "IdPais", "Nombre", idPaisDestino);
-                //ViewData["Provincia"] = await ObtenerSelectListProvincia(idPaisDestino);
-                //ViewData["Ciudad"] = await ObtenerSelectListCiudad(idProvinciaDestino);
-                //ViewData["Sucursal"] = await ObtenerSelectListSucursal(idCiudadDestino);
-                //ViewData["LibroActivoFijo"] = await ObtenerSelectListLibroActivoFijo(idSucursalDestino);
-
-                //ViewData["PaisOrigen"] = new SelectList(listaPais, "IdPais", "Nombre", activoFijoOrigen?.LibroActivoFijo?.Sucursal?.Ciudad?.Provincia?.IdPais ?? -1);
-                //ViewData["ProvinciaOrigen"] = await ObtenerSelectListProvincia(activoFijoOrigen?.LibroActivoFijo?.Sucursal?.Ciudad?.Provincia?.IdPais ?? -1);
-                //ViewData["CiudadOrigen"] = await ObtenerSelectListCiudad(activoFijoOrigen?.LibroActivoFijo?.Sucursal?.Ciudad?.IdProvincia ?? -1);
-                //ViewData["SucursalOrigen"] = await ObtenerSelectListSucursal(activoFijoOrigen?.LibroActivoFijo?.Sucursal?.IdCiudad ?? -1);
-                //ViewData["LibroActivoFijoOrigen"] = await ObtenerSelectListLibroActivoFijo(activoFijoOrigen?.LibroActivoFijo?.IdSucursal ?? -1);
-
-                ViewData["Empleado"] = new SelectList(await apiServicio.Listar<ListaEmpleadoViewModel>(new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleados"), "IdEmpleado", "NombreApellido");
-                ViewData["IdActivoFijo"] = IdActivoFijo;
-                return View(transferenciaActivoFijo);
+                return View(cambioUbicacionSucursalViewModel);
             }
             catch (Exception ex)
             {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Creando un Modelo", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP WebAppTh" });
-                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorCrear}"/*, nameof(ActivosFijosATransferir)*/);
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Creando cambio de ubicación de Activo Fijo", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP WebAppTh" });
+                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorCrear}", nameof(ListadoTransferenciasCreadas));
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EmpleadoTransferenciaResult(int idSucursal, string namePartialView)
+        {
+            if (namePartialView == "_EmpleadosTransferenciaSucursalOrigen")
+            {
+                ViewData["EmpleadoEntrega"] = await ObtenerSelectListEmpleado(idSucursal);
+                ViewData["EmpleadoResponsableEnvio"] = ViewData["EmpleadoEntrega"];
+            }
+            else
+            {
+                ViewData["EmpleadoRecibe"] = await ObtenerSelectListEmpleado(idSucursal);
+                ViewData["EmpleadoResponsableRecibo"] = ViewData["EmpleadoRecibe"];
+                ViewData["LibroActivoFijo"] = await ObtenerSelectListLibroActivoFijo(idSucursal);
+            }
+            return PartialView(namePartialView, new CambioUbicacionSucursalViewModel());
+        }
+
+        public async Task<IActionResult> GestionarAprobacionTransferenciaSucursal(int id, bool id2)
+        {
+            try
+            {
+                var response = new Response();
+                if (id2)
+                    await apiServicio.InsertarAsync(new Estado { Nombre = Estados.Aceptada }, new Uri(WebApp.BaseAddressTH), "api/Estados/InsertarEstado");
+                else
+                    await apiServicio.InsertarAsync(new Estado { Nombre = Estados.Desaprobado }, new Uri(WebApp.BaseAddressTH), "api/Estados/InsertarEstado");
+
+                response = await apiServicio.InsertarAsync(new TransferenciaActivoFijoTransfer { IdTransferenciaActivoFijo = id, Aprobado = id2 }, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/AprobacionTransferenciaCambioUbicacionActivoFijo");
+                return this.Redireccionar(response.IsSuccess ? $"{Mensaje.Informacion}|{Mensaje.Satisfactorio}" : $"{Mensaje.Error}|{Mensaje.Excepcion}", nameof(ListadoTransferenciasAceptadas));
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Aceptando transferencia creada de activos fijos", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webappth" });
+                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.Excepcion}", nameof(ListadoTransferenciasCreadas));
             }
         }
         #endregion
@@ -1531,12 +1659,12 @@ namespace bd.webapprm.web.Controllers.MVC
         #endregion
 
         #region AJAX_LibroActivoFijo
-        public async Task<SelectList> ObtenerSelectListLibroActivoFijo(int idSucursal)
+        public async Task<SelectList> ObtenerSelectListLibroActivoFijo(int idSucursal, int? idLibroActivoFijo = null)
         {
             try
             {
                 var listaLibroActivoFijo = idSucursal != -1 ? await apiServicio.Listar<LibroActivoFijo>(new Uri(WebApp.BaseAddressRM), $"api/LibroActivoFijo/ListarLibrosActivoFijoPorSucursal/{idSucursal}") : new List<LibroActivoFijo>();
-                return new SelectList(listaLibroActivoFijo, "IdLibroActivoFijo", "IdLibroActivoFijo");
+                return new SelectList(listaLibroActivoFijo, "IdLibroActivoFijo", "IdLibroActivoFijo", idLibroActivoFijo);
             }
             catch (Exception)
             {
