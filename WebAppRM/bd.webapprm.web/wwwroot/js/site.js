@@ -74,7 +74,7 @@ function mostrarNotificacion(titulo, texto)
     });
 }
 
-function Asignar_Codigo_Barras(valor) {
+function AsignarCodigoBarrasPorClase(valor) {
     try {
         JsBarcode(".imgBarCode", valor, {
             format: "CODE128",
@@ -84,7 +84,7 @@ function Asignar_Codigo_Barras(valor) {
     } catch (e) { }
 }
 
-function Asignar_Codigo_Barras(idElemento, valor) {
+function AsignarCodigoBarrasPorId(idElemento, valor) {
     try {
         JsBarcode("#" + idElemento, valor, {
             format: "CODE128",

@@ -6,6 +6,9 @@
 
     bool isConfiguracionDetallesRecepcion = ViewBag.IsConfiguracionDetallesRecepcion ?? false;
 
+    bool isConfiguracionEditarPolizaSeguro = ViewBag.IsConfiguracionEditarPolizaSeguro ?? false;
+    bool isConfiguracionMostrarPolizaSeguro = ViewBag.IsConfiguracionMostrarPolizaSeguro ?? false;
+
     bool isConfiguracionSeleccionComponentes = ViewBag.IsConfiguracionSeleccionComponentes ?? false;
     bool isConfiguracionListadoComponentes = ViewBag.IsConfiguracionListadoComponentes ?? false;
 
@@ -47,22 +50,21 @@
                         <div class="widget-body no-padding">
                             <table id="tableActivosFijos" class="table table-striped table-bordered table-hover" style="width:100%;">
                                 <thead>
-                                    @{await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", isConfiguracionDetallesRecepcion ? 9 : 7);}
+                                    @{await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", (isConfiguracionDetallesRecepcion || isConfiguracionEditarPolizaSeguro) ? 9 : isConfiguracionMostrarPolizaSeguro ? 10 : 7);}
                                     <tr>
                                         <th>@Html.DisplayNameFor(model => model.FirstOrDefault().SubClaseActivoFijo.ClaseActivoFijo.IdTipoActivoFijo)</th>
                                         <th>@Html.DisplayNameFor(model => model.FirstOrDefault().SubClaseActivoFijo.IdClaseActivoFijo)</th>
                                         <th>@Html.DisplayNameFor(model => model.FirstOrDefault().IdSubClaseActivoFijo)</th>
                                         <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijoActual.LibroActivoFijo.IdSucursal)</th>
                                         @{
-
-                                            if (isConfiguracionDetallesRecepcion)
+                                            if (isConfiguracionDetallesRecepcion || isConfiguracionEditarPolizaSeguro || isConfiguracionMostrarPolizaSeguro)
                                             {
                                                 <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijo.IdProveedor)</th>
                                                 <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijo.FechaRecepcion)</th>
                                             }
                                         }
                                         <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Nombre)</th>
-                                        @if (ViewData["poliza"] != null)
+                                        @if (isConfiguracionMostrarPolizaSeguro)
                                         {
                                             <th>@Html.DisplayNameFor(model => model.FirstOrDefault().PolizaSeguroActivoFijo.NumeroPoliza)</th>
                                         }
@@ -79,14 +81,14 @@
                                             <td>@Html.DisplayFor(modelItem => item.SubClaseActivoFijo.Nombre)</td>
                                             <td>@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.FirstOrDefault()?.UbicacionActivoFijoActual?.LibroActivoFijo?.Sucursal?.Nombre ?? "-");}</td>
                                             @{
-                                                if (isConfiguracionDetallesRecepcion)
+                                                if (isConfiguracionDetallesRecepcion || isConfiguracionEditarPolizaSeguro || isConfiguracionMostrarPolizaSeguro)
                                                 {
                                                     <td>@{await ViewContext.Writer.WriteAsync($"{item.RecepcionActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijo.Proveedor.Nombre} {item.RecepcionActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijo.Proveedor.Apellidos}"); }</td>
                                                     <td>@Html.DisplayFor(modelItem => item.RecepcionActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijo.FechaRecepcion)</td>
                                                 }
                                             }
                                             <td>@Html.DisplayFor(modelItem => item.Nombre)</td>
-                                            @if (ViewData["poliza"] != null)
+                                            @if (isConfiguracionMostrarPolizaSeguro)
                                             {
                                                 <td>@Html.DisplayFor(modelItem => item.PolizaSeguroActivoFijo.NumeroPoliza)</td>
                                             }
@@ -97,14 +99,16 @@
                                                     {
                                                         if (ViewBag.UrlRevision != null)
                                                         {
-                                                            @Html.ActionLink("Revisar", ViewData["UrlRevision"].ToString(), new { id = item.IdActivoFijo })
-                                                            <span>| </span>
+                                                            @Html.ActionLink("Revisar", ViewData["UrlRevision"].ToString(), new { id = item.IdActivoFijo })<span>| </span>
                                                         }
                                                         if (ViewBag.UrlEditar != null)
                                                         {
-                                                            @Html.ActionLink("Editar", ViewData["UrlEditar"].ToString(), new { id = item.IdActivoFijo })
+                                                            @Html.ActionLink("Editar", ViewData["UrlEditar"].ToString(), new { id = item.IdActivoFijo })<span>| </span>
                                                         }
-                                                        <span>| </span>
+                                                    }
+                                                    if (isConfiguracionEditarPolizaSeguro)
+                                                    {
+                                                        @Html.ActionLink("Asignar P\u00F3liza de Seguro", ViewData["UrlEditar"].ToString(), new { id = item.IdActivoFijo })<span>| </span>
                                                     }
                                                     <a href="javascript:void(0);" class="btnDetallesActivosFijos" id="btnDetallesActivoFijo_@item.IdActivoFijo" onclick="abrirVentanaDetallesActivoFijo('@item.IdActivoFijo')" data-ids="@String.Join(",", item.RecepcionActivoFijoDetalle.Select(c => c.IdRecepcionActivoFijoDetalle))" data-url="@Url.Action("DetallesActivoFijoResult", "ActivoFijo")" data-toggle="modal" data-target="#myModalTableActivosFijos">Detalles</a>
 

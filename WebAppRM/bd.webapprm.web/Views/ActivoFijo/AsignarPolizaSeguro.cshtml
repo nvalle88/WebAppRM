@@ -1,4 +1,4 @@
-@model bd.webapprm.entidades.RecepcionActivoFijoDetalle
+@model bd.webapprm.entidades.ActivoFijo
 
 @section css{
     <link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
@@ -7,7 +7,7 @@
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
-            <article class="col-sm-12 col-md-12 col-lg-12">
+            <article class="col-sm-12 col-md-12 col-lg-9">
                 <div class="jarviswidget jarviswidget-color-red" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
                     <header>
                         <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
@@ -16,19 +16,19 @@
                     <div>
                         <div class="jarviswidget-editbox"></div>
                         <div class="widget-body no-padding">
-                            <form asp-action="AsignarPoliza" id="checkout-form" class="smart-form" novalidate="novalidate">
+                            <form asp-action="AsignarPolizaSeguro" id="checkout-form" class="smart-form" novalidate="novalidate">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                                <input type="hidden" asp-for="IdRecepcionActivoFijoDetalle" />
+                                <input type="hidden" asp-for="IdActivoFijo" />
                                 <fieldset>
                                     <div class="row">
                                         <section class="col col-4">
-                                            <label asp-for="NumeroPoliza"></label>
+                                            <label asp-for="PolizaSeguroActivoFijo.NumeroPoliza"></label>
                                         </section>
 
                                         <section class="col col-8">
                                             <label class="input">
-                                                <input asp-for="NumeroPoliza" name="NumeroPoliza" class="form-control" />
-                                                <span asp-validation-for="NumeroPoliza" class="text-danger"></span>
+                                                <input asp-for="PolizaSeguroActivoFijo.NumeroPoliza" class="form-control" />
+                                                <span asp-validation-for="PolizaSeguroActivoFijo.NumeroPoliza" class="text-danger"></span>
                                             </label>
                                         </section>
                                     </div>
