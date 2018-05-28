@@ -15,7 +15,7 @@ function asignarCodigoBarras()
     try {
         var codigoBarras = $("#spanCodigoSecuencial").html() + $("#spanNumeroConsecutivo").html();
         if (codigoBarras != "") {
-            Asignar_Codigo_Barras(codigoBarras);
+            AsignarCodigoBarrasPorClase(codigoBarras);
             document.getElementById("barcode1").style.display = "";
         }
         else

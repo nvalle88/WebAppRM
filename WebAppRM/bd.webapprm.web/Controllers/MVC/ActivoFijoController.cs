@@ -535,13 +535,13 @@ namespace bd.webapprm.web.Controllers.MVC
         #region Póliza de Seguro
         public async Task<IActionResult> ActivosFijosRecepcionadosSinPoliza()
         {
-            var lista = new List<RecepcionActivoFijoDetalle>();
+            var lista = new List<ActivoFijo>();
+            ViewData["IsConfiguracionEditarPolizaSeguro"] = true;
             try
             {
-                lista = await apiServicio.Listar<RecepcionActivoFijoDetalle>(new Uri(WebApp.BaseAddressRM), "api/RecepcionActivoFijo/ListarRecepcionActivoFijoSinPoliza");
+                lista = await apiServicio.Listar<ActivoFijo>(new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ListarRecepcionActivoFijoSinPoliza");
                 ViewData["Titulo"] = "Activos Fijos sin Póliza de Seguro";
-                ViewData["textoColumna"] = "Asignar Póliza";
-                ViewData["url"] = "AsignarPoliza";
+                ViewData["UrlEditar"] = nameof(AsignarPolizaSeguro);
             }
             catch (Exception ex)
             {
@@ -553,14 +553,12 @@ namespace bd.webapprm.web.Controllers.MVC
 
         public async Task<IActionResult> ActivosFijosRecepcionadosConPoliza()
         {
-            var lista = new List<RecepcionActivoFijoDetalle>();
+            var lista = new List<ActivoFijo>();
+            ViewData["IsConfiguracionMostrarPolizaSeguro"] = true;
             try
             {
-                lista = await apiServicio.Listar<RecepcionActivoFijoDetalle>(new Uri(WebApp.BaseAddressRM), "api/RecepcionActivoFijo/ListarRecepcionActivoFijoConPoliza");
+                lista = await apiServicio.Listar<ActivoFijo>(new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ListarRecepcionActivoFijoConPoliza");
                 ViewData["Titulo"] = "Activos Fijos con Póliza de Seguro";
-                ViewData["textoColumna"] = "Editar Póliza";
-                ViewData["url"] = "AsignarPoliza";
-                ViewData["poliza"] = true;
             }
             catch (Exception ex)
             {
@@ -570,22 +568,22 @@ namespace bd.webapprm.web.Controllers.MVC
             return View("ListadoActivoFijo", lista);
         }
 
-        public async Task<IActionResult> AsignarPoliza(string id) => await ObtenerRecepcionActivoFijo(id, new List<string> { Estados.Recepcionado }, nameof(ActivosFijosRecepcionadosSinPoliza));
+        public async Task<IActionResult> AsignarPolizaSeguro(string id) => await ObtenerRecepcionActivoFijo(id, new List<string>(), nameof(ActivosFijosRecepcionadosSinPoliza));
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AsignarPoliza(RecepcionActivoFijoDetalle recepcionActivoFijoDetalle)
+        public async Task<IActionResult> AsignarPolizaSeguro(ActivoFijo activoFijo)
         {
             try
             {
-                var response = await apiServicio.InsertarAsync(recepcionActivoFijoDetalle, new Uri(WebApp.BaseAddressRM), "api/RecepcionActivoFijo/AsignarPoliza");
+                var response = await apiServicio.InsertarAsync(activoFijo, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/AsignarPolizaSeguro");
                 if (response.IsSuccess)
                 {
-                    await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), ExceptionTrace = null, Message = "Se ha asignado el número de póliza", UserName = "Usuario 1", LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ADV), EntityID = string.Format("{0} {1}", "Recepción Activo Fijo Detalle:", recepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle) });
+                    await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), ExceptionTrace = null, Message = "Se ha asignado el número de póliza", UserName = "Usuario 1", LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ADV), EntityID = string.Format("{0} {1}", "Póliza de seguro Activo Fijo Detalle:", activoFijo.IdActivoFijo) });
                     return this.Redireccionar($"{Mensaje.Informacion}|{Mensaje.Satisfactorio}", nameof(ActivosFijosRecepcionadosConPoliza));
                 }
                 ViewData["Error"] = response.Message;
-                return View(recepcionActivoFijoDetalle);
+                return View(activoFijo);
             }
             catch (Exception ex)
             {
