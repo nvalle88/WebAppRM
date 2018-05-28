@@ -1,0 +1,178 @@
+@model List<TransferenciaActivoFijo>
+@{ 
+    bool isSolicitudesTransferencia = ViewBag.IsSolicitudesTransferencia ?? false;
+    bool isTransferenciasCreadas = ViewBag.IsTransferenciasCreadas ?? false;
+    bool isTransferenciasAceptadas = ViewBag.IsTransferenciasAceptadas ?? false;
+    bool isCambioCustodio = ViewBag.IsCambioCustodio ?? false;
+}
+<div id="content">
+    <p>
+        @{
+            if (isTransferenciasCreadas)
+            {
+                <a asp-action="GestionarCambioCustodio" class="btn btn-primary">Nuevo Cambio de Ubicaci&oacute;n entre Sucursales</a>
+            }
+            else if (isCambioCustodio)
+            {
+                <a asp-action="GestionarCambioCustodio" class="btn btn-primary">Nuevo Cambio de Custodio</a>
+            }
+        }
+    </p>
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                        <h2>
+                            @{
+                                if (isSolicitudesTransferencia)
+                                {
+                                    <span>Listado de Solicitudes de Cambios de Ubicaci&oacute;n entre Sucursales</span>
+                                }
+                                else if (isTransferenciasCreadas)
+                                {
+                                    <span>Listado de Solicitudes creadas de Cambios de Ubicaci&oacute;n entre Sucursales</span>
+                                }
+                                else
+                                {
+                                    <span>Listado de Solicitudes aceptadas de de Cambios de Ubicaci&oacute;n entre Sucursales</span>
+                                }
+                            }
+                        </h2>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox">
+                        </div>
+                        <div class="widget-body no-padding">
+                            <table id="dt_basic" class="table table-striped table-bordered table-hover">
+                                <thead>
+                                    @{await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", (isSolicitudesTransferencia || isTransferenciasCreadas || isTransferenciasAceptadas) ? 9 : 6);}
+                                    <tr>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().SucursalOrigen)
+                                        </th>
+                                        @{ 
+                                            if (isSolicitudesTransferencia || isTransferenciasCreadas || isTransferenciasAceptadas)
+                                            {
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.FirstOrDefault().IdEmpleadoResponsableEnvio)
+                                                </th>
+                                            }
+                                        }
+                                        <th>
+                                            Custodio que entrega:
+                                        </th>
+                                        @{ 
+                                            if (isSolicitudesTransferencia || isTransferenciasCreadas || isTransferenciasAceptadas)
+                                            {
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.FirstOrDefault().IdEmpleadoResponsableRecibo)
+                                                </th>
+                                                <th>
+                                                    @Html.DisplayNameFor(model => model.FirstOrDefault().SucursalDestino)
+                                                </th>
+                                            }
+                                        }
+                                        <th>
+                                            Custodio que recibe:
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().FechaTransferencia)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().Observaciones)
+                                        </th>
+                                        <th>Opciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.SucursalOrigen.Nombre)
+                                            </td>
+                                            @{ 
+                                                if (isSolicitudesTransferencia || isTransferenciasCreadas || isTransferenciasAceptadas)
+                                                {
+                                                    <td>
+                                                        @{await ViewContext.Writer.WriteAsync($"{item.EmpleadoResponsableEnvio.Persona.Nombres} {item.EmpleadoResponsableEnvio.Persona.Apellidos}");}
+                                                    </td>
+                                                }
+                                            }
+                                            <td>
+                                                @{await ViewContext.Writer.WriteAsync($"{item.TransferenciaActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijoOrigen.Empleado.Persona.Nombres} {item.TransferenciaActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijoOrigen.Empleado.Persona.Apellidos}");}
+                                            </td>
+                                            @{ 
+                                                if (isSolicitudesTransferencia || isTransferenciasCreadas || isTransferenciasAceptadas)
+                                                {
+                                                    <td>
+                                                        @{await ViewContext.Writer.WriteAsync($"{item.EmpleadoResponsableRecibo.Persona.Nombres} {item.EmpleadoResponsableRecibo.Persona.Apellidos}");}
+                                                    </td>
+                                                    <td>
+                                                        @Html.DisplayFor(modelItem => item.SucursalDestino.Nombre)
+                                                    </td>
+                                                }
+                                            }
+                                            <td>
+                                                @{await ViewContext.Writer.WriteAsync($"{item.TransferenciaActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijoDestino.Empleado.Persona.Nombres} {item.TransferenciaActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijoDestino.Empleado.Persona.Apellidos}");}
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.FechaTransferencia)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Observaciones)
+                                            </td>
+                                            <td>
+                                                @{ 
+                                                    if (isTransferenciasCreadas)
+                                                    {
+                                                        <a asp-action="GestionarTransferenciaSucursal" asp-route-id="@item.IdTransferenciaActivoFijo">Editar<span> | </span></a>
+                                                    }
+                                                    else if (isSolicitudesTransferencia)
+                                                    {
+                                                        <a href="javascript:void(0);" id="btn_aprobar" onclick="abrirVentanaConfirmacion('btn_aprobar')" data-url="@Url.Action("GestionarAprobacionTransferenciaSucursal", values: new { id = item.IdTransferenciaActivoFijo, id2 = true })" data-titulo="Emitir aprobaci&oacute;n" data-descripcion="&#191;Desea aprobar el Cambio de ubicaci&oacute;n entre Sucursales?">Aprobar<span> | </span></a>
+                                                        <a href="javascript:void(0);" id="btn_rechazar" onclick="abrirVentanaConfirmacion('btn_rechazar')" data-url="@Url.Action("GestionarAprobacionTransferenciaSucursal", values: new { id = item.IdTransferenciaActivoFijo, id2 = false })" data-titulo="Emitir desaprobaci&oacute;n" data-descripcion="&#191;Desea rechazar el Cambio de ubicaci&oacute;n entre Sucursales?">Rechazar<span> | </span></a>
+                                                    }
+                                                }
+                                                <a href="javascript:void(0);" class="btnDetallesActivosFijos" id="btnDetallesActivoFijo_@item.IdTransferenciaActivoFijo" onclick="abrirVentanaDetallesActivoFijo('@item.IdTransferenciaActivoFijo')" data-ids="@String.Join(",", item.TransferenciaActivoFijoDetalle.Select(c => c.IdRecepcionActivoFijoDetalle))" data-url="@Url.Action("DetallesActivoFijoResult", "ActivoFijo")" data-toggle="modal" data-target="#myModalTableActivosFijos">Detalles</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+    <div class="modal fade" id="myModalTableActivosFijos" tabindex="-3" role="dialog" aria-labelledby="myModalTableActivosFijosLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" style="margin-left:8% !important;margin-top:30px !important;width:85% !important;">
+            <div class="modal-content" id="modalContentTableActivosFijos">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h4 class="modal-title" id="myModalTableActivosFijosLabel">Detalles de Activo Fijo</h4>
+                </div>
+                <div class="modal-body" id="modalBodyTableActivosFijos"></div>
+                <div class="modal-footer" id="divFooterTableActivosFijos">
+                    <button type="button" class="btn btn-default" id="btnCancelarTableActivosFijos" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src='~/js/datatables/initDatatableFiltrado.min.js'></script>
+    <script src="~/js/activoFijo/listadoSeleccion.min.js"></script>
+    <script>
+    var arrConfiguraciones = [
+        { propiedad: "IsConfiguracionDatosActivo", valor: true },
+        { propiedad: "IsConfiguracionListadoAltas", valor: true }
+    ];
+    </script>
+}

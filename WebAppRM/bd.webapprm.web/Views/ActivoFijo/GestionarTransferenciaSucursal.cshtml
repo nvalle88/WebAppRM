@@ -1,0 +1,135 @@
+@model CambioUbicacionSucursalViewModel
+@{
+    List<RecepcionActivoFijoDetalleSeleccionado> listadoRecepcionActivoFijoDetalleSeleccionado = ViewBag.ListadoRecepcionActivoFijoDetalleSeleccionado;
+}
+
+@section css{
+    <link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
+    <link rel="stylesheet" href="~/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/tableSmartForm.min.css" />
+}
+<div id="content">
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-sm-12 col-md-12 col-lg-12">
+                <div class="jarviswidget jarviswidget-color-red" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+                        <h2>Cambio de Ubicaci&oacute;n entre Sucursales de Activos Fijos</h2>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox"></div>
+                        <div class="widget-body no-padding">
+                            <form asp-action="GestionarTransferenciaSucursal" id="checkout-form" class="smart-form" novalidate="novalidate" enctype="multipart/form-data">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                @{ 
+                                    if (Model != null)
+                                    {
+                                        <input type="hidden" asp-for="IdTransferenciaActivoFijo" />
+                                    }
+                                }
+                                <input type="hidden" id="idsRecepcionActivoFijoDetalle" name="idsRecepcionActivoFijoDetalle" />
+                                <fieldset>
+                                    <legend>Datos generales</legend>
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="FechaTransferencia"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <input asp-for="FechaTransferencia" class="form-control" />
+                                                <span asp-validation-for="FechaTransferencia" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="Observaciones"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <textarea asp-for="Observaciones" class="form-control paddingTextArea97" rows="4"></textarea>
+                                                <span asp-validation-for="Observaciones" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    <legend>Sucursal de origen</legend>
+                                    <div class="row margin-top-25">
+                                        <section class="col col-4">
+                                            <label asp-for="IdSucursalOrigen"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <select asp-for="IdSucursalOrigen" class="form-control" asp-items="ViewBag.SucursalOrigen"></select>
+                                                <span asp-validation-for="IdSucursalOrigen" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    <div id="divEmpleadosSucursalOrigen">
+                                        @{await Html.RenderPartialAsync("_EmpleadosTransferenciaSucursalOrigen");}
+                                    </div>
+
+                                    <legend>Sucursal de destino</legend>
+                                    <div class="row margin-top-25">
+                                        <section class="col col-4">
+                                            <label asp-for="IdSucursalDestino"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <select asp-for="IdSucursalDestino" class="form-control" asp-items="ViewBag.SucursalDestino"></select>
+                                                <span asp-validation-for="IdSucursalDestino" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    <div id="divEmpleadosSucursalDestino">
+                                        @{await Html.RenderPartialAsync("_EmpleadosTransferenciaSucursalDestino");}
+                                    </div>
+
+                                    <div class="row" style="padding-left:15px !important;padding-right:15px !important;">
+                                        <div class="alert alert-info alert-block" style="border-left-width:5px !important;">
+                                            <h4 class="alert-heading">Informaci&oacute;n</h4>
+                                            Seleccione los Activos Fijos que desea transferir marcando las casillas de selecci&oacute;n.
+                                        </div>
+                                    </div>
+
+                                    <legend>Activos Fijos a transferir</legend>
+                                    <div class="margin-top-10" id="divActivosFijosATransferir">
+                                        @{
+                                            await Html.RenderPartialAsync("_ListadoDetallesActivosFijos", listadoRecepcionActivoFijoDetalleSeleccionado);
+                                        }
+                                    </div>
+                                </fieldset>
+                                <footer>
+                                    <span class="text-danger">@ViewData["Error"]</span>
+                                    <button type="button" class="btn btn-primary" id="btn-guardar">Guardar</button>
+                                    <a asp-action="ListadoTransferenciasCreadas" class="btn btn-default">Cancelar</a>
+                                </footer>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_Select2ScriptsPartial");}
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{await Html.RenderPartialAsync("_DatetimePickerScriptsPartial");}
+    <script src='~/js/activoFijo/listadoSeleccion.min.js'></script>
+    <script src="~/js/activoFijo/transferenciaCambioUbicacionSucursales.min.js"></script>
+    <script>
+        var urlListadoActivosFijosCustodioResult = "@Url.Action("ListadoActivosFijosCustodioResult")";
+        var urlEmpleadoTransferenciaResult = "@Url.Action("EmpleadoTransferenciaResult", "ActivoFijo")";
+        var idsRecepcionActivoFijoDetalle = "@String.Join(",", listadoRecepcionActivoFijoDetalleSeleccionado.Where(c=> c.Seleccionado).Select(c=> c.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle))";
+        var idEditar = "@String.Format("{0}", Model != null ? "true" : "false")" === 'true';
+    </script>
+}
