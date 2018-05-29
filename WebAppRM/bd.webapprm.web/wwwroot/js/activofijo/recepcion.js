@@ -328,13 +328,13 @@ function obtenerPosIdFila(idFila)
 function eventoCambiarCategoria()
 {
     if (categoria == objCategorias.Edificio)
-        mostrarOcultarColumnas([true, false, false, false, false]);
+        mostrarOcultarColumnas([true, false, false, false, true]);
     else if (categoria == objCategorias.Vehiculo)
-        mostrarOcultarColumnas([false, true, true, true, false]);
+        mostrarOcultarColumnas([false, true, true, true, true]);
     else if (categoria == objCategorias.EquiposComputoSoftware)
         mostrarOcultarColumnas([false, false, false, false, true]);
     else
-        mostrarOcultarColumnas([false, false, false, false, false]);
+        mostrarOcultarColumnas([false, false, false, false, true]);
 }
 
 function mostrarOcultarColumnas(arrObj)
