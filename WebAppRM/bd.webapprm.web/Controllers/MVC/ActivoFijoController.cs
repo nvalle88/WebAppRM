@@ -338,7 +338,6 @@ namespace bd.webapprm.web.Controllers.MVC
             ViewData["IsConfiguracionDetallesRecepcion"] = true;
             ViewData["Titulo"] = "Activos Fijos Recepcionados";
             ViewData["UrlEditar"] = nameof(EditarRecepcionAR);
-            ViewData["EstadoFiltrado"] = Estados.Recepcionado;
             try
             {
                 lista = await apiServicio.ObtenerElementoAsync<List<ActivoFijo>>(new List<string> { Estados.Recepcionado }, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ListarActivoFijoPorEstado");
@@ -358,7 +357,6 @@ namespace bd.webapprm.web.Controllers.MVC
             ViewData["Titulo"] = "Activos Fijos que requieren Validación Técnica";
             ViewData["UrlEditar"] = nameof(EditarRecepcionVT);
             ViewData["UrlRevision"] = nameof(RevisionActivoFijo);
-            ViewData["EstadoFiltrado"] = Estados.ValidacionTecnica;
             try
             {
                 lista = await apiServicio.ObtenerElementoAsync<List<ActivoFijo>>(new List<string> { Estados.ValidacionTecnica }, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ListarActivoFijoPorEstado");
@@ -600,7 +598,6 @@ namespace bd.webapprm.web.Controllers.MVC
             ViewData["IsConfiguracionListadoAltas"] = true;
             ViewData["Titulo"] = "Activos Fijos en Alta";
             ViewData["UrlEditar"] = nameof(GestionarAlta);
-            ViewData["EstadoFiltrado"] = Estados.Alta;
             try
             {
                 lista = await apiServicio.ObtenerElementoAsync<List<ActivoFijo>>(Estados.Alta, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ListarActivosFijosPorAgrupacionPorEstado");
@@ -1153,7 +1150,6 @@ namespace bd.webapprm.web.Controllers.MVC
             ViewData["IsConfiguracionListadoBajas"] = true;
             ViewData["Titulo"] = "Activos Fijos en Baja";
             ViewData["UrlEditar"] = nameof(GestionarBaja);
-            ViewData["EstadoFiltrado"] = Estados.Baja;
             try
             {
                 lista = await apiServicio.ObtenerElementoAsync<List<ActivoFijo>>(Estados.Baja, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ListarActivosFijosPorAgrupacionPorEstado");
@@ -1313,7 +1309,6 @@ namespace bd.webapprm.web.Controllers.MVC
                 ViewData["IsConfiguracionListadoMantenimientos"] = true;
                 ViewData["Titulo"] = "Activos Fijos en Alta";
                 ViewData["UrlEditar"] = nameof(EditarMantenimiento);
-                ViewData["EstadoFiltrado"] = Estados.Mantenimiento;
                 lista = await apiServicio.ObtenerElementoAsync<List<ActivoFijo>>(Estados.Alta, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ListarActivosFijosPorAgrupacionPorEstado");
             }
             catch (Exception ex)
@@ -1324,7 +1319,7 @@ namespace bd.webapprm.web.Controllers.MVC
             return View("ListadoActivoFijo", lista);
         }
 
-        public async Task<IActionResult> ListarMantenimientos(string id)
+        public async Task<IActionResult> ListadoMantenimientos(string id)
         {
             var lista = new List<MantenimientoActivoFijo>();
             ViewData["IdRecepcionActivoFijoDetalle"] = id;
@@ -1350,7 +1345,7 @@ namespace bd.webapprm.web.Controllers.MVC
             }
             catch (Exception)
             {
-                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorCargarDatos}", nameof(ListarMantenimientos), routeValues: new { id });
+                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorCargarDatos}", nameof(ListadoMantenimientos), routeValues: new { id });
             }
         }
 
@@ -1367,7 +1362,7 @@ namespace bd.webapprm.web.Controllers.MVC
                     if (response.IsSuccess)
                     {
                         await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), ExceptionTrace = null, Message = "Se ha creado un Mantenimiento Activo Fijo", UserName = "Usuario 1", LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ADV), EntityID = string.Format("{0} {1}", "Mantenimiento Activo Fijo:", mantenimientoActivoFijo.IdMantenimientoActivoFijo) });
-                        return this.Redireccionar($"{Mensaje.Informacion}|{Mensaje.Satisfactorio}", nameof(ListarMantenimientos), routeValues: new { id = mantenimientoActivoFijo.IdRecepcionActivoFijoDetalle });
+                        return this.Redireccionar($"{Mensaje.Informacion}|{Mensaje.Satisfactorio}", nameof(ListadoMantenimientos), routeValues: new { id = mantenimientoActivoFijo.IdRecepcionActivoFijoDetalle });
                     }
                 }
                 else
@@ -1381,7 +1376,7 @@ namespace bd.webapprm.web.Controllers.MVC
             catch (Exception ex)
             {
                 await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Creando Mantenimiento Activo Fijo", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP WebAppTh" });
-                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorCrear}", nameof(ListarMantenimientos), routeValues: new { id = mantenimientoActivoFijo.IdRecepcionActivoFijoDetalle });
+                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorCrear}", nameof(ListadoMantenimientos), routeValues: new { id = mantenimientoActivoFijo.IdRecepcionActivoFijoDetalle });
             }
         }
 
@@ -1393,17 +1388,17 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     var respuesta = await apiServicio.SeleccionarAsync<Response>(id2, new Uri(WebApp.BaseAddressRM), "api/MantenimientoActivoFijo");
                     if (!respuesta.IsSuccess)
-                        return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}", nameof(ListarMantenimientos), routeValues: new { id });
+                        return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}", nameof(ListadoMantenimientos), routeValues: new { id });
 
                     respuesta.Resultado = JsonConvert.DeserializeObject<MantenimientoActivoFijo>(respuesta.Resultado.ToString());
                     ViewData["Empleado"] = new SelectList(await apiServicio.Listar<ListaEmpleadoViewModel>(new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleados"), "IdEmpleado", "NombreApellido");
                     return View(respuesta.Resultado);
                 }
-                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}", nameof(ListarMantenimientos), routeValues: new { id });
+                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}", nameof(ListadoMantenimientos), routeValues: new { id });
             }
             catch (Exception)
             {
-                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorCargarDatos}", nameof(ListarMantenimientos), routeValues: new { id });
+                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorCargarDatos}", nameof(ListadoMantenimientos), routeValues: new { id });
             }
         }
 
@@ -1422,7 +1417,7 @@ namespace bd.webapprm.web.Controllers.MVC
                         if (response.IsSuccess)
                         {
                             await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), EntityID = string.Format("{0} : {1}", "Mantenimiento", mantenimientoActivoFijo.IdMantenimientoActivoFijo.ToString()), LogCategoryParametre = Convert.ToString(LogCategoryParameter.Edit), LogLevelShortName = Convert.ToString(LogLevelParameter.ADV), Message = "Se ha actualizado un registro Mantenimiento Activo Fijo", UserName = "Usuario 1" });
-                            return this.Redireccionar($"{Mensaje.Informacion}|{Mensaje.Satisfactorio}", nameof(ListarMantenimientos), routeValues: new { id = mantenimientoActivoFijo.IdRecepcionActivoFijoDetalle });
+                            return this.Redireccionar($"{Mensaje.Informacion}|{Mensaje.Satisfactorio}", nameof(ListadoMantenimientos), routeValues: new { id = mantenimientoActivoFijo.IdRecepcionActivoFijoDetalle });
                         }
                     }
                     else
@@ -1432,12 +1427,12 @@ namespace bd.webapprm.web.Controllers.MVC
                     ViewData["Empleado"] = new SelectList(await apiServicio.Listar<ListaEmpleadoViewModel>(new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleados"), "IdEmpleado", "NombreApellido");
                     return View(mantenimientoActivoFijo);
                 }
-                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}", nameof(ListarMantenimientos), routeValues: new { id = mantenimientoActivoFijo.IdRecepcionActivoFijoDetalle });
+                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}", nameof(ListadoMantenimientos), routeValues: new { id = mantenimientoActivoFijo.IdRecepcionActivoFijoDetalle });
             }
             catch (Exception ex)
             {
                 await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Editando un Mantenimiento Activo Fijo", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Edit), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webappth" });
-                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorEditar}", nameof(ListarMantenimientos), routeValues: new { id = mantenimientoActivoFijo.IdRecepcionActivoFijoDetalle });
+                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorEditar}", nameof(ListadoMantenimientos), routeValues: new { id = mantenimientoActivoFijo.IdRecepcionActivoFijoDetalle });
             }
         }
 
@@ -1449,14 +1444,161 @@ namespace bd.webapprm.web.Controllers.MVC
                 if (response.IsSuccess)
                 {
                     await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), EntityID = string.Format("{0} : {1}", "Mantenimiento Activo Fijo", id), Message = "Registro eliminado", LogCategoryParametre = Convert.ToString(LogCategoryParameter.Delete), LogLevelShortName = Convert.ToString(LogLevelParameter.ADV), UserName = "Usuario APP webappth" });
-                    return this.Redireccionar($"{Mensaje.Informacion}|{response.Message}", nameof(ListarMantenimientos), routeValues: new { id });
+                    return this.Redireccionar($"{Mensaje.Informacion}|{response.Message}", nameof(ListadoMantenimientos), routeValues: new { id });
                 }
-                return this.Redireccionar($"{Mensaje.Error}|{response.Message}", nameof(ListarMantenimientos), routeValues: new { id });
+                return this.Redireccionar($"{Mensaje.Error}|{response.Message}", nameof(ListadoMantenimientos), routeValues: new { id });
             }
             catch (Exception ex)
             {
                 await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Eliminar Mantenimiento Activo Fijo", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Delete), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webappth" });
-                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.Excepcion}", nameof(ListarMantenimientos), routeValues: new { id });
+                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.Excepcion}", nameof(ListadoMantenimientos), routeValues: new { id });
+            }
+        }
+        #endregion
+
+        #region Procesos Judiciales
+        public async Task<IActionResult> ListarProcesosJudicialesActivosFijos()
+        {
+            var lista = new List<ActivoFijo>();
+            try
+            {
+                ViewData["IsConfiguracionListadoProcesosJudiciales"] = true;
+                ViewData["Titulo"] = "Activos Fijos en Alta";
+                ViewData["UrlEditar"] = nameof(EditarMantenimiento);
+                lista = await apiServicio.ObtenerElementoAsync<List<ActivoFijo>>(Estados.Alta, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ListarActivosFijosPorAgrupacionPorEstado");
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Listando procesos judiciales de Activos Fijos", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webappth" });
+                TempData["Mensaje"] = $"{Mensaje.Error}|{Mensaje.ErrorListado}";
+            }
+            return View("ListadoActivoFijo", lista);
+        }
+
+        public async Task<IActionResult> ListadoProcesosJudiciales(string id)
+        {
+            var lista = new List<ProcesoJudicialActivoFijo>();
+            ViewData["IdRecepcionActivoFijoDetalle"] = id;
+            try
+            {
+                lista = await apiServicio.ObtenerElementoAsync<List<ProcesoJudicialActivoFijo>>(id, new Uri(WebApp.BaseAddressRM), "api/ProcesoJudicialActivoFijo/ListarProcesoJudicialActivoFijoPorIdDetalleActivoFijo");
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Listando procesos judiciales de Activos Fijos", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webappth" });
+                TempData["Mensaje"] = $"{Mensaje.Error}|{Mensaje.ErrorListado}";
+            }
+            return View(lista);
+        }
+
+        public async Task<IActionResult> GestionarProcesoJudicial(string id, string id2)
+        {
+            try
+            {
+                ViewData["IdRecepcionActivoFijoDetalle"] = id;
+                if (!string.IsNullOrEmpty(id2))
+                {
+                    var respuesta = await apiServicio.SeleccionarAsync<Response>(id2, new Uri(WebApp.BaseAddressRM), "api/ProcesoJudicialActivoFijo");
+                    if (!respuesta.IsSuccess)
+                        return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}", nameof(ListadoProcesosJudiciales), routeValues: new { id });
+
+                    respuesta.Resultado = JsonConvert.DeserializeObject<ProcesoJudicialActivoFijo>(respuesta.Resultado.ToString());
+                    return View(respuesta.Resultado);
+                }
+                return View();
+            }
+            catch (Exception)
+            {
+                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorCargarDatos}", nameof(ListadoProcesosJudiciales), routeValues: new { id });
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> GestionarProcesoJudicial(ProcesoJudicialActivoFijo procesoJudicialActivoFijo, List<IFormFile> file)
+        {
+            try
+            {
+                ViewData["IdRecepcionActivoFijoDetalle"] = procesoJudicialActivoFijo.IdRecepcionActivoFijoDetalle;
+                if (!string.IsNullOrEmpty(procesoJudicialActivoFijo.IdProcesoJudicialActivoFijo.ToString()))
+                {
+                    var response = new Response();
+                    if (ModelState.IsValid)
+                    {
+                        int idProcesoJudicialActivoFijo = 0;
+                        if (procesoJudicialActivoFijo.IdProcesoJudicialActivoFijo == 0)
+                        {
+                            response = await apiServicio.InsertarAsync(procesoJudicialActivoFijo, new Uri(WebApp.BaseAddressRM), "api/ProcesoJudicialActivoFijo/InsertarProcesoJudicialActivoFijo");
+                            if (response.IsSuccess)
+                            {
+                                var procesoJudicialActivoFijoAux = JsonConvert.DeserializeObject<ProcesoJudicialActivoFijo>(response.Resultado.ToString());
+                                idProcesoJudicialActivoFijo = procesoJudicialActivoFijoAux.IdProcesoJudicialActivoFijo;
+                                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), EntityID = string.Format("{0} : {1}", "Proceso Judicial", procesoJudicialActivoFijo.IdProcesoJudicialActivoFijo.ToString()), LogCategoryParametre = Convert.ToString(LogCategoryParameter.Edit), LogLevelShortName = Convert.ToString(LogLevelParameter.ADV), Message = "Se ha creado un registro Proceso judicial de Activo Fijo", UserName = "Usuario 1" });
+                            }
+                        }
+                        else
+                        {
+                            idProcesoJudicialActivoFijo = procesoJudicialActivoFijo.IdProcesoJudicialActivoFijo;
+                            response = await apiServicio.EditarAsync(procesoJudicialActivoFijo.IdProcesoJudicialActivoFijo.ToString(), procesoJudicialActivoFijo, new Uri(WebApp.BaseAddressRM), "api/ProcesoJudicialActivoFijo");
+                            if (response.IsSuccess)
+                                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), EntityID = string.Format("{0} : {1}", "Proceso Judicial", procesoJudicialActivoFijo.IdProcesoJudicialActivoFijo.ToString()), LogCategoryParametre = Convert.ToString(LogCategoryParameter.Edit), LogLevelShortName = Convert.ToString(LogLevelParameter.ADV), Message = "Se ha actualizado un registro Proceso judicial de Activo Fijo", UserName = "Usuario 1" });
+                        }
+
+                        var responseFile = new Response { IsSuccess = true };
+                        if (response.IsSuccess)
+                        {
+                            if (file.Count > 0)
+                            {
+                                foreach (var item in file)
+                                {
+                                    byte[] data;
+                                    using (var br = new BinaryReader(item.OpenReadStream()))
+                                        data = br.ReadBytes((int)item.OpenReadStream().Length);
+
+                                    if (data.Length > 0)
+                                    {
+                                        var activoFijoDocumentoTransfer = new DocumentoActivoFijoTransfer { Nombre = item.FileName, Fichero = data, IdProcesoJudicialActivoFijo = idProcesoJudicialActivoFijo };
+                                        responseFile = await apiServicio.InsertarAsync(activoFijoDocumentoTransfer, new Uri(WebApp.BaseAddressRM), "api/DocumentoActivoFijo/UploadFiles");
+                                        if (responseFile != null && responseFile.IsSuccess)
+                                            await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), ExceptionTrace = null, Message = "Se ha subido un archivo", UserName = "Usuario 1", LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ADV), EntityID = string.Format("{0} {1}", "Documento de Activo Fijo:", activoFijoDocumentoTransfer.Nombre) });
+                                    }
+                                }
+                            }
+                        }
+                        if (response.IsSuccess)
+                            return this.Redireccionar(responseFile.IsSuccess ? $"{Mensaje.Informacion}|{Mensaje.Satisfactorio}" : $"{Mensaje.Aviso}|{Mensaje.ErrorUploadFiles}", nameof(ListadoProcesosJudiciales), routeValues: new { id = procesoJudicialActivoFijo.IdRecepcionActivoFijoDetalle });
+                    }
+                    else
+                        response.Message = Mensaje.ModeloInvalido;
+
+                    ViewData["Error"] = response.Message;
+                    return View(procesoJudicialActivoFijo);
+                }
+                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}", nameof(ListadoProcesosJudiciales), routeValues: new { id = procesoJudicialActivoFijo.IdRecepcionActivoFijoDetalle });
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Editando un Proceso judicial de Activo Fijo", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Edit), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webappth" });
+                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorEditar}", nameof(ListadoProcesosJudiciales), routeValues: new { id = procesoJudicialActivoFijo.IdRecepcionActivoFijoDetalle });
+            }
+        }
+
+        public async Task<IActionResult> EliminarProcesoJudicial(string id, string id2)
+        {
+            try
+            {
+                var response = await apiServicio.EliminarAsync(id2, new Uri(WebApp.BaseAddressRM), "api/ProcesoJudicialActivoFijo");
+                if (response.IsSuccess)
+                {
+                    await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), EntityID = string.Format("{0} : {1}", "Proceso judicial de Activo Fijo", id), Message = "Registro eliminado", LogCategoryParametre = Convert.ToString(LogCategoryParameter.Delete), LogLevelShortName = Convert.ToString(LogLevelParameter.ADV), UserName = "Usuario APP webappth" });
+                    return this.Redireccionar($"{Mensaje.Informacion}|{response.Message}", nameof(ListadoProcesosJudiciales), routeValues: new { id });
+                }
+                return this.Redireccionar($"{Mensaje.Error}|{response.Message}", nameof(ListadoProcesosJudiciales), routeValues: new { id });
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Eliminar Proceso judicial de Activo Fijo", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Delete), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webappth" });
+                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.Excepcion}", nameof(ListadoProcesosJudiciales), routeValues: new { id });
             }
         }
         #endregion

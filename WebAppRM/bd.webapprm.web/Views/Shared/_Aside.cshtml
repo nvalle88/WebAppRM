@@ -59,6 +59,9 @@
                     <li class="@Html.RouteIf("MotivoRecepcion", "active")">
                         <a href="@Url.Action("Index", "MotivoRecepcion")">Motivo de Recepción</a>
                     </li>
+                    <li class="@Html.RouteIf("MotivoTraslado", "active")">
+                        <a href="@Url.Action("Index", "MotivoTraslado")">Motivo de Traslado</a>
+                    </li>
                     <li class="@Html.RouteIf("MotivoTransferencia", "active")">
                         <a href="@Url.Action("Index", "MotivoTransferencia")">Motivo de Transferencia</a>
                     </li>
@@ -179,6 +182,10 @@
 
                     <li class="@Html.RouteIf(new[] { "ListarMantenimientosActivosFijos", "ListarMantenimientos", "CrearMantenimiento", "EditarMantenimiento" }, "ActivoFijo", "active")">
                         <a href="@Url.Action("ListarMantenimientosActivosFijos", "ActivoFijo")">Mantenimientos</a>
+                    </li>
+
+                    <li class="@Html.RouteIf(new[] { "ListarProcesosJudicialesActivosFijos", "ListarProcesosJudiciales", "GestionarProcesoJudicial" }, "ActivoFijo", "active")">
+                        <a href="@Url.Action("ListarProcesosJudicialesActivosFijos", "ActivoFijo")">Procesos Judiciales</a>
                     </li>
 
                     <li>

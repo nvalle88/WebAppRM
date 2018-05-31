@@ -18,6 +18,7 @@
     bool isConfiguracionListadoComponentes = ExisteConfiguracion("IsConfiguracionListadoComponentes");
 
     bool isConfiguracionListadoMantenimientos = ExisteConfiguracion("IsConfiguracionListadoMantenimientos");
+    bool isConfiguracionListadoProcesosJudiciales = ExisteConfiguracion("IsConfiguracionListadoProcesosJudiciales");
 
     bool isConfiguracionSeleccionAltas = ExisteConfiguracion("IsConfiguracionSeleccionAltas");
     bool isConfiguracionListadoAltasGestionar = ExisteConfiguracion("IsConfiguracionListadoAltasGestionar");
@@ -140,7 +141,7 @@
                 <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.RecepcionActivoFijo.OrdenCompra)</th>
                 <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.RecepcionActivoFijo.IdFondoFinanciamiento)</th>
                 @{
-                    if (isConfiguracionListadoComponentes || isConfiguracionSeleccionComponentes || isConfiguracionListadoAltas || isConfiguracionListadoMantenimientos || isConfiguracionListadoBajas || isConfiguracionListadoBajasGestionar || isConfiguracionSeleccionBajas)
+                    if (isConfiguracionListadoComponentes || isConfiguracionSeleccionComponentes || isConfiguracionListadoAltas || isConfiguracionListadoMantenimientos || isConfiguracionListadoProcesosJudiciales || isConfiguracionListadoBajas || isConfiguracionListadoBajasGestionar || isConfiguracionSeleccionBajas)
                     {
                         <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.AltaActivoFijoActual.FechaAlta)</th>
                         <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.AltaActivoFijoActual.IdMotivoAlta)</th>
@@ -151,7 +152,7 @@
                         <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.BajaActivoFijoActual.FechaBaja)</th>
                         <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.BajaActivoFijoActual.IdMotivoBaja)</th>
                     }
-                    if (isConfiguracionListadoComponentes || isConfiguracionListadoMantenimientos || isConfiguracionListadoAltasGestionar || (isConfiguracionListadoBajasGestionar && !isConfiguracionBajasGestionarEditar))
+                    if (isConfiguracionListadoComponentes || isConfiguracionListadoMantenimientos || isConfiguracionListadoProcesosJudiciales || isConfiguracionListadoAltasGestionar || (isConfiguracionListadoBajasGestionar && !isConfiguracionBajasGestionarEditar))
                     {
                         <th>Opciones</th>
                     }
@@ -198,7 +199,7 @@
                         <td id="@String.Format("{0}{1}OrdenCompra", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@Html.DisplayFor(modelItem => item.RecepcionActivoFijoDetalle.RecepcionActivoFijo.OrdenCompra)</td>
                         <td id="@String.Format("{0}{1}FondoFinanciamiento", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.RecepcionActivoFijo?.FondoFinanciamiento?.Nombre ?? "-");}</td>
                         @{
-                            if (isConfiguracionListadoComponentes || isConfiguracionSeleccionComponentes || isConfiguracionListadoAltas || isConfiguracionListadoMantenimientos || isConfiguracionListadoBajas || isConfiguracionListadoBajasGestionar || isConfiguracionSeleccionBajas)
+                            if (isConfiguracionListadoComponentes || isConfiguracionSeleccionComponentes || isConfiguracionListadoAltas || isConfiguracionListadoMantenimientos || isConfiguracionListadoProcesosJudiciales || isConfiguracionListadoBajas || isConfiguracionListadoBajasGestionar || isConfiguracionSeleccionBajas)
                             {
                                 <td id="@String.Format("{0}{1}FechaAlta", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.AltaActivoFijoActual?.FechaAlta != null ? item.RecepcionActivoFijoDetalle.AltaActivoFijoActual.FechaAlta.ToString("dd/MM/yyyy hh:mm tt") : "-");}</td>
                                 <td id="@String.Format("{0}{1}MotivoAlta", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.AltaActivoFijoActual?.MotivoAlta?.Descripcion ?? "-");}</td>
@@ -209,13 +210,17 @@
                                 <td id="@String.Format("{0}{1}FechaBaja", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.BajaActivoFijoActual?.FechaBaja != null ? item.RecepcionActivoFijoDetalle.BajaActivoFijoActual.FechaBaja.ToString("dd/MM/yyyy hh:mm tt") : "-");}</td>
                                 <td id="@String.Format("{0}{1}MotivoBaja", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.BajaActivoFijoActual?.MotivoBaja?.Nombre ?? "-");}</td>
                             }
-                            if (isConfiguracionListadoComponentes || isConfiguracionListadoMantenimientos || isConfiguracionListadoAltasGestionar || (isConfiguracionListadoBajasGestionar && !isConfiguracionBajasGestionarEditar))
+                            if (isConfiguracionListadoComponentes || isConfiguracionListadoMantenimientos || isConfiguracionListadoProcesosJudiciales || isConfiguracionListadoAltasGestionar || (isConfiguracionListadoBajasGestionar && !isConfiguracionBajasGestionarEditar))
                             {
                                 <td>
                                     @{
                                         if (isConfiguracionListadoMantenimientos)
                                         {
-                                            @Html.ActionLink("Ver mantenimientos", "ListarMantenimientos", new { id = item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle })
+                                            <a asp-action="ListadoMantenimientos" asp-route-id="@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle">Mantenimientos</a>
+                                        }
+                                        if (isConfiguracionListadoProcesosJudiciales)
+                                        {
+                                            <a asp-action="ListadoProcesosJudiciales" asp-route-id="@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle">Procesos Judiciales</a>
                                         }
                                         if (isConfiguracionListadoComponentes)
                                         {

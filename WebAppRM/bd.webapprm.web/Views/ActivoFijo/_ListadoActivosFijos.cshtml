@@ -13,6 +13,7 @@
     bool isConfiguracionListadoComponentes = ViewBag.IsConfiguracionListadoComponentes ?? false;
 
     bool isConfiguracionListadoMantenimientos = ViewBag.IsConfiguracionListadoMantenimientos ?? false;
+    bool isConfiguracionListadoProcesosJudiciales = ViewBag.IsConfiguracionListadoProcesosJudiciales ?? false;
 
     bool isConfiguracionSeleccionAltas = ViewBag.IsConfiguracionSeleccionAltas ?? false;
     bool isConfiguracionListadoAltasGestionar = ViewBag.IsConfiguracionListadoAltasGestionar ?? false;
@@ -154,6 +155,7 @@
         { propiedad: "IsConfiguracionSeleccionComponentes", valor: ("@isConfiguracionSeleccionComponentes".toLowerCase() === 'true') },
         { propiedad: "IsConfiguracionListadoComponentes", valor: ("@isConfiguracionListadoComponentes".toLowerCase() === 'true') },
         { propiedad: "IsConfiguracionListadoMantenimientos", valor: ("@isConfiguracionListadoMantenimientos".toLowerCase() === 'true') },
+        { propiedad: "IsConfiguracionListadoProcesosJudiciales", valor: ("@isConfiguracionListadoProcesosJudiciales".toLowerCase() === 'true') },
         { propiedad: "IsConfiguracionSeleccionAltas", valor: ("@isConfiguracionSeleccionAltas".toLowerCase() === 'true') },
         { propiedad: "IsConfiguracionListadoAltasGestionar", valor: ("@isConfiguracionListadoAltasGestionar".toLowerCase() === 'true') },
         { propiedad: "IsConfiguracionListadoAltas", valor: ("@isConfiguracionListadoAltas".toLowerCase() === 'true') },
