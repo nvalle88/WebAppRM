@@ -2,8 +2,8 @@
     Init_Select2();
     eventoCustodioEntrega();
     eventoGuardar();
-    initDataTableFiltrado("tableDetallesActivoFijoBajas", []);
     inicializarDetallesActivoSeleccion();
+    initDataTableFiltrado("tableDetallesActivoFijoBajas", []);
     copiarEmpleados();
     adicionarArrRecepcionActivoFijoDetalle();
 });

@@ -1,9 +1,9 @@
 ﻿$(document).ready(function () {
     Init_Select2();
     Init_DatetimePicker("FechaBaja");
-    initDataTableFiltrado("tableDetallesActivoFijoSeleccionados", []);
     inicializarDetallesActivoSeleccion();
     inicializarObjetoAdicional();
+    initDataTableFiltrado("tableDetallesActivoFijoSeleccionados", []);
     eventoGuardar();
 });
 

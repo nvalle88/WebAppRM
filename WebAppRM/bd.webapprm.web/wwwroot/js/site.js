@@ -35,11 +35,48 @@ function Init_DatetimePicker(idElemento)
     });
 }
 
+function Init_DateRangePicker(fechaInicial, fechaFinal, idElemento) {
+    $('#' + idElemento).daterangepicker({
+        opens: ('left'),
+        format: 'MM/DD/YYYY',
+        separator: ' a ',
+        applyClass: 'btn btn-primary',
+        cancelClass: 'btn btn-default',
+        endDate: moment(),
+        startDate: fechaInicial,
+        endDate: fechaFinal,
+        maxDate: moment(),
+    },
+        function (start, end) {
+            $('#' + idElemento + ' input').val(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+            try { onValueChangedDateRangerPicker(start.format('MM/DD/YYYY'), end.format('MM/DD/YYYY')); } catch (e) { }
+        }
+    );
+    $('#' + idElemento + ' input').val(moment(fechaInicial.toLocaleDateString("es-ES"), 'MM/DD/YYYY').format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
+}
+
 function Init_FileInput(idElemento)
 {
     $("#" + idElemento).fileinput({
         showUpload: false,
         language: 'es'
+    });
+}
+
+function Init_DeteccionLectorCodigoBarras(idElemento, fnDrawCallBack)
+{
+    $("#" + idElemento).scannerDetection({
+        timeBeforeScanTest: 200,
+        startChar: [120],
+        endChar: [13],
+        avgTimeByChar: 40,
+        onComplete: function (barcode, qty) {
+            try { fnDrawCallBack(barcode, qty); } catch (e) { }
+        },
+        onError: function (string)
+        {
+            mostrarNotificacion("Error", string);
+        }
     });
 }
 
@@ -153,7 +190,7 @@ function abrirVentanaConfirmacion(id) {
     });
 }
 
-function initDataTableFiltrado(idTabla, arrColumnHidden)
+function initDataTableFiltrado(idTabla, arrColumnHidden, fnDrawCallBack)
 {
     var responsiveHelper_datatable_fixed_column = undefined;
 
@@ -179,6 +216,7 @@ function initDataTableFiltrado(idTabla, arrColumnHidden)
         },
         "drawCallback": function (oSettings) {
             responsiveHelper_datatable_fixed_column.respond();
+            try { fnDrawCallBack(); } catch (e) { }
         }
     });
     
@@ -189,6 +227,18 @@ function initDataTableFiltrado(idTabla, arrColumnHidden)
     for (var i = 0; i < arrColumnHidden.length; i++) {
         otable.column(arrColumnHidden[i]).visible(false);
     }
+}
+
+function crearGrupo(api, rows, last, groupadmin, idColumna, textoLugar, paddingLeft, colspan) {
+    api.column(idColumna, { page: 'current' }).data().each(function (group, i) {
+        if (last !== group) {
+            $(rows).eq(i).before(
+                '<tr class="group" id="' + i + '"><td colspan="' + colspan + '" style="font-weight:bold;">' + "<i class='fa fa-angle-down' style='font-weight:bold;padding-left:" + paddingLeft + "px;'></i> " + textoLugar + ": " + group + '</td ></tr > '
+            );
+            groupadmin.push(i);
+            last = group;
+        }
+    });
 }
 
 function initTreeView()

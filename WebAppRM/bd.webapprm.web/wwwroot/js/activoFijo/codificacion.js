@@ -5,8 +5,7 @@
 
 function eventoSpinnerNumeroConsecutivo() {
     $(".spinnerNumeroConsecutivo").spinner('delay', 200).spinner('changed', function (e, newVal, oldVal) {
-        generarNumeroConsecutivo();
-        asignarCodigoBarras();
+        asignarNumeroConsecutivoCodigoBarras();
     });
 }
 
@@ -21,4 +20,10 @@ function asignarCodigoBarras()
         else
             document.getElementById("barcode1").style.display = "none";
     } catch (e) { }
+}
+
+function asignarNumeroConsecutivoCodigoBarras()
+{
+    generarNumeroConsecutivo();
+    asignarCodigoBarras();
 }

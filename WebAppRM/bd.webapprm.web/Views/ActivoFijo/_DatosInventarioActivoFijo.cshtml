@@ -1,0 +1,62 @@
+@model RecepcionActivoFijoDetalle
+<div class="margin-top-10">
+    <input type="hidden" asp-for="IdRecepcionActivoFijoDetalle" />
+    <input type="hidden" asp-for="ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.Nombre" />
+    <input type="hidden" asp-for="ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.Nombre" />
+    <input type="hidden" asp-for="ActivoFijo.SubClaseActivoFijo.Nombre" />
+    <input type="hidden" asp-for="Serie" />
+    <input type="hidden" asp-for="NumeroChasis" />
+    <input type="hidden" asp-for="NumeroMotor" />
+    <input type="hidden" asp-for="Placa" />
+    <input type="hidden" asp-for="NumeroClaveCatastral" />
+    <input type="hidden" asp-for="UbicacionActivoFijoActual.Bodega.Nombre" />
+    <input type="hidden" asp-for="RecepcionActivoFijo.IdProveedor" value="@String.Format("{0} {1}", Model?.RecepcionActivoFijo?.Proveedor?.Nombre, Model?.RecepcionActivoFijo?.Proveedor?.Apellidos)" />
+    <input type="hidden" asp-for="RecepcionActivoFijo.MotivoRecepcion.Descripcion" />
+    <input type="hidden" asp-for="RecepcionActivoFijo.FechaRecepcion" />
+    <input type="hidden" asp-for="RecepcionActivoFijo.OrdenCompra" />
+    <input type="hidden" asp-for="RecepcionActivoFijo.FondoFinanciamiento.Nombre" />
+    <input type="hidden" asp-for="AltaActivoFijoActual.FechaAlta" />
+    <input type="hidden" asp-for="AltaActivoFijoActual.MotivoAlta.Descripcion" />
+    <input type="hidden" asp-for="AltaActivoFijoActual.FacturaActivoFijo.NumeroFactura" />
+
+    <section class="col col-2">
+        <label asp-for="CodigoActivoFijo.Codigosecuencial" class="label" style="text-transform:uppercase;"></label>
+        <label class="input">
+            <input id="CodigoActivoFijo_Codigosecuencial" value="@Html.DisplayFor(c=> c.CodigoActivoFijo.Codigosecuencial)" type="text" class="form-control" autofocus="autofocus" readonly="readonly">
+        </label>
+    </section>
+
+    <section class="col col-3">
+        <label asp-for="ActivoFijo.Nombre" class="label" style="text-transform:uppercase;"></label>
+        <label class="input">
+            <input id="ActivoFijo_Nombre" value="@Html.DisplayFor(c=> c.ActivoFijo.Nombre)" type="text" class="form-control" readonly="readonly">
+        </label>
+    </section>
+
+    <section class="col col-2">
+        <label asp-for="SucursalActual.Nombre" class="label" style="text-transform:uppercase;"></label>
+        <label class="input">
+            <input id="SucursalActual_Nombre" value="@Html.DisplayFor(c=> c.SucursalActual.Nombre)" type="text" class="form-control" readonly="readonly">
+        </label>
+    </section>
+
+    <section class="col col-2">
+        <label asp-for="UbicacionActivoFijoActual.IdEmpleado" class="label" style="text-transform:uppercase;"></label>
+        <label class="input">
+            <input id="UbicacionActivoFijoActual_IdEmpleado" type="text" class="form-control" value="@String.Format("{0} {1}", Model?.UbicacionActivoFijoActual?.Empleado?.Persona?.Nombres, Model?.UbicacionActivoFijoActual?.Empleado?.Persona?.Apellidos)" readonly="readonly">
+        </label>
+    </section>
+
+    <section class="col col-3" style="margin-bottom:30px !important;">
+        <label class="label">&nbsp;</label>
+        <div class="inline-group">
+            <label class="checkbox">
+                <input name="checkbox-inline" type="checkbox" id="chkConstatado" disabled="disabled" @{await ViewContext.Writer.WriteAsync(Model != null ? "checked='checked'" : "");}>
+                <i></i>Constatado
+            </label>
+            <button type="button" class="btn btn-labeled btn-success" id="btn-registrar" style="padding:0px 11px !important;" disabled="disabled">
+                <span class="btn-label"><i class="glyphicon glyphicon-thumbs-up"></i></span>Registrar
+            </button>
+        </div>
+    </section>
+</div>

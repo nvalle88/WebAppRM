@@ -1,0 +1,52 @@
+@model InventarioActivoFijo
+<div class="row">
+    <section class="col col-4">
+        <label asp-for="NumeroInforme"></label>
+    </section>
+
+    <section class="col col-8">
+        <label class="input">
+            <input asp-for="NumeroInforme" class="form-control" />
+            <span asp-validation-for="NumeroInforme" class="text-danger"></span>
+        </label>
+    </section>
+</div>
+
+<div class="row">
+    <section class="col col-4">
+        <label asp-for="FechaCorteInventario"></label>
+    </section>
+
+    <section class="col col-8">
+        <label class="input">
+            <input asp-for="FechaCorteInventario" class="form-control" />
+            <span asp-validation-for="FechaCorteInventario" class="text-danger"></span>
+        </label>
+    </section>
+</div>
+
+<div class="row">
+    <section class="col col-4">
+        <label asp-for="FechaInforme"></label>
+    </section>
+
+    <section class="col col-8">
+        <label class="input">
+            <input asp-for="FechaInforme" class="form-control" />
+            <span asp-validation-for="FechaInforme" class="text-danger"></span>
+        </label>
+    </section>
+</div>
+
+<div class="row">
+    <section class="col col-4">
+        <label asp-for="IdEstado"></label>
+    </section>
+
+    <section class="col col-8">
+        <label class="input">
+            <select asp-for="IdEstado" class="form-control" asp-items="ViewBag.Estado"></select>
+            <span asp-validation-for="IdEstado" class="text-danger"></span>
+        </label>
+    </section>
+</div>

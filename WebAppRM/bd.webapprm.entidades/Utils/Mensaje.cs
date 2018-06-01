@@ -31,6 +31,8 @@ namespace bd.webapprm.entidades.Utils
         public static string Creada { get { return "Creado"; } }
         public static string Aceptada { get { return "Aceptado"; } }
         public static string Mantenimiento { get { return "Mantenimiento"; } }
+        public static string EnEjecucion { get { return "En Ejecución"; } }
+        public static string Concluido { get { return "Concluido"; } }
     }
 
     public static class LineasServicio

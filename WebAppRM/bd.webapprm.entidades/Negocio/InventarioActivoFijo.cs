@@ -39,6 +39,10 @@ namespace bd.webapprm.entidades
         public int IdEstado { get; set; }
         public virtual Estado Estado { get; set; }
 
+        [Required(ErrorMessage = "Debe introducir el {0}")]
+        [Display(Name = "Tipo")]
+        public bool InventarioManual { get; set; }
+
         public virtual ICollection<InventarioActivoFijoDetalle> InventarioActivoFijoDetalle { get; set; }
     }
 }
