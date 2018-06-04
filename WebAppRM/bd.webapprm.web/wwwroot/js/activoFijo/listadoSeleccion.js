@@ -134,8 +134,38 @@ function eventoCheckboxDetallesActivoFijo(checkbox)
     } catch (e) { }
 }
 
+function obtenerArrColumnasVisible(idTable)
+{
+    var table = $('#' + idTable).DataTable();
+    var iColumns = $('#' + idTable).dataTable().fnSettings().aoColumns.length;
+    var arrColumnas = [];
+    for (var i = 0; i < iColumns; i++) {
+        arrColumnas.push(i);
+    }
+    var arrColumnasVisible = table.columns(arrColumnas).visible();
+    return arrColumnasVisible;
+}
+
+function mostrarOcultarColumnas(idTable, arrObj) {
+    var otable = $('#' + idTable).dataTable();
+    for (var i = 0; i < arrObj.length; i++) {
+        otable.fnSetColumnVis(i, arrObj[i]);
+    }
+}
+
+function mostrarOcultarColumnasPorArray(idTable, mostrarOcultar)
+{
+    var table = $('#' + idTable).DataTable();
+    var iColumns = $('#' + idTable).dataTable().fnSettings().aoColumns.length;
+    for (var i = 0; i < iColumns; i++) {
+        table.column(i).visible(mostrarOcultar);
+    }
+}
+
 function addRowDetallesActivosFijos(idTableACopiar, idTableCopiando, idRecepcionActivoFijoDetalle, arrCeldasCopiando, isOpcionesUltimaColumna) {
-    var table = $('#' + idTableACopiar).DataTable();
+    var arrColumnasVisibleTableACopiando = obtenerArrColumnasVisible(idTableCopiando);
+    mostrarOcultarColumnasPorArray(idTableCopiando, true);
+
     var arrValores = [];
     for (var i = 0; i < arrCeldasCopiando.length; i++) {
         if (i == (arrCeldasCopiando.length - 1)) {
@@ -148,20 +178,23 @@ function addRowDetallesActivosFijos(idTableACopiar, idTableCopiando, idRecepcion
         else
             arrValores.push($("#" + idTableCopiando + idRecepcionActivoFijoDetalle + arrCeldasCopiando[i]).html());
     }
-    var rowNode = table.row.add(arrValores).draw().node();
-    $(rowNode).prop("id", idTableACopiar + idRecepcionActivoFijoDetalle);
-    $.each($(rowNode).children(), function (index, value) {
-        $(value).prop("id", idTableACopiar + idRecepcionActivoFijoDetalle + arrCeldasCopiando[index]);
-    });
+    addRowDetallesActivosFijosPorArray(idTableACopiar, idRecepcionActivoFijoDetalle, arrCeldasCopiando, arrValores, isOpcionesUltimaColumna);
+    mostrarOcultarColumnas(idTableCopiando, arrColumnasVisibleTableACopiando);
 }
 
 function addRowDetallesActivosFijosPorArray(idTableACopiar, idRecepcionActivoFijoDetalle, arrCeldasCopiando, arrValores, isOpcionesUltimaColumna)
 {
     var table = $('#' + idTableACopiar).DataTable();
     var rowNode = table.row.add(arrValores).draw().node();
+    var childrens = $(rowNode).children();
     $(rowNode).prop("id", idTableACopiar + idRecepcionActivoFijoDetalle);
     $.each($(rowNode).children(), function (index, value) {
-        $(value).prop("id", idTableACopiar + idRecepcionActivoFijoDetalle + arrCeldasCopiando[index]);
+        if (index == (childrens.length - 1)) {
+            if (!isOpcionesUltimaColumna)
+                $(value).prop("id", idTableACopiar + idRecepcionActivoFijoDetalle + arrCeldasCopiando[index]);
+        }
+        else
+            $(value).prop("id", idTableACopiar + idRecepcionActivoFijoDetalle + arrCeldasCopiando[index]);
     });
 }
 

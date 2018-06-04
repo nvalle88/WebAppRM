@@ -15,25 +15,23 @@ namespace bd.webapprm.entidades
         [Key]
         public int IdMovilizacionActivoFijo { get; set; }
 
-        [Display(Name = "Empleado responsable:")]
+        [Display(Name = "Autorizado a:")]
         [Required(ErrorMessage = "Debe seleccionar el {0} ")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
         public int IdEmpleadoResponsable { get; set; }
+        public virtual Empleado EmpleadoResponsable { get; set; }
 
-        [Display(Name = "Empleado que solicita:")]
+        [Display(Name = "Solicitado por:")]
         [Required(ErrorMessage = "Debe seleccionar el {0} ")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
         public int IdEmpleadoSolicita { get; set; }
+        public virtual Empleado EmpleadoSolicita { get; set; }
 
-        [Display(Name = "Empleado que retira:")]
-        [Required(ErrorMessage = "Debe seleccionar el {0} ")]
-        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
-        public int IdEmpleadoRetira { get; set; }
-
-        [Display(Name = "Empleado autorizado:")]
+        [Display(Name = "Autorizado por:")]
         [Required(ErrorMessage = "Debe seleccionar el {0} ")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
         public int IdEmpleadoAutorizado { get; set; }
+        public virtual Empleado EmpleadoAutorizado { get; set; }
 
         [Required(ErrorMessage = "Debe introducir la {0}")]
         [Display(Name = "Fecha de salida:")]

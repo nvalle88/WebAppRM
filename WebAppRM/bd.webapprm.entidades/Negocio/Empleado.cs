@@ -12,6 +12,9 @@ namespace bd.webapprm.entidades
             TransferenciasActivoFijoEmpleadoResponsableRecibo = new HashSet<TransferenciaActivoFijo>();
             UbicacionActivoFijo = new HashSet<UbicacionActivoFijo>();
             MantenimientoActivoFijo = new HashSet<MantenimientoActivoFijo>();
+            MovilizacionesActivoFijoEmpleadoAutorizado = new HashSet<MovilizacionActivoFijo>();
+            MovilizacionesActivoFijoEmpleadoResponsable = new HashSet<MovilizacionActivoFijo>();
+            MovilizacionesActivoFijoEmpleadoSolicita = new HashSet<MovilizacionActivoFijo>();
         }
 
         [Key]
@@ -79,5 +82,8 @@ namespace bd.webapprm.entidades
         public virtual ICollection<TransferenciaActivoFijo> TransferenciasActivoFijoEmpleadoResponsableRecibo { get; set; }
         public virtual ICollection<UbicacionActivoFijo> UbicacionActivoFijo { get; set; }
         public virtual ICollection<MantenimientoActivoFijo> MantenimientoActivoFijo { get; set; }
+        public virtual ICollection<MovilizacionActivoFijo> MovilizacionesActivoFijoEmpleadoAutorizado { get; set; }
+        public virtual ICollection<MovilizacionActivoFijo> MovilizacionesActivoFijoEmpleadoResponsable { get; set; }
+        public virtual ICollection<MovilizacionActivoFijo> MovilizacionesActivoFijoEmpleadoSolicita { get; set; }
     }
 }

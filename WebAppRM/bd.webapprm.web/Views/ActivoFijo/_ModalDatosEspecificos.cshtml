@@ -57,10 +57,25 @@
 
     @{
         string categoria = ViewBag.Categoria;
+
+        <legend>Datos Espec&iacute;ficos</legend>
+        <div class="row margin-top-25">
+            <section class="col col-4">
+                <label asp-for="Serie"></label>
+            </section>
+
+            <section class="col col-8">
+                <label class="input">
+                    <input asp-for="Serie" class="form-control" />
+                    <span id="valSerie" class="text-danger validationDatosEspecificos"></span>
+                </label>
+            </section>
+        </div>
+
         if (categoria == Categorias.Edificio)
         {
             <legend>Datos Espec&iacute;ficos</legend>
-            <div class="row margin-top-25">
+            <div class="row">
                 <section class="col col-4">
                     <label asp-for="NumeroClaveCatastral"></label>
                 </section>
@@ -76,7 +91,7 @@
         else if (categoria == Categorias.Vehiculo)
         {
             <legend>Datos Espec&iacute;ficos</legend>
-            <div class="row margin-top-25">
+            <div class="row">
                 <section class="col col-4">
                     <label asp-for="NumeroChasis"></label>
                 </section>
@@ -111,22 +126,6 @@
                     <label class="input">
                         <input asp-for="Placa" class="form-control" />
                         <span id="valPlaca" class="text-danger validationDatosEspecificos"></span>
-                    </label>
-                </section>
-            </div>
-        }
-        else if (categoria == Categorias.EquiposComputoSoftware)
-        {
-            <legend>Datos Espec&iacute;ficos</legend>
-            <div class="row margin-top-25">
-                <section class="col col-4">
-                    <label asp-for="Serie"></label>
-                </section>
-
-                <section class="col col-8">
-                    <label class="input">
-                        <input asp-for="Serie" class="form-control" />
-                        <span id="valSerie" class="text-danger validationDatosEspecificos"></span>
                     </label>
                 </section>
             </div>

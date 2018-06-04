@@ -31,7 +31,7 @@ function Init_Date(idElemento)
 function Init_DatetimePicker(idElemento)
 {
     $('#' + idElemento).datetimepicker({
-        'format': 'D-M-Y hh:mm'
+        'format': 'D-M-Y hh:mm A'
     });
 }
 
@@ -203,6 +203,7 @@ function initDataTableFiltrado(idTabla, arrColumnHidden, fnDrawCallBack)
         "columnDefs": [
             { "visible": false, "targets": arrColumnHidden }
         ],
+        "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"]],
         "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-6 hidden-xs'l'C>r>" +
         "t" +
         "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-sm-6 col-xs-12'p>>",

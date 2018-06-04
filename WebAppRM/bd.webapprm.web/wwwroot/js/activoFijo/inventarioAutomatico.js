@@ -3,7 +3,7 @@
     Init_DatetimePicker("FechaInforme");
     Init_Select2();
     adicionarArrRecepcionActivoFijoDetalle();
-    initDataTableFiltrado("tableDetallesActivoFijoBajas", [], function () {
+    initDataTableFiltrado("tableDetallesActivoFijoBajas", [14, 16, 17, 18, 19 , 20, 21, 22, 23], function () {
         var table = $("#tableDetallesActivoFijoBajas").dataTable();
         var api = table.api();
         var rows = api.rows({ page: 'current' }).nodes();
@@ -99,14 +99,17 @@ function callBackFunctionSeleccionConstatado(idRecepcionActivoFijoDetalle, selec
     adicionarRecepcionActivoFijoDetalleSeleccionado(idRecepcionActivoFijoDetalle, seleccionado);
     var hIdRecepcionActivoFijoDetalle = '<input type="hidden" class="hiddenIdRecepcionActivoFijoDetalle" id="hIdRecepcionActivoFijoDetalle_' + idRecepcionActivoFijoDetalle + '" name="hIdRecepcionActivoFijoDetalle_' + idRecepcionActivoFijoDetalle + '" value="' + idRecepcionActivoFijoDetalle + '" />';
     var btnEliminarActivoFijo = "<div id='divEliminarDatosEspecificos_" + idRecepcionActivoFijoDetalle + "' class='btnEliminarDatosEspecificos' style='display:inline;'><a href='javascript: void(0);' id='btnEliminarDatosEspecifico_" + idRecepcionActivoFijoDetalle + "' onclick=abrirVentanaConfirmacion('btnEliminarDatosEspecifico_" + idRecepcionActivoFijoDetalle + "') data-funcioncallback=callBackFunctionEliminarDatoEspecifico('" + idRecepcionActivoFijoDetalle + "') data-titulo='Eliminar' data-descripcion='&#191; Desea eliminar el Activo Fijo seleccionado... ?'>Eliminar</a></div>";
-
-    addRowDetallesActivosFijosPorArray("tableDetallesActivoFijoBajas", idRecepcionActivoFijoDetalle, ['', 'TipoActivoFijo', 'ClaseActivoFijo', 'SubclaseActivoFijo', 'NombreActivoFijo', 'Codigosecuencial', 'Serie', 'NumeroChasis', 'NumeroMotor', 'Placa', 'NumeroClaveCatastral', 'Sucursal', 'Bodega', 'Empleado', 'Proveedor', 'MotivoRecepcion', 'FechaRecepcion', 'OrdenCompra', 'FondoFinanciamiento', 'FechaAlta', 'MotivoAlta', 'NumeroFactura', ''], [
+    
+    addRowDetallesActivosFijosPorArray("tableDetallesActivoFijoBajas", idRecepcionActivoFijoDetalle, ['', 'Codigosecuencial', 'TipoActivoFijo', 'ClaseActivoFijo', 'SubclaseActivoFijo', 'NombreActivoFijo', 'Marca', 'Modelo', 'Serie', 'NumeroChasis', 'NumeroMotor', 'Placa', 'NumeroClaveCatastral', 'Sucursal', 'Bodega', 'Empleado', 'Proveedor', 'MotivoRecepcion', 'FechaRecepcion', 'OrdenCompra', 'FondoFinanciamiento', 'FechaAlta', 'MotivoAlta', 'NumeroFactura', ''],
+        [
         addRowCheckBox(idRecepcionActivoFijoDetalle, seleccionado, "callBackFunctionSeleccionBaja", false),
         $("#CodigoActivoFijo_Codigosecuencial").val(),
         $("#ActivoFijo_SubClaseActivoFijo_ClaseActivoFijo_TipoActivoFijo_Nombre").val(),
         $("#ActivoFijo_SubClaseActivoFijo_ClaseActivoFijo_Nombre").val(),
         $("#ActivoFijo_SubClaseActivoFijo_Nombre").val(),
         $("#ActivoFijo_Nombre").val(),
+        $("#ActivoFijo_Modelo_Marca_Nombre").val(),
+        $("#ActivoFijo_Modelo_Nombre").val(),
         agregarDashValorEmpty($("#Serie").val()),
         agregarDashValorEmpty($("#NumeroChasis").val()),
         agregarDashValorEmpty($("#NumeroMotor").val()),
@@ -122,7 +125,7 @@ function callBackFunctionSeleccionConstatado(idRecepcionActivoFijoDetalle, selec
         $("#RecepcionActivoFijo_FondoFinanciamiento_Nombre").val(),
         $("#AltaActivoFijoActual_FechaAlta").val(),
         $("#AltaActivoFijoActual_MotivoAlta_Descripcion").val(),
-        $("#AltaActivoFijoActual_FacturaActivoFijo_NumeroFactura").val(),
+        agregarDashValorEmpty($("#AltaActivoFijoActual_FacturaActivoFijo_NumeroFactura").val()),
         hIdRecepcionActivoFijoDetalle + btnEliminarActivoFijo
     ], true);
 }

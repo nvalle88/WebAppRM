@@ -184,12 +184,16 @@
                         <a href="@Url.Action("ListarMantenimientosActivosFijos", "ActivoFijo")">Mantenimientos</a>
                     </li>
 
-                    <li class="@Html.RouteIf(new[] { "ListarProcesosJudicialesActivosFijos", "ListarProcesosJudiciales", "GestionarProcesoJudicial" }, "ActivoFijo", "active")">
+                    <li class="@Html.RouteIf(new[] { "ListarProcesosJudicialesActivosFijos", "ListadoProcesosJudiciales", "GestionarProcesoJudicial" }, "ActivoFijo", "active")">
                         <a href="@Url.Action("ListarProcesosJudicialesActivosFijos", "ActivoFijo")">Procesos Judiciales</a>
                     </li>
 
                     <li class="@Html.RouteIf(new[] { "ListadoInventarioActivosFijos", "GestionarInventarioManual", "GestionarInventarioAutomatico" }, "ActivoFijo", "active")">
                         <a href="@Url.Action("ListadoInventarioActivosFijos", "ActivoFijo")">Inventarios</a>
+                    </li>
+
+                    <li class="@Html.RouteIf(new[] { "ListadoMovilizacionActivosFijos", "GestionarMovilizacion" }, "ActivoFijo", "active")">
+                        <a href="@Url.Action("ListadoMovilizacionActivosFijos", "ActivoFijo")">Movilizaciones</a>
                     </li>
 
                     <li>
