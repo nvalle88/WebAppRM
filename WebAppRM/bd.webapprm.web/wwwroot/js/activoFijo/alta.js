@@ -3,9 +3,9 @@
     Init_DatetimePicker("FacturaActivoFijo_FechaFactura");
     Init_DatetimePicker("FechaAlta");
     eventoMotivoAlta();
-    initDataTableFiltrado("tableDetallesActivoFijoSeleccionados", []);
     inicializarDetallesActivoSeleccion();
     inicializarObjetoAdicional();
+    initDataTableFiltrado("tableDetallesActivoFijoSeleccionados", []);
     Init_FileInput("file");
     Init_FileInput("fileFactura");
     eventoGuardarDatosEmpleado();

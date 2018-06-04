@@ -1,6 +1,7 @@
 @model List<ActivoFijo>
 @{
     bool isConfiguracionSeleccion = ViewBag.IsConfiguracionSeleccion ?? false;
+    bool isConfiguracionSeleccionDisabled = ViewBag.IsConfiguracionSeleccionDisabled ?? false;
     bool isConfiguracionDatosActivo = ViewBag.IsConfiguracionDatosActivo ?? false;
     bool isConfiguracionSmartForm = ViewBag.IsConfiguracionSmartForm ?? false;
 
@@ -80,7 +81,7 @@
                                             <td>@Html.DisplayFor(modelItem => item.SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.Nombre)</td>
                                             <td>@Html.DisplayFor(modelItem => item.SubClaseActivoFijo.ClaseActivoFijo.Nombre)</td>
                                             <td>@Html.DisplayFor(modelItem => item.SubClaseActivoFijo.Nombre)</td>
-                                            <td>@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.FirstOrDefault()?.UbicacionActivoFijoActual?.LibroActivoFijo?.Sucursal?.Nombre ?? "-");}</td>
+                                            <td>@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.FirstOrDefault()?.SucursalActual?.Nombre ?? "-");}</td>
                                             @{
                                                 if (isConfiguracionDetallesRecepcion || isConfiguracionEditarPolizaSeguro || isConfiguracionMostrarPolizaSeguro)
                                                 {
@@ -100,22 +101,22 @@
                                                     {
                                                         if (ViewBag.UrlRevision != null)
                                                         {
-                                                            @Html.ActionLink("Revisar", ViewData["UrlRevision"].ToString(), new { id = item.IdActivoFijo })<span>| </span>
+                                                            @Html.ActionLink("Revisar", ViewData["UrlRevision"].ToString(), new { id = item.IdActivoFijo })<span> | </span>
                                                         }
                                                         if (ViewBag.UrlEditar != null)
                                                         {
-                                                            @Html.ActionLink("Editar", ViewData["UrlEditar"].ToString(), new { id = item.IdActivoFijo })<span>| </span>
+                                                            @Html.ActionLink("Editar", ViewData["UrlEditar"].ToString(), new { id = item.IdActivoFijo })<span> | </span>
                                                         }
                                                     }
                                                     if (isConfiguracionEditarPolizaSeguro)
                                                     {
-                                                        @Html.ActionLink("Asignar P\u00F3liza de Seguro", ViewData["UrlEditar"].ToString(), new { id = item.IdActivoFijo })<span>| </span>
+                                                        @Html.ActionLink("Asignar P\u00F3liza de Seguro", ViewData["UrlEditar"].ToString(), new { id = item.IdActivoFijo })<span> | </span>
                                                     }
-                                                    <a href="javascript:void(0);" class="btnDetallesActivosFijos" id="btnDetallesActivoFijo_@item.IdActivoFijo" onclick="abrirVentanaDetallesActivoFijo('@item.IdActivoFijo')" data-ids="@String.Join(",", item.RecepcionActivoFijoDetalle.Select(c => c.IdRecepcionActivoFijoDetalle))" data-url="@Url.Action("DetallesActivoFijoResult", "ActivoFijo")" data-toggle="modal" data-target="#myModalTableActivosFijos">Detalles</a>
+                                                    <a href="javascript:void(0);" class="btnDetallesActivosFijos" id="btnDetallesActivoFijo_@item.IdActivoFijo" onclick="abrirVentanaDetallesActivoFijo('@item.IdActivoFijo')" data-ids="@String.Join(",", item.RecepcionActivoFijoDetalle.Select(c => $"{c.IdRecepcionActivoFijoDetalle}_true"))" data-url="@Url.Action("DetallesActivoFijoResult", "ActivoFijo")" data-toggle="modal" data-target="#myModalTableActivosFijos">Detalles</a>
 
                                                     if (isConfiguracionDetallesRecepcion)
                                                     {
-                                                        <span>| </span><a href="javascript:void(0);" id="@item.IdActivoFijo" onclick="abrirVentanaConfirmacion('@item.IdActivoFijo')" data-url="@Url.Action("DeleteRecepcion", values: new { id = item.IdActivoFijo, activoFijoRecepcionado = item.RecepcionActivoFijoDetalle.FirstOrDefault().Estado.Nombre == Estados.Recepcionado })" data-titulo="Eliminar" data-descripcion="&#191;Desea eliminar la recepci&oacute;n del Activo Fijo... ?">Eliminar</a>
+                                                        <span> | </span><a href="javascript:void(0);" id="@item.IdActivoFijo" onclick="abrirVentanaConfirmacion('@item.IdActivoFijo')" data-url="@Url.Action("DeleteRecepcion", values: new { id = item.IdActivoFijo, activoFijoRecepcionado = item.RecepcionActivoFijoDetalle.FirstOrDefault().Estado.Nombre == Estados.Recepcionado })" data-titulo="Eliminar" data-descripcion="&#191;Desea eliminar la recepci&oacute;n del Activo Fijo... ?">Eliminar</a>
                                                     }
                                                 }
                                             </td>

@@ -628,8 +628,7 @@ function cargarFormularioCodificacion(idFila)
             $("#CodigoActivoFijo_Consecutivo").val(numeroConsecutivo);
             $(".spinnerNumeroConsecutivo").spinner();
             $("#spanCodigoSecuencial").html(generarCodigosecuencial());
-            generarNumeroConsecutivo();
-            asignarCodigoBarras();
+            asignarNumeroConsecutivoCodigoBarras();
             eventoSpinnerNumeroConsecutivo();
         },
         error: function (errorMessage) {
@@ -643,6 +642,7 @@ function cargarFormularioCodificacion(idFila)
 
 function guardarCodificacion()
 {
+    asignarNumeroConsecutivoCodigoBarras();
     mostrarLoadingPanel("modalContentDatosEspecificos", "Validando datos, por favor espere...");
     $.each($(".validationCodificacion"), function (index, value) {
         $(value).html("");

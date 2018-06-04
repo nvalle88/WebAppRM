@@ -1,20 +1,10 @@
 ﻿var arrRecepcionActivoFijoDetalleSeleccionado = [];
 var objAdicional = [];
-jQuery(document).ready(function () {
-    initDataTableFiltrado("tableActivosFijos", []);
-    inicializarDetallesActivo();
-});
+var mostrarNoSeleccionados = false;
 
-function inicializarDetallesActivo()
-{
-    $.each($(".btnDetallesActivosFijos"), function (index, value) {
-        var ids = $(value);
-        var arrIds = ids.data("ids").toString().split(",");
-        $.each(arrIds, function (index, value) {
-            adicionarRecepcionActivoFijoDetalleSeleccionado(value, false);
-        });
-    });
-}
+jQuery(document).ready(function (e) {
+    initDataTableFiltrado("tableActivosFijos", []);
+});
 
 function inicializarDetallesActivoSeleccion() {
     $.each($(".hiddenIdRecepcionActivoFijoDetalle"), function (index, value) {
@@ -52,14 +42,17 @@ function abrirVentanaDetallesActivoFijo(id) {
 
     var arrAux = Array();
     for (var i = 0; i < arrIds.length; i++) {
-        var rafdSeleccionado = obtenerRecepcionActivoFijoDetalleSeleccionado(arrIds[i]);
-        arrAux.push(rafdSeleccionado);
+        var arrIdsSeleccionados = arrIds[i].split("_");
+        arrAux.push({
+            idRecepcionActivoFijoDetalle: parseInt(arrIdsSeleccionados[0]),
+            seleccionado: arrIdsSeleccionados[1].toLowerCase() === "true"
+        });
     }
 
     $.ajax({
         url: btn_detalles.data("url"),
         method: "POST",
-        data: { listadoRecepcionActivoFijoDetalleSeleccionado: arrAux, arrConfiguraciones: arrConfiguraciones },
+        data: { listadoRecepcionActivoFijoDetalleSeleccionado: arrAux, arrConfiguraciones: arrConfiguraciones, mostrarNoSeleccionados: mostrarNoSeleccionados },
         success: function (data) {
             $("#modalBodyTableActivosFijos").html(data);
         },
@@ -162,7 +155,30 @@ function addRowDetallesActivosFijos(idTableACopiar, idTableCopiando, idRecepcion
     });
 }
 
+function addRowDetallesActivosFijosPorArray(idTableACopiar, idRecepcionActivoFijoDetalle, arrCeldasCopiando, arrValores, isOpcionesUltimaColumna)
+{
+    var table = $('#' + idTableACopiar).DataTable();
+    var rowNode = table.row.add(arrValores).draw().node();
+    $(rowNode).prop("id", idTableACopiar + idRecepcionActivoFijoDetalle);
+    $.each($(rowNode).children(), function (index, value) {
+        $(value).prop("id", idTableACopiar + idRecepcionActivoFijoDetalle + arrCeldasCopiando[index]);
+    });
+}
+
 function deleteRowDetallesActivosFijos(idTableEliminar, idRecepcionActivoFijoDetalle) {
     var row = $("#" + idTableEliminar + idRecepcionActivoFijoDetalle);
     $('#' + idTableEliminar).dataTable().fnDeleteRow(row);
+}
+
+function addRowCheckBox(idRecepcionActivoFijoDetalle, isChecked, callbackFunctionCheckBox, isConfiguracionSeleccionDisabled)
+{
+    return '<div class="checkbox"><label><input class="checkbox style-0 chkDetallesActivoFijo"' + (isChecked ? 'checked="checked"' : '') + ' type="checkbox" onchange="eventoCheckboxDetallesActivoFijo(this)" data-funcioncallback="' + callbackFunctionCheckBox + '" data-idrecepcionactivofijodetalle="' + idRecepcionActivoFijoDetalle + '" id= "chkDetalleActivoFijo_' + idRecepcionActivoFijoDetalle + '"' + (isConfiguracionSeleccionDisabled ? 'disabled="disabled"' : '') + '><span>&nbsp;</span></label ></div>';
+}
+
+function agregarDashValorEmpty(valor)
+{
+    if (valor == "" || valor == null)
+        valor = "-";
+
+    return valor;
 }

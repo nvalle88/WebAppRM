@@ -9,6 +9,7 @@
     };
 
     bool isConfiguracionSeleccion = ExisteConfiguracion("IsConfiguracionSeleccion");
+    bool isConfiguracionSeleccionDisabled = ExisteConfiguracion("IsConfiguracionSeleccionDisabled");
     bool isConfiguracionDatosActivo = ExisteConfiguracion("IsConfiguracionDatosActivo");
     bool isConfiguracionSmartForm = ExisteConfiguracion("IsConfiguracionSmartForm");
 
@@ -25,11 +26,12 @@
     bool isConfiguracionAltasGestionarEditar = ExisteConfiguracion("IsConfiguracionAltasGestionarEditar");
     bool isConfiguracionListadoAltas = ExisteConfiguracion("IsConfiguracionListadoAltas");
 
-
     bool isConfiguracionSeleccionBajas = ExisteConfiguracion("IsConfiguracionSeleccionBajas");
     bool isConfiguracionListadoBajasGestionar = ExisteConfiguracion("IsConfiguracionListadoBajasGestionar");
     bool isConfiguracionBajasGestionarEditar = ExisteConfiguracion("IsConfiguracionBajasGestionarEditar");
     bool isConfiguracionListadoBajas = ExisteConfiguracion("IsConfiguracionListadoBajas");
+
+    bool isConfiguracionGestionarInventarioAutomatico = ExisteConfiguracion("IsConfiguracionGestionarInventarioAutomatico");
 
     int cantidadTotal = 0;
     string nombreTabla = "tableDetallesActivoFijo";
@@ -51,12 +53,12 @@
     }
     else if (isConfiguracionListadoAltasGestionar)
     {
-        cantidadTotal = 14;
+        cantidadTotal = 15;
         nombreTabla += "Seleccionados";
     }
     else if (isConfiguracionSeleccionAltas)
     {
-        cantidadTotal = 13;
+        cantidadTotal = 14;
         nombreTabla += "Altas";
         callbackFunctionCheckBox = "callBackFunctionSeleccionAlta";
     }
@@ -152,7 +154,7 @@
                         <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.BajaActivoFijoActual.FechaBaja)</th>
                         <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.BajaActivoFijoActual.IdMotivoBaja)</th>
                     }
-                    if (isConfiguracionListadoComponentes || isConfiguracionListadoMantenimientos || isConfiguracionListadoProcesosJudiciales || isConfiguracionListadoAltasGestionar || (isConfiguracionListadoBajasGestionar && !isConfiguracionBajasGestionarEditar))
+                    if (isConfiguracionListadoComponentes || isConfiguracionListadoMantenimientos || isConfiguracionListadoProcesosJudiciales || isConfiguracionListadoAltasGestionar || (isConfiguracionListadoBajasGestionar && !isConfiguracionBajasGestionarEditar) || isConfiguracionGestionarInventarioAutomatico)
                     {
                         <th>Opciones</th>
                     }
@@ -170,7 +172,7 @@
                                 <td>
                                     <div class="checkbox">
                                         <label>
-                                            <input class="checkbox style-0 chkDetallesActivoFijo" @{await ViewContext.Writer.WriteAsync(item.Seleccionado ? "checked='checked'" : "");} type="checkbox" onchange="eventoCheckboxDetallesActivoFijo(this)" data-funcioncallback="@callbackFunctionCheckBox" data-idrecepcionactivofijodetalle="@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" id="chkDetalleActivoFijo_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle">
+                                            <input class="checkbox style-0 chkDetallesActivoFijo" @{await ViewContext.Writer.WriteAsync(item.Seleccionado ? "checked='checked'" : "");} type="checkbox" onchange="eventoCheckboxDetallesActivoFijo(this)" data-funcioncallback="@callbackFunctionCheckBox" data-idrecepcionactivofijodetalle="@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" id="chkDetalleActivoFijo_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" @{await ViewContext.Writer.WriteAsync(isConfiguracionSeleccionDisabled ? "disabled='disabled'" : "");}>
                                             <span>&nbsp;</span>
                                         </label>
                                     </div>
@@ -210,7 +212,7 @@
                                 <td id="@String.Format("{0}{1}FechaBaja", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.BajaActivoFijoActual?.FechaBaja != null ? item.RecepcionActivoFijoDetalle.BajaActivoFijoActual.FechaBaja.ToString("dd/MM/yyyy hh:mm tt") : "-");}</td>
                                 <td id="@String.Format("{0}{1}MotivoBaja", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.BajaActivoFijoActual?.MotivoBaja?.Nombre ?? "-");}</td>
                             }
-                            if (isConfiguracionListadoComponentes || isConfiguracionListadoMantenimientos || isConfiguracionListadoProcesosJudiciales || isConfiguracionListadoAltasGestionar || (isConfiguracionListadoBajasGestionar && !isConfiguracionBajasGestionarEditar))
+                            if (isConfiguracionListadoComponentes || isConfiguracionListadoMantenimientos || isConfiguracionListadoProcesosJudiciales || isConfiguracionListadoAltasGestionar || (isConfiguracionListadoBajasGestionar && !isConfiguracionBajasGestionarEditar) || isConfiguracionGestionarInventarioAutomatico)
                             {
                                 <td>
                                     @{
@@ -252,6 +254,13 @@
                                                     <a href="javascript:void(0);" id="btnEliminarDatosEspecifico_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" onclick="abrirVentanaConfirmacion('btnEliminarDatosEspecifico_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle')" data-funcioncallback="callBackFunctionEliminarDatoEspecifico('@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle')" data-titulo="Eliminar" data-descripcion="&#191;Desea eliminar el Activo Fijo seleccionado... ?">Eliminar</a>
                                                 </div>
                                             }
+                                        }
+                                        if (isConfiguracionGestionarInventarioAutomatico)
+                                        {
+                                            <input type="hidden" class="hiddenIdRecepcionActivoFijoDetalle" id="hIdRecepcionActivoFijoDetalle_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" name="hIdRecepcionActivoFijoDetalle_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" value="@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" />
+                                            <div id="divEliminarDatosEspecificos_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" class="btnEliminarDatosEspecificos" style="display:inline;">
+                                                <a href="javascript:void(0);" id="btnEliminarDatosEspecifico_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" onclick="abrirVentanaConfirmacion('btnEliminarDatosEspecifico_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle')" data-funcioncallback="callBackFunctionEliminarDatoEspecifico('@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle')" data-titulo="Eliminar" data-descripcion="&#191;Desea eliminar el Activo Fijo seleccionado... ?">Eliminar</a>
+                                            </div>
                                         }
                                     }
                                 </td>

@@ -188,6 +188,10 @@
                         <a href="@Url.Action("ListarProcesosJudicialesActivosFijos", "ActivoFijo")">Procesos Judiciales</a>
                     </li>
 
+                    <li class="@Html.RouteIf(new[] { "ListadoInventarioActivosFijos", "GestionarInventarioManual", "GestionarInventarioAutomatico" }, "ActivoFijo", "active")">
+                        <a href="@Url.Action("ListadoInventarioActivosFijos", "ActivoFijo")">Inventarios</a>
+                    </li>
+
                     <li>
                         <a href="#"><i class="fa fa-file-text-o"></i> <span class="menu-item-parent">Reportes</span></a>
                         <ul>
