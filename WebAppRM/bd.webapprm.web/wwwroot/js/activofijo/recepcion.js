@@ -37,8 +37,15 @@ $(document).ready(function () {
     }
     else
         eventoCambiarCategoria();
-    $(".ColVis").hide();
+    ocultarDatosTablaEspecificos();
 });
+
+function ocultarDatosTablaEspecificos()
+{
+    $(".ColVis").hide();
+    $('#tbDatosEspecificos').DataTable().page.len(-1).draw();
+    $(".dataTables_length").hide();
+}
 
 function gestionarWizard()
 {
@@ -214,8 +221,7 @@ function partialViewClaseActivoFijo(idClaseActivoFijo) {
 
 function eventoSpinnerCantidad() {
     $(".spinnerCantidad").spinner('delay', 200).spinner('changed', function (e, newVal, oldVal) {
-        if (newVal > arrIdsfilas.length)
-        {
+        if (newVal > arrIdsfilas.length) {
             crearFilas(newVal - arrIdsfilas.length);
             $.each($(".btnEliminarDatosEspecificos"), function (index, value) {
                 $(value).removeClass("hide");
@@ -277,7 +283,7 @@ function crearFilas(cantidad)
         var btnComponentesDatosEspecificos = "<span> | </span><a href='javascript: void(0);' onclick='cargarFormularioComponentesDatosEspecificos(" + nuevoIdFila + ")' class='btnComponentesDatosEspecificos' data-idfila='" + nuevoIdFila + "' data-idorigen='' data-idscomponentes='' data-toggle='modal' data-target='#myModalComponente'>" + "Componentes</a>";
         var btnEliminarDatosEspecificos = "<div id='divEliminarDatosEspecificos_" + nuevoIdFila + "' class='btnEliminarDatosEspecificos" + (arrIdsfilas.length == 0 ? " hide" : "") + "' style='display:inline;'><span> | </span><a href='javascript: void(0);' id='btnEliminarDatosEspecifico_" + nuevoIdFila + "' onclick=abrirVentanaConfirmacion('btnEliminarDatosEspecifico_" + nuevoIdFila + "') data-funcioncallback='callBackFunctionEliminarDatoEspecifico(" + nuevoIdFila + ")' data-titulo='Eliminar' data-descripcion='&#191; Desea eliminar el Dato Espec&iacute; fico... ?'>Eliminar</a>";
 
-        mostrarOcultarColumnas([true, true, true, true, true]);
+        mostrarOcultarColumnas("tbDatosEspecificos", [true, true, true, true, true]);
         addRowTableDatosEspecificos(['-', '-', '-', '-', '-', '-', '-', '-',
             hNumeroClaveCatastral + hNumeroChasis + hNumeroMotor + hPlaca + hSerie + hBodega + hEmpleado + hRecepcionActivoFijoDetalle + hUbicacion + hComponentes + hCodigoSecuencial + btnEditarDatosEspecificos + btnEditarCodificacion + btnComponentesDatosEspecificos + btnEliminarDatosEspecificos],
             nuevoIdFila, [objName.nameNumeroClaveCatastral, objName.nameNumeroChasis, objName.nameNumeroMotor, objName.namePlaca, objName.nameSerie, "Bodega", "Empleado", "Codificacion"]);
@@ -328,21 +334,13 @@ function obtenerPosIdFila(idFila)
 function eventoCambiarCategoria()
 {
     if (categoria == objCategorias.Edificio)
-        mostrarOcultarColumnas([true, false, false, false, true]);
+        mostrarOcultarColumnas("tbDatosEspecificos", [true, false, false, false, true]);
     else if (categoria == objCategorias.Vehiculo)
-        mostrarOcultarColumnas([false, true, true, true, true]);
+        mostrarOcultarColumnas("tbDatosEspecificos", [false, true, true, true, true]);
     else if (categoria == objCategorias.EquiposComputoSoftware)
-        mostrarOcultarColumnas([false, false, false, false, true]);
+        mostrarOcultarColumnas("tbDatosEspecificos", [false, false, false, false, true]);
     else
-        mostrarOcultarColumnas([false, false, false, false, true]);
-}
-
-function mostrarOcultarColumnas(arrObj)
-{
-    var otable = $('#tbDatosEspecificos').DataTable();
-    for (var i = 0; i < arrObj.length; i++) {
-        otable.column(i).visible(arrObj[i]);
-    }
+        mostrarOcultarColumnas("tbDatosEspecificos", [false, false, false, false, true]);
 }
 
 function cargarFormularioDatosEspecificos(idFila)
@@ -363,9 +361,7 @@ function cargarFormularioDatosEspecificos(idFila)
         objData.NumeroMotor = $("#h" + objName.nameNumeroMotor + "_" + idFila).val();
         objData.Placa = $("#h" + objName.namePlaca + "_" + idFila).val();
     }
-    else if (categoria == objCategorias.EquiposComputoSoftware)
-        objData.Serie = $("#h" + objName.nameSerie + "_" + idFila).val();
-
+    objData.Serie = $("#h" + objName.nameSerie + "_" + idFila).val();
     objData.IdBodega = $("#hBodega_" + idFila).val();
     objData.IdEmpleado = $("#hEmpleado_" + idFila).val();
 
@@ -429,9 +425,7 @@ function guardarDatosEspecificos()
         objData.NumeroMotor = $("#" + objName.nameNumeroMotor).val();
         objData.Placa = $("#" + objName.namePlaca).val();
     }
-    else if (categoria == objCategorias.EquiposComputoSoftware)
-        objData.Serie = $("#" + objName.nameSerie).val();
-
+    objData.Serie = $("#" + objName.nameSerie).val();
     objData.IdFila = $("#hIdFilaModalDatosEspecificos").val();
     objData.IdRecepcionActivoFijoDetalle = $("#hIdRecepcionActivoFijoDetalle").val();
     objData.IdBodega = $("#IdBodega").val();
@@ -466,10 +460,9 @@ function guardarDatosEspecificos()
                         table.cell($('#td' + objName.namePlaca + "_" + idFila)).data(formatearDatosEspecifico(objData.Placa)).draw();
                         $("#h" + objName.namePlaca + "_" + idFila).val(objData.Placa);
                     }
-                    else if (categoria == objCategorias.EquiposComputoSoftware) {
-                        table.cell($('#td' + objName.nameSerie + "_" + idFila)).data(formatearDatosEspecifico(objData.Serie)).draw();
-                        $("#h" + objName.nameSerie + "_" + idFila).val(objData.Serie);
-                    }
+                    table.cell($('#td' + objName.nameSerie + "_" + idFila)).data(formatearDatosEspecifico(objData.Serie)).draw();
+                    $("#h" + objName.nameSerie + "_" + idFila).val(objData.Serie);
+
                     if (objData.IsBodega) {
                         var isTodosBodegasDatosEspecificos = $("#chkTodosBodegasDatosEspecificos").prop("checked");
                         if (isTodosBodegasDatosEspecificos) {
@@ -578,12 +571,9 @@ function validarDatosEspecificosExisten(objData)
                 if (!validar)
                     return false;
             }
-            else if (categoria == objCategorias.EquiposComputoSoftware)
-            {
-                if (objData.Serie == $("#td" + objName.nameSerie + "_" + idFila).html()) {
-                    $("#val" + objName. nameSerie).html("La Serie: ya existe.");
-                    return false;
-                }
+            if (objData.Serie == $("#td" + objName.nameSerie + "_" + idFila).html()) {
+                $("#val" + objName.nameSerie).html("La Serie: ya existe.");
+                return false;
             }
         }
     }

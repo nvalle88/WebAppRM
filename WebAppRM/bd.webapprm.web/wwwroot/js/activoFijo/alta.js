@@ -5,7 +5,7 @@
     eventoMotivoAlta();
     inicializarDetallesActivoSeleccion();
     inicializarObjetoAdicional();
-    initDataTableFiltrado("tableDetallesActivoFijoSeleccionados", []);
+    initDataTableFiltrado("tableDetallesActivoFijoSeleccionados", [13, 15, 16, 17, 18, 19]);
     Init_FileInput("file");
     Init_FileInput("fileFactura");
     eventoGuardarDatosEmpleado();
@@ -51,18 +51,19 @@ function callBackFunctionEliminarDatoEspecifico(idRecepcionActivoFijoDetalle)
 
 function callBackInicializarTableListadoSeleccion()
 {
-    initDataTableFiltrado("tableDetallesActivoFijoAltas", []);
+    initDataTableFiltrado("tableDetallesActivoFijoAltas", [14, 16, 17, 18, 19, 20]);
 }
 
 function callBackFunctionSeleccionAlta(idRecepcionActivoFijoDetalle, seleccionado) {
+    var componentes = $("#hComunesComponentes_" + idRecepcionActivoFijoDetalle).val();
     if (seleccionado) {
         adicionarRecepcionActivoFijoDetalleSeleccionado(idRecepcionActivoFijoDetalle, true);
-        addComponenteToArray(idRecepcionActivoFijoDetalle, idRecepcionActivoFijoDetalle, []);
+        addComponenteToArray(idRecepcionActivoFijoDetalle, idRecepcionActivoFijoDetalle, componentes.split(","));
         var idSucursal = $("#tableDetallesActivoFijoAltas" + idRecepcionActivoFijoDetalle + "Sucursal").data("idsucursal");
         var idLibroActivoFijo = $("#tableDetallesActivoFijoAltas" + idRecepcionActivoFijoDetalle + "Sucursal").data("idlibroactivofijo");
         var idEmpleado = $("#tableDetallesActivoFijoAltas" + idRecepcionActivoFijoDetalle + "Empleado").data("idempleado");
-
-        var hComponentes = '<input type="hidden" id="hComponentes_' + idRecepcionActivoFijoDetalle + '" name="hComponentes_' + idRecepcionActivoFijoDetalle + '" />';
+        
+        var hComponentes = '<input type="hidden" id="hComponentes_' + idRecepcionActivoFijoDetalle + '" name="hComponentes_' + idRecepcionActivoFijoDetalle + '" value="' + componentes + '" />';
         var hIdRecepcionActivoFijoDetalle = '<input type="hidden" class="hiddenIdRecepcionActivoFijoDetalle" id="hIdRecepcionActivoFijoDetalle_' + idRecepcionActivoFijoDetalle + '" name="hIdRecepcionActivoFijoDetalle_' + idRecepcionActivoFijoDetalle + '" value="' + idRecepcionActivoFijoDetalle + '" />';
         var hEmpleado = '<input type="hidden" class="hiddenHEmpleado" id="hEmpleado_' + idRecepcionActivoFijoDetalle + '" name="hEmpleado_' + idRecepcionActivoFijoDetalle + '" value="' + idEmpleado + '" />';
         var hSucursal = '<input type="hidden" id="hSucursal_' + idRecepcionActivoFijoDetalle + '" name="hSucursal_' + idRecepcionActivoFijoDetalle + '" value="' + idSucursal + '" />';
@@ -70,7 +71,7 @@ function callBackFunctionSeleccionAlta(idRecepcionActivoFijoDetalle, seleccionad
         var btnEmpleado = '<a href="javascript:void(0);" onclick="cargarFormularioDatosEmpleado(' + idRecepcionActivoFijoDetalle + ')" class="btnDatosEmpleado" data-idfila="' + idRecepcionActivoFijoDetalle + '" data-toggle="modal" data-target="#myModalEmpleado">Custodio</a>';
         var btnComponentes = '<span> | </span><a href="javascript:void(0);" onclick="cargarFormularioComponentesDatosEspecificos(' + idRecepcionActivoFijoDetalle + ')" class="btnComponentesDatosEspecificos" data-idfila="' + idRecepcionActivoFijoDetalle + '" data-idorigen="' + idRecepcionActivoFijoDetalle + '" data-toggle="modal" data-target="#myModalComponente">Componentes</a>';
         var btnEliminarAlta = "<div id='divEliminarDatosEspecificos_" + idRecepcionActivoFijoDetalle + "' class='btnEliminarDatosEspecificos' style='display:inline;'><span> | </span><a href='javascript: void(0);' id='btnEliminarDatosEspecifico_" + idRecepcionActivoFijoDetalle + "' onclick=abrirVentanaConfirmacion('btnEliminarDatosEspecifico_" + idRecepcionActivoFijoDetalle + "') data-funcioncallback=callBackFunctionEliminarDatoEspecifico('" + idRecepcionActivoFijoDetalle + "') data-titulo='Eliminar' data-descripcion='&#191; Desea eliminar el Activo Fijo seleccionado... ?'>Eliminar</a></div>";
-        addRowDetallesActivosFijos("tableDetallesActivoFijoSeleccionados", "tableDetallesActivoFijoAltas", idRecepcionActivoFijoDetalle, ['Codigosecuencial', 'TipoActivoFijo', 'ClaseActivoFijo', 'SubclaseActivoFijo', 'NombreActivoFijo', 'Serie', 'NumeroChasis', 'NumeroMotor', 'Placa', 'NumeroClaveCatastral', 'Sucursal', 'Bodega', 'Empleado', 'Proveedor', 'MotivoRecepcion', 'FechaRecepcion', 'OrdenCompra', 'FondoFinanciamiento', hComponentes + hIdRecepcionActivoFijoDetalle + hEmpleado + hSucursal + hLibroActivoFijo + btnEmpleado + btnComponentes + btnEliminarAlta], true);
+        addRowDetallesActivosFijos("tableDetallesActivoFijoSeleccionados", "tableDetallesActivoFijoAltas", idRecepcionActivoFijoDetalle, ['Codigosecuencial', 'TipoActivoFijo', 'ClaseActivoFijo', 'SubclaseActivoFijo', 'NombreActivoFijo', 'Marca', 'Modelo', 'Serie', 'NumeroChasis', 'NumeroMotor', 'Placa', 'NumeroClaveCatastral', 'Sucursal', 'Bodega', 'Empleado', 'Proveedor', 'MotivoRecepcion', 'FechaRecepcion', 'OrdenCompra', 'FondoFinanciamiento', hComponentes + hIdRecepcionActivoFijoDetalle + hEmpleado + hSucursal + hLibroActivoFijo + btnEmpleado + btnComponentes + btnEliminarAlta], true);
     }
     else
         callBackFunctionEliminarDatoEspecifico(idRecepcionActivoFijoDetalle);

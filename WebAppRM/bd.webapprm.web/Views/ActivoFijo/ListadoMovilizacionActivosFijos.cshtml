@@ -1,0 +1,90 @@
+@model List<MovilizacionActivoFijo>
+
+<div id="content">
+    <p>
+        <a asp-action="GestionarMovilizacion" class="btn btn-primary">Nueva Movilizaci&oacute;n</a>
+    </p>
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                        <h2>Movilizaciones de Activos Fijos</h2>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox"></div>
+                        <div class="widget-body no-padding">
+                            <table id="dt_basic" class="table table-striped table-bordered table-hover" style="width:100%;">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().IdEmpleadoResponsable)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().IdEmpleadoSolicita)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().IdEmpleadoAutorizado)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().FechaSalida)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().FechaRetorno)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().IdMotivoTraslado)
+                                        </th>
+                                        <th>
+                                            Opciones
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @{await ViewContext.Writer.WriteAsync($"{item.EmpleadoResponsable.Persona.Nombres} {item.EmpleadoResponsable.Persona.Apellidos}");}
+                                            </td>
+
+                                            <td>
+                                                @{await ViewContext.Writer.WriteAsync($"{item.EmpleadoSolicita.Persona.Nombres} {item.EmpleadoSolicita.Persona.Apellidos}");}
+                                            </td>
+
+                                            <td>
+                                                @{await ViewContext.Writer.WriteAsync($"{item.EmpleadoAutorizado.Persona.Nombres} {item.EmpleadoAutorizado.Persona.Apellidos}");}
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.FechaSalida)
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.FechaRetorno)
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.MotivoTraslado.Descripcion)
+                                            </td>
+
+                                            <td>
+                                                @Html.ActionLink("Editar", "GestionarMovilizacion", new { id = item.IdMovilizacionActivoFijo }) |
+                                                <a href="javascript:void(0);" id="@item.IdMovilizacionActivoFijo" onclick="abrirVentanaConfirmacion('@item.IdMovilizacionActivoFijo')" data-url="@Url.Action("EliminarMovilizacion", values: new { id = item.IdMovilizacionActivoFijo })" data-titulo="Eliminar" data-descripcion="&#191;Desea eliminar la Movilizaci&oacute;n... ?">Eliminar</a>
+                                            </td>
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+@section Scripts {
+    <script src='~/js/datatables/init.min.js'></script>
+}

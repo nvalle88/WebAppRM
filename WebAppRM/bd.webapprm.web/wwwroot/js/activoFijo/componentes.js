@@ -27,7 +27,7 @@ function cargarFormularioComponentesDatosEspecificos(idFila) {
         data: { componentesActivo: obtenerRecepcionActivoFijoDetalleComponente(), idsComponentesExcluir: obtenerIdsComponentesExcluir(idFila) },
         success: function (data) {
             $("#modalBodyComponente").html(data);
-            initDataTableFiltrado("tableDetallesActivoFijo", []);
+            initDataTableFiltrado("tableDetallesActivoFijo", [13, 15, 16, 17, 18, 19, 20, 21, 22]);
         },
         error: function (errorMessage) {
             mostrarNotificacion("Error", "Ocurrió un error al cargar el formulario.");
@@ -53,7 +53,7 @@ function cargarListadoActivosFijosParaComponentes()
         data: { componentesActivo: componentesActivo, idsComponentesExcluir: idsComponentesExcluir },
         success: function (data) {
             $("#modalBodyComponenteActivoFijo").html(data);
-            initDataTableFiltrado("tableDetallesActivoFijoComponentes", []);
+            initDataTableFiltrado("tableDetallesActivoFijoComponentes", [14, 16, 17, 18, 19, 20, 21, 22, 23]);
             eventoCheckboxDetallesActivoFijo();
         },
         error: function (errorMessage) {
@@ -113,7 +113,7 @@ function callBackFunctionSeleccionComponente(idRecepcionActivoFijoDetalle, selec
 {
     if (seleccionado) {
         var btnEliminarComponente = "<div id='divEliminarComponente_" + idRecepcionActivoFijoDetalle + "' class='btnEliminarComponentes' style='display:inline;'><a href='javascript: void(0);' id='btnEliminarComponente_" + idRecepcionActivoFijoDetalle + "' onclick=abrirVentanaConfirmacion('btnEliminarComponente_" + idRecepcionActivoFijoDetalle + "') data-funcioncallback=callBackEliminarComponente('" + idRecepcionActivoFijoDetalle + "') data-titulo='Eliminar' data-descripcion='&#191; Desea eliminar el Componente... ?'>Eliminar</a></div>";
-        addRowDetallesActivosFijos("tableDetallesActivoFijo", "tableDetallesActivoFijoComponentes", idRecepcionActivoFijoDetalle, ['Codigosecuencial', 'Serie', 'NumeroChasis', 'NumeroMotor', 'Placa', 'NumeroClaveCatastral', 'Sucursal', 'Bodega', 'Empleado', 'Proveedor', 'MotivoRecepcion', 'FechaRecepcion', 'OrdenCompra', 'FondoFinanciamiento', 'FechaAlta', 'MotivoAlta', 'NumeroFactura', btnEliminarComponente], true);
+        addRowDetallesActivosFijos("tableDetallesActivoFijo", "tableDetallesActivoFijoComponentes", idRecepcionActivoFijoDetalle, ['Codigosecuencial', 'TipoActivoFijo', 'ClaseActivoFijo', 'SubclaseActivoFijo', 'NombreActivoFijo', 'Marca', 'Modelo', 'Serie', 'NumeroChasis', 'NumeroMotor', 'Placa', 'NumeroClaveCatastral', 'Sucursal', 'Bodega', 'Empleado', 'Proveedor', 'MotivoRecepcion', 'FechaRecepcion', 'OrdenCompra', 'FondoFinanciamiento', 'FechaAlta', 'MotivoAlta', 'NumeroFactura', btnEliminarComponente], true);
         var rafdComponente = obtenerRecepcionActivoFijoDetalleComponente();
         rafdComponente.arrIdsComponentes.push(idRecepcionActivoFijoDetalle);
     }

@@ -3,16 +3,16 @@
     Init_DatetimePicker("FechaInforme");
     Init_Select2();
     adicionarArrRecepcionActivoFijoDetalle();
-    initDataTableFiltrado("tableDetallesActivoFijoBajas", [], function () {
+    initDataTableFiltrado("tableDetallesActivoFijoBajas", [14, 16, 17, 18, 19, 21, 22, 23], function () {
         var table = $("#tableDetallesActivoFijoBajas").dataTable();
         var api = table.api();
         var rows = api.rows({ page: 'current' }).nodes();
         var last = null;
         var groupadmin = [];
 
-        crearGrupo(api, rows, last, groupadmin, 18, "Fondo de financiamiento", 0, 22);
-        crearGrupo(api, rows, last, groupadmin, 3, "Clase de activo fijo", 6, 22);
-        crearGrupo(api, rows, last, groupadmin, 4, "Subclase de activo fijo", 12, 22);
+        crearGrupo(api, rows, last, groupadmin, 20, "Fondo de financiamiento", 0, 24);
+        crearGrupo(api, rows, last, groupadmin, 3, "Clase de activo fijo", 6, 24);
+        crearGrupo(api, rows, last, groupadmin, 4, "Subclase de activo fijo", 12, 24);
     });
     eventoGuardar();
 });
