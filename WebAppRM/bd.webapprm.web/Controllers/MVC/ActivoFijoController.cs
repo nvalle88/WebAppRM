@@ -1847,9 +1847,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 ViewData["MotivoTraslado"] = new SelectList(await apiServicio.Listar<MotivoTraslado>(new Uri(WebApp.BaseAddressRM), "api/MotivoTraslado/ListarMotivoTraslado"), "IdMotivoTraslado", "Descripcion");
                 ViewData["Configuraciones"] = new List<PropiedadValor>()
                 {
-                    //new PropiedadValor { Propiedad = "IsConfiguracionListadoBajasGestionar", Valor = "true" },
-                    //new PropiedadValor { Propiedad = "IsConfiguracionBajasGestionarEditar", Valor = (id != null).ToString() },
-                    new PropiedadValor { Propiedad = "IsConfiguracionListadoMovilizaciones", Valor = "true" },
+                    new PropiedadValor { Propiedad = "IsConfiguracionSeleccionMovilizaciones", Valor = "true" },
                     new PropiedadValor { Propiedad = "IsConfiguracionDatosActivo", Valor = "true" }
                 };
                 if (id != null)
@@ -1872,6 +1870,25 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorCargarDatos}", nameof(ListadoMovilizacionActivosFijos));
             }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ListadoActivosFijosSeleccionMovilizacionResult(List<IdRecepcionActivoFijoDetalleSeleccionado> listadoRecepcionActivoFijoDetalleSeleccionado)
+        {
+            var lista = new List<RecepcionActivoFijoDetalleSeleccionado>();
+            ViewData["Configuraciones"] = new List<PropiedadValor>()
+            {
+                new PropiedadValor { Propiedad = "IsConfiguracionSeleccion", Valor = "true" },
+                new PropiedadValor { Propiedad = "IsConfiguracionDatosActivo", Valor = "true" },
+                new PropiedadValor { Propiedad = "IsConfiguracionListadoMovilizacionesGestionar", Valor = "true" }
+            };
+            try
+            {
+                lista = await apiServicio.ObtenerElementoAsync<List<RecepcionActivoFijoDetalleSeleccionado>>(listadoRecepcionActivoFijoDetalleSeleccionado, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/DetallesActivoFijoSeleccionadoPorMovilizacion");
+            }
+            catch (Exception)
+            { }
+            return PartialView("_ListadoDetallesActivosFijos", lista);
         }
         #endregion
 

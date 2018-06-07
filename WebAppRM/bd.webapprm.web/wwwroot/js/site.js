@@ -80,6 +80,18 @@ function Init_DeteccionLectorCodigoBarras(idElemento, fnDrawCallBack)
     });
 }
 
+function Init_XEditable(callbackFunction)
+{
+    $('.btntextAreaEditable').editable({
+        showbuttons: 'bottom',
+        emptytext: '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;',
+        success: function (response, newValue) {
+            var idRecepcionActivoFijoDetalle = $(this).data("idrecepcionactivofijodetalle");
+            callbackFunction(idRecepcionActivoFijoDetalle, newValue);
+        }
+    });
+}
+
 function mostrarLoadingPanel(idElemento, texto)
 {
     $('#' + idElemento).waitMe({

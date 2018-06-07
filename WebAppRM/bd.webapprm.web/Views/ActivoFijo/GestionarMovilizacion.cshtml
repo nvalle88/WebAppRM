@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
     <link rel="stylesheet" href="~/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
     <link rel="stylesheet" type="text/css" href="~/css/tableSmartForm.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/activoFijo/xEditable.min.css" />
 }
 <div id="content">
     <section id="widget-grid" class="">
@@ -118,9 +119,12 @@
     @{await Html.RenderPartialAsync("_Select2ScriptsPartial");}
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     @{await Html.RenderPartialAsync("_DatetimePickerScriptsPartial");}
+    <script src="~/js/plugin/x-editable/moment.min.js"></script>
+    <script src="~/js/plugin/x-editable/jquery.mockjax.min.js"></script>
+    <script src="~/js/plugin/x-editable/x-editable.min.js"></script>
     <script src='~/js/activoFijo/listadoSeleccion.min.js'></script>
     <script src="~/js/activoFijo/movilizacion.js"></script>
     <script>
-        var urlListadoActivosFijosSeleccionResult = "@Url.Action("ListadoActivosFijosSeleccionBajaResult")";
+        var urlListadoActivosFijosSeleccionResult = "@Url.Action("ListadoActivosFijosSeleccionMovilizacionResult")";
     </script>
 }

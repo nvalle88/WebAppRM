@@ -162,10 +162,8 @@ function mostrarOcultarColumnasPorArray(idTable, mostrarOcultar)
     }
 }
 
-function addRowDetallesActivosFijos(idTableACopiar, idTableCopiando, idRecepcionActivoFijoDetalle, arrCeldasCopiando, isOpcionesUltimaColumna) {
-    var arrColumnasVisibleTableACopiando = obtenerArrColumnasVisible(idTableCopiando);
-    mostrarOcultarColumnasPorArray(idTableCopiando, true);
-
+function obtenerArrValores(idTableCopiando, idRecepcionActivoFijoDetalle, arrCeldasCopiando, isOpcionesUltimaColumna)
+{
     var arrValores = [];
     for (var i = 0; i < arrCeldasCopiando.length; i++) {
         if (i == (arrCeldasCopiando.length - 1)) {
@@ -178,7 +176,20 @@ function addRowDetallesActivosFijos(idTableACopiar, idTableCopiando, idRecepcion
         else
             arrValores.push($("#" + idTableCopiando + idRecepcionActivoFijoDetalle + arrCeldasCopiando[i]).html());
     }
+    return arrValores;
+}
+
+function addRowDetallesActivosFijos(idTableACopiar, idTableCopiando, idRecepcionActivoFijoDetalle, arrCeldasCopiando, isOpcionesUltimaColumna) {
+    var arrColumnasVisibleTableACopiar = obtenerArrColumnasVisible(idTableACopiar);
+    var arrColumnasVisibleTableACopiando = obtenerArrColumnasVisible(idTableCopiando);
+
+    mostrarOcultarColumnasPorArray(idTableACopiar, true);
+    mostrarOcultarColumnasPorArray(idTableCopiando, true);
+
+    var arrValores = obtenerArrValores(idTableCopiando, idRecepcionActivoFijoDetalle, arrCeldasCopiando, isOpcionesUltimaColumna);
     addRowDetallesActivosFijosPorArray(idTableACopiar, idRecepcionActivoFijoDetalle, arrCeldasCopiando, arrValores, isOpcionesUltimaColumna);
+
+    mostrarOcultarColumnas(idTableACopiar, arrColumnasVisibleTableACopiar);
     mostrarOcultarColumnas(idTableCopiando, arrColumnasVisibleTableACopiando);
 }
 
@@ -188,7 +199,7 @@ function addRowDetallesActivosFijosPorArray(idTableACopiar, idRecepcionActivoFij
     var rowNode = table.row.add(arrValores).draw().node();
     var childrens = $(rowNode).children();
     $(rowNode).prop("id", idTableACopiar + idRecepcionActivoFijoDetalle);
-    $.each($(rowNode).children(), function (index, value) {
+    $.each(childrens, function (index, value) {
         if (index == (childrens.length - 1)) {
             if (!isOpcionesUltimaColumna)
                 $(value).prop("id", idTableACopiar + idRecepcionActivoFijoDetalle + arrCeldasCopiando[index]);

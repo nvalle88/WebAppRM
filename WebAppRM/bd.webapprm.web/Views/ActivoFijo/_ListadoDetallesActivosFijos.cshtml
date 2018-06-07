@@ -32,7 +32,9 @@
     bool isConfiguracionListadoBajas = ExisteConfiguracion("IsConfiguracionListadoBajas");
 
     bool isConfiguracionGestionarInventarioAutomatico = ExisteConfiguracion("IsConfiguracionGestionarInventarioAutomatico");
-    bool isConfiguracionListadoMovilizaciones = ExisteConfiguracion("IsConfiguracionListadoMovilizaciones");
+
+    bool isConfiguracionSeleccionMovilizaciones = ExisteConfiguracion("IsConfiguracionSeleccionMovilizaciones");
+    bool isConfiguracionListadoMovilizacionesGestionar = ExisteConfiguracion("IsConfiguracionListadoMovilizacionesGestionar");
 
     int cantidadTotal = 0;
     string nombreTabla = "tableDetallesActivoFijo";
@@ -96,10 +98,16 @@
     {
         cantidadTotal = 21;
     }
-    else if (isConfiguracionListadoMovilizaciones)
+    else if (isConfiguracionSeleccionMovilizaciones)
     {
         cantidadTotal = 22;
         nombreTabla += "Seleccionados";
+    }
+    else if (isConfiguracionListadoMovilizacionesGestionar)
+    {
+        cantidadTotal = 20;
+        nombreTabla += "Altas";
+        callbackFunctionCheckBox = "callBackFunctionSeleccionAlta";
     }
 
     if (isConfiguracionSeleccion)
@@ -126,7 +134,7 @@
     }
     <table id="@nombreTabla" class="table table-striped table-bordered table-hover" style="width:100%;">
         <thead>
-            @{ await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", cantidadTotal, new ViewDataDictionary(ViewData) { { "MostrarFiltradoUltimaColumna", isConfiguracionSeleccionComponentes || isConfiguracionDetallesRecepcion || isConfiguracionSeleccionAltas || isConfiguracionListadoAltas || isConfiguracionListadoBajas || (isConfiguracionSeleccionBajas && !isConfiguracionGestionarInventarioAutomatico) || (isConfiguracionListadoBajasGestionar && isConfiguracionBajasGestionarEditar) } });}
+            @{ await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", cantidadTotal, new ViewDataDictionary(ViewData) { { "MostrarFiltradoUltimaColumna", isConfiguracionSeleccionComponentes || isConfiguracionDetallesRecepcion || isConfiguracionSeleccionAltas || isConfiguracionListadoAltas || isConfiguracionListadoBajas || (isConfiguracionSeleccionBajas && !isConfiguracionGestionarInventarioAutomatico) || (isConfiguracionListadoBajasGestionar && isConfiguracionBajasGestionarEditar) || isConfiguracionListadoMovilizacionesGestionar } });}
             <tr>
                 @{
                     if (isConfiguracionSeleccion)
@@ -158,7 +166,7 @@
                 <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.RecepcionActivoFijo.OrdenCompra)</th>
                 <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.RecepcionActivoFijo.IdFondoFinanciamiento)</th>
                 @{
-                    if (isConfiguracionListadoComponentes || isConfiguracionSeleccionComponentes || isConfiguracionListadoAltas || isConfiguracionListadoMantenimientos || isConfiguracionListadoProcesosJudiciales || isConfiguracionListadoBajas || isConfiguracionListadoBajasGestionar || isConfiguracionSeleccionBajas || isConfiguracionListadoMovilizaciones)
+                    if (isConfiguracionListadoComponentes || isConfiguracionSeleccionComponentes || isConfiguracionListadoAltas || isConfiguracionListadoMantenimientos || isConfiguracionListadoProcesosJudiciales || isConfiguracionListadoBajas || isConfiguracionListadoBajasGestionar || isConfiguracionSeleccionBajas || isConfiguracionSeleccionMovilizaciones || isConfiguracionListadoMovilizacionesGestionar)
                     {
                         <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.AltaActivoFijoActual.FechaAlta)</th>
                         <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.AltaActivoFijoActual.IdMotivoAlta)</th>
@@ -169,12 +177,15 @@
                         <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.BajaActivoFijoActual.FechaBaja)</th>
                         <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.BajaActivoFijoActual.IdMotivoBaja)</th>
                     }
-                    if (isConfiguracionListadoMovilizaciones)
+                    if (isConfiguracionSeleccionMovilizaciones || isConfiguracionListadoMovilizacionesGestionar)
                     {
-                        <th>Componentes:</th>
-                        <th>Observaciones:</th>
+                        <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Componentes)</th>
+                        if (isConfiguracionSeleccionMovilizaciones)
+	                    {
+                            <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Observaciones)</th>
+	                    }
                     }
-                    if (isConfiguracionListadoComponentes || isConfiguracionListadoMantenimientos || isConfiguracionListadoProcesosJudiciales || isConfiguracionListadoAltasGestionar || (isConfiguracionListadoBajasGestionar && !isConfiguracionBajasGestionarEditar) || isConfiguracionGestionarInventarioAutomatico || isConfiguracionListadoMovilizaciones)
+                    if (isConfiguracionListadoComponentes || isConfiguracionListadoMantenimientos || isConfiguracionListadoProcesosJudiciales || isConfiguracionListadoAltasGestionar || (isConfiguracionListadoBajasGestionar && !isConfiguracionBajasGestionarEditar) || isConfiguracionGestionarInventarioAutomatico || isConfiguracionSeleccionMovilizaciones)
                     {
                         <th>Opciones</th>
                     }
@@ -221,13 +232,13 @@
                         <td id="@String.Format("{0}{1}Sucursal", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)" data-idsucursal="@item.RecepcionActivoFijoDetalle.UbicacionActivoFijoActual.LibroActivoFijo.IdSucursal" data-idlibroactivofijo="@item.RecepcionActivoFijoDetalle.UbicacionActivoFijoActual.IdLibroActivoFijo">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.UbicacionActivoFijoActual?.LibroActivoFijo?.Sucursal?.Nombre ?? "-");}</td>
                         <td id="@String.Format("{0}{1}Bodega", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.UbicacionActivoFijoActual?.Bodega?.Nombre ?? "-");}</td>
                         <td id="@String.Format("{0}{1}Empleado", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)" data-idempleado="@item?.RecepcionActivoFijoDetalle?.UbicacionActivoFijoActual?.IdEmpleado">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.UbicacionActivoFijoActual?.Empleado != null ? $"{item?.RecepcionActivoFijoDetalle?.UbicacionActivoFijoActual?.Empleado?.Persona?.Nombres} {item?.RecepcionActivoFijoDetalle?.UbicacionActivoFijoActual?.Empleado?.Persona?.Apellidos}" : "-"); }</td>
-                        <td id="@String.Format("{0}{1}Proveedor", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.RecepcionActivoFijo?.Proveedor?.Nombre ?? "-");}</td>
+                        <td id="@String.Format("{0}{1}Proveedor", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.RecepcionActivoFijo?.Proveedor != null ? $"{item.RecepcionActivoFijoDetalle.RecepcionActivoFijo.Proveedor.Nombre} {item.RecepcionActivoFijoDetalle.RecepcionActivoFijo.Proveedor.Apellidos}" : "-");}</td>
                         <td id="@String.Format("{0}{1}MotivoRecepcion", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.RecepcionActivoFijo?.MotivoRecepcion?.Descripcion ?? "-");}</td>
                         <td id="@String.Format("{0}{1}FechaRecepcion", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@Html.DisplayFor(modelItem => item.RecepcionActivoFijoDetalle.RecepcionActivoFijo.FechaRecepcion)</td>
                         <td id="@String.Format("{0}{1}OrdenCompra", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@Html.DisplayFor(modelItem => item.RecepcionActivoFijoDetalle.RecepcionActivoFijo.OrdenCompra)</td>
                         <td id="@String.Format("{0}{1}FondoFinanciamiento", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.RecepcionActivoFijo?.FondoFinanciamiento?.Nombre ?? "-");}</td>
                         @{
-                            if (isConfiguracionListadoComponentes || isConfiguracionSeleccionComponentes || isConfiguracionListadoAltas || isConfiguracionListadoMantenimientos || isConfiguracionListadoProcesosJudiciales || isConfiguracionListadoBajas || isConfiguracionListadoBajasGestionar || isConfiguracionSeleccionBajas || isConfiguracionListadoMovilizaciones)
+                            if (isConfiguracionListadoComponentes || isConfiguracionSeleccionComponentes || isConfiguracionListadoAltas || isConfiguracionListadoMantenimientos || isConfiguracionListadoProcesosJudiciales || isConfiguracionListadoBajas || isConfiguracionListadoBajasGestionar || isConfiguracionSeleccionBajas || isConfiguracionSeleccionMovilizaciones || isConfiguracionListadoMovilizacionesGestionar)
                             {
                                 <td id="@String.Format("{0}{1}FechaAlta", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.AltaActivoFijoActual?.FechaAlta != null ? item.RecepcionActivoFijoDetalle.AltaActivoFijoActual.FechaAlta.ToString("dd/MM/yyyy hh:mm tt") : "-");}</td>
                                 <td id="@String.Format("{0}{1}MotivoAlta", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.AltaActivoFijoActual?.MotivoAlta?.Descripcion ?? "-");}</td>
@@ -238,10 +249,15 @@
                                 <td id="@String.Format("{0}{1}FechaBaja", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.BajaActivoFijoActual?.FechaBaja != null ? item.RecepcionActivoFijoDetalle.BajaActivoFijoActual.FechaBaja.ToString("dd/MM/yyyy hh:mm tt") : "-");}</td>
                                 <td id="@String.Format("{0}{1}MotivoBaja", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.BajaActivoFijoActual?.MotivoBaja?.Nombre ?? "-");}</td>
                             }
-                            if (isConfiguracionListadoMovilizaciones)
+                            if (isConfiguracionSeleccionMovilizaciones || isConfiguracionListadoMovilizacionesGestionar)
                             {
-                                <td>@*@{await ViewContext.Writer.WriteAsync(String.Join(", ", item.RecepcionActivoFijoDetalle.ComponentesActivoFijoComponente.Select(c => c.RecepcionActivoFijoDetalleComponente.ActivoFijo.Nombre)));}*@</td>
-                                <td>-</td>
+                                <td id="@String.Format("{0}{1}Componentes", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(!String.IsNullOrEmpty(item?.Componentes) ? item.Componentes : "-");}</td>
+                                if (isConfiguracionSeleccionMovilizaciones)
+	                            {
+                                    <td id="@String.Format("{0}{1}Observaciones", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">
+                                        @{await ViewContext.Writer.WriteAsync(!String.IsNullOrEmpty(item?.Observaciones) ? item.Observaciones : "-");}
+                                    </td>
+	                            }
                             }
                             if (isConfiguracionSeleccionAltas)
                             {
@@ -249,7 +265,7 @@
                                     <input type="hidden" id="hComunesComponentes_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" name="hComunesComponentes_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" value="@String.Join(",", item.RecepcionActivoFijoDetalle.ComponentesActivoFijoOrigen.Select(c => c.IdRecepcionActivoFijoDetalleComponente))" />
                                 </td>
                             }
-                            if (isConfiguracionListadoComponentes || isConfiguracionListadoMantenimientos || isConfiguracionListadoProcesosJudiciales || isConfiguracionListadoAltasGestionar || (isConfiguracionListadoBajasGestionar && !isConfiguracionBajasGestionarEditar) || isConfiguracionGestionarInventarioAutomatico || isConfiguracionListadoMovilizaciones)
+                            if (isConfiguracionListadoComponentes || isConfiguracionListadoMantenimientos || isConfiguracionListadoProcesosJudiciales || isConfiguracionListadoAltasGestionar || (isConfiguracionListadoBajasGestionar && !isConfiguracionBajasGestionarEditar) || isConfiguracionGestionarInventarioAutomatico || isConfiguracionSeleccionMovilizaciones)
                             {
                                 <td>
                                     @{
@@ -292,7 +308,7 @@
                                                 </div>
                                             }
                                         }
-                                        if (isConfiguracionGestionarInventarioAutomatico || isConfiguracionListadoMovilizaciones)
+                                        if (isConfiguracionGestionarInventarioAutomatico || isConfiguracionSeleccionMovilizaciones)
                                         {
                                             <input type="hidden" class="hiddenIdRecepcionActivoFijoDetalle" id="hIdRecepcionActivoFijoDetalle_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" name="hIdRecepcionActivoFijoDetalle_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" value="@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" />
                                             <div id="divEliminarDatosEspecificos_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" class="btnEliminarDatosEspecificos" style="display:inline;">
