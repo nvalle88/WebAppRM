@@ -6,11 +6,59 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using bd.webapprm.servicios.Interfaces;
 using bd.webapprm.entidades.Utils;
+using Microsoft.AspNetCore.Http;
+using bd.log.guardar.ObjectTranfer;
+using bd.log.guardar.Servicios;
+using System.Linq;
+using System.Security.Claims;
+using bd.webapprm.entidades.Utils.Seguridad;
 
 namespace bd.webapprm.servicios.Servicios
 {
     public class ApiServicio : IApiServicio
     {
+        private async Task<bool> SalvarLog(LogEntryTranfer logEntryTranfer)
+        {
+            var responseLog = await GuardarLogService.SaveLogEntry(logEntryTranfer);
+            if (responseLog.IsSuccess)
+            {
+                return true;
+            }
+            return false;
+        }
+        public async Task<Response> SalvarLog<T>(HttpContext context, EntradaLog model)
+        {
+            var NombreUsuario = "";
+            try
+            {
+                var claim = context.User.Identities.Where(x => x.NameClaimType == ClaimTypes.Name).FirstOrDefault();
+                NombreUsuario = claim.Claims.Where(c => c.Type == ClaimTypes.Name).FirstOrDefault().Value;
+
+                var menuRespuesta = await ObtenerElementoAsync<log.guardar.Utiles.Response>(new ModuloAplicacion { Path = context.Request.Path, NombreAplicacion = WebApp.NombreAplicacion }, new Uri(WebApp.BaseAddressSeguridad), "api/Adscmenus/GetMenuPadre");
+                var menu = JsonConvert.DeserializeObject<Adscmenu>(menuRespuesta.Resultado.ToString());
+
+                var Log = new LogEntryTranfer
+                {
+                    ApplicationName = WebApp.NombreAplicacion,
+                    EntityID = menu.AdmeAplicacion,
+                    ExceptionTrace = model.ExceptionTrace,
+                    LogCategoryParametre = model.LogCategoryParametre,
+                    LogLevelShortName = model.LogLevelShortName,
+                    Message = context.Request.Path,
+                    ObjectNext = model.ObjectNext,
+                    ObjectPrevious = model.ObjectPrevious,
+                    UserName = NombreUsuario,
+                };
+                var responseLog = await GuardarLogService.SaveLogEntry(Log);
+                return new Response { IsSuccess = responseLog.IsSuccess };
+            }
+            catch (Exception ex)
+            {
+                var Log = new LogEntryTranfer { ApplicationName = WebApp.NombreAplicacion, EntityID = Mensaje.NoExisteModulo, ExceptionTrace = ex.Message, LogCategoryParametre = model.LogCategoryParametre, LogLevelShortName = model.LogLevelShortName, Message = context.Request.Path, ObjectNext = model.ObjectNext, ObjectPrevious = model.ObjectPrevious, UserName = NombreUsuario };
+                var resultado = await SalvarLog(Log);
+                return new Response { IsSuccess = resultado };
+            }
+        }
         public async Task<Response> InsertarAsync<T>(T model, Uri baseAddress, string url)
         {
             try
@@ -56,6 +104,25 @@ namespace bd.webapprm.servicios.Servicios
                     var request = JsonConvert.SerializeObject(model);
                     var content = new StringContent(request, Encoding.UTF8, "application/json");
                     var response = await client.PutAsync($"{baseAddress}{url}/{id}", content);
+                    var resultado = await response.Content.ReadAsStringAsync();
+                    var respuesta = JsonConvert.DeserializeObject<Response>(resultado);
+                    return respuesta;
+                }
+            }
+            catch (Exception ex)
+            {
+                return new Response { IsSuccess = true, Message = ex.Message };
+            }
+        }
+        public async Task<Response> EditarAsync<T>(object model, Uri baseAddress, string url)
+        {
+            try
+            {
+                using (HttpClient client = new HttpClient())
+                {
+                    var request = JsonConvert.SerializeObject(model);
+                    var content = new StringContent(request, Encoding.UTF8, "application/json");
+                    var response = await client.PostAsync($"{baseAddress}{url}", content);
                     var resultado = await response.Content.ReadAsStringAsync();
                     var respuesta = JsonConvert.DeserializeObject<Response>(resultado);
                     return respuesta;

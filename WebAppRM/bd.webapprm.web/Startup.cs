@@ -64,6 +64,12 @@ namespace bd.webapprm.web
             services.AddSingleton<IAuthorizationHandler, RolesHandler>();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+            services.AddMvc().Services.AddAuthorization(options =>
+            {
+                options.AddPolicy("EstaAutorizado",
+                                  policy => policy.Requirements.Add(new RolesRequirement()));
+            });
+
             WebApp.BaseAddressWebAppLogin = Configuration.GetSection("HostWebAppLogin").Value;
             WebApp.NombreAplicacion = Configuration.GetSection("NombreAplicacion").Value;
             
@@ -112,15 +118,13 @@ namespace bd.webapprm.web
 
                 using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
                 {
-                    //serviceScope.ServiceProvider.GetService<LogDbContext>()
-                    //         .Database.Migrate();
-
-                   // serviceScope.ServiceProvider.GetService<InicializacionServico>().InicializacionAsync();
+                    //serviceScope.ServiceProvider.GetService<LogDbContext>().Database.Migrate();
+                    //serviceScope.ServiceProvider.GetService<InicializacionServico>().InicializacionAsync();
                 }
             }
             else
             {
-                
+
             }
 
             app.UseStaticFiles();
@@ -142,6 +146,7 @@ namespace bd.webapprm.web
             {
                 routes.MapRoute(
                     name: "default",
+                    //template: "{controller=Login}/{action=Login}/{id?}/{id2?}");//Poner esta cuando ya esté bien montada la autenticación
                     template: "{controller=Home}/{action=Index}/{id?}/{id2?}");
             });
         }

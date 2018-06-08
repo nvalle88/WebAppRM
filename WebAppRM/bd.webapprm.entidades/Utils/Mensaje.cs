@@ -19,6 +19,7 @@ namespace bd.webapprm.entidades.Utils
         public static string Error { get { return "Error"; } }
         public static string Aviso { get { return "Aviso"; } }
         public static string ErrorRecursoSolicitado { get { return "No puede acceder al recurso solicitado."; } }
+        public static string NoExisteModulo { get { return "No se ha encontrado el Módulo"; } }
     }
 
     public static class Estados
