@@ -52,7 +52,7 @@ function abrirVentanaDetallesActivoFijo(id) {
     $.ajax({
         url: btn_detalles.data("url"),
         method: "POST",
-        data: { listadoRecepcionActivoFijoDetalleSeleccionado: arrAux, arrConfiguraciones: arrConfiguraciones, mostrarNoSeleccionados: mostrarNoSeleccionados },
+        data: { listadoRecepcionActivoFijoDetalleSeleccionado: arrAux, arrConfiguraciones: arrConfiguraciones, mostrarNoSeleccionados: mostrarNoSeleccionados, objAdicional: id },
         success: function (data) {
             $("#modalBodyTableActivosFijos").html(data);
         },
