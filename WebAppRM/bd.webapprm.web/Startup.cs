@@ -5,6 +5,8 @@ using bd.webapprm.servicios.Servicios;
 using bd.webapprm.web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.DataProtection.AuthenticatedEncryption;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.AspNetCore.Http;
@@ -13,6 +15,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -47,14 +50,14 @@ namespace bd.webapprm.web
             services.AddDistributedMemoryCache();
             services.AddSession();
 
-            //services.AddDataProtection().UseCryptographicAlgorithms(new AuthenticatedEncryptionSettings()
-            //{
-            //    EncryptionAlgorithm = EncryptionAlgorithm.AES_256_CBC,
-            //    ValidationAlgorithm = ValidationAlgorithm.HMACSHA256
-            //});
+            services.AddDataProtection().UseCryptographicAlgorithms(new AuthenticatedEncryptionSettings()
+            {
+                EncryptionAlgorithm = EncryptionAlgorithm.AES_256_CBC,
+                ValidationAlgorithm = ValidationAlgorithm.HMACSHA256
+            });
 
-            //services.AddDataProtection().SetDefaultKeyLifetime(TimeSpan.FromDays(Convert.ToInt32(Configuration.GetSection("DiasValidosClaveEncriptada").Value)));
-            
+            services.AddDataProtection().SetDefaultKeyLifetime(TimeSpan.FromDays(Convert.ToInt32(Configuration.GetSection("DiasValidosClaveEncriptada").Value)));
+
             services.AddSingleton<IApiServicio, ApiServicio>();
             services.AddSingleton<IMenuServicio, MenuServicio>();
 
@@ -90,17 +93,17 @@ namespace bd.webapprm.web
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
 
-            //var logger = new LoggerConfiguration()
-            //    .MinimumLevel.Debug()
-            //    .Enrich.FromLogContext()
-            //    .Enrich.WithProperty("Environment", env.EnvironmentName)
-            //    //.WriteTo.RollingFile("log-{Date}.txt")
-            //    .WriteTo.Seq("http://localhost:5341")
-            //    .CreateLogger();
+            var logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .Enrich.FromLogContext()
+                .Enrich.WithProperty("Environment", env.EnvironmentName)
+                //.WriteTo.RollingFile("log-{Date}.txt")
+                .WriteTo.Seq("http://localhost:5341")
+                .CreateLogger();
 
-            //loggerFactory.AddSerilog(logger);
-            //Log.Logger = logger;
-            //loggerFactory.AddSerilog();
+            loggerFactory.AddSerilog(logger);
+            Log.Logger = logger;
+            loggerFactory.AddSerilog();
 
             if (env.IsDevelopment())
             {
@@ -121,18 +124,18 @@ namespace bd.webapprm.web
             }
 
             app.UseStaticFiles();
-            //app.UseCookieAuthentication(new CookieAuthenticationOptions
-            //{
-            //    AuthenticationScheme = "Cookies",
-            //    LoginPath = new PathString("/"),
-            //    AccessDeniedPath = new PathString("/"),
-            //    AutomaticAuthenticate = true,
-            //    AutomaticChallenge = true,
-            //    CookieName = "ASPTest",
-            //    ExpireTimeSpan = new TimeSpan(1, 0, 0), //1 hour
-            //    DataProtectionProvider = DataProtectionProvider.Create(new DirectoryInfo(@"c:\shared-auth-ticket-keys\"))
-            //});
-            ////app.UseIdentity();
+            app.UseCookieAuthentication(new CookieAuthenticationOptions
+            {
+                AuthenticationScheme = "Cookies",
+                LoginPath = new PathString("/"),
+                AccessDeniedPath = new PathString("/"),
+                AutomaticAuthenticate = true,
+                AutomaticChallenge = true,
+                CookieName = "ASPTest",
+                ExpireTimeSpan = new TimeSpan(1, 0, 0), //1 hour
+                DataProtectionProvider = DataProtectionProvider.Create(new DirectoryInfo(@"c:\shared-auth-ticket-keys\"))
+            });
+            //app.UseIdentity();
 
             app.UseSession();
             app.UseMvc(routes =>
