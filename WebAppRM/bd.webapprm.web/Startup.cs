@@ -2,16 +2,21 @@
 using bd.webapprm.entidades.Utils;
 using bd.webapprm.servicios.Interfaces;
 using bd.webapprm.servicios.Servicios;
+using bd.webapprm.web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Internal;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 
 namespace bd.webapprm.web
 {
@@ -32,32 +37,44 @@ namespace bd.webapprm.web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add framework services.
             services.AddMvc(config => {
                 config.ModelBinderProviders.Insert(0, new InvariantDatetimeModelBinderProvider());
                 //config.ModelBinderProviders.Insert(1, new InvariantDecimalModelBinderProvider());
                 config.ModelBindingMessageProvider.ValueMustBeANumberAccessor = (value) => $"El valor del campo {value} es inválido.";
                 config.ModelBindingMessageProvider.ValueMustNotBeNullAccessor = value => $"Debe introducir el {value}";
             });
+
+            services.AddDistributedMemoryCache();
+            services.AddSession();
+
+            //services.AddDataProtection().UseCryptographicAlgorithms(new AuthenticatedEncryptionSettings()
+            //{
+            //    EncryptionAlgorithm = EncryptionAlgorithm.AES_256_CBC,
+            //    ValidationAlgorithm = ValidationAlgorithm.HMACSHA256
+            //});
+
+            //services.AddDataProtection().SetDefaultKeyLifetime(TimeSpan.FromDays(Convert.ToInt32(Configuration.GetSection("DiasValidosClaveEncriptada").Value)));
+            
             services.AddSingleton<IApiServicio, ApiServicio>();
+            services.AddSingleton<IMenuServicio, MenuServicio>();
+
+            services.AddSingleton<IAuthorizationHandler, RolesHandler>();
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             WebApp.BaseAddressWebAppLogin = Configuration.GetSection("HostWebAppLogin").Value;
             WebApp.NombreAplicacion = Configuration.GetSection("NombreAplicacion").Value;
-
-            var HostSeguridad = Configuration.GetSection("HostServicioSeguridad").Value;
+            
             WebApp.BaseAddressRM = Configuration.GetSection("HostServiciosRecursosMateriales").Value;
             WebApp.BaseAddressSeguridad = Configuration.GetSection("HostServicioSeguridad").Value;
             WebApp.BaseAddressTH = Configuration.GetSection("HostServiciosTalentoHumano").Value;
             AppGuardarLog.BaseAddress = Configuration.GetSection("HostServicioLog").Value;
-
-            services.AddMemoryCache();
-            services.AddSession();
         }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            var defaultCulture = new CultureInfo("en-us");
+            var defaultCulture = new CultureInfo("es-ec");
+            defaultCulture.NumberFormat.NumberDecimalSeparator = ".";
+            defaultCulture.NumberFormat.CurrencyDecimalSeparator = ".";
             app.UseRequestLocalization(new RequestLocalizationOptions
             {
                 DefaultRequestCulture = new RequestCulture(defaultCulture),
@@ -68,8 +85,22 @@ namespace bd.webapprm.web
                 RequestCultureProviders = new List<IRequestCultureProvider> { }
             });
 
+            app.UseExceptionHandler("/Home/Error");
+
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
             loggerFactory.AddDebug();
+
+            //var logger = new LoggerConfiguration()
+            //    .MinimumLevel.Debug()
+            //    .Enrich.FromLogContext()
+            //    .Enrich.WithProperty("Environment", env.EnvironmentName)
+            //    //.WriteTo.RollingFile("log-{Date}.txt")
+            //    .WriteTo.Seq("http://localhost:5341")
+            //    .CreateLogger();
+
+            //loggerFactory.AddSerilog(logger);
+            //Log.Logger = logger;
+            //loggerFactory.AddSerilog();
 
             if (env.IsDevelopment())
             {
@@ -86,10 +117,23 @@ namespace bd.webapprm.web
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                
             }
 
             app.UseStaticFiles();
+            //app.UseCookieAuthentication(new CookieAuthenticationOptions
+            //{
+            //    AuthenticationScheme = "Cookies",
+            //    LoginPath = new PathString("/"),
+            //    AccessDeniedPath = new PathString("/"),
+            //    AutomaticAuthenticate = true,
+            //    AutomaticChallenge = true,
+            //    CookieName = "ASPTest",
+            //    ExpireTimeSpan = new TimeSpan(1, 0, 0), //1 hour
+            //    DataProtectionProvider = DataProtectionProvider.Create(new DirectoryInfo(@"c:\shared-auth-ticket-keys\"))
+            //});
+            ////app.UseIdentity();
+
             app.UseSession();
             app.UseMvc(routes =>
             {

@@ -12,7 +12,7 @@ namespace bd.webapprm.web.Models
 
         public RolesRequirement()
         {
-            
+
         }
     }
 }
