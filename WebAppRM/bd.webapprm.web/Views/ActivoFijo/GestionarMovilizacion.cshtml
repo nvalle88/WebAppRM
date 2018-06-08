@@ -70,37 +70,67 @@
                                         </section>
                                     </div>
 
+                                    <legend>Datos de Empleados</legend>
+                                    <div class="row margin-top-25">
+                                        <section class="col col-4">
+                                            <label asp-for="IdEmpleadoResponsable"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <select asp-for="IdEmpleadoResponsable" class="form-control" asp-items="ViewBag.Empleado"></select>
+                                                <span asp-validation-for="IdEmpleadoResponsable" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="IdEmpleadoSolicita"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <select asp-for="IdEmpleadoSolicita" class="form-control" asp-items="ViewBag.Empleado"></select>
+                                                <span asp-validation-for="IdEmpleadoSolicita" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="IdEmpleadoAutorizado"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <select asp-for="IdEmpleadoAutorizado" class="form-control" asp-items="ViewBag.Empleado"></select>
+                                                <span asp-validation-for="IdEmpleadoAutorizado" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+
                                     <legend>Activos Fijos autorizados</legend>
-                                    @{
-                                        if (Model == null)
-                                        {
-                                            <p class="margin-top-10">
-                                                <button type="button" class="btn btn-primary" style="padding:7px !important;margin-left:7px !important;" onclick="cargarListadoActivosFijosParaSeleccion(this)" data-funcioncallback="callBackInicializarTableListadoSeleccion" id="btnAdicionarActivosFijos" data-toggle="modal" data-target="#myModal">Adicionar / Eliminar Activos Fijos</button>
-                                            </p>
-                                        }
-                                    }
+                                    <p class="margin-top-10">
+                                        <button type="button" class="btn btn-primary" style="padding:7px !important;margin-left:7px !important;" onclick="cargarListadoActivosFijosParaSeleccion(this)" data-funcioncallback="callBackInicializarTableListadoSeleccion" id="btnAdicionarActivosFijos" data-toggle="modal" data-target="#myModal">Adicionar / Eliminar Activos Fijos</button>
+                                    </p>
                                     @{await Html.RenderPartialAsync("_ListadoDetallesActivosFijos", listadoRecepcionActivoFijoDetalleSeleccionado);}
-                                    @{
-                                        if (Model == null)
-                                        {
-                                            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-lg" style="margin-left:8% !important;margin-top:30px !important;width:85% !important;">
-                                                    <div class="modal-content" id="modalContentDatosEspecificos">
-                                                        <div class="modal-header">
-                                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="padding:10px !important;">
-                                                                &times;
-                                                            </button>
-                                                            <h4 class="modal-title" id="myModalLabel" style="padding:12px !important;">Listado de Activos Fijos</h4>
-                                                        </div>
-                                                        <div class="modal-body" style="padding:15px !important;padding-top:10px !important;" id="modalBodyDatosEspecificos"></div>
-                                                        <div class="modal-footer" style="padding:15px !important;">
-                                                            <button type="button" class="btn btn-default" id="btnCancelarDatosEspecificos" data-dismiss="modal" style="padding:7px !important;">Cancelar</button>
-                                                        </div>
-                                                    </div>
+                                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg" style="margin-left:8% !important;margin-top:30px !important;width:85% !important;">
+                                            <div class="modal-content" id="modalContentDatosEspecificos">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="padding:10px !important;">
+                                                        &times;
+                                                    </button>
+                                                    <h4 class="modal-title" id="myModalLabel" style="padding:12px !important;">Listado de Activos Fijos</h4>
+                                                </div>
+                                                <div class="modal-body" style="padding:15px !important;padding-top:10px !important;" id="modalBodyDatosEspecificos"></div>
+                                                <div class="modal-footer" style="padding:15px !important;">
+                                                    <button type="button" class="btn btn-default" id="btnCancelarDatosEspecificos" data-dismiss="modal" style="padding:7px !important;">Cancelar</button>
                                                 </div>
                                             </div>
-                                        }
-                                    }
+                                        </div>
+                                    </div>
                                 </fieldset>
                                 <footer>
                                     <span class="text-danger">@ViewData["Error"]</span>
@@ -123,8 +153,9 @@
     <script src="~/js/plugin/x-editable/jquery.mockjax.min.js"></script>
     <script src="~/js/plugin/x-editable/x-editable.min.js"></script>
     <script src='~/js/activoFijo/listadoSeleccion.min.js'></script>
-    <script src="~/js/activoFijo/movilizacion.js"></script>
+    <script src="~/js/activoFijo/movilizacion.min.js"></script>
     <script>
         var urlListadoActivosFijosSeleccionResult = "@Url.Action("ListadoActivosFijosSeleccionMovilizacionResult")";
+        objAdicional = "@String.Format("{0}", Model != null ? Model.IdMovilizacionActivoFijo.ToString() : "")";
     </script>
 }

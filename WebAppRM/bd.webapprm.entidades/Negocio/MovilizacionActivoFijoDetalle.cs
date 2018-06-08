@@ -27,5 +27,9 @@ namespace bd.webapprm.entidades
         [Display(Name = "Observaciones:")]
         [StringLength(500, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
         public string Observaciones { get; set; }
+
+        [NotMapped]
+        [Display(Name = "Componentes")]
+        public string Componentes { get; set; }
     }
 }
