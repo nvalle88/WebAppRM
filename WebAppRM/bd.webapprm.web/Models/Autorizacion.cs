@@ -1,4 +1,5 @@
 ﻿using bd.webapprm.entidades.Utils;
+using bd.webapprm.entidades.Utils.Seguridad;
 using bd.webapprm.servicios.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using System;
