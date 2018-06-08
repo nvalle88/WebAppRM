@@ -46,7 +46,7 @@
                                     {
                                         <tr>
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.AltaActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijo.LibroActivoFijo.Sucursal.Nombre)
+                                                @Html.DisplayFor(modelItem => item.AltaActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijoDetalle.SucursalActual.Nombre)
                                             </td>
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.AltaActivoFijoDetalle.FirstOrDefault().TipoUtilizacionAlta.Nombre)
@@ -97,7 +97,7 @@
 
 @section Scripts {
     <script src='~/js/datatables/initDatatableFiltrado.min.js'></script>
-    <script src="~/js/activoFijo/listadoSeleccion.min.js"></script>
+    <script src="~/js/activoFijo/listadoSeleccion.js"></script>
     <script>
     var arrConfiguraciones = [
         { propiedad: "IsConfiguracionDatosActivo", valor: true },

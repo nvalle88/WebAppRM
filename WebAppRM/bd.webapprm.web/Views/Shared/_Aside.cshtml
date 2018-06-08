@@ -180,7 +180,7 @@
                         </ul>
                     </li>
 
-                    <li class="@Html.RouteIf(new[] { "ListarMantenimientosActivosFijos", "ListarMantenimientos", "CrearMantenimiento", "EditarMantenimiento" }, "ActivoFijo", "active")">
+                    <li class="@Html.RouteIf(new[] { "ListarMantenimientosActivosFijos", "ListadoMantenimientos", "CrearMantenimiento", "EditarMantenimiento" }, "ActivoFijo", "active")">
                         <a href="@Url.Action("ListarMantenimientosActivosFijos", "ActivoFijo")">Mantenimientos</a>
                     </li>
 
@@ -194,6 +194,10 @@
 
                     <li class="@Html.RouteIf(new[] { "ListadoMovilizacionActivosFijos", "GestionarMovilizacion" }, "ActivoFijo", "active")">
                         <a href="@Url.Action("ListadoMovilizacionActivosFijos", "ActivoFijo")">Movilizaciones</a>
+                    </li>
+
+                    <li class="@Html.RouteIf(new[] { "ListarRevalorizacionesActivosFijos", "ListadoRevalorizaciones", "GestionarRevalorizacion" }, "ActivoFijo", "active")">
+                        <a href="@Url.Action("ListarRevalorizacionesActivosFijos", "ActivoFijo")">Revalorizaciones</a>
                     </li>
 
                     <li>
