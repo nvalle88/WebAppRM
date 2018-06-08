@@ -645,7 +645,7 @@ namespace bd.webapprm.web.Controllers.MVC
                         return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}", nameof(ListadoActivosFijosAlta));
 
                     var altaActivoFijo = JsonConvert.DeserializeObject<AltaActivoFijo>(response.Resultado.ToString());
-                    ViewData["ListadoRecepcionActivoFijoDetalleSeleccionado"] = altaActivoFijo.AltaActivoFijoDetalle.Select(c => new RecepcionActivoFijoDetalleSeleccionado
+                    ViewData["ListadoRecepcionActivoFijoDetalleSeleccionado"] = altaActivoFijo.AltaActivoFijoDetalle.Where(c=> c.RecepcionActivoFijoDetalle.Estado.Nombre == Estados.Alta).Select(c => new RecepcionActivoFijoDetalleSeleccionado
                     {
                         RecepcionActivoFijoDetalle = c.RecepcionActivoFijoDetalle,
                         Seleccionado = true
@@ -1991,6 +1991,84 @@ namespace bd.webapprm.web.Controllers.MVC
             catch (Exception)
             { }
             return PartialView("_ListadoDetallesActivosFijos", lista);
+        }
+        #endregion
+
+        #region Revalorizaciones
+        public async Task<IActionResult> ListarRevalorizacionesActivosFijos()
+        {
+            var lista = new List<ActivoFijo>();
+            try
+            {
+                ViewData["IsConfiguracionListadoRevalorizaciones"] = true;
+                ViewData["Titulo"] = "Activos Fijos en Alta";
+                ViewData["UrlEditar"] = nameof(GestionarRevalorizacion);
+                lista = await apiServicio.ObtenerElementoAsync<List<ActivoFijo>>(Estados.Alta, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ListarActivosFijosPorAgrupacionDepreciacion");
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Listando revalorizaciones de Activos Fijos", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webapprm" });
+                TempData["Mensaje"] = $"{Mensaje.Error}|{Mensaje.ErrorListado}";
+            }
+            return View("ListadoActivoFijo", lista);
+        }
+
+        public async Task<IActionResult> ListadoRevalorizaciones(string id)
+        {
+            var lista = new List<RevalorizacionActivoFijo>();
+            ViewData["IdRecepcionActivoFijoDetalle"] = id;
+            try
+            {
+                lista = await apiServicio.ObtenerElementoAsync<List<RevalorizacionActivoFijo>>(id, new Uri(WebApp.BaseAddressRM), "api/RevalorizacionActivoFijo/ListarRevalorizacionActivoFijoPorIdDetalleActivoFijo");
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Listando revalorizaciones de Activos Fijos", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webapprm" });
+                TempData["Mensaje"] = $"{Mensaje.Error}|{Mensaje.ErrorListado}";
+            }
+            return View(lista);
+        }
+
+        public async Task<IActionResult> GestionarRevalorizacion(string id)
+        {
+            try
+            {
+                ViewData["IdRecepcionActivoFijoDetalle"] = id;
+                decimal ultimaRevalorizacionActivoFijo = await apiServicio.ObtenerElementoAsync<decimal>(id, new Uri(WebApp.BaseAddressRM), "api/RevalorizacionActivoFijo/UltimoValorCompra");
+                return View(new RevalorizacionActivoFijo {
+                    FechaRevalorizacion = DateTime.Now,
+                    ValorCompraAnterior = ultimaRevalorizacionActivoFijo
+                });
+            }
+            catch (Exception)
+            {
+                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorCargarDatos}", nameof(ListadoRevalorizaciones), routeValues: new { id });
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> GestionarRevalorizacion(RevalorizacionActivoFijo revalorizacionActivoFijo)
+        {
+            try
+            {
+                ViewData["IdRecepcionActivoFijoDetalle"] = revalorizacionActivoFijo.IdRecepcionActivoFijoDetalle;
+                var response = new Response();
+                response = await apiServicio.InsertarAsync(revalorizacionActivoFijo, new Uri(WebApp.BaseAddressRM), "api/RevalorizacionActivoFijo/InsertarRevalorizacionActivoFijo");
+                if (response.IsSuccess)
+                    await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), EntityID = string.Format("{0} : {1}", "Revalorización", revalorizacionActivoFijo.IdRevalorizacionActivoFijo.ToString()), LogCategoryParametre = Convert.ToString(LogCategoryParameter.Edit), LogLevelShortName = Convert.ToString(LogLevelParameter.ADV), Message = "Se ha creado una revalorización de Activo Fijo", UserName = "Usuario 1" });
+
+                if (response.IsSuccess)
+                    return this.Redireccionar($"{Mensaje.Informacion}|{Mensaje.Satisfactorio}", nameof(ListadoRevalorizaciones), routeValues: new { id = revalorizacionActivoFijo.IdRecepcionActivoFijoDetalle });
+
+                ViewData["Error"] = response.Message;
+                return View(revalorizacionActivoFijo);
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Editando una revalorización de Activo Fijo", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Edit), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webapprm" });
+                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorEditar}", nameof(ListadoRevalorizaciones), routeValues: new { id = revalorizacionActivoFijo.IdRecepcionActivoFijoDetalle });
+            }
         }
         #endregion
 

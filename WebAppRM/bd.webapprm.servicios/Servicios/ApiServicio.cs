@@ -100,7 +100,7 @@ namespace bd.webapprm.servicios.Servicios
                 return null;
             }
         }
-        public async Task<T> ObtenerElementoAsync<T>(object model, Uri baseAddress, string url) where T : class
+        public async Task<T> ObtenerElementoAsync<T>(object model, Uri baseAddress, string url)
         {
             try
             {
@@ -116,7 +116,7 @@ namespace bd.webapprm.servicios.Servicios
             }
             catch (Exception)
             {
-                return null;
+                return default(T);
             }
         }
     }
