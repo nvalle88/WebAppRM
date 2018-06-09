@@ -23,13 +23,13 @@ namespace bd.webapprm.entidades
         [Required(ErrorMessage = "Debe introducir la {0}")]
         [Display(Name = "Fecha de inicio de vigencia:")]
         [DataType(DataType.DateTime)]
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime FechaInicioVigencia { get; set; }
 
         [Required(ErrorMessage = "Debe introducir la {0}")]
         [Display(Name = "Fecha de fin de vigencia:")]
         [DataType(DataType.DateTime)]
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime FechaFinVigencia { get; set; }
 
         public virtual ICollection<PolizaSeguroActivoFijo> PolizasSeguroActivoFijo { get; set; }

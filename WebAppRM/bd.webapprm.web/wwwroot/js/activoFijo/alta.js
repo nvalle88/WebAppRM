@@ -1,7 +1,7 @@
 ﻿$(document).ready(function () {
     Init_Select2();
-    Init_DatetimePicker("FacturaActivoFijo_FechaFactura");
-    Init_DatetimePicker("FechaAlta");
+    Init_DatetimePicker("FacturaActivoFijo_FechaFactura", true);
+    Init_DatetimePicker("FechaAlta", true);
     eventoMotivoAlta();
     inicializarDetallesActivoSeleccion();
     inicializarObjetoAdicional();
@@ -30,7 +30,7 @@ function partialViewFacturaActivoFijoIsCompra()
             data: { idFacturaActivoFijo: $("#IdFacturaActivoFijo").val() },
             success: function (data) {
                 $("#divOpcionCompra").html(data);
-                Init_DatetimePicker("FacturaActivoFijo_FechaFactura");
+                Init_DatetimePicker("FacturaActivoFijo_FechaFactura", true);
                 Init_FileInput("fileFactura");
             },
             complete: function (data) {

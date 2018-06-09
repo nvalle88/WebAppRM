@@ -14,7 +14,7 @@ namespace bd.webapprm.entidades
         [Required(ErrorMessage = "Debe introducir {0}")]
         [Display(Name = "Fecha de nacimiento:")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? FechaNacimiento { get; set; }
 
         [Required(ErrorMessage = "Debe introducir {0}")]

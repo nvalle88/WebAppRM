@@ -21,17 +21,20 @@ function Init_Select2()
     });
 }
 
-function Init_Date(idElemento)
+function Init_DatetimePicker(idElemento, forceMaxDate, isModeDate)
 {
-    $('#' + idElemento).datetimepicker({
-        'format': 'D-M-Y'
-    });
-}
+    var formato = 'DD/MM/YYYY';
+    var objData = {
+        format: isModeDate ? formato : (formato + ' hh:mm a')
+    };
 
-function Init_DatetimePicker(idElemento)
-{
-    $('#' + idElemento).datetimepicker({
-        'format': 'D-M-Y hh:mm A'
+    if (forceMaxDate)
+        objData.maxDate = moment();
+
+    var datetimePicker = $('#' + idElemento).datetimepicker(objData);
+    datetimePicker.on("dp.show", function (e) {
+        if (forceMaxDate)
+            $(this).data("DateTimePicker").maxDate(moment());
     });
 }
 

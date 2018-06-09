@@ -23,13 +23,13 @@ namespace bd.webapprm.entidades
         [Required(ErrorMessage = "Debe introducir {0}")]
         [Display(Name = "Fecha de ingreso:")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy hh:mm}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy hh:mm tt}", ApplyFormatInEditMode = true)]
         public DateTime FechaIngreso { get; set; }
 
         [Required(ErrorMessage = "Debe introducir {0}")]
         [Display(Name = "Fecha de ingreso al sector público:")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy hh:mm}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy hh:mm tt}", ApplyFormatInEditMode = true)]
         public DateTime? FechaIngresoSectorPublico { get; set; }
 
         [Required(ErrorMessage = "Debe introducir {0}")]

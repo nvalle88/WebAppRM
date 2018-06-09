@@ -1,6 +1,6 @@
 ﻿$(document).ready(function () {
     Init_Select2();
-    Init_DatetimePicker("FechaBaja");
+    Init_DatetimePicker("FechaBaja", true);
     inicializarDetallesActivoSeleccion();
     inicializarObjetoAdicional();
     initDataTableFiltrado("tableDetallesActivoFijoSeleccionados", [13, 15, 16, 17, 18, 19, 20, 21, 22]);

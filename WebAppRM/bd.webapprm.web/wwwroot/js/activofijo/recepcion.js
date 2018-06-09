@@ -22,7 +22,7 @@ $(document).ready(function () {
     eventoRamo();
     eventoSucursal();
     gestionarWizard();
-    Init_DatetimePicker("RecepcionActivoFijo_FechaRecepcion");
+    Init_DatetimePicker("RecepcionActivoFijo_FechaRecepcion", true);
     Init_FileInput("file");
     eventoSpinnerCantidad();
     initArrIdFilas();
