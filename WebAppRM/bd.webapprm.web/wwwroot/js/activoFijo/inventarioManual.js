@@ -1,6 +1,6 @@
 ﻿jQuery(document).ready(function (e) {
-    Init_DatetimePicker("FechaCorteInventario");
-    Init_DatetimePicker("FechaInforme");
+    Init_DatetimePicker("FechaCorteInventario", true);
+    Init_DatetimePicker("FechaInforme", true);
     Init_Select2();
     adicionarArrRecepcionActivoFijoDetalle();
     initDataTableFiltrado("tableDetallesActivoFijoBajas", [14, 16, 17, 18, 19, 21, 22, 23], function () {

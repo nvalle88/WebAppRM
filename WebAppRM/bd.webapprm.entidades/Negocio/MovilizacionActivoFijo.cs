@@ -36,13 +36,13 @@ namespace bd.webapprm.entidades
         [Required(ErrorMessage = "Debe introducir la {0}")]
         [Display(Name = "Fecha de salida:")]
         [DataType(DataType.DateTime)]
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy hh:mm tt}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy hh:mm tt}", ApplyFormatInEditMode = true)]
         public DateTime FechaSalida { get; set; }
 
         [Required(ErrorMessage = "Debe introducir la {0}")]
         [Display(Name = "Fecha de retorno:")]
         [DataType(DataType.DateTime)]
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy hh:mm tt}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy hh:mm tt}", ApplyFormatInEditMode = true)]
         public DateTime FechaRetorno { get; set; }
 
         [Display(Name = "Motivo de traslado:")]

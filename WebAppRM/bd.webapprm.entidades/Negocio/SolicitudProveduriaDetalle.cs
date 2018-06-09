@@ -11,13 +11,13 @@ namespace bd.webapprm.entidades
         [Required(ErrorMessage = "Debe introducir la {0}")]
         [Display(Name = "Fecha de la solicitud:")]
         [DataType(DataType.DateTime)]
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime FechaSolicitud { get; set; }
 
         [Required(ErrorMessage = "Debe introducir la {0}")]
         [Display(Name = "Fecha aprobada:")]
         [DataType(DataType.DateTime)]
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime? FechaAprobada { get; set; }
 
         [Required(ErrorMessage = "Debe introducir la {0}")]

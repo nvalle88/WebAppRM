@@ -42,7 +42,7 @@ namespace bd.webapprm.entidades
         [Required(ErrorMessage = "Debe introducir la {0}")]
         [Display(Name = "Fecha de ubicación:")]
         [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime FechaUbicacion { get; set; }
 
         public virtual ICollection<TransferenciaActivoFijo> TransferenciasActivoFijoDestino { get; set; }

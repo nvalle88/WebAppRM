@@ -1,6 +1,6 @@
 ﻿$(document).ready(function () {
     Init_Select2();
-    Init_DatetimePicker("FechaTransferencia");
+    Init_DatetimePicker("FechaTransferencia", true);
     inicializarDetallesActivoSeleccion();
     initDataTableFiltrado("tableDetallesActivoFijoBajas", [14, 16, 17, 18, 19, 20, 21, 22, 23]);
     eventoCustodioEntrega();
