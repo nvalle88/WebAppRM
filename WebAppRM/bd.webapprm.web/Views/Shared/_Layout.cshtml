@@ -28,9 +28,9 @@
 </head>
 <body class="@ViewBag.PageClass @Settings.Value.CurrentTheme">
     <header id="header">
-        @{ await Html.RenderPartialAsync("_Header"); }
+        @{ await Html.RenderPartialAsync("_Header", User.Identity.IsAuthenticated); }
         <section id="top-right">
-            @(IsSectionDefined("topright") ? RenderSection("topright", false) : Html.Partial("_TopRight"))
+            @(IsSectionDefined("topright") ? RenderSection("topright", User.Identity.IsAuthenticated) : Html.Partial("_TopRight", User.Identity.IsAuthenticated))
         </section>
     </header>
     @{ Html.RenderPartialIf("_Aside", true); }
@@ -40,7 +40,7 @@
     </div>
     @if (User.Identity.IsAuthenticated)
     {
-        await Html.RenderPartialAsync("_Footer");
+        await Html.RenderPartialAsync("_Footer", User.Identity.IsAuthenticated);
         Html.RenderPartialIf("_Tiles", Settings.Value.EnableTiles);
     }
     <span class="hide" id="span_mensaje">@TempData["Mensaje"]</span>

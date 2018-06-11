@@ -1,4 +1,31 @@
-﻿<div class="login-info">
+﻿@*@using bd.webapprm.web.Helpers
+@using System.Security.Claims;
+@inject Microsoft.Extensions.Options.IOptions<Settings> Settings
+
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="login-info">
+        <span>
+            @{var NombreUsuario = "";}
+            @try
+            {
+                var claim = User.Identities.Where(x => x.NameClaimType == ClaimTypes.Name).FirstOrDefault();
+                NombreUsuario = claim.Claims.Where(c => c.Type == ClaimTypes.Name).FirstOrDefault().Value;
+            }
+            catch (Exception)
+            {
+                Url.Action("Index", "Login");
+            }
+            <a href="javascript:void(0);" id="show-shortcut" data-action="toggleShortcut">
+                <img src="~/img/avatars/sunny.png" alt="me" class="online" />
+                <span>@NombreUsuario</span>
+                <i class="fa fa-angle-down"></i>
+            </a>
+        </span>
+    </div>
+}*@
+
+<div class="login-info">
     <span>
         <a href="javascript:void(0);" id="show-shortcut" data-action="toggleShortcut">
             <img src="~/img/avatars/sunny.png" alt="me" class="online" />
