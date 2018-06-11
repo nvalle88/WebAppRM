@@ -124,6 +124,11 @@ tr.group:hover {
     width: 97%;
 }
 
+.paddingTextArea98 {
+    padding: 5px 9px !important;
+    width: 98%;
+}
+
 .width100 {
     width:100% !important;
 }
