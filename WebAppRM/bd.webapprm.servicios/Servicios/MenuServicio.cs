@@ -33,7 +33,7 @@ namespace bd.webapprm.servicios.Servicios
                     listaAcciones = diccionario.Value;
 
                 string accion = ObtenerAccion(admeControlador);
-                if (accion != "Index" && accion != "Create" && accion != "Edit" && accion != "Gestionar") //Agregar aquí las acciones para que se compare solo por el Controlador
+                if (listaAcciones.Count == 0 && (accion != "Index" && accion != "Create" && accion != "Edit")) //Agregar aquí las acciones para que se compare solo por el Controlador
                     listaAcciones.Insert(0, accion);
                 return listaAcciones;
             }
