@@ -28,6 +28,6 @@
         /// <summary>
         ///     Retrieves the entry value for the following composed key: "config:CurrentTheme" as a string.
         /// </summary>
-        public string CurrentTheme { get; set; }
+        public string CurrentTheme { get; set; } = "smart-style-1";
     }
 }

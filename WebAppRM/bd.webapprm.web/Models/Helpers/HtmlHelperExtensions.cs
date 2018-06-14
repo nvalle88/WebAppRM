@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using bd.webapprm.web;
 using System.Linq;
+using System.Collections.Generic;
 #endregion
 
 namespace bd.webapprm.web.Helpers
@@ -66,17 +67,6 @@ namespace bd.webapprm.web.Helpers
             return hasAction || hasController ? new HtmlString(attribute) : new HtmlString(string.Empty);
         }
 
-        public static IHtmlContent RouteIf(this IHtmlHelper helper, string[] accion, string controlador, string attribute)
-        {
-            var currentController = (helper.ViewContext.RouteData.Values["controller"] ?? string.Empty).ToString().UnDash();
-            var currentAction = (helper.ViewContext.RouteData.Values["action"] ?? string.Empty).ToString().UnDash();
-
-            var hasController = controlador.Equals(currentController, StringComparison.OrdinalIgnoreCase);
-            var hasAction = accion.Contains(currentAction);
-
-            return hasAction && hasController ? new HtmlString(attribute) : new HtmlString(string.Empty);
-        }
-
         /// <summary>
         ///     Renders the specified partial view with the parent's view data and model if the given setting entry is found and
         ///     represents the equivalent of true.
@@ -110,9 +100,7 @@ namespace bd.webapprm.web.Helpers
         public static IHtmlContent Copyright(this IHtmlHelper helper)
         {
             helper.EnsureSettings();
-
             var copyright = $"{helper.AssemblyVersion()} &copy; {DateTime.Now.Year} {Settings.Company}".Trim();
-
             return helper.Raw(copyright);
         }
 
@@ -120,10 +108,7 @@ namespace bd.webapprm.web.Helpers
         {
             _executingAssembly = typeof(Startup).GetTypeInfo().Assembly;
             var version = _executingAssembly.GetName().Version;
-
-            _displayVersion =
-                string.Format("{4} {0}.{1}.{2} (build {3})", version.Major, version.Minor, version.Build,
-                    version.Revision, Settings.Project).Trim();
+            _displayVersion = string.Format("{4} {0}.{1}.{2} (build {3})", version.Major, version.Minor, version.Build, version.Revision, Settings.Project).Trim();
         }
 
         /// <summary>
@@ -133,8 +118,7 @@ namespace bd.webapprm.web.Helpers
         /// <param name="alertType">The alert type styling rule to apply to the summary element.</param>
         /// <param name="heading">The optional value for the heading of the summary element.</param>
         /// <returns></returns>
-        public static IHtmlContent ValidationBootstrap(this IHtmlHelper htmlHelper, string alertType = "danger",
-            string heading = "")
+        public static IHtmlContent ValidationBootstrap(this IHtmlHelper htmlHelper, string alertType = "danger", string heading = "")
         {
             if (htmlHelper.ViewData.ModelState.IsValid)
                 return new HtmlString(string.Empty);
@@ -149,20 +133,16 @@ namespace bd.webapprm.web.Helpers
             button.InnerHtml.AppendHtml("&times;");
 
             div.InnerHtml.AppendHtml(button);
-
             if (!heading.IsEmpty())
             {
                 var h4 = new TagBuilder("h4");
                 h4.AddCssClass("alert-heading");
                 h4.InnerHtml.Append($"<h4 class=\"alert-heading\">{heading}</h4>");
-
                 div.InnerHtml.AppendHtml(h4);
             }
 
             var summary = htmlHelper.ValidationSummary();
-
             div.InnerHtml.AppendHtml(summary);
-
             return div;
         }
     }

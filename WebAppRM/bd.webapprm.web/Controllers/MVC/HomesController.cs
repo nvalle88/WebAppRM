@@ -25,19 +25,28 @@ namespace bd.webapprm.web.Controllers.MVC
         }
 
         [Authorize(Policy = PoliticasSeguridad.TienePermiso)]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var lista = new List<Noticia>();
-            try
-            {
-                lista = await apiServicio.Listar<Noticia>(new Uri(WebApp.BaseAddress), "api/Homes/ListarNoticias");
-                return View(lista);
-            }
-            catch (Exception ex)
-            {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Listando noticias", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webapprm" });
-                return BadRequest();
-            }
+            return View();
+        }
+
+        public IActionResult About()
+        {
+            ViewData["Message"] = "Your application description page.";
+
+            return View();
+        }
+
+        public IActionResult Contact()
+        {
+            ViewData["Message"] = "Your contact page.";
+
+            return View();
+        }
+
+        public IActionResult Error()
+        {
+            return View();
         }
     }
 }
