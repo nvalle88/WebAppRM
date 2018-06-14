@@ -1,4 +1,4 @@
 ﻿$(document).ready(function () {
-    Init_Date("FechaInicioVigencia", true);
-    Init_Date("FechaFinVigencia");
+    Init_DatetimePicker("FechaInicioVigencia", true, true);
+    Init_DatetimePicker("FechaFinVigencia", true, true);
 });

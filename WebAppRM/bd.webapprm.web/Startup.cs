@@ -146,8 +146,7 @@ namespace bd.webapprm.web
             {
                 routes.MapRoute(
                     name: "default",
-                    //template: "{controller=Login}/{action=Login}/{id?}/{id2?}");//Poner esta cuando ya esté bien montada la autenticación
-                    template: "{controller=Home}/{action=Index}/{id?}/{id2?}");
+                    template: "{controller=Login}/{action=Login}/{id?}/{id2?}");
             });
         }
     }
