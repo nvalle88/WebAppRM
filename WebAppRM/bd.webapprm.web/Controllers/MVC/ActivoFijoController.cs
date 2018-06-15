@@ -2073,6 +2073,23 @@ namespace bd.webapprm.web.Controllers.MVC
         #endregion
 
         #region Reportes
+        public async Task<IActionResult> AltaReporte()
+        {
+            try
+            {
+                var lista = await apiServicio.ObtenerElementoAsync<List<ActivoFijo>>(new List<string> { Estados.Alta }, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ListarActivoFijoPorEstado");
+                ViewData["Titulo"] = "Activos Fijos";
+                ViewData["textoColumna"] = "Ver Hoja de Vida";
+                ViewData["url"] = "HojaVidaActivoFijo";
+                return View("ListadoActivoFijo", lista);
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Listando activos fijos con estado Recepcionado", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webapprm" });
+                return BadRequest();
+            }
+        }
+
         public async Task<IActionResult> HojaVidaActivoFijo(string id) => await ObtenerRecepcionActivoFijo(id, null, nameof(HojaVidaReporte));
 
         public async Task<IActionResult> HojaVidaReporte()
