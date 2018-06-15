@@ -22,7 +22,10 @@
     {
         Url.Action("Index", "Login");
     }
-    @MenuServicio.CrearMenu(Html, Url, menuItems, 3)
+    @if (menuItems != null)
+    {
+        @MenuServicio.CrearMenu(Html, Url, menuItems, WebApp.NivelesMenu)
+    }
 
     <span class="minifyme" data-action="minifyMenu">
         <i class="fa fa-arrow-circle-left hit"></i>

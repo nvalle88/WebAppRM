@@ -1,7 +1,7 @@
 ﻿$(document).ready(function () {
     Init_Select2();
-    Init_DatetimePicker("FechaSalida", true);
-    Init_DatetimePicker("FechaRetorno");
+    Init_DatetimePicker("FechaSalida", false, true);
+    Init_DatetimePicker("FechaRetorno", false, true);
     inicializarDetallesActivoSeleccion();
     initDataTableFiltrado("tableDetallesActivoFijoSeleccionados", [13, 15, 16, 17, 18, 19, 20, 21, 22]);
     eventoGuardar();

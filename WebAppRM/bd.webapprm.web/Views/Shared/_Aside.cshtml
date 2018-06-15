@@ -2,144 +2,9 @@
     @{ await Html.RenderPartialAsync("_CurrentUser"); }
     @*<nav>
         <ul>
-            <li>
-                <a href="#"><i class="fa fa-lg fa-fw fa-building"></i> <span class="menu-item-parent">Activos Fijos</span></a>
-                <ul>
-                    <li>
-                        <a href="#"><span class="menu-item-parent">P&oacute;liza de Seguro</span></a>
-                        <ul>
-                            <li class="@Html.RouteIf(new[] { "ActivosFijosRecepcionadosSinPoliza", "AsignarPolizaSeguro" }, "ActivoFijo", "active")">
-                                <a href="@Url.Action("ActivosFijosRecepcionadosSinPoliza", "ActivoFijo")">P&oacute;lizas de Seguro sin asignar</a>
-                            </li>
-                            <li class="@Html.RouteIf("ActivosFijosRecepcionadosConPoliza", "active")">
-                                <a href="@Url.Action("ActivosFijosRecepcionadosConPoliza", "ActivoFijo")">P&oacute;lizas de Seguro asignadas</a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li>
-                        <a href="#"><span class="menu-item-parent">Altas</span></a>
-                        <ul>
-                            <li class="@Html.RouteIf("GestionarAlta", "active")">
-                                <a href="@Url.Action("GestionarAlta", "ActivoFijo")">Gestionar Alta de Activos Fijos</a>
-                            </li>
-                            <li class="@Html.RouteIf("ListadoAltaActivosFijos", "active")">
-                                <a href="@Url.Action("ListadoAltaActivosFijos", "ActivoFijo")">Listado de Altas</a>
-                            </li>
-                            <li class="@Html.RouteIf("ListadoActivosFijosAlta", "active")">
-                                <a href="@Url.Action("ListadoActivosFijosAlta", "ActivoFijo")">Listado de Activos Fijos en Alta</a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li>
-                        <a href="#"><span class="menu-item-parent">Bajas</span></a>
-                        <ul>
-                            <li class="@Html.RouteIf("GestionarBaja", "active")">
-                                <a href="@Url.Action("GestionarBaja", "ActivoFijo")">Gestionar Baja de Activos Fijos</a>
-                            </li>
-                            <li class="@Html.RouteIf("ListadoBajaActivosFijos", "active")">
-                                <a href="@Url.Action("ListadoBajaActivosFijos", "ActivoFijo")">Listado de Bajas</a>
-                            </li>
-                            <li class="@Html.RouteIf("ListadoActivosFijosBaja", "active")">
-                                <a href="@Url.Action("ListadoActivosFijosBaja", "ActivoFijo")">Listado de Activos Fijos en Baja</a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li>
-                        <a href="#"><span class="menu-item-parent">Transferencias</span></a>
-                        <ul>
-                            <li class="@Html.RouteIf(new[] { "ListadoCambioCustodio", "GestionarCambioCustodio" }, "ActivoFijo", "active")">
-                                <a href="@Url.Action("ListadoCambioCustodio", "ActivoFijo")">Cambio de Custodio</a>
-                            </li>
-                            <li>
-                                <a href="#"> Cambio de Ubicaci&oacute;n entre Sucursales</a>
-                                <ul>
-                                    <li class="@Html.RouteIf("GestionarTransferenciaSucursal", "active")">
-                                        <a href="@Url.Action("GestionarTransferenciaSucursal", "ActivoFijo")">Gestionar Transferencia de Activos Fijos</a>
-                                    </li>
-                                    <li class="@Html.RouteIf("ListadoSolicitudesTransferencia", "active")">
-                                        <a href="@Url.Action("ListadoSolicitudesTransferencia", "ActivoFijo")">Solicitudes de Transferencia</a>
-                                    </li>
-                                    <li class="@Html.RouteIf("ListadoTransferenciasCreadas", "active")">
-                                        <a href="@Url.Action("ListadoTransferenciasCreadas", "ActivoFijo")">Transferencias Creadas</a>
-                                    </li>
-                                    <li class="@Html.RouteIf("ListadoTransferenciasAceptadas", "active")">
-                                        <a href="@Url.Action("ListadoTransferenciasAceptadas", "ActivoFijo")">Transferencias Aceptadas</a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li class="@Html.RouteIf(new[] { "ListarMantenimientosActivosFijos", "ListadoMantenimientos", "CrearMantenimiento", "EditarMantenimiento" }, "ActivoFijo", "active")">
-                        <a href="@Url.Action("ListarMantenimientosActivosFijos", "ActivoFijo")">Mantenimientos</a>
-                    </li>
-
-                    <li class="@Html.RouteIf(new[] { "ListarProcesosJudicialesActivosFijos", "ListadoProcesosJudiciales", "GestionarProcesoJudicial" }, "ActivoFijo", "active")">
-                        <a href="@Url.Action("ListarProcesosJudicialesActivosFijos", "ActivoFijo")">Procesos Judiciales</a>
-                    </li>
-
-                    <li class="@Html.RouteIf(new[] { "ListadoInventarioActivosFijos", "GestionarInventarioManual", "GestionarInventarioAutomatico" }, "ActivoFijo", "active")">
-                        <a href="@Url.Action("ListadoInventarioActivosFijos", "ActivoFijo")">Inventarios</a>
-                    </li>
-
-                    <li class="@Html.RouteIf(new[] { "ListadoMovilizacionActivosFijos", "GestionarMovilizacion" }, "ActivoFijo", "active")">
-                        <a href="@Url.Action("ListadoMovilizacionActivosFijos", "ActivoFijo")">Movilizaciones</a>
-                    </li>
-
-                    <li class="@Html.RouteIf(new[] { "ListarRevalorizacionesActivosFijos", "ListadoRevalorizaciones", "GestionarRevalorizacion" }, "ActivoFijo", "active")">
-                        <a href="@Url.Action("ListarRevalorizacionesActivosFijos", "ActivoFijo")">Revalorizaciones</a>
-                    </li>
-
-                    <li>
-                        <a href="#"><i class="fa fa-file-text-o"></i> <span class="menu-item-parent">Reportes</span></a>
-                        <ul>
-                            <li class="@Html.RouteIf("AltaReporte", "active")">
-                                <a href="@Url.Action("ActivosFijosReporteAltas", "ActivoFijo")">Registro de Altas</a>
-                            </li>
-                            <li class="@Html.RouteIf("PolizasReporte", "active")">
-                                <a href="@Url.Action("PolizasReporte", "ActivoFijo")">Detalles con P&oacute;liza de Seguro</a>
-                            </li>
-                            <li class="@Html.RouteIf("BienesReporte", "active")">
-                                <a href="@Url.Action("BienesReporte", "ActivoFijo")">Bienes por &aacute;rea usuaria</a>
-                            </li>
-                            <li class="@Html.RouteIf("HojaVidaReporte", "active")">
-                                <a href="@Url.Action("HojaVidaReporte", "ActivoFijo")">Hoja de vida</a>
-                            </li>
-                            <li class="@Html.RouteIf("MantenimientosReporte", "active")">
-                                <a href="@Url.Action("MantenimientosReporte", "ActivoFijo")">Registros de Mantenimiento</a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
             <li class="@Html.RouteIf("proveeduria", "active")">
                 <a href="#"><i class="fa fa-lg fa-fw fa-building"></i> <span class="menu-item-parent">Proveedur&iacute;a</span></a>
                 <ul>
-                    <li class="@Html.RouteIf("recepcion_proveeduria", "active")">
-                        <a href="#"><span class="menu-item-parent">Recepci&oacute;n</span></a>
-                        <ul>
-                            <li class="@Html.RouteIf("ListadoRecepcion", "active")">
-                                <a href="@Url.Action("ListadoRecepcion", "Proveeduria")">Recepcionar Proveedur&iacute;a</a>
-                            </li>
-                            <li class="@Html.RouteIf("MaestroArticuloSucursal", "active")">
-                                <a href="@Url.Action("Index", "MaestroArticuloSucursal")">Configurar Maestro de Art&iacute;culo</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="@Html.RouteIf("IngresarFacturas", "active")">
-                        <a href="@Url.Action("IngresarFacturas", "Proveeduria")">Ingresar Facturas</a>
-                    </li>
-                    <li class="@Html.RouteIf("altas", "active")">
-                        <a href="#"><span class="menu-item-parent">Altas</span></a>
-                        <ul>
-                            <li class="@Html.RouteIf("ArticulosADarAlta", "active")">
-                                <a href="@Url.Action("ArticulosADarAlta", "Proveeduria")">Dar Altas</a>
-                            </li>
-                        </ul>
-                    </li>
                     <li class="@Html.RouteIf("bajas", "active")">
                         <a href="#"><span class="menu-item-parent">Bajas</span></a>
                         <ul>
@@ -151,6 +16,7 @@
                             </li>
                         </ul>
                     </li>
+
                     <li class="@Html.RouteIf("reportes", "active")">
                         <a href="#"><i class="fa fa-file-text-o"></i> <span class="menu-item-parent">Reportes</span></a>
                         <ul>
@@ -180,10 +46,7 @@
                 </ul>
             </li>
         </ul>
-    </nav>
-    <span class="minifyme" data-action="minifyMenu">
-        <i class="fa fa-arrow-circle-left hit"></i>
-    </span>*@
+    </nav>*@
 
     @{ await Html.RenderPartialAsync("_Menu"); }
 </aside>

@@ -66,8 +66,12 @@ namespace bd.webapprm.web
 
             services.AddMvc().Services.AddAuthorization(options =>
             {
-                options.AddPolicy("EstaAutorizado",
-                                  policy => policy.Requirements.Add(new RolesRequirement()));
+                options.AddPolicy("EstaAutorizado", policy => policy.Requirements.Add(new RolesRequirement()));
+            });
+
+            services.AddMvc(options =>
+            {
+                options.Filters.Add(new Filtro());
             });
 
             WebApp.BaseAddressWebAppLogin = Configuration.GetSection("HostWebAppLogin").Value;
@@ -77,6 +81,7 @@ namespace bd.webapprm.web
             WebApp.BaseAddressSeguridad = Configuration.GetSection("HostServicioSeguridad").Value;
             WebApp.BaseAddressTH = Configuration.GetSection("HostServiciosTalentoHumano").Value;
             AppGuardarLog.BaseAddress = Configuration.GetSection("HostServicioLog").Value;
+            WebApp.NivelesMenu = Convert.ToInt32(Configuration.GetSection("NivelMenu").Value);
         }
         
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)

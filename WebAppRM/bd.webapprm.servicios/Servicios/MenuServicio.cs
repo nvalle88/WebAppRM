@@ -19,7 +19,14 @@ namespace bd.webapprm.servicios.Servicios
         private IDictionary<string, List<string>> DiccionarioAcciones = new Dictionary<string, List<string>>
         {
             { "/ActivoFijo/Recepcion", new List<string> { "EditarRecepcionAR" } },
-            { "/ActivoFijo/ActivosFijosValidacionTecnica", new List<string> { "RevisionActivoFijo", "EditarRecepcionVT" } }
+            { "/ActivoFijo/ActivosFijosValidacionTecnica", new List<string> { "RevisionActivoFijo", "EditarRecepcionVT" } },
+            { "/ActivoFijo/ActivosFijosRecepcionadosSinPoliza", new List<string> { "AsignarPolizaSeguro" } },
+            { "/ActivoFijo/ListadoCambioCustodio", new List<string> { "GestionarCambioCustodio" } },
+            { "/ActivoFijo/ListarMantenimientosActivosFijos", new List<string> { "ListadoMantenimientos", "CrearMantenimiento", "EditarMantenimiento" } },
+            { "/ActivoFijo/ListarProcesosJudicialesActivosFijos", new List<string> { "ListadoProcesosJudiciales", "GestionarProcesoJudicial" } },
+            { "/ActivoFijo/ListadoInventarioActivosFijos", new List<string> { "GestionarInventarioManual", "GestionarInventarioAutomatico" } },
+            { "/ActivoFijo/ListadoMovilizacionActivosFijos", new List<string> { "GestionarMovilizacion" } },
+            { "/ActivoFijo/ListarRevalorizacionesActivosFijos", new List<string> { "ListadoRevalorizaciones", "GestionarRevalorizacion" } },
         };
 
         public List<string> ObtenerAccionesDiccionario(string admeControlador)
@@ -33,7 +40,7 @@ namespace bd.webapprm.servicios.Servicios
                     listaAcciones = diccionario.Value;
 
                 string accion = ObtenerAccion(admeControlador);
-                if (listaAcciones.Count == 0 && (accion != "Index" && accion != "Create" && accion != "Edit")) //Agregar aquí las acciones para que se compare solo por el Controlador
+                if (accion != "Index" && accion != "Create" && accion != "Edit") //Agregar aquí las acciones para que se compare solo por el Controlador
                     listaAcciones.Insert(0, accion);
                 return listaAcciones;
             }
