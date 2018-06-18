@@ -44,10 +44,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                ViewData["Pais"] = new SelectList(await apiServicio.Listar<Pais>(new Uri(WebApp.BaseAddressTH), "api/Pais/ListarPais"), "IdPais", "Nombre");
-                ViewData["Provincia"] = await ObtenerSelectListProvincia((ViewData["Pais"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Pais"] as SelectList).FirstOrDefault().Value) : -1);
-                ViewData["Ciudad"] = await ObtenerSelectListCiudad((ViewData["Provincia"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Provincia"] as SelectList).FirstOrDefault().Value) : -1);
-                ViewData["Sucursal"] = await ObtenerSelectListSucursal((ViewData["Ciudad"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Ciudad"] as SelectList).FirstOrDefault().Value) : -1);
+                ViewData["Sucursal"] = new SelectList(await apiServicio.Listar<Sucursal>(new Uri(WebApp.BaseAddressTH), "api/Sucursal/ListarSucursal"), "IdSucursal", "Nombre");
                 return View();
             }
             catch (Exception)
@@ -89,10 +86,7 @@ namespace bd.webapprm.web.Controllers.MVC
                     }
                 }
                 ViewData["Error"] = response.Message;
-                ViewData["Pais"] = new SelectList(await apiServicio.Listar<Pais>(new Uri(WebApp.BaseAddressTH), "api/Pais/ListarPais"), "IdPais", "Nombre");
-                ViewData["Provincia"] = await ObtenerSelectListProvincia(maestroArticuloSucursal?.Sucursal.Ciudad?.Provincia?.IdPais ?? -1);
-                ViewData["Ciudad"] = await ObtenerSelectListCiudad(maestroArticuloSucursal?.Sucursal?.Ciudad?.IdProvincia ?? -1);
-                ViewData["Sucursal"] = await ObtenerSelectListSucursal(maestroArticuloSucursal?.Sucursal?.IdCiudad ?? -1);
+                ViewData["Sucursal"] = new SelectList(await apiServicio.Listar<Sucursal>(new Uri(WebApp.BaseAddressTH), "api/Sucursal/ListarSucursal"), "IdSucursal", "Nombre");
                 return View(maestroArticuloSucursal);
             }
             catch (Exception ex)
@@ -113,10 +107,7 @@ namespace bd.webapprm.web.Controllers.MVC
                         return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}");
 
                     var maestroArticuloSucursal = JsonConvert.DeserializeObject<MaestroArticuloSucursal>(respuesta.Resultado.ToString());
-                    ViewData["Pais"] = new SelectList(await apiServicio.Listar<Pais>(new Uri(WebApp.BaseAddressTH), "api/Pais/ListarPais"), "IdPais", "Nombre");
-                    ViewData["Provincia"] = await ObtenerSelectListProvincia(maestroArticuloSucursal?.Sucursal.Ciudad?.Provincia?.IdPais ?? -1);
-                    ViewData["Ciudad"] = await ObtenerSelectListCiudad(maestroArticuloSucursal?.Sucursal?.Ciudad?.IdProvincia ?? -1);
-                    ViewData["Sucursal"] = await ObtenerSelectListSucursal(maestroArticuloSucursal?.Sucursal?.IdCiudad ?? -1);
+                    ViewData["Sucursal"] = new SelectList(await apiServicio.Listar<Sucursal>(new Uri(WebApp.BaseAddressTH), "api/Sucursal/ListarSucursal"), "IdSucursal", "Nombre");
                     return View(maestroArticuloSucursal);
                 }
                 return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}");
@@ -147,10 +138,7 @@ namespace bd.webapprm.web.Controllers.MVC
                         }
                     }
                     ViewData["Error"] = response.Message;
-                    ViewData["Pais"] = new SelectList(await apiServicio.Listar<Pais>(new Uri(WebApp.BaseAddressTH), "api/Pais/ListarPais"), "IdPais", "Nombre");
-                    ViewData["Provincia"] = await ObtenerSelectListProvincia(maestroArticuloSucursal?.Sucursal.Ciudad?.Provincia?.IdPais ?? -1);
-                    ViewData["Ciudad"] = await ObtenerSelectListCiudad(maestroArticuloSucursal?.Sucursal?.Ciudad?.IdProvincia ?? -1);
-                    ViewData["Sucursal"] = await ObtenerSelectListSucursal(maestroArticuloSucursal?.Sucursal?.IdCiudad ?? -1);
+                    ViewData["Sucursal"] = new SelectList(await apiServicio.Listar<Sucursal>(new Uri(WebApp.BaseAddressTH), "api/Sucursal/ListarSucursal"), "IdSucursal", "Nombre");
                     return View(maestroArticuloSucursal);
                 }
                 return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}");
@@ -180,71 +168,5 @@ namespace bd.webapprm.web.Controllers.MVC
                 return this.Redireccionar($"{Mensaje.Error}|{Mensaje.Excepcion}");
             }
         }
-
-        #region AJAX_Provincia
-        public async Task<SelectList> ObtenerSelectListProvincia(int idPais)
-        {
-            try
-            {
-                var listaProvincia = idPais != -1 ? (await apiServicio.Listar<Provincia>(new Uri(WebApp.BaseAddressTH), "api/Provincia/ListarProvincia")).Where(c => c.IdPais == idPais) : new List<Provincia>();
-                return new SelectList(listaProvincia, "IdProvincia", "Nombre");
-            }
-            catch (Exception)
-            {
-                return new SelectList(new List<Provincia>());
-            }
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Provincia_SelectResult(int idPais)
-        {
-            ViewBag.Provincia = await ObtenerSelectListProvincia(idPais);
-            return PartialView("_ProvinciaSelect", new MaestroArticuloSucursal());
-        }
-        #endregion
-
-        #region AJAX_Ciudad
-        public async Task<SelectList> ObtenerSelectListCiudad(int idProvincia)
-        {
-            try
-            {
-                var listaCiudad = idProvincia != -1 ? (await apiServicio.Listar<Ciudad>(new Uri(WebApp.BaseAddressTH), "api/Ciudad/ListarCiudad")).Where(c => c.IdProvincia == idProvincia) : new List<Ciudad>();
-                return new SelectList(listaCiudad, "IdCiudad", "Nombre");
-            }
-            catch (Exception)
-            {
-                return new SelectList(new List<Ciudad>());
-            }
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Ciudad_SelectResult(int idProvincia)
-        {
-            ViewBag.Ciudad = await ObtenerSelectListCiudad(idProvincia);
-            return PartialView("_CiudadSelect", new MaestroArticuloSucursal());
-        }
-        #endregion
-
-        #region AJAX_Sucursal
-        public async Task<SelectList> ObtenerSelectListSucursal(int idCiudad)
-        {
-            try
-            {
-                var listaSucursal = idCiudad != -1 ? (await apiServicio.Listar<Sucursal>(new Uri(WebApp.BaseAddressTH), "api/Sucursal/ListarSucursal")).Where(c => c.IdCiudad == idCiudad) : new List<Sucursal>();
-                return new SelectList(listaSucursal, "IdSucursal", "Nombre");
-            }
-            catch (Exception)
-            {
-                return new SelectList(new List<Sucursal>());
-            }
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Sucursal_SelectResult(int idCiudad)
-        {
-            ViewBag.Sucursal = await ObtenerSelectListSucursal(idCiudad);
-            return PartialView("_SucursalSelect", new MaestroArticuloSucursal());
-        }
-        #endregion
     }
 }

@@ -19,15 +19,6 @@
                                 <thead>
                                     <tr>
                                         <th>
-                                            @Html.DisplayNameFor(model => model.FirstOrDefault().Sucursal.Ciudad.Provincia.IdPais)
-                                        </th>
-                                        <th>
-                                            @Html.DisplayNameFor(model => model.FirstOrDefault().Sucursal.Ciudad.IdProvincia)
-                                        </th>
-                                        <th>
-                                            @Html.DisplayNameFor(model => model.FirstOrDefault().Sucursal.IdCiudad)
-                                        </th>
-                                        <th>
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().IdSucursal)
                                         </th>
                                         <th>
@@ -43,18 +34,6 @@
                                     @foreach (var item in Model)
                                     {
                                         <tr>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Sucursal.Ciudad.Provincia.Pais.Nombre)
-                                            </td>
-
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Sucursal.Ciudad.Provincia.Nombre)
-                                            </td>
-
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Sucursal.Ciudad.Nombre)
-                                            </td>
-
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.Sucursal.Nombre)
                                             </td>
