@@ -17,6 +17,13 @@ namespace bd.webapprm.web.Models
 {
     public class Filtro : IActionFilter
     {
+        private readonly IApiServicio apiServicio;
+
+        public Filtro(IApiServicio apiServicio)
+        {
+            this.apiServicio = apiServicio;
+        }
+
         public void OnActionExecuted(ActionExecutedContext context)
         {
             
@@ -58,18 +65,21 @@ namespace bd.webapprm.web.Models
                 /// Se valida que la información del usuario actual tenga permiso para acceder al path solicitado... 
                 /// </summary>
                 /// <returns></returns>
-                ApiServicio a = new ApiServicio();
-                var respuestaToken = a.ObtenerElementoAsync<Response>(permiso, new Uri(WebApp.BaseAddressSeguridad), "api/Adscpassws/ExisteToken");
+                var respuestaToken = apiServicio.ObtenerElementoAsync<Response>(permiso, new Uri(WebApp.BaseAddressSeguridad), "api/Adscpassws/ExisteToken");
 
                 if (!respuestaToken.Result.IsSuccess)
                 {
                     context.HttpContext.Authentication.SignOutAsync("Cookies");
+
+                    foreach (var cookie in context.HttpContext.Request.Cookies.Keys)
+                        context.HttpContext.Response.Cookies.Delete(cookie);
+
                     var result = new ViewResult { ViewName = "SeccionCerrada" };
                     context.Result = result;
                 }
                 else
                 {
-                    var respuesta = a.ObtenerElementoAsync<Response>(permiso, new Uri(WebApp.BaseAddressSeguridad), "api/Adscpassws/TienePermiso");
+                    var respuesta = apiServicio.ObtenerElementoAsync<Response>(permiso, new Uri(WebApp.BaseAddressSeguridad), "api/Adscpassws/TienePermiso");
                     if (!respuesta.Result.IsSuccess)
                     {
                         var result = new ViewResult { ViewName = "AccesoDenegado" };

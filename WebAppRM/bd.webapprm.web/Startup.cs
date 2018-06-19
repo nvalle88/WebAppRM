@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -71,16 +72,22 @@ namespace bd.webapprm.web
 
             services.AddMvc(options =>
             {
-                options.Filters.Add(new Filtro());
+                options.Filters.Add(typeof(Filtro));
             });
 
-            WebApp.BaseAddressWebAppLogin = Configuration.GetSection("HostWebAppLogin").Value;
+            Func<string, string> AsignarSlash = appsettingsOpcion =>
+            {
+                if (appsettingsOpcion[appsettingsOpcion.Length - 1] != '/')
+                    appsettingsOpcion += "/";
+
+                return appsettingsOpcion;
+            };
+            WebApp.BaseAddressWebAppLogin = AsignarSlash(Configuration.GetSection("HostWebAppLogin").Value);
             WebApp.NombreAplicacion = Configuration.GetSection("NombreAplicacion").Value;
-            
-            WebApp.BaseAddressRM = Configuration.GetSection("HostServiciosRecursosMateriales").Value;
-            WebApp.BaseAddressSeguridad = Configuration.GetSection("HostServicioSeguridad").Value;
-            WebApp.BaseAddressTH = Configuration.GetSection("HostServiciosTalentoHumano").Value;
-            AppGuardarLog.BaseAddress = Configuration.GetSection("HostServicioLog").Value;
+            WebApp.BaseAddressRM = AsignarSlash(Configuration.GetSection("HostServiciosRecursosMateriales").Value);
+            WebApp.BaseAddressSeguridad = AsignarSlash(Configuration.GetSection("HostServicioSeguridad").Value);
+            WebApp.BaseAddressTH = AsignarSlash(Configuration.GetSection("HostServiciosTalentoHumano").Value);
+            AppGuardarLog.BaseAddress = AsignarSlash(Configuration.GetSection("HostServicioLog").Value);
             WebApp.NivelesMenu = Convert.ToInt32(Configuration.GetSection("NivelMenu").Value);
         }
         
