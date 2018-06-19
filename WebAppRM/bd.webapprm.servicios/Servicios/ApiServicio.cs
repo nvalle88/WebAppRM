@@ -142,7 +142,7 @@ namespace bd.webapprm.servicios.Servicios
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    //AsignarClientHeaders(client, new List<string> { "IdSucursal" });
+                    AsignarClientHeaders(client);
                     var respuesta = await client.GetAsync($"{baseAddress}{url}");
                     var resultado = await respuesta.Content.ReadAsStringAsync();
                     var response = JsonConvert.DeserializeObject<List<T>>(resultado);
@@ -160,6 +160,7 @@ namespace bd.webapprm.servicios.Servicios
             {
                 using (HttpClient client = new HttpClient())
                 {
+                    AsignarClientHeaders(client);
                     var respuesta = await client.GetAsync($"{baseAddress}{url}/{id}");
                     var resultado = await respuesta.Content.ReadAsStringAsync();
                     var response = JsonConvert.DeserializeObject<T>(resultado);
@@ -177,6 +178,7 @@ namespace bd.webapprm.servicios.Servicios
             {
                 using (HttpClient client = new HttpClient())
                 {
+                    AsignarClientHeaders(client);
                     var request = JsonConvert.SerializeObject(model);
                     var content = new StringContent(request, Encoding.UTF8, "application/json");
                     var response = await client.PostAsync($"{baseAddress}{url}", content);
@@ -191,22 +193,21 @@ namespace bd.webapprm.servicios.Servicios
             }
         }
 
-        private void AsignarClientHeaders(HttpClient client, IEnumerable<string> claimTypes)
+        private void AsignarClientHeaders(HttpClient client)
         {
-            foreach (var item in claimTypes)
-                client.DefaultRequestHeaders.Add(item, ObtenerIdSucursalUsuario(item));
-        }
-        private string ObtenerIdSucursalUsuario(string claimType)
-        {
-            try
+            var listaClaimTypes = new List<string> { "IdSucursal", "NombreSucursal" };
+            foreach (var item in listaClaimTypes)
             {
-                var claim = httpContext.HttpContext.User.Identities.Where(x => x.NameClaimType == ClaimTypes.Name).FirstOrDefault();
-                var claimValue = claim.Claims.Where(c => c.Type == claimType).FirstOrDefault();
-                return claimValue?.Value ?? String.Empty;
-            }
-            catch (Exception)
-            {
-                return String.Empty;
+                if (!String.IsNullOrEmpty(item))
+                {
+                    var claim = httpContext.HttpContext.User.Identities.Where(x => x.NameClaimType == ClaimTypes.Name).FirstOrDefault();
+                    var claimValue = claim.Claims.Where(c => c.Type == item).FirstOrDefault();
+                    if (claimValue != null)
+                    {
+                        if (!String.IsNullOrEmpty(claimValue.Value))
+                            client.DefaultRequestHeaders.Add(item, claimValue.Value);
+                    }
+                }
             }
         }
     }
