@@ -17,14 +17,17 @@ namespace bd.webapprm.servicios.Servicios
 {
     public class ApiServicio : IApiServicio
     {
+        private readonly IHttpContextAccessor httpContext;
+
+        public ApiServicio(IHttpContextAccessor httpContext)
+        {
+            this.httpContext = httpContext;
+        }
+
         private async Task<bool> SalvarLog(LogEntryTranfer logEntryTranfer)
         {
             var responseLog = await GuardarLogService.SaveLogEntry(logEntryTranfer);
-            if (responseLog.IsSuccess)
-            {
-                return true;
-            }
-            return false;
+            return responseLog.IsSuccess;
         }
         public async Task<Response> SalvarLog<T>(HttpContext context, EntradaLog model)
         {
@@ -47,7 +50,7 @@ namespace bd.webapprm.servicios.Servicios
                     Message = context.Request.Path,
                     ObjectNext = model.ObjectNext,
                     ObjectPrevious = model.ObjectPrevious,
-                    UserName = NombreUsuario,
+                    UserName = NombreUsuario
                 };
                 var responseLog = await GuardarLogService.SaveLogEntry(Log);
                 return new Response { IsSuccess = responseLog.IsSuccess };
@@ -139,6 +142,7 @@ namespace bd.webapprm.servicios.Servicios
             {
                 using (HttpClient client = new HttpClient())
                 {
+                    //AsignarClientHeaders(client, new List<string> { "IdSucursal" });
                     var respuesta = await client.GetAsync($"{baseAddress}{url}");
                     var resultado = await respuesta.Content.ReadAsStringAsync();
                     var response = JsonConvert.DeserializeObject<List<T>>(resultado);
@@ -184,6 +188,25 @@ namespace bd.webapprm.servicios.Servicios
             catch (Exception)
             {
                 return default(T);
+            }
+        }
+
+        private void AsignarClientHeaders(HttpClient client, IEnumerable<string> claimTypes)
+        {
+            foreach (var item in claimTypes)
+                client.DefaultRequestHeaders.Add(item, ObtenerIdSucursalUsuario(item));
+        }
+        private string ObtenerIdSucursalUsuario(string claimType)
+        {
+            try
+            {
+                var claim = httpContext.HttpContext.User.Identities.Where(x => x.NameClaimType == ClaimTypes.Name).FirstOrDefault();
+                var claimValue = claim.Claims.Where(c => c.Type == claimType).FirstOrDefault();
+                return claimValue?.Value ?? String.Empty;
+            }
+            catch (Exception)
+            {
+                return String.Empty;
             }
         }
     }
