@@ -61,6 +61,7 @@ namespace bd.webapprm.web
 
             services.AddSingleton<IApiServicio, ApiServicio>();
             services.AddSingleton<IMenuServicio, MenuServicio>();
+            services.AddSingleton<IClaimsTransfer, ClaimsTransferServicio>();
 
             services.AddSingleton<IAuthorizationHandler, RolesHandler>();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();

@@ -59,4 +59,10 @@ namespace bd.webapprm.entidades.Utils
         public static string PrestamoUsoInterno { get { return "Préstamo de Uso Interno"; } }
         public static string TransferenciaBodegas { get { return "Transferencia entre Bodegas"; } }
     }
+
+    public static class ClaimsTransferNombres
+    {
+        public static string IdSucursal { get { return "IdSucursal"; } }
+        public static string NombreSucursal { get { return "NombreSucursal"; } }
+    }
 }
