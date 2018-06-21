@@ -17,11 +17,11 @@ namespace bd.webapprm.servicios.Servicios
 {
     public class ApiServicio : IApiServicio
     {
-        private readonly IHttpContextAccessor httpContext;
+        private readonly IClaimsTransfer claimsTransfer;
 
-        public ApiServicio(IHttpContextAccessor httpContext)
+        public ApiServicio(IClaimsTransfer claimsTransfer)
         {
-            this.httpContext = httpContext;
+            this.claimsTransfer = claimsTransfer;
         }
 
         private async Task<bool> SalvarLog(LogEntryTranfer logEntryTranfer)
@@ -195,20 +195,9 @@ namespace bd.webapprm.servicios.Servicios
 
         private void AsignarClientHeaders(HttpClient client)
         {
-            var listaClaimTypes = new List<string> { "IdSucursal", "NombreSucursal" };
-            foreach (var item in listaClaimTypes)
-            {
-                if (!String.IsNullOrEmpty(item))
-                {
-                    var claim = httpContext.HttpContext.User.Identities.Where(x => x.NameClaimType == ClaimTypes.Name).FirstOrDefault();
-                    var claimValue = claim.Claims.Where(c => c.Type == item).FirstOrDefault();
-                    if (claimValue != null)
-                    {
-                        if (!String.IsNullOrEmpty(claimValue.Value))
-                            client.DefaultRequestHeaders.Add(item, claimValue.Value);
-                    }
-                }
-            }
+            var claimTransfer = claimsTransfer.ObtenerClaimsTransferHttpContext();
+            client.DefaultRequestHeaders.Add(ClaimsTransferNombres.IdSucursal, claimTransfer.IdSucursal.ToString());
+            client.DefaultRequestHeaders.Add(ClaimsTransferNombres.NombreSucursal, claimTransfer.NombreSucursal);
         }
     }
 }
