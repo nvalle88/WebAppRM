@@ -38,6 +38,7 @@ $(document).ready(function () {
     else
         eventoCambiarCategoria();
     ocultarDatosTablaEspecificos();
+    $("#LibroActivoFijo_IdSucursal").prop("disabled", "disabled");
 });
 
 function ocultarDatosTablaEspecificos()

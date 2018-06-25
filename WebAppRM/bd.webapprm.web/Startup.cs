@@ -37,8 +37,7 @@ namespace bd.webapprm.web
         }
 
         public IConfigurationRoot Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
+        
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc(config => {
@@ -106,7 +105,6 @@ namespace bd.webapprm.web
                 FallBackToParentUICultures = false,
                 RequestCultureProviders = new List<IRequestCultureProvider> { }
             });
-
             app.UseExceptionHandler("/Home/Error");
 
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
@@ -149,7 +147,7 @@ namespace bd.webapprm.web
                 AutomaticAuthenticate = true,
                 AutomaticChallenge = true,
                 CookieName = "ASPTest",
-                ExpireTimeSpan = new TimeSpan(1, 0, 0), //1 hour
+                ExpireTimeSpan = new TimeSpan(1, 0, 0),
                 DataProtectionProvider = DataProtectionProvider.Create(new DirectoryInfo(@"c:\shared-auth-ticket-keys\"))
             });
             //app.UseIdentity();

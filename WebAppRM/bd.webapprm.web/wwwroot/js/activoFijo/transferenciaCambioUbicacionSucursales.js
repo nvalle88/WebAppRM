@@ -8,6 +8,7 @@
     adicionarArrRecepcionActivoFijoDetalle();
     eventoSucursalOrigen();
     eventoSucursalDestino();
+    $("#IdSucursalOrigen").prop("disabled", "disabled");
 
     if (idEditar)
         deshabilitarCamposFormulario();
