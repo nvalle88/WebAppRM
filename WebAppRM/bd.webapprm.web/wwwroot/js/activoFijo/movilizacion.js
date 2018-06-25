@@ -3,7 +3,7 @@
     Init_DatetimePicker("FechaSalida", false, true);
     Init_DatetimePicker("FechaRetorno", false, true);
     inicializarDetallesActivoSeleccion();
-    initDataTableFiltrado("tableDetallesActivoFijoSeleccionados", [13, 15, 16, 17, 18, 19, 20, 21, 22]);
+    initDataTableFiltrado("tableDetallesActivoFijoSeleccionados", [13, 15, 16, 17, 18, 19, 20, 21]);
     eventoGuardar();
     Init_XEditable(function (idRecepcionActivoFijoDetalle, newValue) {
         callbackXEditableSuccess(idRecepcionActivoFijoDetalle, newValue);
@@ -16,7 +16,7 @@ function callbackXEditableSuccess(idRecepcionActivoFijoDetalle, newValue)
 }
 
 function callBackInicializarTableListadoSeleccion() {
-    initDataTableFiltrado("tableDetallesActivoFijoAltas", [14, 16, 17, 18, 19, 20, 21, 22, 23]);
+    initDataTableFiltrado("tableDetallesActivoFijoAltas", [14, 16, 17, 18, 19, 20, 21, 22]);
 }
 
 function callBackFunctionSeleccionAlta(idRecepcionActivoFijoDetalle, seleccionado) {
@@ -31,7 +31,7 @@ function callBackFunctionSeleccionAlta(idRecepcionActivoFijoDetalle, seleccionad
 
         var hIdRecepcionActivoFijoDetalle = '<input type="hidden" class="hiddenIdRecepcionActivoFijoDetalle" id="hIdRecepcionActivoFijoDetalle_' + idRecepcionActivoFijoDetalle + '" name="hIdRecepcionActivoFijoDetalle_' + idRecepcionActivoFijoDetalle + '" value="' + idRecepcionActivoFijoDetalle + '" />';
         var btnEliminarMovilizacion = "<div id='divEliminarDatosEspecificos_" + idRecepcionActivoFijoDetalle + "' class='btnEliminarDatosEspecificos' style='display:inline;'><a href='javascript: void(0);' id='btnEliminarDatosEspecifico_" + idRecepcionActivoFijoDetalle + "' onclick=abrirVentanaConfirmacion('btnEliminarDatosEspecifico_" + idRecepcionActivoFijoDetalle + "') data-funcioncallback=callBackFunctionEliminarDatoEspecifico('" + idRecepcionActivoFijoDetalle + "') data-titulo='Eliminar' data-descripcion='&#191; Desea eliminar el Activo Fijo seleccionado... ?'>Eliminar</a></div>";
-        var arrValores = obtenerArrValores("tableDetallesActivoFijoAltas", idRecepcionActivoFijoDetalle, ['Codigosecuencial', 'TipoActivoFijo', 'ClaseActivoFijo', 'SubclaseActivoFijo', 'NombreActivoFijo', 'Marca', 'Modelo', 'Serie', 'NumeroChasis', 'NumeroMotor', 'Placa', 'NumeroClaveCatastral', 'Sucursal', 'Bodega', 'Empleado', 'Proveedor', 'MotivoRecepcion', 'FechaRecepcion', 'OrdenCompra', 'FondoFinanciamiento', 'FechaAlta', 'MotivoAlta', 'NumeroFactura', 'Componentes'], false);
+        var arrValores = obtenerArrValores("tableDetallesActivoFijoAltas", idRecepcionActivoFijoDetalle, ['Codigosecuencial', 'TipoActivoFijo', 'ClaseActivoFijo', 'SubclaseActivoFijo', 'NombreActivoFijo', 'Marca', 'Modelo', 'Serie', 'NumeroChasis', 'NumeroMotor', 'Placa', 'NumeroClaveCatastral', 'Sucursal', 'Bodega', 'Empleado', 'Proveedor', 'MotivoAlta', 'FechaRecepcion', 'OrdenCompra', 'FondoFinanciamiento', 'FechaAlta', 'NumeroFactura', 'Componentes'], false);
 
         var valueObservaciones = $("#tableDetallesActivoFijoAltas" + idRecepcionActivoFijoDetalle + "Observaciones").html().toString().trim();
         var observaciones = valueObservaciones == "" || valueObservaciones == "-" || valueObservaciones == null ? "" : valueObservaciones;
@@ -39,7 +39,7 @@ function callBackFunctionSeleccionAlta(idRecepcionActivoFijoDetalle, seleccionad
         arrValores.push(btnObserbaciones);
 
         arrValores.push(hIdRecepcionActivoFijoDetalle + btnEliminarMovilizacion);
-        addRowDetallesActivosFijosPorArray("tableDetallesActivoFijoSeleccionados", idRecepcionActivoFijoDetalle, ['Codigosecuencial', 'TipoActivoFijo', 'ClaseActivoFijo', 'SubclaseActivoFijo', 'NombreActivoFijo', 'Marca', 'Modelo', 'Serie', 'NumeroChasis', 'NumeroMotor', 'Placa', 'NumeroClaveCatastral', 'Sucursal', 'Bodega', 'Empleado', 'Proveedor', 'MotivoRecepcion', 'FechaRecepcion', 'OrdenCompra', 'FondoFinanciamiento', 'FechaAlta', 'MotivoAlta', 'NumeroFactura', 'Componentes'], arrValores, true);
+        addRowDetallesActivosFijosPorArray("tableDetallesActivoFijoSeleccionados", idRecepcionActivoFijoDetalle, ['Codigosecuencial', 'TipoActivoFijo', 'ClaseActivoFijo', 'SubclaseActivoFijo', 'NombreActivoFijo', 'Marca', 'Modelo', 'Serie', 'NumeroChasis', 'NumeroMotor', 'Placa', 'NumeroClaveCatastral', 'Sucursal', 'Bodega', 'Empleado', 'Proveedor', 'MotivoAlta', 'FechaRecepcion', 'OrdenCompra', 'FondoFinanciamiento', 'FechaAlta', 'NumeroFactura', 'Componentes'], arrValores, true);
 
         mostrarOcultarColumnas("tableDetallesActivoFijoSeleccionados", arrColumnasVisibleTableACopiar);
         mostrarOcultarColumnas("tableDetallesActivoFijoAltas", arrColumnasVisibleTableACopiando);
