@@ -10,6 +10,7 @@ namespace bd.webapprm.entidades
         public MotivoAlta()
         {
             AltaActivoFijo = new HashSet<AltaActivoFijo>();
+            RecepcionActivoFijo = new HashSet<RecepcionActivoFijo>();
         }
 
         [Key]
@@ -21,5 +22,6 @@ namespace bd.webapprm.entidades
         public string Descripcion { get; set; }
 
         public virtual ICollection<AltaActivoFijo> AltaActivoFijo { get; set; }
+        public virtual ICollection<RecepcionActivoFijo> RecepcionActivoFijo { get; set; }
     }
 }

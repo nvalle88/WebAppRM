@@ -38,8 +38,8 @@ namespace bd.webapprm.entidades
         [Display(Name = "Motivo de Recepción:")]
         [Required(ErrorMessage = "Debe seleccionar el {0}")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0}")]
-        public int IdMotivoRecepcion { get; set; }
-        public virtual MotivoRecepcion MotivoRecepcion { get; set; }
+        public int IdMotivoAlta { get; set; }
+        public virtual MotivoAlta MotivoAlta { get; set; }
 
         [Display(Name = "Proveedor:")]
         [Required(ErrorMessage = "Debe seleccionar el {0}")]

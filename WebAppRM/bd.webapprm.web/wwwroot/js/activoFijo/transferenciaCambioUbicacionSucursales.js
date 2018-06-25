@@ -2,7 +2,7 @@
     Init_Select2();
     Init_DatetimePicker("FechaTransferencia", true);
     inicializarDetallesActivoSeleccion();
-    initDataTableFiltrado("tableDetallesActivoFijoBajas", !idEditar ? [14, 16, 17, 18, 19, 20, 21, 22, 23] : [13, 15, 16, 17, 18, 19, 20, 21, 22]);
+    initDataTableFiltrado("tableDetallesActivoFijoBajas", !idEditar ? [14, 16, 17, 18, 19, 20, 21, 22] : [13, 15, 16, 17, 18, 19, 20, 21]);
     eventoCustodioEntrega();
     eventoGuardar();
     adicionarArrRecepcionActivoFijoDetalle();
@@ -83,7 +83,7 @@ function partialViewActivosFijosPorCustodio() {
         data: { idEmpleado: $("#IdEmpleadoEntrega").val() },
         success: function (data) {
             $("#divActivosFijosATransferir").html(data);
-            initDataTableFiltrado("tableDetallesActivoFijoBajas", [14, 16, 17, 18, 19, 20, 21, 22, 23]);
+            initDataTableFiltrado("tableDetallesActivoFijoBajas", [14, 16, 17, 18, 19, 20, 21, 22]);
             arrRecepcionActivoFijoDetalleSeleccionado = [];
         },
         complete: function (data) {
