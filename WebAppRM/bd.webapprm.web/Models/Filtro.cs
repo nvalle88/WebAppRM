@@ -18,10 +18,12 @@ namespace bd.webapprm.web.Models
     public class Filtro : IActionFilter
     {
         private readonly IApiServicio apiServicio;
+        private readonly IClaimsTransfer claimsTransfer;
 
-        public Filtro(IApiServicio apiServicio)
+        public Filtro(IApiServicio apiServicio, IClaimsTransfer claimsTransfer)
         {
             this.apiServicio = apiServicio;
+            this.claimsTransfer = claimsTransfer;
         }
 
         public void OnActionExecuted(ActionExecutedContext context)
@@ -84,6 +86,15 @@ namespace bd.webapprm.web.Models
                     {
                         var result = new ViewResult { ViewName = "AccesoDenegado" };
                         context.Result = result;
+                    }
+                    else
+                    {
+                        var claimTransfer = claimsTransfer.ObtenerClaimsTransferHttpContext();
+                        if (claimTransfer == null || claimTransfer.IdSucursal == null || claimTransfer.IdSucursal == 0 || String.IsNullOrEmpty(claimTransfer.NombreSucursal))
+                        {
+                            var result = new ViewResult { ViewName = "AccesoDenegadoEmpleadosClaims" };
+                            context.Result = result;
+                        }
                     }
                 }
             }

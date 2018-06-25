@@ -149,8 +149,7 @@ function obtenerArrColumnasVisible(idTable)
 function mostrarOcultarColumnas(idTable, arrObj) {
     var otable = $('#' + idTable).dataTable();
     for (var i = 0; i < arrObj.length; i++) {
-        if (!arrObj[i])
-            otable.fnSetColumnVis(i, arrObj[i]);
+        otable.fnSetColumnVis(i, arrObj[i]);
     }
 }
 
