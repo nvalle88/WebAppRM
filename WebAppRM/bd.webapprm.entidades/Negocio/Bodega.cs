@@ -26,6 +26,12 @@ namespace bd.webapprm.entidades
         public int IdSucursal { get; set; }
         public virtual Sucursal Sucursal { get; set; }
 
+        [Display(Name = "Custodio:")]
+        [Required(ErrorMessage = "Debe seleccionar el {0} ")]
+        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
+        public int IdEmpleadoResponsable { get; set; }
+        public virtual Empleado EmpleadoResponsable { get; set; }
+
         public virtual ICollection<UbicacionActivoFijo> UbicacionActivoFijo { get; set; }
     }
 }
