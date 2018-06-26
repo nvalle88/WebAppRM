@@ -65,10 +65,10 @@ namespace bd.webapprm.web
             services.AddSingleton<IAuthorizationHandler, RolesHandler>();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-            services.AddMvc().Services.AddAuthorization(options =>
-            {
-                options.AddPolicy("EstaAutorizado", policy => policy.Requirements.Add(new RolesRequirement()));
-            });
+            //services.AddMvc().Services.AddAuthorization(options =>
+            //{
+            //    options.AddPolicy("EstaAutorizado", policy => policy.Requirements.Add(new RolesRequirement()));
+            //});
 
             services.AddMvc(options =>
             {

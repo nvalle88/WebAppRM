@@ -24,7 +24,7 @@ namespace bd.webapprm.web.Controllers.MVC
             this.apiServicio = apiServicio;
         }
 
-        [Authorize(Policy = PoliticasSeguridad.TienePermiso)]
+       
         public IActionResult Index()
         {
             return View();
