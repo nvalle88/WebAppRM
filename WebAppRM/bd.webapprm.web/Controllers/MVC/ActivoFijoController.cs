@@ -49,7 +49,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 ViewData["Proveedor"] = new SelectList((await apiServicio.ObtenerElementoAsync<List<Proveedor>>(new ProveedorTransfer { LineaServicio = LineasServicio.ActivosFijos, Activo = true }, new Uri(WebApp.BaseAddressRM), "api/Proveedor/ListarProveedoresPorLineaServicioEstado")).Select(c => new { c.IdProveedor, NombreApellidos = $"{c.Nombre} {c.Apellidos}" }), "IdProveedor", "NombreApellidos");
                 
                 var claimTransfer = claimsTransfer.ObtenerClaimsTransferHttpContext();
-                ViewData["Sucursal"] = new SelectList(new List<Sucursal> { new Sucursal { IdSucursal = (int)claimTransfer.IdSucursal, Nombre = claimTransfer.NombreSucursal } }, "IdSucursal", "Nombre");
+                ViewData["Sucursal"] = new SelectList(new List<Sucursal> { new Sucursal { IdSucursal = claimTransfer.IdSucursal, Nombre = claimTransfer.NombreSucursal } }, "IdSucursal", "Nombre");
 
                 ViewData["LibroActivoFijo"] = await ObtenerSelectListLibroActivoFijo(claimTransfer?.IdSucursal ?? -1);
 
@@ -95,7 +95,7 @@ namespace bd.webapprm.web.Controllers.MVC
                     ViewData["FondoFinanciamiento"] = new SelectList(await apiServicio.Listar<FondoFinanciamiento>(new Uri(WebApp.BaseAddressRM), "api/FondoFinanciamiento/ListarFondoFinanciamiento"), "IdFondoFinanciamiento", "Nombre");
 
                     var claimTransfer = claimsTransfer.ObtenerClaimsTransferHttpContext();
-                    ViewData["Sucursal"] = new SelectList(new List<Sucursal> { new Sucursal { IdSucursal = (int)claimTransfer.IdSucursal, Nombre = claimTransfer.NombreSucursal } }, "IdSucursal", "Nombre");
+                    ViewData["Sucursal"] = new SelectList(new List<Sucursal> { new Sucursal { IdSucursal = claimTransfer.IdSucursal, Nombre = claimTransfer.NombreSucursal } }, "IdSucursal", "Nombre");
 
                     ViewData["LibroActivoFijo"] = await ObtenerSelectListLibroActivoFijo(recepcionActivoFijoDetalle?.UbicacionActivoFijoActual?.LibroActivoFijo?.IdSucursal ?? -1);
 
@@ -240,7 +240,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 ViewData["FondoFinanciamiento"] = new SelectList(await apiServicio.Listar<FondoFinanciamiento>(new Uri(WebApp.BaseAddressRM), "api/FondoFinanciamiento/ListarFondoFinanciamiento"), "IdFondoFinanciamiento", "Nombre");
 
                 var claimTransfer = claimsTransfer.ObtenerClaimsTransferHttpContext();
-                ViewData["Sucursal"] = new SelectList(new List<Sucursal> { new Sucursal { IdSucursal = (int)claimTransfer.IdSucursal, Nombre = claimTransfer.NombreSucursal } }, "IdSucursal", "Nombre");
+                ViewData["Sucursal"] = new SelectList(new List<Sucursal> { new Sucursal { IdSucursal = claimTransfer.IdSucursal, Nombre = claimTransfer.NombreSucursal } }, "IdSucursal", "Nombre");
 
                 ViewData["LibroActivoFijo"] = await ObtenerSelectListLibroActivoFijo(libroActivoFijo?.IdSucursal ?? -1);
 
@@ -869,7 +869,7 @@ namespace bd.webapprm.web.Controllers.MVC
                     new PropiedadValor { Propiedad = "IsConfiguracionSeleccionBajas", Valor = "true" }
                 };
                 var claimTransfer = claimsTransfer.ObtenerClaimsTransferHttpContext();
-                ViewData["Empleado"] = await ObtenerSelectListEmpleado((int)claimTransfer.IdSucursal);
+                ViewData["Empleado"] = await ObtenerSelectListEmpleado(claimTransfer.IdSucursal);
                 ViewData["ListadoRecepcionActivoFijoDetalleSeleccionado"] = await apiServicio.ObtenerElementoAsync<List<RecepcionActivoFijoDetalleSeleccionado>>(new CambioCustodioViewModel { IdEmpleadoEntrega = (ViewData["Empleado"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Empleado"] as SelectList).FirstOrDefault().Value) : -1, ListadoIdRecepcionActivoFijoDetalle = new List<int>() }, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/DetallesActivoFijoSeleccionadoPorEmpleado");
                 return View();
             }
@@ -903,7 +903,7 @@ namespace bd.webapprm.web.Controllers.MVC
                     new PropiedadValor { Propiedad = "IsConfiguracionSeleccionBajas", Valor = "true" }
                 };
                 var claimTransfer = claimsTransfer.ObtenerClaimsTransferHttpContext();
-                ViewData["Empleado"] = await ObtenerSelectListEmpleado((int)claimTransfer.IdSucursal);
+                ViewData["Empleado"] = await ObtenerSelectListEmpleado(claimTransfer.IdSucursal);
                 ViewData["ListadoRecepcionActivoFijoDetalleSeleccionado"] = listaRecepcionActivoFijoDetalleSeleccionado;
                 return View(cambioCustodioModel);
             }
@@ -1011,7 +1011,7 @@ namespace bd.webapprm.web.Controllers.MVC
                             FechaTransferencia = transferenciaActivoFijo.FechaTransferencia,
                             Observaciones = transferenciaActivoFijo.Observaciones
                         };
-                        ViewData["SucursalOrigen"] = new SelectList(new List<Sucursal> { new Sucursal { IdSucursal = (int)claimTransfer.IdSucursal, Nombre = claimTransfer.NombreSucursal } }, "IdSucursal", "Nombre", cambioUbicacionSucursalViewModel.IdSucursalDestino);
+                        ViewData["SucursalOrigen"] = new SelectList(new List<Sucursal> { new Sucursal { IdSucursal = claimTransfer.IdSucursal, Nombre = claimTransfer.NombreSucursal } }, "IdSucursal", "Nombre", cambioUbicacionSucursalViewModel.IdSucursalDestino);
                         ViewData["SucursalDestino"] = new SelectList(listaSucursales, "IdSucursal", "Nombre", cambioUbicacionSucursalViewModel.IdSucursalDestino);
                         ViewData["LibroActivoFijo"] = await ObtenerSelectListLibroActivoFijo(cambioUbicacionSucursalViewModel.IdSucursalDestino, cambioUbicacionSucursalViewModel.IdLibroActivoFijoDestino);
 
@@ -1030,12 +1030,12 @@ namespace bd.webapprm.web.Controllers.MVC
                     else
                         return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorRecursoSolicitado}", nameof(ListadoTransferenciasCreadas));
                 }
-                ViewData["SucursalOrigen"] = new SelectList(new List<Sucursal> { new Sucursal { IdSucursal = (int)claimTransfer.IdSucursal, Nombre = claimTransfer.NombreSucursal } }, "IdSucursal", "Nombre");
+                ViewData["SucursalOrigen"] = new SelectList(new List<Sucursal> { new Sucursal { IdSucursal = claimTransfer.IdSucursal, Nombre = claimTransfer.NombreSucursal } }, "IdSucursal", "Nombre");
                 ViewData["SucursalDestino"] = new SelectList(listaSucursales, "IdSucursal", "Nombre");
                 int idSucursalDestino = (ViewData["SucursalDestino"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["SucursalDestino"] as SelectList).FirstOrDefault().Value) : -1;
                 ViewData["LibroActivoFijo"] = await ObtenerSelectListLibroActivoFijo((ViewData["SucursalDestino"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["SucursalDestino"] as SelectList).FirstOrDefault().Value) : -1);
 
-                var listaEmpleadoSucursalOrigen = await apiServicio.ObtenerElementoAsync<List<DatosBasicosEmpleadoViewModel>>(new EmpleadosPorSucursalViewModel { IdSucursal = (int)claimTransfer.IdSucursal, EmpleadosActivos = true }, new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleadosPorSucursal");
+                var listaEmpleadoSucursalOrigen = await apiServicio.ObtenerElementoAsync<List<DatosBasicosEmpleadoViewModel>>(new EmpleadosPorSucursalViewModel { IdSucursal = claimTransfer.IdSucursal, EmpleadosActivos = true }, new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleadosPorSucursal");
                 ViewData["EmpleadoEntrega"] = new SelectList(listaEmpleadoSucursalOrigen.Select(c => new ListaEmpleadoViewModel { IdEmpleado = c.IdEmpleado, NombreApellido = $"{c.Nombres} {c.Apellidos}" }), "IdEmpleado", "NombreApellido");
                 ViewData["EmpleadoResponsableEnvio"] = ViewData["EmpleadoEntrega"];
 

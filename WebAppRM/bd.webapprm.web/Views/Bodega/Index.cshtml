@@ -25,6 +25,10 @@
                                         <th>
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().IdSucursal)
                                         </th>
+
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().IdEmpleadoResponsable)
+                                        </th>
                                         <th>Opciones</th>
                                     </tr>
                                 </thead>
@@ -38,6 +42,10 @@
 
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.Sucursal.Nombre)
+                                            </td>
+
+                                            <td>
+                                                @{await ViewContext.Writer.WriteAsync($"{item.EmpleadoResponsable.Persona.Nombres} {item.EmpleadoResponsable.Persona.Apellidos}"); }
                                             </td>
 
                                             <td>

@@ -1,4 +1,5 @@
 @model ProcesoJudicialActivoFijo
+
 @section css{
     <link rel="stylesheet" type="text/css" href="~/lib/bootstrap-fileinput/css/fileinput.min.css">
     <link rel="stylesheet" type="text/css" href="~/css/activoFijo/recepcion.min.css" />
@@ -48,7 +49,6 @@
                                     </div>
                                 </fieldset>
                                 <footer>
-                                    <span class="text-danger">@ViewData["Error"]</span>
                                     <button type="submit" class="btn btn-primary" id="btn-guardar">Guardar</button>
                                     <a asp-action="ListadoProcesosJudiciales" asp-route-id="@ViewBag.IdRecepcionActivoFijoDetalle" class="btn btn-default">Cancelar</a>
                                 </footer>

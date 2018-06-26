@@ -23,8 +23,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             this.apiServicio = apiServicio;
         }
-
-       
+        
         public IActionResult Index()
         {
             return View();

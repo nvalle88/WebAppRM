@@ -44,26 +44,6 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                //var claim = HttpContext.User.Identities.Where(x => x.NameClaimType == ClaimTypes.Name).FirstOrDefault();
-                //var token = claim.Claims.Where(c => c.Type == ClaimTypes.SerialNumber).FirstOrDefault().Value;
-                //var NombreUsuario = claim.Claims.Where(c => c.Type == ClaimTypes.Name).FirstOrDefault().Value;
-
-                //var permiso = new PermisoUsuario
-                //{
-                //    Contexto = HttpContext.Request.Path,
-                //    Token = token,
-                //    Usuario = NombreUsuario,
-                //};
-
-                ///// <summary>
-                ///// Se valida que la información del usuario actual tenga permiso para acceder al path solicitado... 
-                ///// </summary>
-                ///// <returns></returns>
-                //var respuesta = apiServicio.ObtenerElementoAsync<entidades.Utils.Response>(permiso, new Uri(WebApp.BaseAddressSeguridad), "api/Adscpassws/TienePermiso");
-
-                //if (!respuesta.Result.IsSuccess)
-                //    return Redirect(WebApp.BaseAddressWebAppLogin);
-
                 if (Request.Query.Count != 2)
                     return Redirect(WebApp.BaseAddressWebAppLogin);
 
