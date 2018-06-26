@@ -64,7 +64,7 @@ namespace bd.webapprm.web
 
             services.AddSingleton<IAuthorizationHandler, RolesHandler>();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
+          
             services.AddMvc(options =>
             {
                 options.Filters.Add(typeof(Filtro));
