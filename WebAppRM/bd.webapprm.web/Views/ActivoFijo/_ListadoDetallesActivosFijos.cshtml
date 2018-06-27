@@ -1,133 +1,10 @@
 @model List<RecepcionActivoFijoDetalleSeleccionado>
 @{ 
-    List<PropiedadValor> arrConfiguraciones = ViewBag.Configuraciones ?? new List<PropiedadValor>();
-
-    Func<string, bool> ExisteConfiguracion = x =>
-    {
-        var propiedadValor = arrConfiguraciones.FirstOrDefault(c => c.Propiedad == x);
-        return propiedadValor != null ? bool.Parse(propiedadValor.Valor) : false;
-    };
-
-    bool isConfiguracionSeleccion = ExisteConfiguracion("IsConfiguracionSeleccion");
-    bool isConfiguracionSeleccionDisabled = ExisteConfiguracion("IsConfiguracionSeleccionDisabled");
-    bool isConfiguracionDatosActivo = ExisteConfiguracion("IsConfiguracionDatosActivo");
-    bool isConfiguracionSmartForm = ExisteConfiguracion("IsConfiguracionSmartForm");
-
-    bool isConfiguracionDetallesRecepcion = ExisteConfiguracion("IsConfiguracionDetallesRecepcion");
-
-    bool isConfiguracionSeleccionComponentes = ExisteConfiguracion("IsConfiguracionSeleccionComponentes");
-    bool isConfiguracionListadoComponentes = ExisteConfiguracion("IsConfiguracionListadoComponentes");
-
-    bool isConfiguracionListadoMantenimientos = ExisteConfiguracion("IsConfiguracionListadoMantenimientos");
-    bool isConfiguracionListadoProcesosJudiciales = ExisteConfiguracion("IsConfiguracionListadoProcesosJudiciales");
-    bool isConfiguracionListadoRevalorizaciones = ExisteConfiguracion("IsConfiguracionListadoRevalorizaciones");
-
-    bool isConfiguracionSeleccionAltas = ExisteConfiguracion("IsConfiguracionSeleccionAltas");
-    bool isConfiguracionListadoAltasGestionar = ExisteConfiguracion("IsConfiguracionListadoAltasGestionar");
-    bool isConfiguracionAltasGestionarEditar = ExisteConfiguracion("IsConfiguracionAltasGestionarEditar");
-    bool isConfiguracionListadoAltas = ExisteConfiguracion("IsConfiguracionListadoAltas");
-
-    bool isConfiguracionSeleccionBajas = ExisteConfiguracion("IsConfiguracionSeleccionBajas");
-    bool isConfiguracionListadoBajasGestionar = ExisteConfiguracion("IsConfiguracionListadoBajasGestionar");
-    bool isConfiguracionBajasGestionarEditar = ExisteConfiguracion("IsConfiguracionBajasGestionarEditar");
-    bool isConfiguracionListadoBajas = ExisteConfiguracion("IsConfiguracionListadoBajas");
-
-    bool isConfiguracionGestionarInventarioAutomatico = ExisteConfiguracion("IsConfiguracionGestionarInventarioAutomatico");
-
-    bool isConfiguracionSeleccionMovilizaciones = ExisteConfiguracion("IsConfiguracionSeleccionMovilizaciones");
-    bool isConfiguracionListadoMovilizacionesGestionar = ExisteConfiguracion("IsConfiguracionListadoMovilizacionesGestionar");
-    bool isConfiguracionListadoMovilizaciones = ExisteConfiguracion("IsConfiguracionListadoMovilizaciones");
-
-    int cantidadTotal = 0;
-    string nombreTabla = "tableDetallesActivoFijo";
-    string callbackFunctionCheckBox = String.Empty;
-
-    if (isConfiguracionDetallesRecepcion)
-    {
-        cantidadTotal = 15;
-    }
-    else if (isConfiguracionListadoComponentes)
-    {
-        cantidadTotal = 19;
-    }
-    else if (isConfiguracionSeleccionComponentes)
-    {
-        cantidadTotal = 18;
-        nombreTabla += "Componentes";
-        callbackFunctionCheckBox = "callBackFunctionSeleccionComponente";
-    }
-    else if (isConfiguracionListadoAltasGestionar)
-    {
-        cantidadTotal = 16;
-        nombreTabla += "Seleccionados";
-    }
-    else if (isConfiguracionSeleccionAltas)
-    {
-        cantidadTotal = 15;
-        nombreTabla += "Altas";
-        callbackFunctionCheckBox = "callBackFunctionSeleccionAlta";
-    }
-    else if (isConfiguracionListadoAltas)
-    {
-        cantidadTotal = 18;
-    }
-    else if (isConfiguracionListadoBajasGestionar || isConfiguracionBajasGestionarEditar)
-    {
-        if (isConfiguracionListadoBajasGestionar && !isConfiguracionBajasGestionarEditar)
-        {
-            cantidadTotal = 19;
-        }
-        else
-        {
-            cantidadTotal = 18;
-        }
-        nombreTabla += "Seleccionados";
-    }
-    else if (isConfiguracionSeleccionBajas)
-    {
-        if (isConfiguracionGestionarInventarioAutomatico)
-        {
-            cantidadTotal = 19;
-        }
-        else
-        {
-            cantidadTotal = 18;
-        }
-        nombreTabla += "Bajas";
-        callbackFunctionCheckBox = "callBackFunctionSeleccionBaja";
-    }
-    else if (isConfiguracionListadoBajas)
-    {
-        cantidadTotal = 20;
-    }
-    else if (isConfiguracionSeleccionMovilizaciones)
-    {
-        cantidadTotal = 21;
-        nombreTabla += "Seleccionados";
-    }
-    else if (isConfiguracionListadoMovilizacionesGestionar || isConfiguracionListadoMovilizaciones)
-    {
-        if (isConfiguracionListadoMovilizacionesGestionar)
-        {
-            nombreTabla += "Altas";
-            callbackFunctionCheckBox = "callBackFunctionSeleccionAlta";
-        }
-        cantidadTotal = 20;
-    }
-
-    if (isConfiguracionSeleccion)
-    {
-        cantidadTotal++;
-    }
-
-    if (isConfiguracionDatosActivo)
-    {
-        cantidadTotal += 4;
-    }
+    ListadoDetallesActivosFijosViewModel listadoDetallesActivosFijosViewModel = ViewBag.Configuraciones;
 }
 <div class="table-responsive">
     @{
-        if (isConfiguracionSeleccionComponentes)
+        if (listadoDetallesActivosFijosViewModel.IsConfiguracionSeleccionComponentes)
         {
             <div class="row">
                 <div class="alert alert-info alert-block" style="border-left-width:5px !important;padding-left:20px !important;">
@@ -137,17 +14,17 @@
             </div>
         }
     }
-    <table id="@nombreTabla" class="table table-striped table-bordered table-hover" style="width:100%;">
+    <table id="@listadoDetallesActivosFijosViewModel.NombreTabla" class="table table-striped table-bordered table-hover" style="width:100%;">
         <thead>
-            @{ await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", cantidadTotal, new ViewDataDictionary(ViewData) { { "MostrarFiltradoUltimaColumna", isConfiguracionSeleccionComponentes || isConfiguracionDetallesRecepcion || isConfiguracionSeleccionAltas || isConfiguracionListadoAltas || isConfiguracionListadoBajas || (isConfiguracionSeleccionBajas && !isConfiguracionGestionarInventarioAutomatico) || (isConfiguracionListadoBajasGestionar && isConfiguracionBajasGestionarEditar) || isConfiguracionListadoMovilizacionesGestionar || isConfiguracionListadoMovilizaciones } });}
+            @{ await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", listadoDetallesActivosFijosViewModel.Cantidad, new ViewDataDictionary(ViewData) { { "MostrarFiltradoUltimaColumna", listadoDetallesActivosFijosViewModel.MostrarFiltradoUltimaColumna } });}
             <tr>
                 @{
-                    if (isConfiguracionSeleccion)
+                    if (listadoDetallesActivosFijosViewModel.IsConfiguracionSeleccion)
                     {
                         <th></th>
                     }
                     <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.IdCodigoActivoFijo)</th>
-                    if (isConfiguracionDatosActivo)
+                    if (listadoDetallesActivosFijosViewModel.IsConfiguracionDatosActivo)
                     {
                         <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.IdTipoActivoFijo)</th>
                         <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.IdClaseActivoFijo)</th>
@@ -171,26 +48,26 @@
                 <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.RecepcionActivoFijo.OrdenCompra)</th>
                 <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.RecepcionActivoFijo.IdFondoFinanciamiento)</th>
                 @{
-                    if (isConfiguracionListadoComponentes || isConfiguracionSeleccionComponentes || isConfiguracionListadoAltas || isConfiguracionListadoMantenimientos || isConfiguracionListadoRevalorizaciones || isConfiguracionListadoProcesosJudiciales || isConfiguracionListadoBajas || isConfiguracionListadoBajasGestionar || isConfiguracionSeleccionBajas || isConfiguracionSeleccionMovilizaciones || isConfiguracionListadoMovilizacionesGestionar || isConfiguracionListadoMovilizaciones)
+                    if (listadoDetallesActivosFijosViewModel.IsConfiguracionDatosAlta)
                     {
                         <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.AltaActivoFijoActual.FechaAlta)</th>
                         <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.AltaActivoFijoActual.FacturaActivoFijo.NumeroFactura)</th>
                     }
-                    if (isConfiguracionListadoBajas)
+                    if (listadoDetallesActivosFijosViewModel.IsConfiguracionDatosBaja)
                     {
                         <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.BajaActivoFijoActual.FechaBaja)</th>
                         <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.BajaActivoFijoActual.IdMotivoBaja)</th>
                     }
-                    if (isConfiguracionSeleccionMovilizaciones || isConfiguracionListadoMovilizacionesGestionar || isConfiguracionListadoMovilizaciones)
+                    if (listadoDetallesActivosFijosViewModel.IsConfiguracionDatosMovilizaciones)
                     {
                         <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Componentes)</th>
                         <th>@Html.DisplayNameFor(model => model.FirstOrDefault().Observaciones)</th>
                     }
-                    if (isConfiguracionListadoComponentes || isConfiguracionListadoMantenimientos || isConfiguracionListadoRevalorizaciones || isConfiguracionListadoProcesosJudiciales || isConfiguracionListadoAltasGestionar || (isConfiguracionListadoBajasGestionar && !isConfiguracionBajasGestionarEditar) || isConfiguracionGestionarInventarioAutomatico || isConfiguracionSeleccionMovilizaciones)
+                    if (listadoDetallesActivosFijosViewModel.IsConfiguracionOpciones)
                     {
                         <th>Opciones</th>
                     }
-                    if (isConfiguracionSeleccionAltas)
+                    if (listadoDetallesActivosFijosViewModel.IsConfiguracionSeleccionAltas)
                     {
                         <th style="display: none !important;"></th>
                     }
@@ -201,98 +78,98 @@
             @{
                 foreach (var item in Model)
                 {
-                    <tr id="@nombreTabla@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle">
+                    <tr id="@listadoDetallesActivosFijosViewModel.NombreTabla@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle">
                         @{
-                            if (isConfiguracionSeleccion)
+                            if (listadoDetallesActivosFijosViewModel.IsConfiguracionSeleccion)
                             {
                                 <td>
                                     <div class="checkbox">
                                         <label>
-                                            <input class="checkbox style-0 chkDetallesActivoFijo" @{await ViewContext.Writer.WriteAsync(item.Seleccionado ? "checked='checked'" : "");} type="checkbox" onchange="eventoCheckboxDetallesActivoFijo(this)" data-funcioncallback="@callbackFunctionCheckBox" data-idrecepcionactivofijodetalle="@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" id="chkDetalleActivoFijo_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" @{await ViewContext.Writer.WriteAsync(isConfiguracionSeleccionDisabled ? "disabled='disabled'" : "");}>
+                                            <input class="checkbox style-0 chkDetallesActivoFijo" @{await ViewContext.Writer.WriteAsync(item.Seleccionado ? "checked='checked'" : "");} type="checkbox" onchange="eventoCheckboxDetallesActivoFijo(this)" data-funcioncallback="@listadoDetallesActivosFijosViewModel.CallbackFunctionCheckBox" data-idrecepcionactivofijodetalle="@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" id="chkDetalleActivoFijo_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" @{await ViewContext.Writer.WriteAsync(listadoDetallesActivosFijosViewModel.IsConfiguracionSeleccionDisabled ? "disabled='disabled'" : "");}>
                                             <span>&nbsp;</span>
                                         </label>
                                     </div>
                                 </td>
                             }
-                            <td id="@String.Format("{0}{1}Codigosecuencial", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.CodigoActivoFijo?.Codigosecuencial ?? "-");}</td>
-                            if (isConfiguracionDatosActivo)
+                            <td id="@String.Format("{0}{1}Codigosecuencial", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.CodigoActivoFijo?.Codigosecuencial ?? "-");}</td>
+                            if (listadoDetallesActivosFijosViewModel.IsConfiguracionDatosActivo)
                             {
-                                <td id="@String.Format("{0}{1}TipoActivoFijo", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@Html.DisplayFor(c=> item.RecepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.Nombre)</td>
-                                <td id="@String.Format("{0}{1}ClaseActivoFijo", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@Html.DisplayFor(c=> item.RecepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.Nombre)</td>
-                                <td id="@String.Format("{0}{1}SubclaseActivoFijo", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@Html.DisplayFor(c=> item.RecepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.Nombre)</td>
-                                <td id="@String.Format("{0}{1}NombreActivoFijo", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@Html.DisplayFor(c=> item.RecepcionActivoFijoDetalle.ActivoFijo.Nombre)</td>
+                                <td id="@String.Format("{0}{1}TipoActivoFijo", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@Html.DisplayFor(c=> item.RecepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.Nombre)</td>
+                                <td id="@String.Format("{0}{1}ClaseActivoFijo", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@Html.DisplayFor(c=> item.RecepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.Nombre)</td>
+                                <td id="@String.Format("{0}{1}SubclaseActivoFijo", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@Html.DisplayFor(c=> item.RecepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.Nombre)</td>
+                                <td id="@String.Format("{0}{1}NombreActivoFijo", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@Html.DisplayFor(c=> item.RecepcionActivoFijoDetalle.ActivoFijo.Nombre)</td>
                             }
                         }
-                        <td id="@String.Format("{0}{1}Marca", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.ActivoFijo?.Modelo?.Marca?.Nombre ?? "-");}</td>
-                        <td id="@String.Format("{0}{1}Modelo", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.ActivoFijo?.Modelo?.Nombre ?? "-");}</td>
-                        <td id="@String.Format("{0}{1}Serie", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.Serie ?? "-");}</td>
-                        <td id="@String.Format("{0}{1}NumeroChasis", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.NumeroChasis ?? "-");}</td>
-                        <td id="@String.Format("{0}{1}NumeroMotor", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.NumeroMotor ?? "-");}</td>
-                        <td id="@String.Format("{0}{1}Placa", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.Placa ?? "-");}</td>
-                        <td id="@String.Format("{0}{1}NumeroClaveCatastral", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.NumeroClaveCatastral ?? "-");}</td>
-                        <td id="@String.Format("{0}{1}Sucursal", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)" data-idsucursal="@item.RecepcionActivoFijoDetalle.UbicacionActivoFijoActual.LibroActivoFijo.IdSucursal" data-idlibroactivofijo="@item.RecepcionActivoFijoDetalle.UbicacionActivoFijoActual.IdLibroActivoFijo">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.UbicacionActivoFijoActual?.LibroActivoFijo?.Sucursal?.Nombre ?? "-");}</td>
-                        <td id="@String.Format("{0}{1}Bodega", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.UbicacionActivoFijoActual?.Bodega?.Nombre ?? "-");}</td>
-                        <td id="@String.Format("{0}{1}Empleado", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)" data-idempleado="@item?.RecepcionActivoFijoDetalle?.UbicacionActivoFijoActual?.IdEmpleado">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.UbicacionActivoFijoActual?.Empleado != null ? $"{item?.RecepcionActivoFijoDetalle?.UbicacionActivoFijoActual?.Empleado?.Persona?.Nombres} {item?.RecepcionActivoFijoDetalle?.UbicacionActivoFijoActual?.Empleado?.Persona?.Apellidos}" : "-"); }</td>
-                        <td id="@String.Format("{0}{1}Proveedor", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.RecepcionActivoFijo?.Proveedor != null ? $"{item.RecepcionActivoFijoDetalle.RecepcionActivoFijo.Proveedor.Nombre} {item.RecepcionActivoFijoDetalle.RecepcionActivoFijo.Proveedor.Apellidos}" : "-");}</td>
-                        <td id="@String.Format("{0}{1}MotivoAlta", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.RecepcionActivoFijo?.MotivoAlta?.Descripcion ?? "-");}</td>
-                        <td id="@String.Format("{0}{1}FechaRecepcion", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@Html.DisplayFor(modelItem => item.RecepcionActivoFijoDetalle.RecepcionActivoFijo.FechaRecepcion)</td>
-                        <td id="@String.Format("{0}{1}OrdenCompra", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@Html.DisplayFor(modelItem => item.RecepcionActivoFijoDetalle.RecepcionActivoFijo.OrdenCompra)</td>
-                        <td id="@String.Format("{0}{1}FondoFinanciamiento", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.RecepcionActivoFijo?.FondoFinanciamiento?.Nombre ?? "-");}</td>
+                        <td id="@String.Format("{0}{1}Marca", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.ActivoFijo?.Modelo?.Marca?.Nombre ?? "-");}</td>
+                        <td id="@String.Format("{0}{1}Modelo", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.ActivoFijo?.Modelo?.Nombre ?? "-");}</td>
+                        <td id="@String.Format("{0}{1}Serie", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.Serie ?? "-");}</td>
+                        <td id="@String.Format("{0}{1}NumeroChasis", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.NumeroChasis ?? "-");}</td>
+                        <td id="@String.Format("{0}{1}NumeroMotor", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.NumeroMotor ?? "-");}</td>
+                        <td id="@String.Format("{0}{1}Placa", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.Placa ?? "-");}</td>
+                        <td id="@String.Format("{0}{1}NumeroClaveCatastral", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.NumeroClaveCatastral ?? "-");}</td>
+                        <td id="@String.Format("{0}{1}Sucursal", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)" data-idsucursal="@item.RecepcionActivoFijoDetalle.UbicacionActivoFijoActual.LibroActivoFijo.IdSucursal" data-idlibroactivofijo="@item.RecepcionActivoFijoDetalle.UbicacionActivoFijoActual.IdLibroActivoFijo">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.UbicacionActivoFijoActual?.LibroActivoFijo?.Sucursal?.Nombre ?? "-");}</td>
+                        <td id="@String.Format("{0}{1}Bodega", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.UbicacionActivoFijoActual?.Bodega?.Nombre ?? "-");}</td>
+                        <td id="@String.Format("{0}{1}Empleado", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)" data-idempleado="@item?.RecepcionActivoFijoDetalle?.UbicacionActivoFijoActual?.IdEmpleado">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.UbicacionActivoFijoActual?.Empleado != null ? $"{item?.RecepcionActivoFijoDetalle?.UbicacionActivoFijoActual?.Empleado?.Persona?.Nombres} {item?.RecepcionActivoFijoDetalle?.UbicacionActivoFijoActual?.Empleado?.Persona?.Apellidos}" : "-"); }</td>
+                        <td id="@String.Format("{0}{1}Proveedor", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.RecepcionActivoFijo?.Proveedor != null ? $"{item.RecepcionActivoFijoDetalle.RecepcionActivoFijo.Proveedor.Nombre} {item.RecepcionActivoFijoDetalle.RecepcionActivoFijo.Proveedor.Apellidos}" : "-");}</td>
+                        <td id="@String.Format("{0}{1}MotivoAlta", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.RecepcionActivoFijo?.MotivoAlta?.Descripcion ?? "-");}</td>
+                        <td id="@String.Format("{0}{1}FechaRecepcion", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@Html.DisplayFor(modelItem => item.RecepcionActivoFijoDetalle.RecepcionActivoFijo.FechaRecepcion)</td>
+                        <td id="@String.Format("{0}{1}OrdenCompra", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@Html.DisplayFor(modelItem => item.RecepcionActivoFijoDetalle.RecepcionActivoFijo.OrdenCompra)</td>
+                        <td id="@String.Format("{0}{1}FondoFinanciamiento", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.RecepcionActivoFijo?.FondoFinanciamiento?.Nombre ?? "-");}</td>
                         @{
-                            if (isConfiguracionListadoComponentes || isConfiguracionSeleccionComponentes || isConfiguracionListadoAltas || isConfiguracionListadoMantenimientos || isConfiguracionListadoRevalorizaciones || isConfiguracionListadoProcesosJudiciales || isConfiguracionListadoBajas || isConfiguracionListadoBajasGestionar || isConfiguracionSeleccionBajas || isConfiguracionSeleccionMovilizaciones || isConfiguracionListadoMovilizacionesGestionar || isConfiguracionListadoMovilizaciones)
+                            if (listadoDetallesActivosFijosViewModel.IsConfiguracionDatosAlta)
                             {
-                                <td id="@String.Format("{0}{1}FechaAlta", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.AltaActivoFijoActual?.FechaAlta != null ? item.RecepcionActivoFijoDetalle.AltaActivoFijoActual.FechaAlta.ToString("dd/MM/yyyy hh:mm tt") : "-");}</td>
-                                <td id="@String.Format("{0}{1}NumeroFactura", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.AltaActivoFijoActual?.FacturaActivoFijo?.NumeroFactura ?? "-");}</td>
+                                <td id="@String.Format("{0}{1}FechaAlta", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.AltaActivoFijoActual?.FechaAlta != null ? item.RecepcionActivoFijoDetalle.AltaActivoFijoActual.FechaAlta.ToString("dd/MM/yyyy hh:mm tt") : "-");}</td>
+                                <td id="@String.Format("{0}{1}NumeroFactura", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.AltaActivoFijoActual?.FacturaActivoFijo?.NumeroFactura ?? "-");}</td>
                             }
-                            if (isConfiguracionListadoBajas)
+                            if (listadoDetallesActivosFijosViewModel.IsConfiguracionDatosBaja)
                             {
-                                <td id="@String.Format("{0}{1}FechaBaja", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.BajaActivoFijoActual?.FechaBaja != null ? item.RecepcionActivoFijoDetalle.BajaActivoFijoActual.FechaBaja.ToString("dd/MM/yyyy hh:mm tt") : "-");}</td>
-                                <td id="@String.Format("{0}{1}MotivoBaja", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.BajaActivoFijoActual?.MotivoBaja?.Nombre ?? "-");}</td>
+                                <td id="@String.Format("{0}{1}FechaBaja", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.BajaActivoFijoActual?.FechaBaja != null ? item.RecepcionActivoFijoDetalle.BajaActivoFijoActual.FechaBaja.ToString("dd/MM/yyyy hh:mm tt") : "-");}</td>
+                                <td id="@String.Format("{0}{1}MotivoBaja", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.BajaActivoFijoActual?.MotivoBaja?.Nombre ?? "-");}</td>
                             }
-                            if (isConfiguracionSeleccionMovilizaciones || isConfiguracionListadoMovilizacionesGestionar || isConfiguracionListadoMovilizaciones)
+                            if (listadoDetallesActivosFijosViewModel.IsConfiguracionDatosMovilizaciones)
                             {
-                                <td id="@String.Format("{0}{1}Componentes", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(!String.IsNullOrEmpty(item?.Componentes) ? item.Componentes : "-");}</td>
-                                if (isConfiguracionSeleccionMovilizaciones)
+                                <td id="@String.Format("{0}{1}Componentes", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(!String.IsNullOrEmpty(item?.Componentes) ? item.Componentes : "-");}</td>
+                                if (listadoDetallesActivosFijosViewModel.IsConfiguracionSeleccionMovilizaciones)
                                 {
-                                    <td id="@String.Format("{0}{1}Observaciones", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">
+                                    <td id="@String.Format("{0}{1}Observaciones", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">
                                         <a href="form-x-editable.html#" class="btntextAreaEditable" data-idrecepcionactivofijodetalle="@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" data-type="textarea" data-pk="@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" data-original-title="Observaciones">@{await ViewContext.Writer.WriteAsync(item?.Observaciones);}</a>
                                         <input type="hidden" id="hTextAreaEditable_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" name="hTextAreaEditable_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" />
                                     </td>
                                 }
-                                if (isConfiguracionListadoMovilizacionesGestionar || isConfiguracionListadoMovilizaciones)
+                                if (listadoDetallesActivosFijosViewModel.IsConfiguracionListadoMovilizacionesGestionar || listadoDetallesActivosFijosViewModel.IsConfiguracionListadoMovilizaciones)
                                 {
-                                    <td id="@String.Format("{0}{1}Observaciones", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">
+                                    <td id="@String.Format("{0}{1}Observaciones", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">
                                         @{await ViewContext.Writer.WriteAsync(!String.IsNullOrEmpty(item?.Observaciones) ? item.Observaciones : "-");}
                                     </td>
                                 }
                             }
-                            if (isConfiguracionSeleccionAltas)
+                            if (listadoDetallesActivosFijosViewModel.IsConfiguracionSeleccionAltas)
                             {
-                                <td id="@String.Format("{0}{1}Comunes", nombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)" style="display:none !important;">
+                                <td id="@String.Format("{0}{1}Comunes", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)" style="display:none !important;">
                                     <input type="hidden" id="hComunesComponentes_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" name="hComunesComponentes_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" value="@String.Join(",", item.RecepcionActivoFijoDetalle.ComponentesActivoFijoOrigen.Select(c => c.IdRecepcionActivoFijoDetalleComponente))" />
                                 </td>
                             }
-                            if (isConfiguracionListadoComponentes || isConfiguracionListadoMantenimientos || isConfiguracionListadoRevalorizaciones || isConfiguracionListadoProcesosJudiciales || isConfiguracionListadoAltasGestionar || (isConfiguracionListadoBajasGestionar && !isConfiguracionBajasGestionarEditar) || isConfiguracionGestionarInventarioAutomatico || isConfiguracionSeleccionMovilizaciones)
+                            if (listadoDetallesActivosFijosViewModel.IsConfiguracionOpciones)
                             {
                                 <td>
                                     @{
-                                        if (isConfiguracionListadoMantenimientos)
+                                        if (listadoDetallesActivosFijosViewModel.IsConfiguracionListadoMantenimientos)
                                         {
                                             <a asp-action="ListadoMantenimientos" asp-route-id="@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle">Mantenimientos</a>
                                         }
-                                        if (isConfiguracionListadoProcesosJudiciales)
+                                        if (listadoDetallesActivosFijosViewModel.IsConfiguracionListadoProcesosJudiciales)
                                         {
                                             <a asp-action="ListadoProcesosJudiciales" asp-route-id="@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle">Procesos Judiciales</a>
                                         }
-                                        if (isConfiguracionListadoRevalorizaciones)
+                                        if (listadoDetallesActivosFijosViewModel.IsConfiguracionListadoRevalorizaciones)
                                         {
                                             <a asp-action="ListadoRevalorizaciones" asp-route-id="@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle">Revalorizaciones</a>
                                         }
-                                        if (isConfiguracionListadoComponentes)
+                                        if (listadoDetallesActivosFijosViewModel.IsConfiguracionListadoComponentes)
                                         {
                                             <div id="divEliminarComponente_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" class="btnEliminarComponentes" style="display:inline;"><a href="javascript: void(0);" id="btnEliminarComponente_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" onclick="abrirVentanaConfirmacion('btnEliminarComponente_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle')" data-funcioncallback="callBackEliminarComponente('@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle')" data-titulo="Eliminar" data-descripcion="&#191; Desea eliminar el Componente... ?">Eliminar</a></div>
                                         }
-                                        if (isConfiguracionListadoAltasGestionar)
+                                        if (listadoDetallesActivosFijosViewModel.IsConfiguracionListadoAltasGestionar)
                                         {
                                             <input type="hidden" id="hComponentes_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" name="hComponentes_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" value="@String.Join(",", item.RecepcionActivoFijoDetalle.ComponentesActivoFijoOrigen.Select(c => c.IdRecepcionActivoFijoDetalleComponente))" />
                                             <input type="hidden" class="hiddenIdRecepcionActivoFijoDetalle" id="hIdRecepcionActivoFijoDetalle_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" name="hIdRecepcionActivoFijoDetalle_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" value="@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" />
@@ -300,7 +177,7 @@
                                             <input type="hidden" id="hSucursal_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" name="hSucursal_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" value="@item.RecepcionActivoFijoDetalle.UbicacionActivoFijoActual.LibroActivoFijo.IdSucursal" />
                                             <input type="hidden" id="hLibroActivoFijo_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" name="hLibroActivoFijo_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" value="@item.RecepcionActivoFijoDetalle.UbicacionActivoFijoActual.IdLibroActivoFijo" />
                                             <a href="javascript:void(0);" onclick="cargarFormularioDatosEmpleado(@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)" class="btnDatosEmpleado" data-idfila="@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" data-toggle="modal" data-target="#myModalEmpleado">Custodio</a>
-                                            if (!isConfiguracionAltasGestionarEditar)
+                                            if (!listadoDetallesActivosFijosViewModel.IsConfiguracionAltasGestionarEditar)
                                             {
                                                 <span>| </span><a href="javascript:void(0);" onclick="cargarFormularioComponentesDatosEspecificos(@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)" class="btnComponentesDatosEspecificos" data-idfila="@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" data-idorigen="@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" data-toggle="modal" data-target="#myModalComponente">Componentes</a>
                                                 <div id="divEliminarDatosEspecificos_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" class="btnEliminarDatosEspecificos" style="display:inline;">
@@ -308,18 +185,18 @@
                                                 </div>
                                             }
                                         }
-                                        if (isConfiguracionListadoBajasGestionar)
+                                        if (listadoDetallesActivosFijosViewModel.IsConfiguracionListadoBajasGestionar)
                                         {
                                             <input type="hidden" class="hiddenIdRecepcionActivoFijoDetalle" id="hIdRecepcionActivoFijoDetalle_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" name="hIdRecepcionActivoFijoDetalle_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" value="@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" />
                                             <input type="hidden" class="hiddenHEmpleado" id="hEmpleado_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" name="hEmpleado_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" value="@item.RecepcionActivoFijoDetalle.UbicacionActivoFijoActual.IdEmpleado" />
-                                            if (!isConfiguracionBajasGestionarEditar)
+                                            if (!listadoDetallesActivosFijosViewModel.IsConfiguracionBajasGestionarEditar)
                                             {
                                                 <div id="divEliminarDatosEspecificos_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" class="btnEliminarDatosEspecificos" style="display:inline;">
                                                     <a href="javascript:void(0);" id="btnEliminarDatosEspecifico_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" onclick="abrirVentanaConfirmacion('btnEliminarDatosEspecifico_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle')" data-funcioncallback="callBackFunctionEliminarDatoEspecifico('@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle')" data-titulo="Eliminar" data-descripcion="&#191;Desea eliminar el Activo Fijo seleccionado... ?">Eliminar</a>
                                                 </div>
                                             }
                                         }
-                                        if (isConfiguracionGestionarInventarioAutomatico || isConfiguracionSeleccionMovilizaciones)
+                                        if (listadoDetallesActivosFijosViewModel.IsConfiguracionGestionarInventarioAutomatico || listadoDetallesActivosFijosViewModel.IsConfiguracionSeleccionMovilizaciones)
                                         {
                                             <input type="hidden" class="hiddenIdRecepcionActivoFijoDetalle" id="hIdRecepcionActivoFijoDetalle_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" name="hIdRecepcionActivoFijoDetalle_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" value="@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" />
                                             <div id="divEliminarDatosEspecificos_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" class="btnEliminarDatosEspecificos" style="display:inline;">

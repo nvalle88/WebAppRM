@@ -11,7 +11,8 @@ namespace bd.webapprm.entidades.Utils
     {
         public IModelBinder GetBinder(ModelBinderProviderContext context)
         {
-            if (context == null) throw new ArgumentNullException(nameof(context));
+            if (context == null)
+                throw new ArgumentNullException(nameof(context));
 
             if (!context.Metadata.IsComplexType && (context.Metadata.ModelType == typeof(DateTime) || context.Metadata.ModelType == typeof(DateTime?)))
                 return new InvariantDatetimeModelBinder(context.Metadata.ModelType);
