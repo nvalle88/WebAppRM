@@ -13,16 +13,19 @@ using bd.webapprm.entidades;
 using bbd.webapprm.servicios.Enumeradores;
 using bd.webapprm.servicios.Extensores;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using bd.webapprm.entidades.ObjectTransfer;
 
 namespace bd.webapprm.web.Controllers.MVC
 {
     public class BodegaController : Controller
     {
         private readonly IApiServicio apiServicio;
+        private readonly IClaimsTransfer claimsTransfer;
 
-        public BodegaController(IApiServicio apiServicio)
+        public BodegaController(IApiServicio apiServicio, IClaimsTransfer claimsTransfer)
         {
             this.apiServicio = apiServicio;
+            this.claimsTransfer = claimsTransfer;
         }
 
         public async Task<IActionResult> Index()
@@ -44,7 +47,9 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                ViewData["Sucursal"] = new SelectList(await apiServicio.Listar<Sucursal>(new Uri(WebApp.BaseAddressTH), "api/Sucursal/ListarSucursal"), "IdSucursal", "Nombre");
+                var claimTransfer = claimsTransfer.ObtenerClaimsTransferHttpContext();
+                ViewData["Sucursal"] = new SelectList(new List<Sucursal> { new Sucursal { IdSucursal = (int)claimTransfer.IdSucursal, Nombre = claimTransfer.NombreSucursal } }, "IdSucursal", "Nombre");
+                ViewData["Empleado"] = new SelectList((await apiServicio.ObtenerElementoAsync<List<DatosBasicosEmpleadoViewModel>>(new EmpleadosPorSucursalViewModel { IdSucursal = claimTransfer.IdSucursal, EmpleadosActivos = true }, new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleadosPorSucursal")).Select(c => new ListaEmpleadoViewModel { IdEmpleado = c.IdEmpleado, NombreApellido = $"{c.Nombres} {c.Apellidos}" }), "IdEmpleado", "NombreApellido");
                 return View();
             }
             catch (Exception)
@@ -59,7 +64,9 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                bodega.Sucursal = JsonConvert.DeserializeObject<Sucursal>((await apiServicio.SeleccionarAsync<Response>(bodega.IdSucursal.ToString(), new Uri(WebApp.BaseAddressTH), "api/Sucursal")).Resultado.ToString());
+                var claimTransfer = claimsTransfer.ObtenerClaimsTransferHttpContext();
+                bodega.IdSucursal = claimTransfer.IdSucursal;
+
                 var response = await apiServicio.InsertarAsync(bodega, new Uri(WebApp.BaseAddressRM), "api/Bodega/InsertarBodega");
                 if (response.IsSuccess)
                 {
@@ -67,7 +74,8 @@ namespace bd.webapprm.web.Controllers.MVC
                     return this.Redireccionar($"{Mensaje.Informacion}|{Mensaje.Satisfactorio}");
                 }
                 ViewData["Error"] = response.Message;
-                ViewData["Sucursal"] = new SelectList(await apiServicio.Listar<Sucursal>(new Uri(WebApp.BaseAddressTH), "api/Sucursal/ListarSucursal"), "IdSucursal", "Nombre");
+                ViewData["Sucursal"] = new SelectList(new List<Sucursal> { new Sucursal { IdSucursal = (int)claimTransfer.IdSucursal, Nombre = claimTransfer.NombreSucursal } }, "IdSucursal", "Nombre");
+                ViewData["Empleado"] = new SelectList((await apiServicio.ObtenerElementoAsync<List<DatosBasicosEmpleadoViewModel>>(new EmpleadosPorSucursalViewModel { IdSucursal = claimTransfer.IdSucursal, EmpleadosActivos = true }, new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleadosPorSucursal")).Select(c => new ListaEmpleadoViewModel { IdEmpleado = c.IdEmpleado, NombreApellido = $"{c.Nombres} {c.Apellidos}" }), "IdEmpleado", "NombreApellido");
                 return View(bodega);
             }
             catch (Exception ex)
@@ -88,7 +96,9 @@ namespace bd.webapprm.web.Controllers.MVC
                         return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}");
 
                     var bodega = JsonConvert.DeserializeObject<Bodega>(respuesta.Resultado.ToString());
-                    ViewData["Sucursal"] = new SelectList(await apiServicio.Listar<Sucursal>(new Uri(WebApp.BaseAddressTH), "api/Sucursal/ListarSucursal"), "IdSucursal", "Nombre");
+                    var claimTransfer = claimsTransfer.ObtenerClaimsTransferHttpContext();
+                    ViewData["Sucursal"] = new SelectList(new List<Sucursal> { new Sucursal { IdSucursal = (int)claimTransfer.IdSucursal, Nombre = claimTransfer.NombreSucursal } }, "IdSucursal", "Nombre");
+                    ViewData["Empleado"] = new SelectList((await apiServicio.ObtenerElementoAsync<List<DatosBasicosEmpleadoViewModel>>(new EmpleadosPorSucursalViewModel { IdSucursal = claimTransfer.IdSucursal, EmpleadosActivos = true }, new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleadosPorSucursal")).Select(c => new ListaEmpleadoViewModel { IdEmpleado = c.IdEmpleado, NombreApellido = $"{c.Nombres} {c.Apellidos}" }), "IdEmpleado", "NombreApellido");
                     return View(bodega);
                 }
                 return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}");
@@ -107,7 +117,9 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    bodega.Sucursal = JsonConvert.DeserializeObject<Sucursal>((await apiServicio.SeleccionarAsync<Response>(bodega.IdSucursal.ToString(), new Uri(WebApp.BaseAddressTH), "api/Sucursal")).Resultado.ToString());
+                    var claimTransfer = claimsTransfer.ObtenerClaimsTransferHttpContext();
+                    bodega.IdSucursal = claimTransfer.IdSucursal;
+
                     var response = await apiServicio.EditarAsync(id, bodega, new Uri(WebApp.BaseAddressRM), "api/Bodega");
                     if (response.IsSuccess)
                     {
@@ -115,7 +127,8 @@ namespace bd.webapprm.web.Controllers.MVC
                         return this.Redireccionar($"{Mensaje.Informacion}|{Mensaje.Satisfactorio}");
                     }
                     ViewData["Error"] = response.Message;
-                    ViewData["Sucursal"] = new SelectList(await apiServicio.Listar<Sucursal>(new Uri(WebApp.BaseAddressTH), "api/Sucursal/ListarSucursal"), "IdSucursal", "Nombre");
+                    ViewData["Sucursal"] = new SelectList(new List<Sucursal> { new Sucursal { IdSucursal = (int)claimTransfer.IdSucursal, Nombre = claimTransfer.NombreSucursal } }, "IdSucursal", "Nombre");
+                    ViewData["Empleado"] = new SelectList((await apiServicio.ObtenerElementoAsync<List<DatosBasicosEmpleadoViewModel>>(new EmpleadosPorSucursalViewModel { IdSucursal = claimTransfer.IdSucursal, EmpleadosActivos = true }, new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleadosPorSucursal")).Select(c => new ListaEmpleadoViewModel { IdEmpleado = c.IdEmpleado, NombreApellido = $"{c.Nombres} {c.Apellidos}" }), "IdEmpleado", "NombreApellido");
                     return View(bodega);
                 }
                 return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}");

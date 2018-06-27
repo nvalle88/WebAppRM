@@ -6,7 +6,7 @@ namespace bd.webapprm.entidades.Utils
 {
     public class ClaimsTransfer
     {
-        public int? IdSucursal { get; set; }
+        public int IdSucursal { get; set; }
         public string NombreSucursal { get; set; }
     }
 }

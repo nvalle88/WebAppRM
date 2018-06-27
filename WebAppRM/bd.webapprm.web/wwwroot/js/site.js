@@ -110,11 +110,17 @@ function mostrarNotificacion(titulo, texto)
 {
     var color = "";
     var icon = "";
-    switch (titulo)
-    {
-        case "Información": color = "#3276B1"; icon = "exclamation-circle"; break;
-        case "Error": color = "#C46A69"; icon = "times-circle"; break;
-        case "Aviso": color = "#c79121"; icon = "exclamation-triangle"; break;
+    if (titulo.indexOf("Informaci") > -1) {
+        color = "#3276B1";
+        icon = "exclamation-circle";
+    }
+    else if (titulo == "Error") {
+        color = "#C46A69";
+        icon = "times-circle";
+    }
+    else {//Aviso
+        color = "#c79121";
+        icon = "exclamation-triangle";
     }
     $.sound_on = true;
     $.smallBox({
@@ -161,6 +167,10 @@ function Gestionar_Msg() {
         var arr_msg = mensaje.split('|');
         mostrarNotificacion(arr_msg[0], arr_msg[1]);
     }
+
+    var mensajeError = $("#span_error").html();
+    if (mensajeError != "" && mensajeError != null)
+        mostrarNotificacion("Error", mensajeError);
 }
 
 function initLoadingForm()

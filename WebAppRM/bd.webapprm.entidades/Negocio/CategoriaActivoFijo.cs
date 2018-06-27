@@ -16,7 +16,7 @@ namespace bd.webapprm.entidades
         public int IdCategoriaActivoFijo { get; set; }
 
         [Required(ErrorMessage = "Debe introducir la {0}")]
-        [Display(Name = "Categoría de activo fijo:")]
+        [Display(Name = "Nombre:")]
         [StringLength(200, MinimumLength = 2, ErrorMessage = "La {0} no puede tener más de {1} y menos de {2}")]
         public string Nombre { get; set; }
 

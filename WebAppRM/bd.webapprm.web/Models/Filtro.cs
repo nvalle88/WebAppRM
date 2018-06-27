@@ -90,7 +90,7 @@ namespace bd.webapprm.web.Models
                     else
                     {
                         var claimTransfer = claimsTransfer.ObtenerClaimsTransferHttpContext();
-                        if (claimTransfer == null || claimTransfer.IdSucursal == null || claimTransfer.IdSucursal == 0 || String.IsNullOrEmpty(claimTransfer.NombreSucursal))
+                        if (claimTransfer == null || claimTransfer.IdSucursal == 0 || String.IsNullOrEmpty(claimTransfer.NombreSucursal))
                         {
                             var result = new ViewResult { ViewName = "AccesoDenegadoEmpleadosClaims" };
                             context.Result = result;
