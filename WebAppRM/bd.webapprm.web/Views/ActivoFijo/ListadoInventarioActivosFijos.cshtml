@@ -60,12 +60,12 @@
     @{await Html.RenderPartialAsync("_DatetimePickerScriptsPartial");}
     <script src="~/js/datatables/rangoFecha.min.js"></script>
     <script>
-        var arrConfiguraciones = [
-            { propiedad: "IsConfiguracionSeleccion", valor: true },
-            { propiedad: "IsConfiguracionSeleccionDisabled", valor: true },
-            { propiedad: "IsConfiguracionDatosActivo", valor: true },
-            { propiedad: "IsConfiguracionListadoAltas", valor: true }
-        ];
+        var arrConfiguraciones = {
+            IsConfiguracionSeleccion: true,
+            IsConfiguracionSeleccionDisabled: true,
+            IsConfiguracionDatosActivo: true,
+            IsConfiguracionListadoAltas: true
+        };
         mostrarNoSeleccionados = true;
         var urlListadoTabla = "@Url.Action("ListadoInventarioResult")";
     </script>

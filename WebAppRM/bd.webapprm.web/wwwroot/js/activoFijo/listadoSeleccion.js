@@ -93,21 +93,6 @@ function obtenerRecepcionActivoFijoDetalleSeleccionado(valor) {
     return null;
 }
 
-function existeConfiguracion(propiedad)
-{
-    var configuracion = obtenerConfiguracion(propiedad);
-    return configuracion != null ? configuracion.valor : false;
-}
-
-function obtenerConfiguracion(propiedad)
-{
-    for (var i = 0; i < arrConfiguraciones.length; i++) {
-        if (arrConfiguraciones[i].propiedad == propiedad)
-            return arrConfiguraciones[i];
-    }
-    return null;
-}
-
 function eliminarRecepcionActivoFijoDetalleSeleccionado(idRecepcionActivoFijoDetalle)
 {
     for (var i = 0; i < arrRecepcionActivoFijoDetalleSeleccionado.length; i++) {

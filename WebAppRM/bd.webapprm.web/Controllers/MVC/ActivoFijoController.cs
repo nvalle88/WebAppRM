@@ -449,7 +449,7 @@ namespace bd.webapprm.web.Controllers.MVC
         }
 
         [HttpPost]
-        public async Task<IActionResult> DetallesActivoFijoResult(List<IdRecepcionActivoFijoDetalleSeleccionado> listadoRecepcionActivoFijoDetalleSeleccionado, List<PropiedadValor> arrConfiguraciones, bool mostrarNoSeleccionados)
+        public async Task<IActionResult> DetallesActivoFijoResult(List<IdRecepcionActivoFijoDetalleSeleccionado> listadoRecepcionActivoFijoDetalleSeleccionado, ListadoDetallesActivosFijosViewModel arrConfiguraciones, bool mostrarNoSeleccionados)
         {
             var lista = new List<RecepcionActivoFijoDetalleSeleccionado>();
             ViewData["Configuraciones"] = arrConfiguraciones;
@@ -469,7 +469,7 @@ namespace bd.webapprm.web.Controllers.MVC
         public async Task<IActionResult> ModalComponentesResult(RecepcionActivoFijoDetalleComponentes componentesActivo)
         {
             var lista = new List<RecepcionActivoFijoDetalleSeleccionado>();
-            ViewData["Configuraciones"] = new List<PropiedadValor>() { new PropiedadValor { Propiedad = "IsConfiguracionListadoComponentes", Valor = "true" }, new PropiedadValor { Propiedad = "IsConfiguracionDatosActivo", Valor = "true" } };
+            ViewData["Configuraciones"] = new ListadoDetallesActivosFijosViewModel(IsConfiguracionDatosActivo: true, IsConfiguracionListadoComponentes: true);
             try
             {
                 lista = await apiServicio.ObtenerElementoAsync<List<RecepcionActivoFijoDetalleSeleccionado>>(ObtenerListaRecepcionActivoFijoDetalleSeleccionado(componentesActivo), new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/DetallesActivoFijo");
@@ -483,12 +483,7 @@ namespace bd.webapprm.web.Controllers.MVC
         public async Task<IActionResult> ComponentesActivosFijosResult(RecepcionActivoFijoDetalleComponentes componentesActivo, List<int> idsComponentesExcluir)
         {
             var lista = new List<RecepcionActivoFijoDetalleSeleccionado>();
-            ViewData["Configuraciones"] = new List<PropiedadValor>()
-            {
-                new PropiedadValor { Propiedad = "IsConfiguracionSeleccion", Valor = "true" },
-                new PropiedadValor { Propiedad = "IsConfiguracionSeleccionComponentes", Valor = "true" },
-                new PropiedadValor { Propiedad = "IsConfiguracionDatosActivo", Valor = "true" }
-            };
+            ViewData["Configuraciones"] = new ListadoDetallesActivosFijosViewModel(IsConfiguracionDatosActivo: true, IsConfiguracionSeleccion: true, IsConfiguracionSeleccionComponentes: true);
             try
             {
                 lista = await apiServicio.ObtenerElementoAsync<List<RecepcionActivoFijoDetalleSeleccionado>>(new IdRecepcionActivoFijoDetalleSeleccionadoIdsComponentesExcluir
@@ -640,12 +635,8 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 ViewData["MotivoAlta"] = new SelectList(await apiServicio.Listar<MotivoAlta>(new Uri(WebApp.BaseAddressRM), "api/MotivoAlta/ListarMotivoAlta"), "IdMotivoAlta", "Descripcion");
                 ViewData["TipoUtilizacionAlta"] = new SelectList(await apiServicio.Listar<TipoUtilizacionAlta>(new Uri(WebApp.BaseAddressRM), "api/TipoUtilizacionAlta/ListarTipoUtilizacionAlta"), "IdTipoUtilizacionAlta", "Nombre");
-                ViewData["Configuraciones"] = new List<PropiedadValor>()
-                {
-                    new PropiedadValor { Propiedad = "IsConfiguracionListadoAltasGestionar", Valor = "true" },
-                    new PropiedadValor { Propiedad = "IsConfiguracionAltasGestionarEditar", Valor = (id != null).ToString() },
-                    new PropiedadValor { Propiedad = "IsConfiguracionDatosActivo", Valor = "true" }
-                };
+                ViewData["Configuraciones"] = new ListadoDetallesActivosFijosViewModel(IsConfiguracionDatosActivo: true, IsConfiguracionListadoAltasGestionar: true, IsConfiguracionAltasGestionarEditar: id != null);
+                
                 if (id != null)
                 {
                     var response = await apiServicio.SeleccionarAsync<Response>(id.ToString(), new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ObtenerAltaActivosFijos");
@@ -767,12 +758,8 @@ namespace bd.webapprm.web.Controllers.MVC
 
                 ViewData["MotivoAlta"] = new SelectList(await apiServicio.Listar<MotivoAlta>(new Uri(WebApp.BaseAddressRM), "api/MotivoAlta/ListarMotivoAlta"), "IdMotivoAlta", "Descripcion");
                 ViewData["TipoUtilizacionAlta"] = new SelectList(await apiServicio.Listar<TipoUtilizacionAlta>(new Uri(WebApp.BaseAddressRM), "api/TipoUtilizacionAlta/ListarTipoUtilizacionAlta"), "IdTipoUtilizacionAlta", "Nombre");
-                ViewData["Configuraciones"] = new List<PropiedadValor>()
-                {
-                    new PropiedadValor { Propiedad = "IsConfiguracionListadoAltasGestionar", Valor = "true" },
-                    new PropiedadValor { Propiedad = "IsConfiguracionAltasGestionarEditar", Valor = (altaActivoFijo.IdAltaActivoFijo > 0).ToString() },
-                    new PropiedadValor { Propiedad = "IsConfiguracionDatosActivo", Valor = "true" }
-                };
+                ViewData["Configuraciones"] = new ListadoDetallesActivosFijosViewModel(IsConfiguracionDatosActivo: true, IsConfiguracionListadoAltasGestionar: true, IsConfiguracionAltasGestionarEditar: altaActivoFijo.IdAltaActivoFijo > 0);
+                
                 var listaRecepcionActivoFijoDetalleSeleccionado = await apiServicio.ObtenerElementoAsync<List<RecepcionActivoFijoDetalleSeleccionado>>(altaActivoFijo.AltaActivoFijoDetalle.Select(c=> new IdRecepcionActivoFijoDetalleSeleccionado { idRecepcionActivoFijoDetalle = c.IdRecepcionActivoFijoDetalle, seleccionado = true }), new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/DetallesActivoFijo");
                 foreach (var item in listaRecepcionActivoFijoDetalleSeleccionado)
                 {
@@ -796,12 +783,7 @@ namespace bd.webapprm.web.Controllers.MVC
         public async Task<IActionResult> ListadoActivosFijosSeleccionAltaResult(List<IdRecepcionActivoFijoDetalleSeleccionado> listadoRecepcionActivoFijoDetalleSeleccionado, List<IdRecepcionActivoFijoDetalleSeleccionado> objAdicional)
         {
             var lista = new List<RecepcionActivoFijoDetalleSeleccionado>();
-            ViewData["Configuraciones"] = new List<PropiedadValor>()
-            {
-                new PropiedadValor { Propiedad = "IsConfiguracionSeleccion", Valor = "true" },
-                new PropiedadValor { Propiedad = "IsConfiguracionDatosActivo", Valor = "true" },
-                new PropiedadValor { Propiedad = "IsConfiguracionSeleccionAltas", Valor = "true" }
-            };
+            ViewData["Configuraciones"] = new ListadoDetallesActivosFijosViewModel(IsConfiguracionDatosActivo: true, IsConfiguracionSeleccion: true, IsConfiguracionSeleccionAltas: true);
             try
             {
                 lista = await apiServicio.ObtenerElementoAsync<List<RecepcionActivoFijoDetalleSeleccionado>>(new IdRecepcionActivoFijoDetalleSeleccionadoIdsInicialesAltaBaja
@@ -862,12 +844,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                ViewData["Configuraciones"] = new List<PropiedadValor>()
-                {
-                    new PropiedadValor { Propiedad = "IsConfiguracionSeleccion", Valor = "true" },
-                    new PropiedadValor { Propiedad = "IsConfiguracionDatosActivo", Valor = "true" },
-                    new PropiedadValor { Propiedad = "IsConfiguracionSeleccionBajas", Valor = "true" }
-                };
+                ViewData["Configuraciones"] = new ListadoDetallesActivosFijosViewModel(IsConfiguracionDatosActivo: true, IsConfiguracionSeleccion: true, IsConfiguracionSeleccionBajas: true);
                 var claimTransfer = claimsTransfer.ObtenerClaimsTransferHttpContext();
                 ViewData["Empleado"] = await ObtenerSelectListEmpleado(claimTransfer.IdSucursal);
                 ViewData["ListadoRecepcionActivoFijoDetalleSeleccionado"] = await apiServicio.ObtenerElementoAsync<List<RecepcionActivoFijoDetalleSeleccionado>>(new CambioCustodioViewModel { IdEmpleadoEntrega = (ViewData["Empleado"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Empleado"] as SelectList).FirstOrDefault().Value) : -1, ListadoIdRecepcionActivoFijoDetalle = new List<int>() }, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/DetallesActivoFijoSeleccionadoPorEmpleado");
@@ -896,12 +873,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 }
                 var listaRecepcionActivoFijoDetalleSeleccionado = await apiServicio.ObtenerElementoAsync<List<RecepcionActivoFijoDetalleSeleccionado>>(cambioCustodioModel, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/DetallesActivoFijoSeleccionadoPorEmpleado");
                 ViewData["Error"] = response.Message;
-                ViewData["Configuraciones"] = new List<PropiedadValor>()
-                {
-                    new PropiedadValor { Propiedad = "IsConfiguracionSeleccion", Valor = "true" },
-                    new PropiedadValor { Propiedad = "IsConfiguracionDatosActivo", Valor = "true" },
-                    new PropiedadValor { Propiedad = "IsConfiguracionSeleccionBajas", Valor = "true" }
-                };
+                ViewData["Configuraciones"] = new ListadoDetallesActivosFijosViewModel(IsConfiguracionDatosActivo: true, IsConfiguracionSeleccion: true, IsConfiguracionSeleccionBajas: true);
                 var claimTransfer = claimsTransfer.ObtenerClaimsTransferHttpContext();
                 ViewData["Empleado"] = await ObtenerSelectListEmpleado(claimTransfer.IdSucursal);
                 ViewData["ListadoRecepcionActivoFijoDetalleSeleccionado"] = listaRecepcionActivoFijoDetalleSeleccionado;
@@ -920,12 +892,7 @@ namespace bd.webapprm.web.Controllers.MVC
             var lista = new List<RecepcionActivoFijoDetalleSeleccionado>();
             try
             {
-                ViewData["Configuraciones"] = new List<PropiedadValor>()
-                {
-                    new PropiedadValor { Propiedad = "IsConfiguracionSeleccion", Valor = "true" },
-                    new PropiedadValor { Propiedad = "IsConfiguracionDatosActivo", Valor = "true" },
-                    new PropiedadValor { Propiedad = "IsConfiguracionSeleccionBajas", Valor = "true" }
-                };
+                ViewData["Configuraciones"] = new ListadoDetallesActivosFijosViewModel(IsConfiguracionDatosActivo: true, IsConfiguracionSeleccion: true, IsConfiguracionSeleccionBajas: true);
                 lista = await apiServicio.ObtenerElementoAsync<List<RecepcionActivoFijoDetalleSeleccionado>>(new CambioCustodioViewModel { IdEmpleadoEntrega = idEmpleado, ListadoIdRecepcionActivoFijoDetalle = new List<int>() }, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/DetallesActivoFijoSeleccionadoPorEmpleado");
             }
             catch (Exception)
@@ -1024,7 +991,7 @@ namespace bd.webapprm.web.Controllers.MVC
                         ViewData["EmpleadoResponsableRecibo"] = new SelectList(listadoEmpleadoSucursalDestino, "IdEmpleado", "NombreApellido", cambioUbicacionSucursalViewModel.IdEmpleadoResponsableRecibo);
 
                         ViewData["ListadoRecepcionActivoFijoDetalleSeleccionado"] = transferenciaActivoFijo.TransferenciaActivoFijoDetalle.Select(c => new RecepcionActivoFijoDetalleSeleccionado { RecepcionActivoFijoDetalle = c.RecepcionActivoFijoDetalle, Seleccionado = true }).ToList();
-                        ViewData["Configuraciones"] = new List<PropiedadValor>() { new PropiedadValor { Propiedad = "IsConfiguracionDatosActivo", Valor = "true" }, new PropiedadValor { Propiedad = "IsConfiguracionSeleccionBajas", Valor = "true" } };
+                        ViewData["Configuraciones"] = new ListadoDetallesActivosFijosViewModel(IsConfiguracionDatosActivo: true, IsConfiguracionSeleccionBajas: true);
                         return View(cambioUbicacionSucursalViewModel);
                     }
                     else
@@ -1045,7 +1012,7 @@ namespace bd.webapprm.web.Controllers.MVC
 
                 int idEmpleadoEntrega = (ViewData["EmpleadoEntrega"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["EmpleadoEntrega"] as SelectList).FirstOrDefault().Value) : -1;
                 ViewData["ListadoRecepcionActivoFijoDetalleSeleccionado"] = idEmpleadoEntrega != -1 ? await apiServicio.ObtenerElementoAsync<List<RecepcionActivoFijoDetalleSeleccionado>>(new CambioCustodioViewModel { IdEmpleadoEntrega = idEmpleadoEntrega, ListadoIdRecepcionActivoFijoDetalle = new List<int>() }, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/DetallesActivoFijoSeleccionadoPorEmpleado") : new List<RecepcionActivoFijoDetalleSeleccionado>();
-                ViewData["Configuraciones"] = new List<PropiedadValor>() { new PropiedadValor { Propiedad = "IsConfiguracionSeleccion", Valor = "true" }, new PropiedadValor { Propiedad = "IsConfiguracionDatosActivo", Valor = "true" }, new PropiedadValor { Propiedad = "IsConfiguracionSeleccionBajas", Valor = "true" } };
+                ViewData["Configuraciones"] = new ListadoDetallesActivosFijosViewModel(IsConfiguracionSeleccion: true, IsConfiguracionDatosActivo: true, IsConfiguracionSeleccionBajas: true);
                 return View();
             }
             catch (Exception)
@@ -1080,13 +1047,8 @@ namespace bd.webapprm.web.Controllers.MVC
 
                 if (response.IsSuccess)
                     return this.Redireccionar($"{Mensaje.Informacion}|{Mensaje.Satisfactorio}", nameof(ListadoTransferenciasCreadas));
-
-                ViewData["Configuraciones"] = new List<PropiedadValor>()
-                {
-                    new PropiedadValor { Propiedad = "IsConfiguracionSeleccion", Valor = "true" },
-                    new PropiedadValor { Propiedad = "IsConfiguracionDatosActivo", Valor = "true" },
-                    new PropiedadValor { Propiedad = "IsConfiguracionSeleccionBajas", Valor = "true" }
-                };
+                
+                ViewData["Configuraciones"] = new ListadoDetallesActivosFijosViewModel(IsConfiguracionSeleccion: true, IsConfiguracionDatosActivo: true, IsConfiguracionSeleccionBajas: true);
                 var claimTransfer = claimsTransfer.ObtenerClaimsTransferHttpContext();
                 var listaSucursales = (await apiServicio.Listar<Sucursal>(new Uri(WebApp.BaseAddressTH), "api/Sucursal/ListarSucursal")).Where(c => c.IdSucursal != claimTransfer.IdSucursal);
                 ViewData["SucursalOrigen"] = new SelectList(listaSucursales, "IdSucursal", "Nombre", cambioUbicacionSucursalViewModel.IdSucursalOrigen);
@@ -1193,12 +1155,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 ViewData["MotivoBaja"] = new SelectList(await apiServicio.Listar<MotivoBaja>(new Uri(WebApp.BaseAddressRM), "api/MotivoBaja/ListarMotivoBaja"), "IdMotivoBaja", "Nombre");
-                ViewData["Configuraciones"] = new List<PropiedadValor>()
-                {
-                    new PropiedadValor { Propiedad = "IsConfiguracionListadoBajasGestionar", Valor = "true" },
-                    new PropiedadValor { Propiedad = "IsConfiguracionBajasGestionarEditar", Valor = (id != null).ToString() },
-                    new PropiedadValor { Propiedad = "IsConfiguracionDatosActivo", Valor = "true" }
-                };
+                ViewData["Configuraciones"] = new ListadoDetallesActivosFijosViewModel(IsConfiguracionListadoBajasGestionar: true, IsConfiguracionBajasGestionarEditar: id != null, IsConfiguracionDatosActivo: true);
                 if (id != null)
                 {
                     var response = await apiServicio.SeleccionarAsync<Response>(id.ToString(), new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ObtenerBajaActivosFijos");
@@ -1263,12 +1220,7 @@ namespace bd.webapprm.web.Controllers.MVC
                     return this.Redireccionar($"{Mensaje.Informacion}|{Mensaje.Satisfactorio}", nameof(ListadoActivosFijosBaja));
 
                 ViewData["MotivoBaja"] = new SelectList(await apiServicio.Listar<MotivoBaja>(new Uri(WebApp.BaseAddressRM), "api/MotivoBaja/ListarMotivoBaja"), "IdMotivoBaja", "Nombre");
-                ViewData["Configuraciones"] = new List<PropiedadValor>()
-                {
-                    new PropiedadValor { Propiedad = "IsConfiguracionListadoBajasGestionar", Valor = "true" },
-                    new PropiedadValor { Propiedad = "IsConfiguracionBajasGestionarEditar", Valor = (bajaActivoFijo.IdBajaActivoFijo > 0).ToString() },
-                    new PropiedadValor { Propiedad = "IsConfiguracionDatosActivo", Valor = "true" }
-                };
+                ViewData["Configuraciones"] = new ListadoDetallesActivosFijosViewModel(IsConfiguracionListadoBajasGestionar: true, IsConfiguracionBajasGestionarEditar: bajaActivoFijo.IdBajaActivoFijo > 0, IsConfiguracionDatosActivo: true);
                 var listaRecepcionActivoFijoDetalleSeleccionado = await apiServicio.ObtenerElementoAsync<List<RecepcionActivoFijoDetalleSeleccionado>>(bajaActivoFijo.BajaActivoFijoDetalle.Select(c => new IdRecepcionActivoFijoDetalleSeleccionado { idRecepcionActivoFijoDetalle = c.IdRecepcionActivoFijoDetalle, seleccionado = true }), new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/DetallesActivoFijo");
                 foreach (var item in listaRecepcionActivoFijoDetalleSeleccionado)
                 {
@@ -1291,12 +1243,7 @@ namespace bd.webapprm.web.Controllers.MVC
         public async Task<IActionResult> ListadoActivosFijosSeleccionBajaResult(List<IdRecepcionActivoFijoDetalleSeleccionado> listadoRecepcionActivoFijoDetalleSeleccionado, List<IdRecepcionActivoFijoDetalleSeleccionado> objAdicional)
         {
             var lista = new List<RecepcionActivoFijoDetalleSeleccionado>();
-            ViewData["Configuraciones"] = new List<PropiedadValor>()
-            {
-                new PropiedadValor { Propiedad = "IsConfiguracionSeleccion", Valor = "true" },
-                new PropiedadValor { Propiedad = "IsConfiguracionDatosActivo", Valor = "true" },
-                new PropiedadValor { Propiedad = "IsConfiguracionSeleccionBajas", Valor = "true" }
-            };
+            ViewData["Configuraciones"] = new ListadoDetallesActivosFijosViewModel(IsConfiguracionSeleccion: true, IsConfiguracionDatosActivo: true, IsConfiguracionSeleccionBajas: true);
             try
             {
                 lista = await apiServicio.ObtenerElementoAsync<List<RecepcionActivoFijoDetalleSeleccionado>>(new IdRecepcionActivoFijoDetalleSeleccionadoIdsInicialesAltaBaja
@@ -1660,8 +1607,8 @@ namespace bd.webapprm.web.Controllers.MVC
                 await apiServicio.InsertarAsync(new Estado { Nombre = Estados.EnEjecucion }, new Uri(WebApp.BaseAddressTH), "api/Estados/InsertarEstado");
                 await apiServicio.InsertarAsync(new Estado { Nombre = Estados.Concluido }, new Uri(WebApp.BaseAddressTH), "api/Estados/InsertarEstado");
                 var listaEstado = await apiServicio.Listar<Estado>(new Uri(WebApp.BaseAddressTH), "api/Estados/ListarEstados");
-
-                ViewData["Configuraciones"] = new List<PropiedadValor>() { new PropiedadValor { Propiedad = "IsConfiguracionSeleccion", Valor = "true" }, new PropiedadValor { Propiedad = "IsConfiguracionDatosActivo", Valor = "true" }, new PropiedadValor { Propiedad = "IsConfiguracionSeleccionBajas", Valor = "true" } };
+                
+                ViewData["Configuraciones"] = new ListadoDetallesActivosFijosViewModel(IsConfiguracionSeleccion: true, IsConfiguracionDatosActivo: true, IsConfiguracionSeleccionBajas: true);
                 if (!string.IsNullOrEmpty(id))
                 {
                     var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ObtenerInventarioActivosFijos");
@@ -1718,8 +1665,8 @@ namespace bd.webapprm.web.Controllers.MVC
 
                 if (response.IsSuccess)
                     return this.Redireccionar($"{Mensaje.Informacion}|{Mensaje.Satisfactorio}", nameof(ListadoInventarioActivosFijos));
-
-                ViewData["Configuraciones"] = new List<PropiedadValor>() { new PropiedadValor { Propiedad = "IsConfiguracionSeleccion", Valor = "true" }, new PropiedadValor { Propiedad = "IsConfiguracionDatosActivo", Valor = "true" }, new PropiedadValor { Propiedad = "IsConfiguracionSeleccionBajas", Valor = "true" } };
+                
+                ViewData["Configuraciones"] = new ListadoDetallesActivosFijosViewModel(IsConfiguracionSeleccion: true, IsConfiguracionDatosActivo: true, IsConfiguracionSeleccionBajas: true);
                 ViewData["Estado"] = new SelectList((await apiServicio.Listar<Estado>(new Uri(WebApp.BaseAddressTH), "api/Estados/ListarEstados")).Where(c => c.Nombre == Estados.EnEjecucion || c.Nombre == Estados.Concluido).OrderByDescending(c => c.Nombre), "IdEstado", "Nombre");
                 ViewData["ListadoRecepcionActivoFijoDetalleSeleccionado"] = await apiServicio.ObtenerElementoAsync<List<RecepcionActivoFijoDetalleSeleccionado>>(inventarioActivoFijo.InventarioActivoFijoDetalle.Select(c => new IdRecepcionActivoFijoDetalleSeleccionado { idRecepcionActivoFijoDetalle = c.IdRecepcionActivoFijoDetalle, seleccionado = c.Constatado }), new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/DetallesActivoFijo");
                 return View(inventarioActivoFijo);
@@ -1738,8 +1685,8 @@ namespace bd.webapprm.web.Controllers.MVC
                 await apiServicio.InsertarAsync(new Estado { Nombre = Estados.EnEjecucion }, new Uri(WebApp.BaseAddressTH), "api/Estados/InsertarEstado");
                 await apiServicio.InsertarAsync(new Estado { Nombre = Estados.Concluido }, new Uri(WebApp.BaseAddressTH), "api/Estados/InsertarEstado");
                 var listaEstado = await apiServicio.Listar<Estado>(new Uri(WebApp.BaseAddressTH), "api/Estados/ListarEstados");
-
-                ViewData["Configuraciones"] = new List<PropiedadValor>() { new PropiedadValor { Propiedad = "IsConfiguracionSeleccion", Valor = "true" }, new PropiedadValor { Propiedad = "IsConfiguracionDatosActivo", Valor = "true" }, new PropiedadValor { Propiedad = "IsConfiguracionSeleccionBajas", Valor = "true" }, new PropiedadValor { Propiedad = "IsConfiguracionGestionarInventarioAutomatico", Valor = "true" } };
+                
+                ViewData["Configuraciones"] = new ListadoDetallesActivosFijosViewModel(IsConfiguracionSeleccion: true, IsConfiguracionDatosActivo: true, IsConfiguracionSeleccionBajas: true, IsConfiguracionGestionarInventarioAutomatico: true);
                 if (!string.IsNullOrEmpty(id))
                 {
                     var respuesta = await apiServicio.SeleccionarAsync<Response>(id, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ObtenerInventarioActivosFijos");
@@ -1796,8 +1743,8 @@ namespace bd.webapprm.web.Controllers.MVC
 
                 if (response.IsSuccess)
                     return this.Redireccionar($"{Mensaje.Informacion}|{Mensaje.Satisfactorio}", nameof(ListadoInventarioActivosFijos));
-
-                ViewData["Configuraciones"] = new List<PropiedadValor>() { new PropiedadValor { Propiedad = "IsConfiguracionSeleccion", Valor = "true" }, new PropiedadValor { Propiedad = "IsConfiguracionDatosActivo", Valor = "true" }, new PropiedadValor { Propiedad = "IsConfiguracionSeleccionBajas", Valor = "true" }, new PropiedadValor { Propiedad = "IsConfiguracionGestionarInventarioAutomatico", Valor = "true" } };
+                
+                ViewData["Configuraciones"] = new ListadoDetallesActivosFijosViewModel(IsConfiguracionSeleccion: true, IsConfiguracionDatosActivo: true, IsConfiguracionSeleccionBajas: true, IsConfiguracionGestionarInventarioAutomatico: true);
                 ViewData["Estado"] = new SelectList((await apiServicio.Listar<Estado>(new Uri(WebApp.BaseAddressTH), "api/Estados/ListarEstados")).Where(c => c.Nombre == Estados.EnEjecucion || c.Nombre == Estados.Concluido).OrderByDescending(c => c.Nombre), "IdEstado", "Nombre");
                 ViewData["ListadoRecepcionActivoFijoDetalleSeleccionado"] = await apiServicio.ObtenerElementoAsync<List<RecepcionActivoFijoDetalleSeleccionado>>(inventarioActivoFijo.InventarioActivoFijoDetalle.Select(c => new IdRecepcionActivoFijoDetalleSeleccionado { idRecepcionActivoFijoDetalle = c.IdRecepcionActivoFijoDetalle, seleccionado = c.Constatado }), new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/DetallesActivoFijo");
                 return View(inventarioActivoFijo);
@@ -1855,11 +1802,7 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 ViewData["Empleado"] = new SelectList(await apiServicio.Listar<ListaEmpleadoViewModel>(new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleados"), "IdEmpleado", "NombreApellido");
                 ViewData["MotivoTraslado"] = new SelectList(await apiServicio.Listar<MotivoTraslado>(new Uri(WebApp.BaseAddressRM), "api/MotivoTraslado/ListarMotivoTraslado"), "IdMotivoTraslado", "Descripcion");
-                ViewData["Configuraciones"] = new List<PropiedadValor>()
-                {
-                    new PropiedadValor { Propiedad = "IsConfiguracionSeleccionMovilizaciones", Valor = "true" },
-                    new PropiedadValor { Propiedad = "IsConfiguracionDatosActivo", Valor = "true" }
-                };
+                ViewData["Configuraciones"] = new ListadoDetallesActivosFijosViewModel(IsConfiguracionSeleccionMovilizaciones: true, IsConfiguracionDatosActivo: true);
                 if (id != null)
                 {
                     var response = await apiServicio.SeleccionarAsync<Response>(id.ToString(), new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ObtenerMovilizacionActivosFijos");
@@ -1934,11 +1877,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 ViewData["Error"] = response.Message;
                 ViewData["Empleado"] = new SelectList(await apiServicio.Listar<ListaEmpleadoViewModel>(new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleados"), "IdEmpleado", "NombreApellido");
                 ViewData["MotivoTraslado"] = new SelectList(await apiServicio.Listar<MotivoTraslado>(new Uri(WebApp.BaseAddressRM), "api/MotivoTraslado/ListarMotivoTraslado"), "IdMotivoTraslado", "Descripcion");
-                ViewData["Configuraciones"] = new List<PropiedadValor>()
-                {
-                    new PropiedadValor { Propiedad = "IsConfiguracionSeleccionMovilizaciones", Valor = "true" },
-                    new PropiedadValor { Propiedad = "IsConfiguracionDatosActivo", Valor = "true" }
-                };
+                ViewData["Configuraciones"] = new ListadoDetallesActivosFijosViewModel(IsConfiguracionSeleccionMovilizaciones: true, IsConfiguracionDatosActivo: true);
                 var listaRecepcionActivoFijoSeleccionado = await apiServicio.ObtenerElementoAsync<List<RecepcionActivoFijoDetalleSeleccionado>>(new MovilizacionActivoFijoTransfer { ListadoRecepcionActivoFijoDetalleSeleccionado = movilizacionActivoFijo.MovilizacionActivoFijoDetalle.Select(c => new IdRecepcionActivoFijoDetalleSeleccionado { idRecepcionActivoFijoDetalle = c.IdRecepcionActivoFijoDetalle, seleccionado = true }).ToList(), SeleccionarTodasAltas = false }, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/DetallesActivoFijoSeleccionadoPorMovilizacion");
                 listaRecepcionActivoFijoSeleccionado.ForEach(c => c.Observaciones = movilizacionActivoFijo.MovilizacionActivoFijoDetalle.FirstOrDefault(x => x.IdRecepcionActivoFijoDetalle == c.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle).Observaciones);
                 ViewData["ListadoRecepcionActivoFijoDetalleSeleccionado"] = listaRecepcionActivoFijoSeleccionado;
@@ -1955,12 +1894,7 @@ namespace bd.webapprm.web.Controllers.MVC
         public async Task<IActionResult> ListadoActivosFijosSeleccionMovilizacionResult(List<IdRecepcionActivoFijoDetalleSeleccionado> listadoRecepcionActivoFijoDetalleSeleccionado, int? objAdicional)
         {
             var lista = new List<RecepcionActivoFijoDetalleSeleccionado>();
-            ViewData["Configuraciones"] = new List<PropiedadValor>()
-            {
-                new PropiedadValor { Propiedad = "IsConfiguracionSeleccion", Valor = "true" },
-                new PropiedadValor { Propiedad = "IsConfiguracionDatosActivo", Valor = "true" },
-                new PropiedadValor { Propiedad = "IsConfiguracionListadoMovilizacionesGestionar", Valor = "true" }
-            };
+            ViewData["Configuraciones"] = new ListadoDetallesActivosFijosViewModel(IsConfiguracionSeleccion: true, IsConfiguracionDatosActivo: true, IsConfiguracionListadoMovilizacionesGestionar: true);
             try
             {
                 lista = await apiServicio.ObtenerElementoAsync<List<RecepcionActivoFijoDetalleSeleccionado>>(new MovilizacionActivoFijoTransfer { ListadoRecepcionActivoFijoDetalleSeleccionado = listadoRecepcionActivoFijoDetalleSeleccionado, SeleccionarTodasAltas = true, IdMovilizacionActivoFijo = objAdicional }, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/DetallesActivoFijoSeleccionadoPorMovilizacion");
@@ -1990,7 +1924,7 @@ namespace bd.webapprm.web.Controllers.MVC
         }
 
         [HttpPost]
-        public async Task<IActionResult> DetallesMovilizacionActivoFijoResult(List<IdRecepcionActivoFijoDetalleSeleccionado> listadoRecepcionActivoFijoDetalleSeleccionado, List<PropiedadValor> arrConfiguraciones, int? objAdicional)
+        public async Task<IActionResult> DetallesMovilizacionActivoFijoResult(List<IdRecepcionActivoFijoDetalleSeleccionado> listadoRecepcionActivoFijoDetalleSeleccionado, ListadoDetallesActivosFijosViewModel arrConfiguraciones, int? objAdicional)
         {
             var lista = new List<RecepcionActivoFijoDetalleSeleccionado>();
             ViewData["Configuraciones"] = arrConfiguraciones;

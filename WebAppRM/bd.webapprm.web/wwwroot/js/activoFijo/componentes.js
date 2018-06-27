@@ -27,7 +27,7 @@ function cargarFormularioComponentesDatosEspecificos(idFila) {
         data: { componentesActivo: obtenerRecepcionActivoFijoDetalleComponente(), idsComponentesExcluir: obtenerIdsComponentesExcluir(idFila) },
         success: function (data) {
             $("#modalBodyComponente").html(data);
-            initDataTableFiltrado("tableDetallesActivoFijo", [13, 15, 16, 17, 18, 19, 20, 21]);
+            initDataTableFiltrado("tableDetallesActivoFijo", [15, 16, 17, 18, 19, 20, 21]);
         },
         error: function (errorMessage) {
             mostrarNotificacion("Error", "Ocurrió un error al cargar el formulario.");
@@ -53,7 +53,7 @@ function cargarListadoActivosFijosParaComponentes()
         data: { componentesActivo: componentesActivo, idsComponentesExcluir: idsComponentesExcluir },
         success: function (data) {
             $("#modalBodyComponenteActivoFijo").html(data);
-            initDataTableFiltrado("tableDetallesActivoFijoComponentes", [14, 16, 17, 18, 19, 20, 21, 22]);
+            initDataTableFiltrado("tableDetallesActivoFijoComponentes", [16, 17, 18, 19, 20, 21, 22]);
             eventoCheckboxDetallesActivoFijo();
         },
         error: function (errorMessage) {
