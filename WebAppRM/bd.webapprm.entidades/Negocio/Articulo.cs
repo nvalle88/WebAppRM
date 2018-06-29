@@ -5,6 +5,12 @@ namespace bd.webapprm.entidades
 
     public partial class Articulo
     {
+        public Articulo()
+        {
+            MaestroArticuloSucursal = new HashSet<MaestroArticuloSucursal>();
+            RequerimientosArticulosDetalles = new HashSet<RequerimientosArticulosDetalles>();
+        }
+
         [Key]
         public int IdArticulo { get; set; }
 
@@ -15,7 +21,7 @@ namespace bd.webapprm.entidades
 
         //Propiedades Virtuales Referencias a otras clases
 
-        [Display(Name = "Subclase de artículo:")]
+        [Display(Name = "Sub clase de artículo:")]
         [Required(ErrorMessage = "Debe seleccionar la {0} ")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar la {0}")]
         public int IdSubClaseArticulo { get; set; }
@@ -31,18 +37,8 @@ namespace bd.webapprm.entidades
         public int? IdModelo { get; set; }
         public virtual Modelo Modelo { get; set; }
 
-        public virtual ICollection<AltaProveeduria> AltaProveeduria { get; set; }
+        public virtual ICollection<MaestroArticuloSucursal> MaestroArticuloSucursal { get; set; }
 
-        public virtual ICollection<MaestroDetalleArticulo> MaestroDetalleArticulo { get; set; }
-
-        public virtual ICollection<RecepcionArticulos> RecepcionArticulos { get; set; }
-
-        public virtual ICollection<SolicitudProveeduriaDetalle> SolicitudProveeduriaDetalle { get; set; }
-
-        public virtual ICollection<DetalleFactura> DetalleFactura { get; set; }
-
-        public virtual ICollection<TranferenciaArticulo> TranferenciaArticulo { get; set; }
-
-        public virtual ExistenciaArticuloProveeduria ExistenciaArticuloProveeduria { get; set; }
+        public virtual ICollection<RequerimientosArticulosDetalles> RequerimientosArticulosDetalles { get; set; }
     }
 }

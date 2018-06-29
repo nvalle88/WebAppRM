@@ -8,6 +8,7 @@ namespace bd.webapprm.entidades
     {
         public Empleado()
         {
+            AjusteInventarioArticulos = new HashSet<AjusteInventarioArticulos>();
             Bodega = new HashSet<Bodega>();
             TransferenciasActivoFijoEmpleadoResponsableEnvio = new HashSet<TransferenciaActivoFijo>();
             TransferenciasActivoFijoEmpleadoResponsableRecibo = new HashSet<TransferenciaActivoFijo>();
@@ -16,6 +17,11 @@ namespace bd.webapprm.entidades
             MovilizacionesActivoFijoEmpleadoAutorizado = new HashSet<MovilizacionActivoFijo>();
             MovilizacionesActivoFijoEmpleadoResponsable = new HashSet<MovilizacionActivoFijo>();
             MovilizacionesActivoFijoEmpleadoSolicita = new HashSet<MovilizacionActivoFijo>();
+            OrdenCompra = new HashSet<OrdenCompra>();
+            RecepcionArticulos = new HashSet<RecepcionArticulos>();
+            RequerimientoArticulos = new HashSet<RequerimientoArticulos>();
+            SalidaArticulosEmpleadosDespacho = new HashSet<SalidaArticulos>();
+            SalidaArticulosEmpleadosRealizanBaja = new HashSet<SalidaArticulos>();
         }
 
         [Key]
@@ -79,6 +85,7 @@ namespace bd.webapprm.entidades
         public int? IdDependencia { get; set; }
         public virtual Dependencia Dependencia { get; set; }
 
+        public virtual ICollection<AjusteInventarioArticulos> AjusteInventarioArticulos { get; set; }
         public virtual ICollection<Bodega> Bodega { get; set; }
         public virtual ICollection<TransferenciaActivoFijo> TransferenciasActivoFijoEmpleadoResponsableEnvio { get; set; }
         public virtual ICollection<TransferenciaActivoFijo> TransferenciasActivoFijoEmpleadoResponsableRecibo { get; set; }
@@ -87,5 +94,10 @@ namespace bd.webapprm.entidades
         public virtual ICollection<MovilizacionActivoFijo> MovilizacionesActivoFijoEmpleadoAutorizado { get; set; }
         public virtual ICollection<MovilizacionActivoFijo> MovilizacionesActivoFijoEmpleadoResponsable { get; set; }
         public virtual ICollection<MovilizacionActivoFijo> MovilizacionesActivoFijoEmpleadoSolicita { get; set; }
+        public virtual ICollection<OrdenCompra> OrdenCompra { get; set; }
+        public virtual ICollection<RecepcionArticulos> RecepcionArticulos { get; set; }
+        public virtual ICollection<RequerimientoArticulos> RequerimientoArticulos { get; set; }
+        public virtual ICollection<SalidaArticulos> SalidaArticulosEmpleadosDespacho { get; set; }
+        public virtual ICollection<SalidaArticulos> SalidaArticulosEmpleadosRealizanBaja { get; set; }
     }
 }

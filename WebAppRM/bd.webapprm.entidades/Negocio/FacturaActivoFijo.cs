@@ -11,6 +11,7 @@ namespace bd.webapprm.entidades
         {
             AltaActivoFijo = new HashSet<AltaActivoFijo>();
             DocumentoActivoFijo = new HashSet<DocumentoActivoFijo>();
+            OrdenCompra = new HashSet<OrdenCompra>();
         }
 
         [Key]
@@ -30,5 +31,6 @@ namespace bd.webapprm.entidades
 
         public virtual ICollection<AltaActivoFijo> AltaActivoFijo { get; set; }
         public virtual ICollection<DocumentoActivoFijo> DocumentoActivoFijo { get; set; }
+        public virtual ICollection<OrdenCompra> OrdenCompra { get; set; }
     }
 }
