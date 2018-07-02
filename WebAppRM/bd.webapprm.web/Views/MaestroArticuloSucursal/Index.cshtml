@@ -2,7 +2,7 @@
 
 <div id="content">
     <p>
-        <a asp-action="Create" class="btn btn-primary">Nuevo Maestro Art&iacute;culo de Sucursal</a>
+        <a asp-action="Create" class="btn btn-primary">Nuevo Maestro de Art&iacute;culo de Sucursal</a>
     </p>
     <section id="widget-grid" class="">
         <div class="row">
@@ -10,7 +10,7 @@
                 <div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
                     <header>
                         <span class="widget-icon"> <i class="fa fa-table"></i> </span>
-                        <h2>Maestros Art&iacute;culos de Sucursales</h2>
+                        <h2>Maestros de Art&iacute;culos de Sucursal</h2>
                     </header>
                     <div>
                         <div class="jarviswidget-editbox"></div>
@@ -20,6 +20,18 @@
                                     <tr>
                                         <th>
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().IdSucursal)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().IdArticulo)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().CodigoArticulo)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().Habilitado)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().ValorActual)
                                         </th>
                                         <th>
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().Minimo)
@@ -37,15 +49,24 @@
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.Sucursal.Nombre)
                                             </td>
-
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Articulo.Nombre)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.CodigoArticulo)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Habilitado)
+                                            </td>
+                                             <td>
+                                                @Html.DisplayFor(modelItem => item.ValorActual)
+                                            </td>
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.Minimo)
                                             </td>
-
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.Maximo)
                                             </td>
-
                                             <td>
                                                 @Html.ActionLink("Editar", "Edit", new { id = item.IdMaestroArticuloSucursal }) |
                                                 <a href="javascript:void(0);" id="@item.IdMaestroArticuloSucursal" onclick="abrirVentanaConfirmacion('@item.IdMaestroArticuloSucursal')" data-url="@Url.Action("Delete", values: new { id = item.IdMaestroArticuloSucursal })" data-titulo="Eliminar" data-descripcion="&#191;Desea eliminar el Maestro Art&iacute;culo de Sucursal... ?">Eliminar</a>

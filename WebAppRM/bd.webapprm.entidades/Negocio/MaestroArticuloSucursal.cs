@@ -3,6 +3,7 @@ namespace bd.webapprm.entidades
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
 
     public partial class MaestroArticuloSucursal
     {
@@ -39,13 +40,16 @@ namespace bd.webapprm.entidades
 
         [Required(ErrorMessage = "Debe introducir el {0}")]
         [Display(Name = "Código de artículo:")]
-        [StringLength(30, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
+        [StringLength(5, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
+        [RegularExpression(@"^\d*$", ErrorMessage = "El {0} solo puede contener números.")]
         public string CodigoArticulo { get; set; }
+
+        [NotMapped]
+        public string GrupoArticulo { get; set; }
 
         [Display(Name = "Habilitado:")]
         public bool Habilitado { get; set; }
-
-        [Required(ErrorMessage = "Debe introducir la {0}")]
+        
         [Display(Name = "Fecha sin existencia:")]
         [DataType(DataType.DateTime)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
