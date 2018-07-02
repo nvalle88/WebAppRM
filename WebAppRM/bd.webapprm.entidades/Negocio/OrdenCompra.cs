@@ -22,6 +22,9 @@ namespace bd.webapprm.entidades
         public int IdProveedor { get; set; }
         public virtual Proveedor Proveedor { get; set; }
 
+        [Display(Name = "Código:")]
+        [Required(ErrorMessage = "Debe introducir el {0}")]
+        [RegularExpression(@"^[-A-Z0-9a-z-]*$", ErrorMessage = "El {0} tiene que ser alfanumérico.")]
         public string Codigo { get; set; }
 
         [Required(ErrorMessage = "Debe introducir {0}")]

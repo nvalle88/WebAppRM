@@ -1,0 +1,53 @@
+@model List<bd.webapprm.entidades.MotivoRecepcionArticulos>
+
+<div id="content">
+    <p>
+        <a asp-action="Create" class="btn btn-primary">Nuevo Motivo de Recepci&oacute;n de Art&iacute;culo</a>
+    </p>
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                        <h2>Listado de Motivos de Recepci&oacute;n de Art&iacute;culo</h2>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox">
+                        </div>
+                        <div class="widget-body no-padding">
+                            <table id="dt_basic" class="table table-striped table-bordered table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().Descripcion)
+                                        </th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Descripcion)
+                                            </td>
+                                            <td>
+                                                @Html.ActionLink("Editar", "Edit", new { id = item.IdMotivoRecepcionArticulos }) |
+                                                <a href="javascript:void(0);" id="@item.IdMotivoRecepcionArticulos" onclick="abrirVentanaConfirmacion('@item.IdMotivoRecepcionArticulos')" data-url="@Url.Action("Delete", values: new { id = item.IdMotivoRecepcionArticulos })" data-titulo="Eliminar" data-descripcion="&#191;Desea eliminar el Motivo de recepci&oacute;n de art&iacute;culo... ?">Eliminar</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+
+@section Scripts {
+    <script src='~/js/datatables/init.min.js'></script>
+}

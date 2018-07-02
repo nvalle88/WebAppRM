@@ -11,13 +11,14 @@
                 <div class="jarviswidget jarviswidget-color-red" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
                     <header>
                         <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
-                        <h2>Maestros Art&iacute;culos de Sucursales</h2>
+                        <h2>Maestro de Art&iacute;culo de Sucursal</h2>
                     </header>
                     <div>
                         <div class="jarviswidget-editbox"></div>
                         <div class="widget-body no-padding">
                             <form asp-action="Create" id="checkout-form" class="smart-form" novalidate="novalidate">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <input type="hidden" asp-for="GrupoArticulo" />
                                 <fieldset>
                                     <div class="row">
                                         <section class="col col-4">
@@ -29,6 +30,35 @@
                                                 <select asp-for="IdSucursal" class="form-control" asp-items="ViewBag.Sucursal"></select>
                                                 <span asp-validation-for="IdSucursal" class="text-danger"></span>
                                             </label>
+                                        </section>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="IdArticulo"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <select asp-for="IdArticulo" class="form-control" asp-items="ViewBag.Articulo"></select>
+                                                <span asp-validation-for="IdArticulo" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label>Consecutivo</label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <input asp-for="CodigoArticulo" class="form-control" maxlength="5" onkeyup="putNumeroConsecutivo(this)" />
+                                            </label>
+                                            <div class="note">
+                                                <strong><label asp-for="CodigoArticulo"></label></strong> <span id="spanCodigoSecuencial"></span><span id="spanNumeroConsecutivo"></span>
+                                            </div>
+                                            <span asp-validation-for="CodigoArticulo" class="text-danger"></span>
                                         </section>
                                     </div>
 
@@ -65,6 +95,19 @@
                                             <span asp-validation-for="Maximo" class="text-danger"></span>
                                         </section>
                                     </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="Habilitado"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="toggle" style="float:left;padding-right:50px !important;">
+                                                <input type="checkbox" name="checkbox-toggle" asp-for="Habilitado" checked="checked">
+                                                <i data-swchon-text="SI" data-swchoff-text="NO"></i>
+                                            </label>
+                                        </section>
+                                    </div>
                                 </fieldset>
                                 <footer>
                                     <button type="submit" class="btn btn-primary" id="btn-guardar">Guardar</button>
@@ -85,8 +128,7 @@
     <script src='~/lib/jquery.spinner-master/dist/js/jquery.spinner.min.js'></script>
     <script src='~/js/proveeduria/maestroArticuloSucursal.min.js'></script>
     <script>
-        var provinciaSelectResult = "@Url.Action("Provincia_SelectResult")";
-        var ciudadSelectResult = "@Url.Action("Ciudad_SelectResult")";
-        var sucursalSelectResult = "@Url.Action("Sucursal_SelectResult")";
+        var codigoArticuloSelectResult = "@Url.Action("CodigoArticulo_SelectResult")";
+        var isEditar = false;
     </script>
 }

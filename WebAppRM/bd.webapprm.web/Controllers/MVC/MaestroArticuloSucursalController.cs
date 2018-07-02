@@ -45,6 +45,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 ViewData["Sucursal"] = new SelectList(await apiServicio.Listar<Sucursal>(new Uri(WebApp.BaseAddressTH), "api/Sucursal/ListarSucursal"), "IdSucursal", "Nombre");
+                ViewData["Articulo"] = new SelectList(await apiServicio.Listar<Articulo>(new Uri(WebApp.BaseAddressRM), "api/Articulo/ListarArticulos"), "IdArticulo", "Nombre");
                 return View();
             }
             catch (Exception)
@@ -77,7 +78,6 @@ namespace bd.webapprm.web.Controllers.MVC
                 var response = new Response();
                 if (ValidacionMinMax(maestroArticuloSucursal, response))
                 {
-                    maestroArticuloSucursal.Sucursal = JsonConvert.DeserializeObject<Sucursal>((await apiServicio.SeleccionarAsync<Response>(maestroArticuloSucursal.IdSucursal.ToString(), new Uri(WebApp.BaseAddressTH), "api/Sucursal")).Resultado.ToString());
                     response = await apiServicio.InsertarAsync(maestroArticuloSucursal, new Uri(WebApp.BaseAddressRM), "api/MaestroArticuloSucursal/InsertarMaestroArticuloSucursal");
                     if (response.IsSuccess)
                     {
@@ -87,6 +87,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 }
                 ViewData["Error"] = response.Message;
                 ViewData["Sucursal"] = new SelectList(await apiServicio.Listar<Sucursal>(new Uri(WebApp.BaseAddressTH), "api/Sucursal/ListarSucursal"), "IdSucursal", "Nombre");
+                ViewData["Articulo"] = new SelectList(await apiServicio.Listar<Articulo>(new Uri(WebApp.BaseAddressRM), "api/Articulo/ListarArticulos"), "IdArticulo", "Nombre");
                 return View(maestroArticuloSucursal);
             }
             catch (Exception ex)
@@ -107,7 +108,12 @@ namespace bd.webapprm.web.Controllers.MVC
                         return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}");
 
                     var maestroArticuloSucursal = JsonConvert.DeserializeObject<MaestroArticuloSucursal>(respuesta.Resultado.ToString());
+                    string[] arrCodigoArticulo = maestroArticuloSucursal.CodigoArticulo.Split('.');
+                    maestroArticuloSucursal.GrupoArticulo = arrCodigoArticulo[0];
+                    maestroArticuloSucursal.CodigoArticulo = arrCodigoArticulo[1];
+
                     ViewData["Sucursal"] = new SelectList(await apiServicio.Listar<Sucursal>(new Uri(WebApp.BaseAddressTH), "api/Sucursal/ListarSucursal"), "IdSucursal", "Nombre");
+                    ViewData["Articulo"] = new SelectList(await apiServicio.Listar<Articulo>(new Uri(WebApp.BaseAddressRM), "api/Articulo/ListarArticulos"), "IdArticulo", "Nombre");
                     return View(maestroArticuloSucursal);
                 }
                 return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}");
@@ -129,7 +135,6 @@ namespace bd.webapprm.web.Controllers.MVC
                 {
                     if (ValidacionMinMax(maestroArticuloSucursal, response))
                     {
-                        maestroArticuloSucursal.Sucursal = JsonConvert.DeserializeObject<Sucursal>((await apiServicio.SeleccionarAsync<Response>(maestroArticuloSucursal.IdSucursal.ToString(), new Uri(WebApp.BaseAddressTH), "api/Sucursal")).Resultado.ToString());
                         response = await apiServicio.EditarAsync(id, maestroArticuloSucursal, new Uri(WebApp.BaseAddressRM), "api/MaestroArticuloSucursal");
                         if (response.IsSuccess)
                         {
@@ -139,6 +144,7 @@ namespace bd.webapprm.web.Controllers.MVC
                     }
                     ViewData["Error"] = response.Message;
                     ViewData["Sucursal"] = new SelectList(await apiServicio.Listar<Sucursal>(new Uri(WebApp.BaseAddressTH), "api/Sucursal/ListarSucursal"), "IdSucursal", "Nombre");
+                    ViewData["Articulo"] = new SelectList(await apiServicio.Listar<Articulo>(new Uri(WebApp.BaseAddressRM), "api/Articulo/ListarArticulos"), "IdArticulo", "Nombre");
                     return View(maestroArticuloSucursal);
                 }
                 return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}");
@@ -167,6 +173,20 @@ namespace bd.webapprm.web.Controllers.MVC
                 await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Eliminar Maestro Artículo de Sucursal", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Delete), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webapprm" });
                 return this.Redireccionar($"{Mensaje.Error}|{Mensaje.Excepcion}");
             }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CodigoArticulo_SelectResult(int idArticulo)
+        {
+            try
+            {
+                var response = await apiServicio.ObtenerElementoAsync<Response>(idArticulo, new Uri(WebApp.BaseAddressRM), "api/MaestroArticuloSucursal/ObtenerGrupoArticulo");
+                if (response.IsSuccess)
+                    return Json(response.Resultado);
+            }
+            catch (Exception)
+            { }
+            return StatusCode(500);
         }
     }
 }
