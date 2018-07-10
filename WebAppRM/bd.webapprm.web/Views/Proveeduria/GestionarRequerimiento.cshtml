@@ -1,0 +1,153 @@
+@model RequerimientoArticulos
+@inject bd.webapprm.servicios.Interfaces.IClaimsTransfer claimsTransfer
+@{
+    var claimTransfer = claimsTransfer.ObtenerClaimsTransferHttpContext();
+}
+
+@section css{
+    <link rel="stylesheet" href="~/lib/jquery.spinner-master/dist/css/bootstrap-spinner.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/tableSmartForm.min.css" />
+}
+<div id="content">
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-sm-12 col-md-12 col-lg-12">
+                <div class="jarviswidget jarviswidget-color-red" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+                        <h2>Requerimiento de Art&iacute;culos</h2>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox"></div>
+                        <div class="widget-body no-padding">
+                            <form asp-action="GestionarRequerimiento" id="checkout-form" class="smart-form" novalidate="novalidate">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                @{ 
+                                    if (Model != null)
+                                    {
+                                        <input type="hidden" asp-for="IdRequerimientoArticulos" />
+                                    }
+                                }
+                                <fieldset>
+                                    <legend>Datos generales</legend>
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="FuncionarioSolicitante.IdDependencia"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <input class="form-control" value="@claimTransfer.NombreDependencia" disabled="disabled" style="background:#e8e6e6;" />
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="IdFuncionarioSolicitante"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <input class="form-control" value="@claimTransfer.NombreEmpleado" disabled="disabled" style="background:#e8e6e6;" />
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="Observaciones"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <textarea asp-for="Observaciones" class="form-control paddingTextArea97"></textarea>
+                                                <span asp-validation-for="Observaciones" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    <legend>Detalles</legend>
+                                    <p class="margin-top-10">
+                                        <button type="button" class="btn btn-primary" style="padding:7px !important;margin-left:7px !important;" onclick="cargarListadoActivosFijosParaSeleccion(this)" data-funcioncallback="callBackInicializarTableListadoSeleccion" id="btnAdicionarArticulos" data-toggle="modal" data-target="#myModal">Adicionar / Eliminar Art&iacute;culos</button>
+                                    </p>
+
+                                    <div class="table-responsive">
+                                        <table id="tableDetallesRequerimientos" class="table table-striped table-bordered table-hover" style="width:100%;">
+                                            <thead>
+                                                @{ await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", 3);}
+                                                <tr>
+                                                    <th>@Html.DisplayNameFor(m => m.RequerimientosArticulosDetalles.FirstOrDefault().Articulo.Nombre)</th>
+                                                    <th>@Html.DisplayNameFor(m => m.RequerimientosArticulosDetalles.FirstOrDefault().CantidadSolicitada)</th>
+                                                    <th>Opciones</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @{
+                                                    if (Model != null)
+                                                    {
+                                                        foreach (var item in Model.RequerimientosArticulosDetalles)
+                                                        {
+                                                            <tr id="@String.Format("tableDetallesRequerimientos{0}", item.IdArticulo)">
+                                                                <td>
+                                                                    @Html.DisplayFor(m => item.Articulo.Nombre)
+                                                                </td>
+                                                                <td>
+                                                                    <div class="input-group spinner" data-trigger="spinner" id="spinner_@item.IdArticulo">
+                                                                        <input type="text" id="cantidad_@item.IdArticulo" name="cantidad_@item.IdArticulo" value="@item.CantidadSolicitada" class="form-control" data-rule="quantity" style="padding-left:6px !important;" />
+                                                                        <div class="input-group-addon" style="padding-left:17px !important;">
+                                                                            <a href="javascript:;" class="spin-up" data-spin="up"><i class="fa fa-caret-up"></i></a>
+                                                                            <a href="javascript:;" class="spin-down" data-spin="down"><i class="fa fa-caret-down"></i></a>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    <input type="hidden" class="hiddenIdRecepcionActivoFijoDetalle" id="hIdRecepcionActivoFijoDetalle_@item.IdArticulo" name="hIdRecepcionActivoFijoDetalle_@item.IdArticulo" value="@item.IdArticulo">
+                                                                    <div id="divEliminarDatosEspecificos_@item.IdArticulo" class="btnEliminarDatosEspecificos" style="display:inline;"><a href="javascript: void(0);" id="btnEliminarDatosEspecifico_@item.IdArticulo" onclick="abrirVentanaConfirmacion('btnEliminarDatosEspecifico_@item.IdArticulo')" data-funcioncallback="callBackFunctionEliminarDatoEspecifico('@item.IdArticulo')" data-titulo="Eliminar" data-descripcion="&#191; Desea eliminar el Art&iacute;culo seleccionado... ?">Eliminar</a></div>
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg" style="margin-left:8% !important;margin-top:30px !important;width:85% !important;">
+                                            <div class="modal-content" id="modalContentDatosEspecificos">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="padding:10px !important;">
+                                                        &times;
+                                                    </button>
+                                                    <h4 class="modal-title" id="myModalLabel" style="padding:12px !important;">Listado de Art&iacute;culos</h4>
+                                                </div>
+                                                <div class="modal-body" style="padding:15px !important;padding-top:10px !important;" id="modalBodyDatosEspecificos"></div>
+                                                <div class="modal-footer" style="padding:15px !important;">
+                                                    <button type="button" class="btn btn-default" id="btnCancelarDatosEspecificos" data-dismiss="modal" style="padding:7px !important;">Cancelar</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <footer>
+                                    <button type="button" class="btn btn-primary" id="btn-guardar">Guardar</button>
+                                    <a asp-action="ListadoRequerimientosSolicitados" class="btn btn-default">Cancelar</a>
+                                </footer>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src='~/lib/jquery.spinner-master/dist/js/jquery.spinner.min.js'></script>
+    <script src='~/js/activoFijo/listadoSeleccion.min.js'></script>
+    <script src="~/js/proveeduria/gestionarRequerimiento.min.js"></script>
+    <script>
+        var urlListadoActivosFijosSeleccionResult = "@Url.Action("ArticulosResult")";
+    </script>
+}

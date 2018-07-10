@@ -8,5 +8,9 @@ namespace bd.webapprm.entidades.Utils
     {
         public int IdSucursal { get; set; }
         public string NombreSucursal { get; set; }
+        public int IdDependencia { get; set; }
+        public string NombreDependencia { get; set; }
+        public int IdEmpleado { get; set; }
+        public string NombreEmpleado { get; set; }
     }
 }

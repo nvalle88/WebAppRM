@@ -1,0 +1,74 @@
+@model RequerimientoArticulos
+
+<table id="dt_basic" class="table table-hover" style="width:100%;">
+    <tbody style="background:#f5f5f5 !important;">
+        <tr>
+            <td colspan="5" class="text-center noBorder"><b>CABECERA</b></td>
+        </tr>
+
+        <tr>
+            <td><b>@Html.DisplayNameFor(model => model.FuncionarioSolicitante.Dependencia.IdSucursal)</b></td>
+            <td colspan="4">@Html.DisplayFor(m => m.FuncionarioSolicitante.Dependencia.Sucursal.Nombre)</td>
+        </tr>
+
+        <tr>
+            <td><b>@Html.DisplayNameFor(model => model.FuncionarioSolicitante.IdDependencia)</b></td>
+            <td colspan="4">@Html.DisplayFor(m => m.FuncionarioSolicitante.Dependencia.Nombre)</td>
+        </tr>
+
+        <tr>
+            <td><b>@Html.DisplayNameFor(model => model.IdFuncionarioSolicitante)</b></td>
+            <td colspan="4">@{await ViewContext.Writer.WriteAsync($"{Model.FuncionarioSolicitante.Persona.Nombres} {Model.FuncionarioSolicitante.Persona.Apellidos}");}</td>
+        </tr>
+
+        <tr>
+            <td><b>@Html.DisplayNameFor(model => model.FechaSolicitud)</b></td>
+            <td colspan="4">@Html.DisplayFor(m => m.FechaSolicitud)</td>
+        </tr>
+
+        @{ 
+            if (Model.Estado.Nombre == Estados.Desaprobado || Model.Estado.Nombre == Estados.Despachado)
+            {
+                <tr>
+                    <td><b>@Html.DisplayNameFor(model => model.FechaAprobadoDenegado)</b></td>
+                    <td colspan="4">@Html.DisplayFor(m => m.FechaAprobadoDenegado)</td>
+                </tr>
+            }
+        }
+
+        <tr>
+            <td colspan="5" class="noBorder">&nbsp;</td>
+        </tr>
+
+        <tr>
+            <td colspan="5" class="text-center noBorder"><b>DETALLES</b></td>
+        </tr>
+
+        <tr>
+            <td><b>@Html.DisplayNameFor(model => model.RequerimientosArticulosDetalles.FirstOrDefault().CantidadSolicitada)</b></td>
+            <td><b>@Html.DisplayNameFor(model => model.RequerimientosArticulosDetalles.FirstOrDefault().Articulo.Nombre)</b></td>
+            @{ 
+                if (Model.Estado.Nombre == Estados.Despachado)
+                {
+                    <td><b>@Html.DisplayNameFor(model => model.RequerimientosArticulosDetalles.FirstOrDefault().CantidadAprobada)</b></td>
+                }
+            }
+        </tr>
+
+        @{
+            foreach (var item in Model.RequerimientosArticulosDetalles)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(m => item.CantidadSolicitada)</td>
+                    <td>@Html.DisplayFor(m => item.Articulo.Nombre)</td>
+                    @{ 
+                        if (Model.Estado.Nombre == Estados.Despachado)
+                        {
+                            <td>@Html.DisplayFor(m => item.CantidadAprobada)</td>
+                        }
+                    }
+                </tr>
+            }
+        }
+    </tbody>
+</table>

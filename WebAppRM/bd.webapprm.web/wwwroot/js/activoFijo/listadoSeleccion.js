@@ -35,7 +35,7 @@ function adicionarRecepcionActivoFijoDetalleSeleccionado(idRecepcionActivoFijoDe
 }
 
 function abrirVentanaDetallesActivoFijo(id) {
-    mostrarLoadingPanel("modalContentTableActivosFijos", "Cargando detalles de activo fijo...");
+    mostrarLoadingPanel("modalContentTableActivosFijos", "Cargando detalles, por favor espere...");
     $("#modalBodyTableActivosFijos").html("");
     var btn_detalles = $("#btnDetallesActivoFijo_" + id);
     var arrIds = btn_detalles.data("ids").toString().split(",");
@@ -64,7 +64,7 @@ function abrirVentanaDetallesActivoFijo(id) {
 }
 
 function cargarListadoActivosFijosParaSeleccion(objeto) {
-    mostrarLoadingPanel("modalContentDatosEspecificos", "Cargando listado de activos fijos, por favor espere...");
+    mostrarLoadingPanel("modalContentDatosEspecificos", "Cargando listado, por favor espere...");
     $.ajax({
         url: urlListadoActivosFijosSeleccionResult,
         method: "POST",

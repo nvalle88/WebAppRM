@@ -10,5 +10,7 @@ namespace bd.webapprm.servicios.Interfaces
     {
         ClaimsTransfer ObtenerClaimsTransferHttpContext();
         string ObtenerClaimValue(string claimType);
+        IEnumerable<string> ObtenerClaimsValue(string claimType);
+        bool IsADMIGrupo(string admiGrupo);
     }
 }

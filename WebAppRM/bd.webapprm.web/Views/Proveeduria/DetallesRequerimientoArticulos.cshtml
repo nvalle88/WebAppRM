@@ -1,0 +1,26 @@
+@model RequerimientoArticulos
+
+<div id="content">
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-sm-12 col-md-12 col-lg-12">
+                <div class="jarviswidget jarviswidget-color-red" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+                        <h2>Detalles de Requerimiento de Art&iacute;culos</h2>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox"></div>
+                        <div class="widget-body no-padding">
+                            <div class="smart-form">
+                                <fieldset>
+                                    @{await Html.RenderPartialAsync("_DetallesRequerimientoArticulos", Model);}
+                                </fieldset>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>

@@ -24,11 +24,11 @@ namespace bd.webapprm.entidades
 
         [Display(Name = "Código:")]
         [Required(ErrorMessage = "Debe introducir el {0}")]
-        [RegularExpression(@"^[-A-Z0-9a-z-]*$", ErrorMessage = "El {0} tiene que ser alfanumérico.")]
+        [RegularExpression(@"^\d*$", ErrorMessage = "El {0} solo puede contener números.")]
         public string Codigo { get; set; }
 
         [Required(ErrorMessage = "Debe introducir {0}")]
-        [Display(Name = "Fecha de salida:")]
+        [Display(Name = "Fecha:")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime Fecha { get; set; }
@@ -39,17 +39,17 @@ namespace bd.webapprm.entidades
         public int IdEstado { get; set; }
         public virtual Estado Estado { get; set; }
 
-        [Display(Name = "Empleado responsable:")]
-        [Required(ErrorMessage = "Debe seleccionar el {0}")]
-        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0}")]
-        public int IdEmpleadoResponsable { get; set; }
-        public virtual Empleado EmpleadoResponsable { get; set; }
-
         [Display(Name = "Factura:")]
         [Required(ErrorMessage = "Debe seleccionar la {0}")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar la {0}")]
         public int IdFacturaActivoFijo { get; set; }
         public virtual FacturaActivoFijo Factura { get; set; }
+
+        [Display(Name = "Empleado responsable:")]
+        [Required(ErrorMessage = "Debe seleccionar el {0}")]
+        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0}")]
+        public int IdEmpleadoResponsable { get; set; }
+        public virtual Empleado EmpleadoResponsable { get; set; }
 
         public virtual ICollection<OrdenCompraDetalles> OrdenCompraDetalles { get; set; }
         public virtual ICollection<OrdenCompraRecepcionArticulos> OrdenCompraRecepcionArticulos { get; set; }

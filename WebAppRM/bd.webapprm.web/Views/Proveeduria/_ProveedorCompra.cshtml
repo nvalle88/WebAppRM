@@ -1,0 +1,26 @@
+@model Proveedor
+<div class="row">
+    <section class="col col-4">
+        <label asp-for="Nombre"></label>
+    </section>
+
+    <section class="col col-8">
+        <label class="input">
+            <input asp-for="Nombre" class="form-control" disabled="disabled" style="background:#e8e6e6;" />
+        </label>
+    </section>
+</div>
+
+<div class="row">
+    <section class="col col-4">
+        <label asp-for="Apellidos"></label>
+    </section>
+
+    <section class="col col-8">
+        <label class="input">
+            <input asp-for="Apellidos" class="form-control" disabled="disabled" style="background:#e8e6e6;" />
+        </label>
+    </section>
+</div>
+
+@{await Html.RenderPartialAsync("_ProveedorOrdenCompra", Model);}

@@ -18,22 +18,59 @@ namespace bd.webapprm.servicios.Servicios
             this.httpContext = httpContext;
         }
 
+        public bool IsADMIGrupo(string admiGrupo)
+        {
+            try
+            {
+                var listadoGrupos = ObtenerClaimsValue("ADMI_Grupo");
+                return listadoGrupos.Contains(admiGrupo);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
         public ClaimsTransfer ObtenerClaimsTransferHttpContext()
         {
             try
             {
                 ClaimsTransfer claimsTransfer = new ClaimsTransfer();
 
-                var claimIdSucursal = ObtenerClaimValue(ClaimsTransferNombres.IdSucursal);
+                var claimIdSucursal = ObtenerClaimValue("IdSucursal");
                 if (!String.IsNullOrEmpty(claimIdSucursal))
                     claimsTransfer.IdSucursal = int.Parse(claimIdSucursal);
 
-                claimsTransfer.NombreSucursal = ObtenerClaimValue(ClaimsTransferNombres.NombreSucursal);
+                claimsTransfer.NombreSucursal = ObtenerClaimValue("NombreSucursal");
+                claimsTransfer.NombreDependencia = ObtenerClaimValue("NombreDependencia");
+                claimsTransfer.NombreEmpleado = ObtenerClaimValue("NombreEmpleado");
+
+                var claimIdDependencia = ObtenerClaimValue("IdDependencia");
+                if (!String.IsNullOrEmpty(claimIdDependencia))
+                    claimsTransfer.IdDependencia = int.Parse(claimIdDependencia);
+
+                var claimIdEmpleado = ObtenerClaimValue("IdEmpleado");
+                if (!String.IsNullOrEmpty(claimIdEmpleado))
+                    claimsTransfer.IdEmpleado = int.Parse(claimIdEmpleado);
+
                 return claimsTransfer;
             }
             catch (Exception)
             {
                 return null;
+            }
+        }
+
+        public IEnumerable<string> ObtenerClaimsValue(string claimType)
+        {
+            try
+            {
+                var claim = httpContext.HttpContext.User.Identities.Where(x => x.NameClaimType == ClaimTypes.Name).FirstOrDefault();
+                return claim.Claims.Where(c => c.Type == claimType).Select(c=> c.Value);
+            }
+            catch (Exception)
+            {
+                return new List<string>();
             }
         }
 

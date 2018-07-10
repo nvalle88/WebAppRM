@@ -60,7 +60,7 @@ namespace bd.webapprm.web.Models
                 {
                     Contexto = request.Path,
                     Token = token,
-                    Usuario = NombreUsuario,
+                    Usuario = NombreUsuario
                 };
 
                 /// <summary>

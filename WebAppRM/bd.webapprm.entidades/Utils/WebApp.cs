@@ -13,5 +13,6 @@ namespace bd.webapprm.entidades.Utils
         public static string BaseAddressWebAppLogin { get; set; }
         public static string NombreAplicacion { get; set; }
         public static int NivelesMenu { get; set; }
+        public static int DiasPedido { get; set; }
     }
 }

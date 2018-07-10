@@ -20,6 +20,7 @@ namespace bd.webapprm.entidades.Utils
         public static string Aviso { get { return "Aviso"; } }
         public static string ErrorRecursoSolicitado { get { return "No puede acceder al recurso solicitado."; } }
         public static string NoExisteModulo { get { return "No se ha encontrado el Módulo"; } }
+        public static string ErrorDiasPedido { get { return "El plazo para realizar el requerimiento de proveeduría ha expirado."; } }
     }
 
     public static class Estados
@@ -34,6 +35,10 @@ namespace bd.webapprm.entidades.Utils
         public static string Mantenimiento { get { return "Mantenimiento"; } }
         public static string EnEjecucion { get { return "En Ejecución"; } }
         public static string Concluido { get { return "Concluido"; } }
+        public static string EnTramite { get { return "En trámite"; } }
+        public static string Procesada { get { return "Procesada"; } }
+        public static string Solicitado { get { return "Solicitado"; } }
+        public static string Despachado { get { return "Despachado"; } }
     }
 
     public static class LineasServicio
@@ -60,9 +65,10 @@ namespace bd.webapprm.entidades.Utils
         public static string TransferenciaBodegas { get { return "Transferencia entre Bodegas"; } }
     }
 
-    public static class ClaimsTransferNombres
+    public static class ADMI_Grupos
     {
-        public static string IdSucursal { get { return "IdSucursal"; } }
-        public static string NombreSucursal { get { return "NombreSucursal"; } }
+        public static string AdminNacionalProveeduria { get { return "Admin Nacional de Proveeduría"; } }
+        public static string AdminZonalProveeduria { get { return "Admin Zonal de Proveeduría"; } }
+        public static string FuncionarioSolicitante { get { return "Funcionario solicitante"; } }
     }
 }
