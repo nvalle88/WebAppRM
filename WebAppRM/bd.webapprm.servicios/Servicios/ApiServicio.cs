@@ -68,6 +68,7 @@ namespace bd.webapprm.servicios.Servicios
             {
                 using (HttpClient client = new HttpClient())
                 {
+                    AsignarClientHeaders(client, baseAddress);
                     var request = JsonConvert.SerializeObject(model);
                     var content = new StringContent(request, Encoding.UTF8, "application/json");
                     var response = await client.PostAsync($"{baseAddress}{url}", content);
@@ -87,6 +88,7 @@ namespace bd.webapprm.servicios.Servicios
             {
                 using (HttpClient client = new HttpClient())
                 {
+                    AsignarClientHeaders(client, baseAddress);
                     var response = await client.DeleteAsync($"{baseAddress}{url}/{id}");
                     var resultado = await response.Content.ReadAsStringAsync();
                     var respuesta = JsonConvert.DeserializeObject<Response>(resultado);
@@ -104,6 +106,7 @@ namespace bd.webapprm.servicios.Servicios
             {
                 using (HttpClient client = new HttpClient())
                 {
+                    AsignarClientHeaders(client, baseAddress);
                     var request = JsonConvert.SerializeObject(model);
                     var content = new StringContent(request, Encoding.UTF8, "application/json");
                     var response = await client.PutAsync($"{baseAddress}{url}/{id}", content);
@@ -123,6 +126,7 @@ namespace bd.webapprm.servicios.Servicios
             {
                 using (HttpClient client = new HttpClient())
                 {
+                    AsignarClientHeaders(client, baseAddress);
                     var request = JsonConvert.SerializeObject(model);
                     var content = new StringContent(request, Encoding.UTF8, "application/json");
                     var response = await client.PostAsync($"{baseAddress}{url}", content);
@@ -142,7 +146,7 @@ namespace bd.webapprm.servicios.Servicios
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    AsignarClientHeaders(client);
+                    AsignarClientHeaders(client, baseAddress);
                     var respuesta = await client.GetAsync($"{baseAddress}{url}");
                     var resultado = await respuesta.Content.ReadAsStringAsync();
                     var response = JsonConvert.DeserializeObject<List<T>>(resultado);
@@ -154,13 +158,13 @@ namespace bd.webapprm.servicios.Servicios
                 return new List<T>();
             }
         }
-        public async Task<T> SeleccionarAsync<T>(string id,Uri baseAddress, string url) where T : class
+        public async Task<T> SeleccionarAsync<T>(string id, Uri baseAddress, string url) where T : class
         {
             try
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    AsignarClientHeaders(client);
+                    AsignarClientHeaders(client, baseAddress);
                     var respuesta = await client.GetAsync($"{baseAddress}{url}/{id}");
                     var resultado = await respuesta.Content.ReadAsStringAsync();
                     var response = JsonConvert.DeserializeObject<T>(resultado);
@@ -178,7 +182,7 @@ namespace bd.webapprm.servicios.Servicios
             {
                 using (HttpClient client = new HttpClient())
                 {
-                    AsignarClientHeaders(client);
+                    AsignarClientHeaders(client, baseAddress);
                     var request = JsonConvert.SerializeObject(model);
                     var content = new StringContent(request, Encoding.UTF8, "application/json");
                     var response = await client.PostAsync($"{baseAddress}{url}", content);
@@ -193,11 +197,18 @@ namespace bd.webapprm.servicios.Servicios
             }
         }
 
-        private void AsignarClientHeaders(HttpClient client)
+        private void AsignarClientHeaders(HttpClient client, Uri baseAddress)
         {
-            var claimTransfer = claimsTransfer.ObtenerClaimsTransferHttpContext();
-            client.DefaultRequestHeaders.Add(ClaimsTransferNombres.IdSucursal, claimTransfer.IdSucursal.ToString());
-            client.DefaultRequestHeaders.Add(ClaimsTransferNombres.NombreSucursal, claimTransfer.NombreSucursal);
+            if (baseAddress.ToString().StartsWith(WebApp.BaseAddressRM))
+            {
+                var claimTransfer = claimsTransfer.ObtenerClaimsTransferHttpContext();
+                client.DefaultRequestHeaders.Add("IdSucursal", claimTransfer.IdSucursal.ToString());
+                client.DefaultRequestHeaders.Add("IdDependencia", claimTransfer.IdDependencia.ToString());
+                client.DefaultRequestHeaders.Add("IdEmpleado", claimTransfer.IdEmpleado.ToString());
+                client.DefaultRequestHeaders.Add("IsAdminNacionalProveeduria", claimsTransfer.IsADMIGrupo(ADMI_Grupos.AdminNacionalProveeduria).ToString());
+                client.DefaultRequestHeaders.Add("IsAdminZonalProveeduria", claimsTransfer.IsADMIGrupo(ADMI_Grupos.AdminZonalProveeduria).ToString());
+                client.DefaultRequestHeaders.Add("IsFuncionarioSolicitante", claimsTransfer.IsADMIGrupo(ADMI_Grupos.FuncionarioSolicitante).ToString());
+            }
         }
     }
 }

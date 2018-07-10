@@ -22,10 +22,19 @@
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().Nombre)
                                         </th>
                                         <th>
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().SubClaseArticulo.ClaseArticulo.IdTipoArticulo)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().SubClaseArticulo.IdClaseArticulo)
+                                        </th>
+                                        <th>
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().IdSubClaseArticulo)
                                         </th>
                                         <th>
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().IdUnidadMedida)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().Modelo.IdMarca)
                                         </th>
                                         <th>
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().IdModelo)
@@ -42,11 +51,23 @@
                                             </td>
 
                                             <td>
+                                                @Html.DisplayFor(modelItem => item.SubClaseArticulo.ClaseArticulo.TipoArticulo.Nombre)
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.SubClaseArticulo.ClaseArticulo.Nombre)
+                                            </td>
+
+                                            <td>
                                                 @Html.DisplayFor(modelItem => item.SubClaseArticulo.Nombre)
                                             </td>
 
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.UnidadMedida.Nombre)
+                                            </td>
+
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Modelo.Marca.Nombre)
                                             </td>
 
                                             <td>

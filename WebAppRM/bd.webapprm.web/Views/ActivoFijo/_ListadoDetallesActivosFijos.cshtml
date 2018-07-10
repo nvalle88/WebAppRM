@@ -82,14 +82,12 @@
                         @{
                             if (listadoDetallesActivosFijosViewModel.IsConfiguracionSeleccion)
                             {
-                                <td>
-                                    <div class="checkbox">
-                                        <label>
-                                            <input class="checkbox style-0 chkDetallesActivoFijo" @{await ViewContext.Writer.WriteAsync(item.Seleccionado ? "checked='checked'" : "");} type="checkbox" onchange="eventoCheckboxDetallesActivoFijo(this)" data-funcioncallback="@listadoDetallesActivosFijosViewModel.CallbackFunctionCheckBox" data-idrecepcionactivofijodetalle="@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" id="chkDetalleActivoFijo_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" @{await ViewContext.Writer.WriteAsync(listadoDetallesActivosFijosViewModel.IsConfiguracionSeleccionDisabled ? "disabled='disabled'" : "");}>
-                                            <span>&nbsp;</span>
-                                        </label>
-                                    </div>
-                                </td>
+                                await Html.RenderPartialAsync("_CheckBoxSeleccion", new ViewDataDictionary(ViewData){
+                                    { "Seleccionado", item.Seleccionado },
+                                    { "CallbackFunctionCheckBox", listadoDetallesActivosFijosViewModel.CallbackFunctionCheckBox },
+                                    { "IdRecepcionActivoFijoDetalle", item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle },
+                                    { "IsConfiguracionSeleccionDisabled", listadoDetallesActivosFijosViewModel.IsConfiguracionSeleccionDisabled }
+                                });
                             }
                             <td id="@String.Format("{0}{1}Codigosecuencial", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.CodigoActivoFijo?.Codigosecuencial ?? "-");}</td>
                             if (listadoDetallesActivosFijosViewModel.IsConfiguracionDatosActivo)

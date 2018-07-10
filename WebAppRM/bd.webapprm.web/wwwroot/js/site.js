@@ -11,6 +11,18 @@
     });
 }
 
+function Init_TouchspinPorId(idElemento) {
+    $('#' + idElemento).TouchSpin({
+        min: 0.00,
+        max: 99999999999,
+        decimals: 2,
+        prefix: '$',
+        step: 0.01,
+        buttondown_class: 'btn btn-primary',
+        buttonup_class: 'btn btn-primary'
+    });
+}
+
 function Init_Select2()
 {
     $('select').select2({

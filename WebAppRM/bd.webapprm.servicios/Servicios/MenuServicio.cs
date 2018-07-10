@@ -27,6 +27,10 @@ namespace bd.webapprm.servicios.Servicios
             { "/ActivoFijo/ListadoInventarioActivosFijos", new List<string> { "GestionarInventarioManual", "GestionarInventarioAutomatico" } },
             { "/ActivoFijo/ListadoMovilizacionActivosFijos", new List<string> { "GestionarMovilizacion" } },
             { "/ActivoFijo/ListarRevalorizacionesActivosFijos", new List<string> { "ListadoRevalorizaciones", "GestionarRevalorizacion" } },
+            { "/Proveeduria/ListadoOrdenCompraEntramite", new List<string> { "DetallesOrdenCompraEnTramite" } },
+            { "/Proveeduria/ListadoOrdenCompraProcesadas", new List<string> { "ProcesarOrdenCompraEnTramite" } },
+            { "/Proveeduria/ListadoRequerimientosSolicitados", new List<string> { "DetallesRequerimientoArticulos" } },
+            { "/Proveeduria/ListadoRequerimientosDespachados", new List<string> { "DespacharRequerimiento" } },
         };
 
         public List<string> ObtenerAccionesDiccionario(string admeControlador)

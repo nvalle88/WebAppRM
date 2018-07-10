@@ -1,0 +1,95 @@
+@model List<OrdenCompra>
+
+@{ 
+    string estado = ViewBag.Estado;
+}
+<div id="content">
+    @{
+        if (estado == Estados.EnTramite)
+        {
+            <p>
+                <a asp-action="GestionarOrdenCompraEnTramite" class="btn btn-primary">Nueva Orden de Compra</a>
+            </p>
+        }
+    }
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                        <h2>Listado de &Oacute;rdenes de compra</h2>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox">
+                        </div>
+                        <div class="widget-body no-padding">
+                            <table id="dt_basic" class="table table-striped table-bordered table-hover" style="width:100%;">
+                                <thead>
+                                    <tr>
+                                        @{ await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", 6);}
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().Codigo)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().IdProveedor)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().Fecha)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().Factura.NumeroFactura)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().IdEmpleadoResponsable)
+                                        </th>
+                                        <th>
+                                            Opciones
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Codigo)
+                                            </td>
+                                            <td>
+                                                @{await ViewContext.Writer.WriteAsync($"{item.Proveedor.Nombre} {item.Proveedor.Apellidos}");}
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Fecha)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Factura.NumeroFactura)
+                                            </td>
+                                            <td>
+                                                @{await ViewContext.Writer.WriteAsync($"{item.EmpleadoResponsable.Persona.Nombres} {item.EmpleadoResponsable.Persona.Apellidos}");}
+                                            </td>
+                                            <td>
+                                                <a asp-action="DetallesOrdenCompraEnTramite" asp-route-id="@item.IdOrdenCompra">Detalles</a>
+                                                @{ 
+                                                    if (estado == Estados.EnTramite)
+                                                    {
+                                                        <span> | </span>
+                                                        <a asp-action="GestionarOrdenCompraEnTramite" asp-route-id="@item.IdOrdenCompra">Editar</a><span> | </span>
+                                                        <a asp-action="ProcesarOrdenCompraEnTramite" asp-route-id="@item.IdOrdenCompra">Procesar</a><span> | </span>
+                                                        <a href="javascript:void(0);" id="@item.IdOrdenCompra" onclick="abrirVentanaConfirmacion('@item.IdOrdenCompra')" data-url="@Url.Action("DeleteOrdenCompraEnTramite", values: new { id = item.IdOrdenCompra })" data-titulo="Eliminar" data-descripcion="&#191;Desea eliminar la Orden de compra... ?">Eliminar</a>
+                                                    }
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+@section Scripts {
+    <script src='~/js/datatables/initDatatableFiltrado.min.js'></script>
+}

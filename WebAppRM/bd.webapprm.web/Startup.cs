@@ -85,6 +85,7 @@ namespace bd.webapprm.web
             WebApp.BaseAddressTH = AsignarSlash(Configuration.GetSection("HostServiciosTalentoHumano").Value);
             AppGuardarLog.BaseAddress = AsignarSlash(Configuration.GetSection("HostServicioLog").Value);
             WebApp.NivelesMenu = Convert.ToInt32(Configuration.GetSection("NivelMenu").Value);
+            WebApp.DiasPedido = Convert.ToInt32(Configuration.GetSection("DiasPedido").Value);
         }
         
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)

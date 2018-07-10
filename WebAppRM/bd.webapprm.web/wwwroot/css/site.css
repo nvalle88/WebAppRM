@@ -136,3 +136,7 @@ tr.group:hover {
 ul.ColVis_collection {
     min-width: 230px !important;
 }
+
+.noBorder{
+    border: none !important;
+}

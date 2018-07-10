@@ -43,11 +43,5 @@ namespace bd.webapprm.entidades
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0}")]
         public int IdRequerimientoArticulos { get; set; }
         public virtual RequerimientoArticulos RequerimientoArticulos { get; set; }
-
-        [Required(ErrorMessage = "Debe introducir {0}")]
-        [Display(Name = "Fecha de salida:")]
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy hh:mm tt}", ApplyFormatInEditMode = true)]
-        public DateTime FechaSalida { get; set; }
     }
 }

@@ -1,0 +1,15 @@
+@{ 
+    bool seleccionado = ViewBag.Seleccionado ?? false;
+    string callbackFunctionCheckBox = ViewBag.CallbackFunctionCheckBox;
+    int idRecepcionActivoFijoDetalle = ViewBag.IdRecepcionActivoFijoDetalle;
+    bool isDisabled = ViewBag.IsConfiguracionSeleccionDisabled ?? false;
+}
+
+<td>
+    <div class="checkbox">
+        <label>
+            <input class="checkbox style-0 chkDetallesActivoFijo" @{await ViewContext.Writer.WriteAsync(seleccionado ? "checked='checked'" : "");} type="checkbox" onchange="eventoCheckboxDetallesActivoFijo(this)" data-funcioncallback="@callbackFunctionCheckBox" data-idrecepcionactivofijodetalle="@idRecepcionActivoFijoDetalle" id="chkDetalleActivoFijo_@idRecepcionActivoFijoDetalle" @{await ViewContext.Writer.WriteAsync(isDisabled ? "disabled='disabled'" : "");}>
+            <span>&nbsp;</span>
+        </label>
+    </div>
+</td>

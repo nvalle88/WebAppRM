@@ -17,8 +17,8 @@ namespace bd.webapprm.entidades
             MovilizacionesActivoFijoEmpleadoAutorizado = new HashSet<MovilizacionActivoFijo>();
             MovilizacionesActivoFijoEmpleadoResponsable = new HashSet<MovilizacionActivoFijo>();
             MovilizacionesActivoFijoEmpleadoSolicita = new HashSet<MovilizacionActivoFijo>();
-            OrdenCompra = new HashSet<OrdenCompra>();
-            RecepcionArticulos = new HashSet<RecepcionArticulos>();
+            RecepcionArticulosEmpleadoDevolucion = new HashSet<RecepcionArticulos>();
+            OrdenCompraEmpleadosResponsables = new HashSet<OrdenCompra>();
             RequerimientoArticulos = new HashSet<RequerimientoArticulos>();
             SalidaArticulosEmpleadosDespacho = new HashSet<SalidaArticulos>();
             SalidaArticulosEmpleadosRealizanBaja = new HashSet<SalidaArticulos>();
@@ -94,8 +94,8 @@ namespace bd.webapprm.entidades
         public virtual ICollection<MovilizacionActivoFijo> MovilizacionesActivoFijoEmpleadoAutorizado { get; set; }
         public virtual ICollection<MovilizacionActivoFijo> MovilizacionesActivoFijoEmpleadoResponsable { get; set; }
         public virtual ICollection<MovilizacionActivoFijo> MovilizacionesActivoFijoEmpleadoSolicita { get; set; }
-        public virtual ICollection<OrdenCompra> OrdenCompra { get; set; }
-        public virtual ICollection<RecepcionArticulos> RecepcionArticulos { get; set; }
+        public virtual ICollection<RecepcionArticulos> RecepcionArticulosEmpleadoDevolucion { get; set; }
+        public virtual ICollection<OrdenCompra> OrdenCompraEmpleadosResponsables { get; set; }
         public virtual ICollection<RequerimientoArticulos> RequerimientoArticulos { get; set; }
         public virtual ICollection<SalidaArticulos> SalidaArticulosEmpleadosDespacho { get; set; }
         public virtual ICollection<SalidaArticulos> SalidaArticulosEmpleadosRealizanBaja { get; set; }

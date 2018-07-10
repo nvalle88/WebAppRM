@@ -1,0 +1,84 @@
+@model OrdenCompra
+
+<table id="dt_basic" class="table table-hover" style="width:100%;">
+    <tbody style="background:#f5f5f5 !important;">
+        <tr>
+            <td colspan="5" class="text-center noBorder"><b>CABECERA</b></td>
+        </tr>
+
+        <tr>
+            <td><b>@Html.DisplayNameFor(model => model.Codigo)</b></td>
+            <td colspan="4">@Html.DisplayFor(m => m.Codigo)</td>
+        </tr>
+
+        <tr>
+            <td><b>@Html.DisplayNameFor(model => model.Fecha)</b></td>
+            <td colspan="4">@Html.DisplayFor(m => m.Fecha)</td>
+        </tr>
+
+        <tr>
+            <td colspan="5" class="noBorder">&nbsp;</td>
+        </tr>
+
+        <tr>
+            <td colspan="5" class="text-center noBorder"><b>DATOS DEL PROVEEDOR</b></td>
+        </tr>
+
+        <tr>
+            <td><b>@Html.DisplayNameFor(model => model.Proveedor.RazonSocial)</b></td>
+            <td colspan="4">@Html.DisplayFor(m => m.Proveedor.RazonSocial)</td>
+        </tr>
+
+        <tr>
+            <td><b>@Html.DisplayNameFor(model => model.Proveedor.Direccion)</b></td>
+            <td colspan="4">@Html.DisplayFor(m => m.Proveedor.Direccion)</td>
+        </tr>
+
+        <tr>
+            <td><b>@Html.DisplayNameFor(model => model.Proveedor.Identificacion)</b></td>
+            <td colspan="4">@Html.DisplayFor(m => m.Proveedor.Identificacion)</td>
+        </tr>
+
+        <tr>
+            <td colspan="5" class="noBorder">&nbsp;</td>
+        </tr>
+
+        <tr>
+            <td colspan="5" class="text-center noBorder"><b>DETALLES</b></td>
+        </tr>
+
+        <tr>
+            <td><b>@Html.DisplayNameFor(model => model.OrdenCompraDetalles.FirstOrDefault().Cantidad)</b></td>
+            <td><b>@Html.DisplayNameFor(model => model.OrdenCompraDetalles.FirstOrDefault().Articulo.IdUnidadMedida)</b></td>
+            <td><b>@Html.DisplayNameFor(model => model.OrdenCompraDetalles.FirstOrDefault().Articulo.Nombre)</b></td>
+            <td><b>@Html.DisplayNameFor(model => model.OrdenCompraDetalles.FirstOrDefault().ValorUnitario)</b></td>
+            <td><b>Valor total</b></td>
+        </tr>
+
+        @{ 
+            decimal total = 0;
+            foreach (var item in Model.OrdenCompraDetalles)
+            {
+                decimal valorTotal = (item.Cantidad * item.ValorUnitario);
+                total += valorTotal;
+                <tr>
+                    <td>@Html.DisplayFor(m=> item.Cantidad)</td>
+                    <td>@Html.DisplayFor(m=> item.Articulo.UnidadMedida.Nombre)</td>
+                    <td>@Html.DisplayFor(m=> item.Articulo.Nombre)</td>
+                    <td>@Html.DisplayFor(m=> item.ValorUnitario)</td>
+                    <td>@{await ViewContext.Writer.WriteAsync(valorTotal.ToString("C2"));}</td>
+                </tr>
+            }
+        }
+
+        <tr>
+            <td colspan="5" class="noBorder">&nbsp;</td>
+        </tr>
+
+        <tr>
+            <td colspan="3" class="noBorder"></td>
+            <td class="noBorder" style="background:#e2dede !important;"><b>TOTAL</b></td>
+            <td class="noBorder" style="background:#e2dede !important;"><b>@{await ViewContext.Writer.WriteAsync(total.ToString("C2"));}</b></td>
+        </tr>
+    </tbody>
+</table>

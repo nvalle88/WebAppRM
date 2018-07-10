@@ -1,0 +1,86 @@
+@model SalidaArticulos
+@inject bd.webapprm.servicios.Interfaces.IClaimsTransfer claimsTransfer
+@{
+    var claimTransfer = claimsTransfer.ObtenerClaimsTransferHttpContext();
+}
+
+@section css{
+    <link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
+}
+<div id="content">
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-sm-12 col-md-12 col-lg-12">
+                <div class="jarviswidget jarviswidget-color-red" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+                        <h2>Requerimiento de Art&iacute;culos</h2>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox"></div>
+                        <div class="widget-body no-padding">
+                            <form asp-action="DespacharRequerimiento" id="checkout-form" class="smart-form" novalidate="novalidate">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                @{
+                                    if (Model != null)
+                                    {
+                                        <input type="hidden" asp-for="IdSalidaArticulos" />
+                                        <input type="hidden" id="" name="" value="@claimTransfer.id" />
+                                    }
+                                }
+                                <fieldset>
+                                    <legend>Datos generales</legend>
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="IdMotivoSalidaArticulos"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <select asp-for="IdMotivoSalidaArticulos" class="form-control" asp-items="ViewBag.MotivoSalidaArticulos"></select>
+                                                <span asp-validation-for="IdMotivoSalidaArticulos" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="DescripcionMotivo"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <textarea asp-for="DescripcionMotivo" class="form-control paddingTextArea97"></textarea>
+                                                <span asp-validation-for="DescripcionMotivo" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    <legend id="legendDetallesProveedor" class="hide">Detalles del Proveedor al que se realiza la devoluci&oacute;n</legend>
+                                    <div id="divDetallesProveedor" class="margin-top-25 hide"></div>
+
+                                    <legend id="legendDetallesEmpleadoBajaDespacho" class="hide"></legend>
+                                    <div id="divDetallesEmpleadoDevolucion" class="margin-top-25 hide"></div>
+                                </fieldset>
+                                <footer>
+                                    <button type="submit" class="btn btn-primary" id="btn-guardar">Guardar</button>
+                                    <a asp-action="ListadoRequerimientosSolicitados" class="btn btn-default">Cancelar</a>
+                                </footer>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_Select2ScriptsPartial");}
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="~/js/proveeduria/despacharRequerimiento.js"></script>
+    <script>
+        var proveedorSelectResult = "@Url.Action("ProveedorCompraResult")";
+        var urlEmpleadoDevolucionSelectResult = "@Url.Action("EmpleadoDevolucionSelectResult")";
+        var bodegaSelectResult = "@Url.Action("BodegaResult")";
+    </script>
+}

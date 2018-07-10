@@ -25,10 +25,13 @@ namespace bd.webapprm.entidades
         public int IdSucursal { get; set; }
         public virtual Sucursal Sucursal { get; set; }
 
+        [Display(Name = "Bodega:")]
+        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar la {0} ")]
+        public int? IdBodega { get; set; }
+        public virtual Bodega Bodega { get; set; }
+
         public virtual ICollection<Empleado> Empleado { get; set; }
-
         public virtual ICollection<Dependencia> Dependencia1 { get; set; }
-
         public virtual ICollection<IndiceOcupacional> IndiceOcupacional { get; set; }
 
         

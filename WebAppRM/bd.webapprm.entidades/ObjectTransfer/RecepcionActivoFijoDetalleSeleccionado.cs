@@ -23,6 +23,12 @@ namespace bd.webapprm.entidades.ObjectTransfer
         public string Componentes { get; set; }
     }
 
+    public class ArticuloSeleccionado
+    {
+        public Articulo Articulo { get; set; }
+        public bool Seleccionado { get; set; }
+    }
+
     public class IdRecepcionActivoFijoDetalleSeleccionadoIdsComponentesExcluir
     {
         public List<IdRecepcionActivoFijoDetalleSeleccionado> ListaIdRecepcionActivoFijoDetalleSeleccionado { get; set; }
