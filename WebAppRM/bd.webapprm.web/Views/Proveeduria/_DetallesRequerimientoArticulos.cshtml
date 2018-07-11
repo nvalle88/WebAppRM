@@ -46,13 +46,13 @@
 
         <tr>
             <td><b>@Html.DisplayNameFor(model => model.RequerimientosArticulosDetalles.FirstOrDefault().CantidadSolicitada)</b></td>
-            <td><b>@Html.DisplayNameFor(model => model.RequerimientosArticulosDetalles.FirstOrDefault().Articulo.Nombre)</b></td>
             @{ 
                 if (Model.Estado.Nombre == Estados.Despachado)
                 {
                     <td><b>@Html.DisplayNameFor(model => model.RequerimientosArticulosDetalles.FirstOrDefault().CantidadAprobada)</b></td>
                 }
             }
+            <td><b>@Html.DisplayNameFor(model => model.RequerimientosArticulosDetalles.FirstOrDefault().Articulo.Nombre)</b></td>
         </tr>
 
         @{
@@ -60,13 +60,13 @@
             {
                 <tr>
                     <td>@Html.DisplayFor(m => item.CantidadSolicitada)</td>
-                    <td>@Html.DisplayFor(m => item.Articulo.Nombre)</td>
                     @{ 
                         if (Model.Estado.Nombre == Estados.Despachado)
                         {
                             <td>@Html.DisplayFor(m => item.CantidadAprobada)</td>
                         }
                     }
+                    <td>@Html.DisplayFor(m => item.Articulo.Nombre)</td>
                 </tr>
             }
         }

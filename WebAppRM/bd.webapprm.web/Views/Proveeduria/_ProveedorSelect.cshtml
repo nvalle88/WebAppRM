@@ -1,0 +1,13 @@
+@model bd.webapprm.entidades.SalidaArticulos
+<div class="row">
+    <section class="col col-4">
+        <label asp-for="IdProveedorDevolucion"></label>
+    </section>
+
+    <section class="col col-8">
+        <label class="input">
+            <select asp-for="IdProveedorDevolucion" class="form-control" asp-items="ViewBag.Proveedor"></select>
+            <span asp-validation-for="IdProveedorDevolucion" class="text-danger"></span>
+        </label>
+    </section>
+</div>

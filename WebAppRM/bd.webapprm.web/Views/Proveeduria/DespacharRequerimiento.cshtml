@@ -2,6 +2,7 @@
 @inject bd.webapprm.servicios.Interfaces.IClaimsTransfer claimsTransfer
 @{
     var claimTransfer = claimsTransfer.ObtenerClaimsTransferHttpContext();
+    var requerimientoArticulos = ViewData["RequerimientoArticulos"] as RequerimientoArticulos;
 }
 
 @section css{
@@ -21,13 +22,10 @@
                         <div class="widget-body no-padding">
                             <form asp-action="DespacharRequerimiento" id="checkout-form" class="smart-form" novalidate="novalidate">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                                @{
-                                    if (Model != null)
-                                    {
-                                        <input type="hidden" asp-for="IdSalidaArticulos" />
-                                        <input type="hidden" id="" name="" value="@claimTransfer.id" />
-                                    }
-                                }
+                                <input type="hidden" id="IdSucursal" value="@claimTransfer.IdSucursal" />
+                                <input type="hidden" asp-for="IdRequerimientoArticulos" value="@requerimientoArticulos.IdRequerimientoArticulos" />
+                                <input type="hidden" id="FuncionarioSolicitante_IdDependencia" name="FuncionarioSolicitante_IdDependencia" value="@requerimientoArticulos.FuncionarioSolicitante.IdDependencia" />
+                                <input type="hidden" id="MotSalida" name="MotSalida" />
                                 <fieldset>
                                     <legend>Datos generales</legend>
                                     <div class="row">
@@ -50,7 +48,7 @@
 
                                         <section class="col col-8">
                                             <label class="input">
-                                                <textarea asp-for="DescripcionMotivo" class="form-control paddingTextArea97"></textarea>
+                                                <textarea asp-for="DescripcionMotivo" class="form-control paddingTextArea98"></textarea>
                                                 <span asp-validation-for="DescripcionMotivo" class="text-danger"></span>
                                             </label>
                                         </section>
@@ -59,11 +57,23 @@
                                     <legend id="legendDetallesProveedor" class="hide">Detalles del Proveedor al que se realiza la devoluci&oacute;n</legend>
                                     <div id="divDetallesProveedor" class="margin-top-25 hide"></div>
 
-                                    <legend id="legendDetallesEmpleadoBajaDespacho" class="hide"></legend>
+                                    <legend id="legendDetallesEmpleadoDevolucion" class="hide">Empleado al que se realiza el despacho o la baja de art&iacute;culos</legend>
                                     <div id="divDetallesEmpleadoDevolucion" class="margin-top-25 hide"></div>
+
+                                    <div class="row padding-right-10 padding-left-10 margin-top-10">
+                                        <div class="alert alert-info alert-block" style="border-left-width:5px !important;padding-left:20px !important;">
+                                            <h4 class="alert-heading">Informaci&oacute;n</h4>
+                                            Si desea editar el requerimiento, b&uacute;squelo en <b>Requerimiento solicitados</b> y haga clic en la opci&oacute;n <b>Editar</b> del listado.
+                                        </div>
+                                    </div>
+
+                                    <legend>Detalles de requerimiento de art&iacute;culos</legend>
+                                    <div class="margin-top-25">
+                                        @{await Html.RenderPartialAsync("_DetallesRequerimientoArticulos", requerimientoArticulos);}
+                                    </div>
                                 </fieldset>
                                 <footer>
-                                    <button type="submit" class="btn btn-primary" id="btn-guardar">Guardar</button>
+                                    <button type="button" class="btn btn-primary" id="btn-guardar">Guardar</button>
                                     <a asp-action="ListadoRequerimientosSolicitados" class="btn btn-default">Cancelar</a>
                                 </footer>
                             </form>
@@ -77,10 +87,11 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_Select2ScriptsPartial");}
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-    <script src="~/js/proveeduria/despacharRequerimiento.js"></script>
+    <script src="~/js/proveeduria/despacharRequerimiento.min.js"></script>
     <script>
-        var proveedorSelectResult = "@Url.Action("ProveedorCompraResult")";
+        var proveedorSelectResult = "@Url.Action("ProveedorSelectResult")";
         var urlEmpleadoDevolucionSelectResult = "@Url.Action("EmpleadoDevolucionSelectResult")";
-        var bodegaSelectResult = "@Url.Action("BodegaResult")";
+        var bodegaExisteResult = "@Url.Action("BodegaExisteResult")";
+        var dependenciaRequerimiento = "@requerimientoArticulos.FuncionarioSolicitante.Dependencia.Nombre";
     </script>
 }
