@@ -499,6 +499,7 @@ namespace bd.webapprm.web.Controllers.MVC
                     if (!response.IsSuccess)
                         return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}", nameof(ListadoRequerimientosSolicitados));
 
+                    ViewData["RequerimientoArticulos"] = JsonConvert.DeserializeObject<RequerimientoArticulos>(response.Resultado.ToString());
                     ViewData["MotivoSalidaArticulos"] = new SelectList(await apiServicio.Listar<MotivoSalidaArticulos>(new Uri(WebApp.BaseAddressRM), "api/MotivoSalidaArticulos/ListarMotivoSalidaArticulos"), "IdMotivoSalidaArticulos", "Descripcion");
                     return View();
                 }
@@ -508,6 +509,69 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorCargarDatos}", nameof(ListadoRequerimientosSolicitados));
             }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DespacharRequerimiento(SalidaArticulos salidaArticulos)
+        {
+            try
+            {
+                await apiServicio.InsertarAsync(new Estado { Nombre = Estados.Despachado }, new Uri(WebApp.BaseAddressTH), "api/Estados/InsertarEstado");
+
+                string motivoSalidaArticulos = Request.Form["MotSalida"].ToString();
+                if (motivoSalidaArticulos == "Baja de inventarios")
+                    salidaArticulos.IdEmpleadoRealizaBaja = int.Parse(Request.Form["IdEmpleadoDevolucion"].ToString());
+
+                if (motivoSalidaArticulos == "Despacho")
+                    salidaArticulos.IdEmpleadoDespacho = int.Parse(Request.Form["IdEmpleadoDevolucion"].ToString());
+
+                var response = await apiServicio.InsertarAsync(salidaArticulos, new Uri(WebApp.BaseAddressRM), "api/Proveeduria/DespacharRequerimientoArticulos");
+                if (response.IsSuccess)
+                {
+                    await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), ExceptionTrace = null, Message = "Se ha despachado un requerimiento de artículos", UserName = "Usuario 1", LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ADV), EntityID = string.Format("{0} {1}", "Despachando requerimiento de artículos:", salidaArticulos.IdSalidaArticulos) });
+                    return this.Redireccionar($"{Mensaje.Informacion}|{Mensaje.Satisfactorio}", nameof(ListadoRequerimientosSolicitados));
+                }
+
+                response = await apiServicio.SeleccionarAsync<Response>(salidaArticulos.IdRequerimientoArticulos.ToString(), new Uri(WebApp.BaseAddressRM), "api/Proveeduria/ObtenerRequerimientoArticulos");
+                if (!response.IsSuccess)
+                    return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}", nameof(ListadoRequerimientosSolicitados));
+
+                ViewData["RequerimientoArticulos"] = JsonConvert.DeserializeObject<RequerimientoArticulos>(response.Resultado.ToString());
+                ViewData["MotivoSalidaArticulos"] = new SelectList(await apiServicio.Listar<MotivoSalidaArticulos>(new Uri(WebApp.BaseAddressRM), "api/MotivoSalidaArticulos/ListarMotivoSalidaArticulos"), "IdMotivoSalidaArticulos", "Descripcion");
+                return View(salidaArticulos);
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Despachando requerimiento de artículos", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP WebAppRM" });
+                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorCrear}", nameof(ListadoRequerimientosSolicitados));
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ProveedorSelectResult(int idProveedor)
+        {
+            try
+            {
+                ViewData["Proveedor"] = new SelectList((await apiServicio.ObtenerElementoAsync<List<Proveedor>>(new ProveedorTransfer { LineaServicio = LineasServicio.Proveeduria, Activo = true }, new Uri(WebApp.BaseAddressRM), "api/Proveedor/ListarProveedoresPorLineaServicioEstado")).Select(c => new { c.IdProveedor, NombreApellidos = $"{c.Nombre} {c.Apellidos}" }), "IdProveedor", "NombreApellidos");
+            }
+            catch (Exception)
+            { }
+            return PartialView("_ProveedorSelect", new SalidaArticulos());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> BodegaExisteResult(int idDependencia)
+        {
+            try
+            {
+                var response = await apiServicio.ObtenerElementoAsync<Response>(idDependencia, new Uri(WebApp.BaseAddressRM), "api/Proveeduria/ExisteBodegaParaDependencia");
+                if (response.IsSuccess)
+                    return Json(true);
+            }
+            catch (Exception)
+            { }
+            return StatusCode(500);
         }
         #endregion
 

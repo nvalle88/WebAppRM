@@ -19,6 +19,7 @@
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <input type="hidden" asp-for="IdBodega" />
                                 <fieldset>
+                                    <legend>Datos generales</legend>
                                     <div class="row">
                                         <section class="col col-4">
                                             <label asp-for="IdSucursal"></label>
@@ -56,6 +57,9 @@
                                             </label>
                                         </section>
                                     </div>
+
+                                    <legend>Dependencias asociadas</legend>
+                                    <select id="dependencias[]" name="dependencias[]" multiple="multiple" style="width:100%" class="select2 margin-top-10" asp-items="ViewBag.Dependencia"></select>
                                 </fieldset>
                                 <footer>
                                     <button type="submit" class="btn btn-primary" id="btn-guardar">Guardar</button>
