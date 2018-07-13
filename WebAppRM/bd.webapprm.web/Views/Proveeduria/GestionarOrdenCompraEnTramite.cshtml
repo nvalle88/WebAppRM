@@ -1,4 +1,8 @@
 @model OrdenCompra
+@inject bd.webapprm.servicios.Interfaces.IClaimsTransfer claimsTransfer
+@{
+    var claimTransfer = claimsTransfer.ObtenerClaimsTransferHttpContext();
+}
 
 @section css{
     <link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
@@ -31,8 +35,77 @@
                                     }
                                 }
                                 <fieldset>
+                                    <legend>Datos de ubicaci&oacute;n</legend>
+                                    @{ 
+                                        if (claimsTransfer.IsADMIGrupo(ADMI_Grupos.AdminNacionalProveeduria))
+                                        {
+                                            <div class="row">
+                                                <section class="col col-4">
+                                                    <label asp-for="Bodega.IdSucursal"></label>
+                                                </section>
+
+                                                <section class="col col-8">
+                                                    <label class="input">
+                                                        <select asp-for="Bodega.IdSucursal" class="form-control" asp-items="ViewBag.Sucursal"></select>
+                                                        <span asp-validation-for="Bodega.IdSucursal" class="text-danger"></span>
+                                                    </label>
+                                                </section>
+                                            </div>
+
+                                            <div id="divBodega">
+                                                @{await Html.RenderPartialAsync("_BodegaProcesarSelect", new OrdenCompra());}
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="row">
+                                                <section class="col col-4">
+                                                    <label asp-for="Bodega.IdSucursal"></label>
+                                                </section>
+
+                                                <section class="col col-8">
+                                                    <label class="input">
+                                                        <input value="@claimTransfer.NombreSucursal" class="form-control" disabled="disabled" style="background:#e8e6e6;" />
+                                                    </label>
+                                                </section>
+                                            </div>
+
+                                            <div class="row">
+                                                <section class="col col-4">
+                                                    <label asp-for="EmpleadoResponsable.IdDependencia"></label>
+                                                </section>
+
+                                                <section class="col col-8">
+                                                    <label class="input">
+                                                        <input id="IdDependencia" value="@claimTransfer.NombreDependencia" class="form-control" disabled="disabled" style="background:#e8e6e6;" />
+                                                    </label>
+                                                </section>
+                                            </div>
+
+                                            var bodega = ViewBag.Bodega as Bodega;
+                                            <div class="row">
+                                                <section class="col col-4">
+                                                    <label asp-for="EmpleadoResponsable.Dependencia.IdBodega"></label>
+                                                </section>
+
+                                                <section class="col col-8">
+                                                    <label class="input">
+                                                        <input value="@bodega?.Nombre" class="form-control" disabled="disabled" style="background:#e8e6e6;" />
+                                                        @{ 
+                                                            if (bodega == null)
+                                                            {
+                                                                <span class="text-danger">Tiene que asignar una Bodega a la dependencia:</span>
+                                                            }
+                                                        }
+                                                        <input type="hidden" asp-for="IdBodega" value="@bodega?.IdBodega" />
+                                                    </label>
+                                                </section>
+                                            </div>
+                                        }
+                                    }
+
                                     <legend>Datos generales</legend>
-                                    <div class="row">
+                                    <div class="row margin-top-25">
                                         <section class="col col-4">
                                             <label asp-for="Codigo"></label>
                                         </section>
@@ -56,6 +129,40 @@
                                                 <span asp-validation-for="Fecha" class="text-danger"></span>
                                             </label>
                                         </section>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="IdMotivoRecepcionArticulos"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <select asp-for="IdMotivoRecepcionArticulos" class="form-control" asp-items="ViewBag.MotivoRecepcionArticulos"></select>
+                                                <span asp-validation-for="IdMotivoRecepcionArticulos" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    <legend id="legendDetallesProveedor" class="@String.Format("{0}", Model != null && Model.IdProveedor != null ? "" : "hide")">Detalles del Proveedor al que se realiza la compra</legend>
+                                    <div id="divDetallesProveedor" class="margin-top-25 @String.Format("{0}", Model != null ? "" : "hide")">
+                                        @{ 
+                                            if (Model != null && Model.IdProveedor != null)
+                                            {
+                                                await Html.RenderPartialAsync("_ProveedorSelectOrdenCompra", Model);
+                                            }
+                                        }
+                                    </div>
+                                    <div id="divDatosProveedor"></div>
+
+                                    <legend id="legendDetallesEmpleadoDevolucion" class="@String.Format("{0}", Model != null && Model.IdEmpleadoDevolucion != null ? "" : "hide")">Empleado que realiza la devoluci&oacute;n</legend>
+                                    <div id="divDetallesEmpleadoDevolucion" class="margin-top-25 @String.Format("{0}", Model != null ? "" : "hide")">
+                                        @{ 
+                                            if (Model != null && Model.IdEmpleadoDevolucion != null)
+                                            {
+                                                await Html.RenderPartialAsync("_EmpleadoDevolucionSelect", Model);
+                                            }
+                                        }
                                     </div>
 
                                     <legend>Datos de factura</legend>
@@ -92,21 +199,6 @@
                                         </section>
                                     </div>
 
-                                    <legend>Datos de proveedor</legend>
-                                    <div class="row margin-top-25">
-                                        <section class="col col-4">
-                                            <label asp-for="IdProveedor"></label>
-                                        </section>
-
-                                        <section class="col col-8">
-                                            <label class="input">
-                                                <select asp-for="IdProveedor" class="form-control" asp-items="ViewBag.Proveedor"></select>
-                                                <span asp-validation-for="IdProveedor" class="text-danger"></span>
-                                            </label>
-                                        </section>
-                                    </div>
-                                    <div id="divDatosProveedor"></div>
-
                                     <legend>Detalles</legend>
                                     <p class="margin-top-10">
                                         <button type="button" class="btn btn-primary" style="padding:7px !important;margin-left:7px !important;" onclick="cargarListadoActivosFijosParaSeleccion(this)" data-funcioncallback="callBackInicializarTableListadoSeleccion" id="btnAdicionarArticulos" data-toggle="modal" data-target="#myModal">Adicionar / Eliminar Art&iacute;culos</button>
@@ -117,8 +209,8 @@
                                             <thead>
                                                 @{ await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", 6);}
                                                 <tr>
-                                                    <th>@Html.DisplayNameFor(m => m.OrdenCompraDetalles.FirstOrDefault().Articulo.Nombre)</th>
-                                                    <th>@Html.DisplayNameFor(m => m.OrdenCompraDetalles.FirstOrDefault().Articulo.IdUnidadMedida)</th>
+                                                    <th>@Html.DisplayNameFor(m => m.OrdenCompraDetalles.FirstOrDefault().MaestroArticuloSucursal.Articulo.Nombre)</th>
+                                                    <th>@Html.DisplayNameFor(m => m.OrdenCompraDetalles.FirstOrDefault().MaestroArticuloSucursal.Articulo.IdUnidadMedida)</th>
                                                     <th>@Html.DisplayNameFor(m => m.OrdenCompraDetalles.FirstOrDefault().Cantidad)</th>
                                                     <th>@Html.DisplayNameFor(m => m.OrdenCompraDetalles.FirstOrDefault().ValorUnitario)</th>
                                                     <th>Valor total</th>
@@ -131,36 +223,36 @@
                                                     {
                                                         foreach (var item in Model.OrdenCompraDetalles)
                                                         {
-                                                            <tr id="@String.Format("tableDetallesOrdenCompra{0}", item.IdArticulo)">
+                                                            <tr id="@String.Format("tableDetallesOrdenCompra{0}", item.IdMaestroArticuloSucursal)">
                                                                 <td>
-                                                                    @Html.DisplayFor(m => item.Articulo.Nombre)
+                                                                    @Html.DisplayFor(m => item.MaestroArticuloSucursal.Articulo.Nombre)
                                                                 </td>
                                                                 <td>
-                                                                    @Html.DisplayFor(m => item.Articulo.UnidadMedida.Nombre)
+                                                                    @Html.DisplayFor(m => item.MaestroArticuloSucursal.Articulo.UnidadMedida.Nombre)
                                                                 </td>
                                                                 <td>
-                                                                    <div class="input-group spinner" data-trigger="spinner" id="spinner_@item.IdArticulo">
-                                                                        <input type="text" id="cantidad_@item.IdArticulo" name="cantidad_@item.IdArticulo" value="@item.Cantidad" class="form-control" data-rule="quantity" style="padding-left:6px !important;" />
+                                                                    <div class="input-group spinner" data-trigger="spinner" id="spinner_@item.IdMaestroArticuloSucursal">
+                                                                        <input type="text" id="cantidad_@item.IdMaestroArticuloSucursal" name="cantidad_@item.IdMaestroArticuloSucursal" value="@item.Cantidad" class="form-control" data-rule="quantity" style="padding-left:6px !important;" />
                                                                         <div class="input-group-addon" style="padding-left:17px !important;">
                                                                             <a href="javascript:;" class="spin-up" data-spin="up"><i class="fa fa-caret-up"></i></a>
                                                                             <a href="javascript:;" class="spin-down" data-spin="down"><i class="fa fa-caret-down"></i></a>
                                                                         </div>
                                                                     </div>
                                                                 </td>
-                                                                <td id="tdValorUnitario_@item.IdArticulo">
+                                                                <td id="tdValorUnitario_@item.IdMaestroArticuloSucursal">
                                                                     <label class="input">
-                                                                        <input id="valorUnitario_@item.IdArticulo" name="valorUnitario_@item.IdArticulo" value="@item.ValorUnitario" class="form-control touchspin_tasa" onchange="calcularCostos();" />
+                                                                        <input id="valorUnitario_@item.IdMaestroArticuloSucursal" name="valorUnitario_@item.IdMaestroArticuloSucursal" value="@item.ValorUnitario" class="form-control touchspin_tasa" onchange="calcularCostos();" />
                                                                     </label>
                                                                 </td>
                                                                 <td>
                                                                     @{
                                                                         var valorTotal = (item.Cantidad * item.ValorUnitario).ToString("N2");
                                                                     }
-                                                                    <span id="spanValorTotal_@item.IdArticulo">@valorTotal</span>
+                                                                    <span id="spanValorTotal_@item.IdMaestroArticuloSucursal">@valorTotal</span>
                                                                 </td>
                                                                 <td>
-                                                                    <input type="hidden" class="hiddenIdRecepcionActivoFijoDetalle" id="hIdRecepcionActivoFijoDetalle_@item.IdArticulo" name="hIdRecepcionActivoFijoDetalle_@item.IdArticulo" value="@item.IdArticulo">
-                                                                    <div id="divEliminarDatosEspecificos_@item.IdArticulo" class="btnEliminarDatosEspecificos" style="display:inline;"><a href="javascript: void(0);" id="btnEliminarDatosEspecifico_@item.IdArticulo" onclick="abrirVentanaConfirmacion('btnEliminarDatosEspecifico_@item.IdArticulo')" data-funcioncallback="callBackFunctionEliminarDatoEspecifico('@item.IdArticulo')" data-titulo="Eliminar" data-descripcion="&#191; Desea eliminar el Art&iacute;culo seleccionado... ?">Eliminar</a></div>
+                                                                    <input type="hidden" class="hiddenIdRecepcionActivoFijoDetalle" id="hIdRecepcionActivoFijoDetalle_@item.IdMaestroArticuloSucursal" name="hIdRecepcionActivoFijoDetalle_@item.IdMaestroArticuloSucursal" value="@item.IdMaestroArticuloSucursal">
+                                                                    <div id="divEliminarDatosEspecificos_@item.IdMaestroArticuloSucursal" class="btnEliminarDatosEspecificos" style="display:inline;"><a href="javascript: void(0);" id="btnEliminarDatosEspecifico_@item.IdMaestroArticuloSucursal" onclick="abrirVentanaConfirmacion('btnEliminarDatosEspecifico_@item.IdMaestroArticuloSucursal')" data-funcioncallback="callBackFunctionEliminarDatoEspecifico('@item.IdMaestroArticuloSucursal')" data-titulo="Eliminar" data-descripcion="&#191; Desea eliminar el Art&iacute;culo seleccionado... ?">Eliminar</a></div>
                                                                 </td>
                                                             </tr>
                                                         }
@@ -219,6 +311,16 @@
     <script src="~/js/proveeduria/ordenCompra.min.js"></script>
     <script>
         var proveedorSelectResult = "@Url.Action("ProveedorResult")";
+        var proveedorCompraResult = "@Url.Action("ProveedorCompraResult")";
         var urlListadoActivosFijosSeleccionResult = "@Url.Action("ArticulosResult")";
+        var urlEmpleadoDevolucionSelectResult = "@Url.Action("EmpleadoDevolucionSelectResult")";
+        var bodegaSelectResult = "@Url.Action("BodegaResult")";
+        var isEditar = "@String.Format("{0}", Model != null ? true : false)".toLowerCase() === 'true';
+        var isAdminZonalProveeduria = "@claimsTransfer.IsADMIGrupo(ADMI_Grupos.AdminZonalProveeduria)".toLowerCase() === 'true';
+        var isAdminNacionalProveeduria = "@claimsTransfer.IsADMIGrupo(ADMI_Grupos.AdminNacionalProveeduria)".toLowerCase() === 'true';
+        
+        if (isAdminZonalProveeduria) {
+            objAdicional = parseInt("@claimTransfer.IdSucursal");
+        }
     </script>
 }

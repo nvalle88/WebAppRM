@@ -18,11 +18,11 @@ namespace bd.webapprm.entidades
 
         [Key]
         [Column(Order = 1)]
-        [Display(Name = "Artículo:")]
+        [Display(Name = "Maestro de artículo de sucursal:")]
         [Required(ErrorMessage = "Debe seleccionar el {0}")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0}")]
-        public int IdArticulo { get; set; }
-        public virtual Articulo Articulo { get; set; }
+        public int IdMaestroArticuloSucursal { get; set; }
+        public virtual MaestroArticuloSucursal MaestroArticuloSucursal { get; set; }
 
         [Required(ErrorMessage = "Debe introducir el {0}")]
         [Display(Name = "Valor unitario:")]

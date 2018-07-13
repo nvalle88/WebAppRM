@@ -10,22 +10,16 @@ namespace bd.webapprm.entidades
         public OrdenCompra()
         {
             OrdenCompraDetalles = new HashSet<OrdenCompraDetalles>();
-            OrdenCompraRecepcionArticulos = new HashSet<OrdenCompraRecepcionArticulos>();
         }
 
         [Key]
         public int IdOrdenCompra { get; set; }
 
-        [Display(Name = "Proveedor:")]
+        [Display(Name = "Motivo de recepción:")]
         [Required(ErrorMessage = "Debe seleccionar el {0}")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0}")]
-        public int IdProveedor { get; set; }
-        public virtual Proveedor Proveedor { get; set; }
-
-        [Display(Name = "Código:")]
-        [Required(ErrorMessage = "Debe introducir el {0}")]
-        [RegularExpression(@"^\d*$", ErrorMessage = "El {0} solo puede contener números.")]
-        public string Codigo { get; set; }
+        public int IdMotivoRecepcionArticulos { get; set; }
+        public virtual MotivoRecepcionArticulos MotivoRecepcionArticulos { get; set; }
 
         [Required(ErrorMessage = "Debe introducir {0}")]
         [Display(Name = "Fecha:")]
@@ -51,7 +45,29 @@ namespace bd.webapprm.entidades
         public int IdEmpleadoResponsable { get; set; }
         public virtual Empleado EmpleadoResponsable { get; set; }
 
+        [Display(Name = "Bodega:")]
+        [Required(ErrorMessage = "Debe seleccionar la {0}")]
+        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar la {0}")]
+        public int IdBodega { get; set; }
+        public virtual Bodega Bodega { get; set; }
+
+        [Display(Name = "Proveedor:")]
+        [Required(ErrorMessage = "Debe seleccionar el {0}")]
+        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0}")]
+        public int? IdProveedor { get; set; }
+        public virtual Proveedor Proveedor { get; set; }
+
+        [Display(Name = "Empleado que devuelve:")]
+        [Required(ErrorMessage = "Debe seleccionar el {0}")]
+        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0}")]
+        public int? IdEmpleadoDevolucion { get; set; }
+        public virtual Empleado EmpleadoDevolucion { get; set; }
+
+        [Display(Name = "Código:")]
+        [Required(ErrorMessage = "Debe introducir el {0}")]
+        [RegularExpression(@"^\d*$", ErrorMessage = "El {0} solo puede contener números.")]
+        public string Codigo { get; set; }
+
         public virtual ICollection<OrdenCompraDetalles> OrdenCompraDetalles { get; set; }
-        public virtual ICollection<OrdenCompraRecepcionArticulos> OrdenCompraRecepcionArticulos { get; set; }
     }
 }

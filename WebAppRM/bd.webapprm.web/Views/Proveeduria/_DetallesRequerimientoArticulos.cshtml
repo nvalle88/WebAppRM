@@ -45,6 +45,7 @@
         </tr>
 
         <tr>
+            <td><b>@Html.DisplayNameFor(model => model.RequerimientosArticulosDetalles.FirstOrDefault().MaestroArticuloSucursal.Articulo.Nombre)</b></td>
             <td><b>@Html.DisplayNameFor(model => model.RequerimientosArticulosDetalles.FirstOrDefault().CantidadSolicitada)</b></td>
             @{ 
                 if (Model.Estado.Nombre == Estados.Despachado)
@@ -52,13 +53,13 @@
                     <td><b>@Html.DisplayNameFor(model => model.RequerimientosArticulosDetalles.FirstOrDefault().CantidadAprobada)</b></td>
                 }
             }
-            <td><b>@Html.DisplayNameFor(model => model.RequerimientosArticulosDetalles.FirstOrDefault().Articulo.Nombre)</b></td>
         </tr>
 
         @{
             foreach (var item in Model.RequerimientosArticulosDetalles)
             {
                 <tr>
+                    <td>@Html.DisplayFor(m => item.MaestroArticuloSucursal.Articulo.Nombre)</td>
                     <td>@Html.DisplayFor(m => item.CantidadSolicitada)</td>
                     @{ 
                         if (Model.Estado.Nombre == Estados.Despachado)
@@ -66,7 +67,6 @@
                             <td>@Html.DisplayFor(m => item.CantidadAprobada)</td>
                         }
                     }
-                    <td>@Html.DisplayFor(m => item.Articulo.Nombre)</td>
                 </tr>
             }
         }

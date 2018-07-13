@@ -9,8 +9,6 @@ namespace bd.webapprm.entidades
         {
             InventarioArticulos = new HashSet<InventarioArticulos>();
             MaestroArticuloSucursal = new HashSet<MaestroArticuloSucursal>();
-            OrdenCompraDetalles = new HashSet<OrdenCompraDetalles>();
-            RequerimientosArticulosDetalles = new HashSet<RequerimientosArticulosDetalles>();
         }
 
         [Key]
@@ -20,8 +18,6 @@ namespace bd.webapprm.entidades
         [Required(ErrorMessage = "Debe introducir el {0}")]
         [StringLength(200, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
         public string Nombre { get; set; }
-
-        //Propiedades Virtuales Referencias a otras clases
 
         [Display(Name = "Sub clase de artículo:")]
         [Required(ErrorMessage = "Debe seleccionar la {0} ")]
@@ -41,7 +37,5 @@ namespace bd.webapprm.entidades
 
         public virtual ICollection<InventarioArticulos> InventarioArticulos { get; set; }
         public virtual ICollection<MaestroArticuloSucursal> MaestroArticuloSucursal { get; set; }
-        public virtual ICollection<OrdenCompraDetalles> OrdenCompraDetalles { get; set; }
-        public virtual ICollection<RequerimientosArticulosDetalles> RequerimientosArticulosDetalles { get; set; }
     }
 }
