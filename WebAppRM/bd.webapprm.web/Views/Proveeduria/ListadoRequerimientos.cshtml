@@ -5,6 +5,7 @@
     string estado = ViewBag.Estado;
     bool isAdminZonalProveeduria = claimsTransfer.IsADMIGrupo(ADMI_Grupos.AdminZonalProveeduria);
     bool isAdminNacionalProveeduria = claimsTransfer.IsADMIGrupo(ADMI_Grupos.AdminNacionalProveeduria);
+    bool isFuncionarioSolicitante = claimsTransfer.IsADMIGrupo(ADMI_Grupos.FuncionarioSolicitante);
 }
 <div id="content">
     @{
@@ -78,9 +79,9 @@
                                             @{
                                                 if (estado == Estados.Desaprobado || estado == Estados.Despachado)
                                                 {
-                                                    <th>
+                                                    <td>
                                                         @Html.DisplayFor(modelItem => item.FechaAprobadoDenegado)
-                                                    </th>
+                                                    </td>
                                                 }
                                             }
                                             <td>
@@ -91,13 +92,16 @@
                                                 @{
                                                     if (estado == Estados.Solicitado)
                                                     {
-                                                        <span> | </span>
-                                                        <a asp-action="GestionarRequerimiento" asp-route-id="@item.IdRequerimientoArticulos">Editar</a>
-                                                        
+                                                        if (isFuncionarioSolicitante)
+                                                        {
+                                                            <span> | </span>
+                                                            <a asp-action="GestionarRequerimiento" asp-route-id="@item.IdRequerimientoArticulos">Editar</a>
+                                                        }
+
                                                         if (isAdminZonalProveeduria || isAdminNacionalProveeduria)
                                                         {
                                                             <span> | </span>
-                                                            <a asp-action="DespacharRequerimiento" asp-route-id="@item.IdRequerimientoArticulos">Despachar</a><span> | </span>
+                                                            <a asp-action="DespacharRequerimiento" asp-route-id="@item.IdRequerimientoArticulos">Dar salida</a><span> | </span>
                                                             <a href="javascript:void(0);" id="@item.IdRequerimientoArticulos" onclick="abrirVentanaConfirmacion('@item.IdRequerimientoArticulos')" data-url="@Url.Action("DenegarRequerimiento", values: new { id = item.IdRequerimientoArticulos })" data-titulo="Denegar requerimiento" data-descripcion="&#191;Desea denegar el Requerimiento de art&iacute;culos... ?">Denegar</a>
                                                         }
 
