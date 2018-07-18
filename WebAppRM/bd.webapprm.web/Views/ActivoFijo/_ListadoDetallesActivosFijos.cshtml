@@ -21,7 +21,20 @@
                 @{
                     if (listadoDetallesActivosFijosViewModel.IsConfiguracionSeleccion)
                     {
-                        <th></th>
+                        <th>
+                            @{ 
+                                if (Model.Count > 0)
+                                {
+                                    await Html.RenderPartialAsync("_CheckBoxSeleccion", new ViewDataDictionary(ViewData){
+                                        { "Seleccionado", false },
+                                        { "IdRecepcionActivoFijoDetalle", 0 },
+                                        { "IsConfiguracionSeleccionDisabled", listadoDetallesActivosFijosViewModel.IsConfiguracionSeleccionDisabled },
+                                        { "CallbackFunctionAddRowDetalleTodos", listadoDetallesActivosFijosViewModel.CallbackFunctionCheckBox },
+                                        { "CallbackFunctionRemoveRowDetalleTodos", listadoDetallesActivosFijosViewModel.CallbackFunctionRemoveTodos }
+                                    });
+                                }
+                            }
+                        </th>
                     }
                     <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.IdCodigoActivoFijo)</th>
                     if (listadoDetallesActivosFijosViewModel.IsConfiguracionDatosActivo)
@@ -82,12 +95,16 @@
                         @{
                             if (listadoDetallesActivosFijosViewModel.IsConfiguracionSeleccion)
                             {
-                                await Html.RenderPartialAsync("_CheckBoxSeleccion", new ViewDataDictionary(ViewData){
-                                    { "Seleccionado", item.Seleccionado },
-                                    { "CallbackFunctionCheckBox", listadoDetallesActivosFijosViewModel.CallbackFunctionCheckBox },
-                                    { "IdRecepcionActivoFijoDetalle", item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle },
-                                    { "IsConfiguracionSeleccionDisabled", listadoDetallesActivosFijosViewModel.IsConfiguracionSeleccionDisabled }
-                                });
+                                <td>
+                                    @{ 
+                                        await Html.RenderPartialAsync("_CheckBoxSeleccion", new ViewDataDictionary(ViewData){
+                                            { "Seleccionado", item.Seleccionado },
+                                            { "CallbackFunctionCheckBox", listadoDetallesActivosFijosViewModel.CallbackFunctionCheckBox },
+                                            { "IdRecepcionActivoFijoDetalle", item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle },
+                                            { "IsConfiguracionSeleccionDisabled", listadoDetallesActivosFijosViewModel.IsConfiguracionSeleccionDisabled }
+                                        });
+                                    }
+                                </td>
                             }
                             <td id="@String.Format("{0}{1}Codigosecuencial", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.CodigoActivoFijo?.Codigosecuencial ?? "-");}</td>
                             if (listadoDetallesActivosFijosViewModel.IsConfiguracionDatosActivo)
@@ -211,3 +228,6 @@
         </tbody>
     </table>
 </div>
+<script>
+    arrRecepcionActivoFijoDetalleTodos = "@String.Join(",", Model.Select(c => c.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle))".split(",");
+</script>
