@@ -633,7 +633,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                ViewData["MotivoAlta"] = new SelectList(await apiServicio.Listar<MotivoAlta>(new Uri(WebApp.BaseAddressRM), "api/MotivoAlta/ListarMotivoAlta"), "IdMotivoAlta", "Descripcion");
+                ViewData["MotivoAlta"] = new SelectList((await apiServicio.Listar<MotivoAlta>(new Uri(WebApp.BaseAddressRM), "api/MotivoAlta/ListarMotivoAlta")).Where(c => c.Descripcion.ToLower().Trim() != "adición"), "IdMotivoAlta", "Descripcion");
                 ViewData["TipoUtilizacionAlta"] = new SelectList(await apiServicio.Listar<TipoUtilizacionAlta>(new Uri(WebApp.BaseAddressRM), "api/TipoUtilizacionAlta/ListarTipoUtilizacionAlta"), "IdTipoUtilizacionAlta", "Nombre");
                 ViewData["Configuraciones"] = new ListadoDetallesActivosFijosViewModel(IsConfiguracionDatosActivo: true, IsConfiguracionListadoAltasGestionar: true, IsConfiguracionAltasGestionarEditar: id != null);
                 
@@ -756,7 +756,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 if (response.IsSuccess)
                     return this.Redireccionar(responseFile.IsSuccess ? $"{Mensaje.Informacion}|{Mensaje.Satisfactorio}" : $"{Mensaje.Aviso}|{Mensaje.ErrorUploadFiles}", nameof(ListadoActivosFijosAlta));
 
-                ViewData["MotivoAlta"] = new SelectList(await apiServicio.Listar<MotivoAlta>(new Uri(WebApp.BaseAddressRM), "api/MotivoAlta/ListarMotivoAlta"), "IdMotivoAlta", "Descripcion");
+                ViewData["MotivoAlta"] = new SelectList((await apiServicio.Listar<MotivoAlta>(new Uri(WebApp.BaseAddressRM), "api/MotivoAlta/ListarMotivoAlta")).Where(c => c.Descripcion.ToLower().Trim() != "adición"), "IdMotivoAlta", "Descripcion");
                 ViewData["TipoUtilizacionAlta"] = new SelectList(await apiServicio.Listar<TipoUtilizacionAlta>(new Uri(WebApp.BaseAddressRM), "api/TipoUtilizacionAlta/ListarTipoUtilizacionAlta"), "IdTipoUtilizacionAlta", "Nombre");
                 ViewData["Configuraciones"] = new ListadoDetallesActivosFijosViewModel(IsConfiguracionDatosActivo: true, IsConfiguracionListadoAltasGestionar: true, IsConfiguracionAltasGestionarEditar: altaActivoFijo.IdAltaActivoFijo > 0);
                 

@@ -31,6 +31,7 @@ namespace bd.webapprm.servicios.Servicios
             { "/Proveeduria/ListadoOrdenCompraProcesadas", new List<string> { "ProcesarOrdenCompraEnTramite" } },
             { "/Proveeduria/ListadoRequerimientosSolicitados", new List<string> { "DetallesRequerimientoArticulos" } },
             { "/Proveeduria/ListadoRequerimientosDespachados", new List<string> { "DespacharRequerimiento" } },
+            { "/Proveeduria/ConsultarInventario", new List<string> { "DetallesAjusteInventario" } },
         };
 
         public List<string> ObtenerAccionesDiccionario(string admeControlador)

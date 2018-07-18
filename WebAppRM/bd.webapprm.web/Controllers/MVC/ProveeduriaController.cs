@@ -569,6 +569,7 @@ namespace bd.webapprm.web.Controllers.MVC
 
                 ViewData["MotivoSalidaArticulos"] = new SelectList(await apiServicio.Listar<MotivoSalidaArticulos>(new Uri(WebApp.BaseAddressRM), "api/MotivoSalidaArticulos/ListarMotivoSalidaArticulos"), "IdMotivoSalidaArticulos", "Descripcion");
                 ViewData["Bodega"] = await apiServicio.ObtenerElementoAsync<Bodega>(requerimientoArticulos.FuncionarioSolicitante.IdDependencia, new Uri(WebApp.BaseAddressRM), "api/Proveeduria/BodegaPorDependencia");
+                ViewData["Error"] = response.Message;
                 return View(salidaArticulos);
             }
             catch (Exception ex)
@@ -602,6 +603,183 @@ namespace bd.webapprm.web.Controllers.MVC
             catch (Exception)
             { }
             return StatusCode(500);
+        }
+        #endregion
+
+        #region Inventario
+        public async Task<IActionResult> ConsultarInventario()
+        {
+            var nuevoAjusteInventarioArticulos = new AjusteInventarioArticulos();
+            nuevoAjusteInventarioArticulos.Fecha = DateTime.Now;
+            nuevoAjusteInventarioArticulos.InventarioArticulos = new List<InventarioArticulos>();
+            try
+            {
+                var claimTransfer = claimsTransfer.ObtenerClaimsTransferHttpContext();
+                ViewData["Sucursal"] = new SelectList(claimsTransfer.IsADMIGrupo(ADMI_Grupos.AdminNacionalProveeduria) ? await apiServicio.Listar<Sucursal>(new Uri(WebApp.BaseAddressTH), "api/Sucursal/ListarSucursal") : new List<Sucursal> { new Sucursal { IdSucursal = claimTransfer.IdSucursal, Nombre = claimTransfer.NombreSucursal } }, "IdSucursal", "Nombre");
+
+                if (claimsTransfer.IsADMIGrupo(ADMI_Grupos.AdminZonalProveeduria))
+                    ViewData["Bodega"] = await apiServicio.ObtenerElementoAsync<Bodega>(claimTransfer.IdDependencia, new Uri(WebApp.BaseAddressRM), "api/Proveeduria/BodegaPorDependencia");
+                else
+                    ViewData["Bodega"] = await ObtenerSelectListBodega((ViewData["Sucursal"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Sucursal"] as SelectList).FirstOrDefault().Value) : -1);
+
+                int idBodega = claimsTransfer.IsADMIGrupo(ADMI_Grupos.AdminZonalProveeduria) ? (ViewData["Bodega"] as Bodega) != null ? (ViewData["Bodega"] as Bodega).IdBodega : -1 : (ViewData["Bodega"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Bodega"] as SelectList).FirstOrDefault().Value) : -1;
+                nuevoAjusteInventarioArticulos.InventarioArticulos = await apiServicio.ObtenerElementoAsync<List<InventarioArticulos>>(new IdBodegaFecha { Fecha = nuevoAjusteInventarioArticulos.Fecha, IdBodega = idBodega }, new Uri(WebApp.BaseAddressRM), "api/Proveeduria/ListadoInventarioPorBodegaFecha");
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Consultando inventario de artículos", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webapprm" });
+                TempData["Mensaje"] = $"{Mensaje.Error}|{Mensaje.ErrorCargarDatos}";
+            }
+            return View(nuevoAjusteInventarioArticulos);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ArticulosBodegaFechaResult(int idBodega, DateTime fecha)
+        {
+            var lista = new List<InventarioArticulos>();
+            try
+            {
+                lista = await apiServicio.ObtenerElementoAsync<List<InventarioArticulos>>(new IdBodegaFecha { Fecha = fecha, IdBodega = idBodega }, new Uri(WebApp.BaseAddressRM), "api/Proveeduria/ListadoInventarioPorBodegaFecha");
+            }
+            catch (Exception)
+            { }
+            return PartialView("_DetallesInventario", lista);
+        }
+
+        public async Task<IActionResult> AjustarInventario()
+        {
+            try
+            {
+                var claimTransfer = claimsTransfer.ObtenerClaimsTransferHttpContext();
+                ViewData["Sucursal"] = new SelectList(claimsTransfer.IsADMIGrupo(ADMI_Grupos.AdminNacionalProveeduria) ? await apiServicio.Listar<Sucursal>(new Uri(WebApp.BaseAddressTH), "api/Sucursal/ListarSucursal") : new List<Sucursal> { new Sucursal { IdSucursal = claimTransfer.IdSucursal, Nombre = claimTransfer.NombreSucursal } }, "IdSucursal", "Nombre");
+
+                if (claimsTransfer.IsADMIGrupo(ADMI_Grupos.AdminZonalProveeduria))
+                    ViewData["Bodega"] = await apiServicio.ObtenerElementoAsync<Bodega>(claimTransfer.IdDependencia, new Uri(WebApp.BaseAddressRM), "api/Proveeduria/BodegaPorDependencia");
+                else
+                    ViewData["Bodega"] = await ObtenerSelectListBodega((ViewData["Sucursal"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Sucursal"] as SelectList).FirstOrDefault().Value) : -1);
+
+                ViewData["Empleado"] = await ObtenerSelectListEmpleado((ViewData["Sucursal"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Sucursal"] as SelectList).FirstOrDefault().Value) : -1);
+
+                var nuevoAjusteInventario = new AjusteInventarioArticulos();
+                int idBodega = claimsTransfer.IsADMIGrupo(ADMI_Grupos.AdminZonalProveeduria) ? (ViewData["Bodega"] as Bodega) != null ? (ViewData["Bodega"] as Bodega).IdBodega : -1 : (ViewData["Bodega"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Bodega"] as SelectList).FirstOrDefault().Value) : -1;
+                nuevoAjusteInventario.InventarioArticulos = await apiServicio.ObtenerElementoAsync<List<InventarioArticulos>>(idBodega, new Uri(WebApp.BaseAddressRM), "api/Proveeduria/ListadoInventarioPorBodega");
+                return View(nuevoAjusteInventario);
+            }
+            catch (Exception)
+            {
+                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorCargarDatos}", nameof(ListadoAjusteInventario));
+            }
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AjustarInventario(AjusteInventarioArticulos ajusteInventarioArticulos)
+        {
+            try
+            {
+                var listaFormDatosEspecificos = Request.Form.Where(c => c.Key.StartsWith("hIdRecepcionActivoFijoDetalle_"));
+                ajusteInventarioArticulos.InventarioArticulos = new List<InventarioArticulos>();
+                var response = new Response();
+                foreach (var item in listaFormDatosEspecificos)
+                {
+                    int posFormDatoEspecifico = int.Parse(item.Key.ToString().Split('_')[1]);
+                    int cantidad = int.Parse(Request.Form[$"cantidad_{posFormDatoEspecifico}"].ToString().Replace(",", ""));
+                    response = await apiServicio.SeleccionarAsync<Response>(posFormDatoEspecifico.ToString(), new Uri(WebApp.BaseAddressRM), "api/MaestroArticuloSucursal");
+                    var maestroArticuloSucursal = JsonConvert.DeserializeObject<MaestroArticuloSucursal>(response.Resultado.ToString());
+
+                    ajusteInventarioArticulos.InventarioArticulos.Add(new InventarioArticulos
+                    {
+                        IdMaestroArticuloSucursal = posFormDatoEspecifico,
+                        IdBodega = ajusteInventarioArticulos.IdBodega,
+                        Cantidad = cantidad,
+                        MaestroArticuloSucursal = maestroArticuloSucursal
+                    });
+                }
+                response = await apiServicio.InsertarAsync(ajusteInventarioArticulos, new Uri(WebApp.BaseAddressRM), "api/Proveeduria/InsertarAjusteInventarioArticulos");
+                if (response.IsSuccess)
+                {
+                    var ajusteInventarioArticulosAux = JsonConvert.DeserializeObject<AjusteInventarioArticulos>(response.Resultado.ToString());
+                    await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), ExceptionTrace = null, Message = "Se ha creado un ajuste de inventario de artículos", UserName = "Usuario 1", LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ADV), EntityID = string.Format("{0} {1}", "Ajuste de inventario de artículos:", ajusteInventarioArticulos.IdAjusteInventario) });
+                    return this.Redireccionar($"{Mensaje.Informacion}|{Mensaje.Satisfactorio}", nameof(DetallesAjusteInventario), routeValues: new { id = ajusteInventarioArticulosAux.IdAjusteInventario });
+                }
+                var claimTransfer = claimsTransfer.ObtenerClaimsTransferHttpContext();
+                ViewData["Sucursal"] = new SelectList(claimsTransfer.IsADMIGrupo(ADMI_Grupos.AdminNacionalProveeduria) ? await apiServicio.Listar<Sucursal>(new Uri(WebApp.BaseAddressTH), "api/Sucursal/ListarSucursal") : new List<Sucursal> { new Sucursal { IdSucursal = claimTransfer.IdSucursal, Nombre = claimTransfer.NombreSucursal } }, "IdSucursal", "Nombre");
+                if (!claimsTransfer.IsADMIGrupo(ADMI_Grupos.AdminNacionalProveeduria))
+                    ViewData["Bodega"] = await apiServicio.ObtenerElementoAsync<Bodega>(claimTransfer.IdDependencia, new Uri(WebApp.BaseAddressRM), "api/Proveeduria/BodegaPorDependencia");
+                else
+                    ViewData["Bodega"] = await ObtenerSelectListBodega(ajusteInventarioArticulos?.Bodega?.IdSucursal ?? -1);
+
+                ViewData["Empleado"] = await ObtenerSelectListEmpleado(ajusteInventarioArticulos?.Bodega?.IdSucursal ?? -1);
+                ViewData["Error"] = response.Message;
+                return View(ajusteInventarioArticulos);
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Ajustando inventario", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP WebAppRM" });
+                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorCrear}", nameof(ListadoAjusteInventario));
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EmpleadoAutorizaSelectResult(int? idSucursal)
+        {
+            try
+            {
+                ViewData["Empleado"] = idSucursal != null ? await ObtenerSelectListEmpleado((int)idSucursal) : new SelectList(new List<ListaEmpleadoViewModel>(), "IdEmpleado", "NombreApellido");
+            }
+            catch (Exception)
+            { }
+            return PartialView("_EmpleadoAutorizaSelect", new AjusteInventarioArticulos());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ArticulosAjusteInventarioResult(int idBodega)
+        {
+            var listadoInventarioArticulos = new List<InventarioArticulos>();
+            try
+            {
+                listadoInventarioArticulos = await apiServicio.ObtenerElementoAsync<List<InventarioArticulos>>(idBodega, new Uri(WebApp.BaseAddressRM), "api/Proveeduria/ListadoInventarioPorBodega");
+            }
+            catch (Exception)
+            { }
+            return PartialView("_ListadoArticulosAjusteInventario", listadoInventarioArticulos);
+        }
+
+        public async Task<IActionResult> ListadoAjusteInventario()
+        {
+            var lista = new List<AjusteInventarioArticulos>();
+            try
+            {
+                lista = await apiServicio.Listar<AjusteInventarioArticulos>(new Uri(WebApp.BaseAddressRM), "api/Proveeduria/ListadoAjusteInventarioArticulos");
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Listando ajustes de inventario de artículos", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webapprm" });
+                TempData["Mensaje"] = $"{Mensaje.Error}|{Mensaje.ErrorListado}";
+            }
+            return View(lista);
+        }
+
+        public async Task<IActionResult> DetallesAjusteInventario(int? id)
+        {
+            try
+            {
+                if (id != null)
+                {
+                    var response = await apiServicio.SeleccionarAsync<Response>(id.ToString(), new Uri(WebApp.BaseAddressRM), "api/Proveeduria/ObtenerAjusteInventarioArticulos");
+                    if (!response.IsSuccess)
+                        return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}", nameof(ListadoAjusteInventario));
+
+                    var ajusteInventarioArticulosActual = JsonConvert.DeserializeObject<AjusteInventarioArticulos>(response.Resultado.ToString());
+                    ViewData["InventarioArticulosAnterior"] = await apiServicio.ObtenerElementoAsync<List<InventarioArticulos>>(ajusteInventarioArticulosActual.Fecha, new Uri(WebApp.BaseAddressRM), "api/Proveeduria/ListadoInventarioArticulosAnterior");
+                    return View(ajusteInventarioArticulosActual);
+                }
+                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}", nameof(ListadoAjusteInventario));
+            }
+            catch (Exception)
+            {
+                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorCargarDatos}", nameof(ListadoAjusteInventario));
+            }
         }
         #endregion
 

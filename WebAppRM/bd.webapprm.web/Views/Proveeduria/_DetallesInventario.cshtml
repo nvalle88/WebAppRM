@@ -1,0 +1,23 @@
+@model List<InventarioArticulos>
+<table id="dt_basic" class="table table-hover" style="width:100%;">
+    <tbody style="background:#f5f5f5 !important;">
+        <tr>
+            <td colspan="5" class="text-center noBorder"><b>DETALLES</b></td>
+        </tr>
+
+        <tr>
+            <td><b>@Html.DisplayNameFor(model => Model.FirstOrDefault().MaestroArticuloSucursal.Articulo.Nombre)</b></td>
+            <td><b>Cantidad en bodega</b></td>
+        </tr>
+
+        @{
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(m => item.MaestroArticuloSucursal.Articulo.Nombre)</td>
+                    <td>@Html.DisplayFor(m => item.Cantidad)</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

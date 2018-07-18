@@ -244,7 +244,7 @@ function eventoGuardar() {
             }
         }
         if (isAdminZonalProveeduria) {
-            var idBodega = $("#IdBodega").val().toString();
+            var idBodega = $("#IdBodega").val();
             if (idBodega == null || idBodega == "") {
                 mostrarNotificacion("Error", "Tiene que asignar una Bodega a la dependencia " + $("#IdDependencia").val() + ".");
                 validar = false;
