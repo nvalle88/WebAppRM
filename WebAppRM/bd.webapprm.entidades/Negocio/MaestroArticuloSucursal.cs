@@ -7,6 +7,13 @@ namespace bd.webapprm.entidades
 
     public partial class MaestroArticuloSucursal
     {
+        public MaestroArticuloSucursal()
+        {
+            InventarioArticulos = new HashSet<InventarioArticulos>();
+            OrdenCompraDetalles = new HashSet<OrdenCompraDetalles>();
+            RequerimientosArticulosDetalles = new HashSet<RequerimientosArticulosDetalles>();
+        }
+
         [Key]
         public int IdMaestroArticuloSucursal { get; set; }
 
@@ -52,6 +59,11 @@ namespace bd.webapprm.entidades
         [Required(ErrorMessage = "Debe introducir el {0}")]
         [Display(Name = "Valor de artículo:")]
         [DisplayFormat(DataFormatString = "{0:C2}", ApplyFormatInEditMode = false)]
+        [NotMapped]
         public decimal ValorActual { get; set; }
+
+        public virtual ICollection<InventarioArticulos> InventarioArticulos { get; set; }
+        public virtual ICollection<OrdenCompraDetalles> OrdenCompraDetalles { get; set; }
+        public virtual ICollection<RequerimientosArticulosDetalles> RequerimientosArticulosDetalles { get; set; }
     }
 }

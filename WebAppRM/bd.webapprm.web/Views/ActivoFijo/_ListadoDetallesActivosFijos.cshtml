@@ -21,7 +21,17 @@
                 @{
                     if (listadoDetallesActivosFijosViewModel.IsConfiguracionSeleccion)
                     {
-                        <th></th>
+                        <th>
+                            @{ 
+                                await Html.RenderPartialAsync("_CheckBoxSeleccion", new ViewDataDictionary(ViewData){
+                                    { "Seleccionado", false },
+                                    { "IdRecepcionActivoFijoDetalle", 0 },
+                                    { "IsConfiguracionSeleccionDisabled", listadoDetallesActivosFijosViewModel.IsConfiguracionSeleccionDisabled },
+                                    { "CallbackFunctionAddRowDetalleTodos", listadoDetallesActivosFijosViewModel.CallbackFunctionCheckBox },
+                                    { "CallbackFunctionRemoveRowDetalleTodos", listadoDetallesActivosFijosViewModel.CallbackFunctionRemoveTodos }
+                                });
+                            }
+                        </th>
                     }
                     <th>@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.IdCodigoActivoFijo)</th>
                     if (listadoDetallesActivosFijosViewModel.IsConfiguracionDatosActivo)
@@ -82,12 +92,16 @@
                         @{
                             if (listadoDetallesActivosFijosViewModel.IsConfiguracionSeleccion)
                             {
-                                await Html.RenderPartialAsync("_CheckBoxSeleccion", new ViewDataDictionary(ViewData){
-                                    { "Seleccionado", item.Seleccionado },
-                                    { "CallbackFunctionCheckBox", listadoDetallesActivosFijosViewModel.CallbackFunctionCheckBox },
-                                    { "IdRecepcionActivoFijoDetalle", item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle },
-                                    { "IsConfiguracionSeleccionDisabled", listadoDetallesActivosFijosViewModel.IsConfiguracionSeleccionDisabled }
-                                });
+                                <td>
+                                    @{ 
+                                        await Html.RenderPartialAsync("_CheckBoxSeleccion", new ViewDataDictionary(ViewData){
+                                            { "Seleccionado", item.Seleccionado },
+                                            { "CallbackFunctionCheckBox", listadoDetallesActivosFijosViewModel.CallbackFunctionCheckBox },
+                                            { "IdRecepcionActivoFijoDetalle", item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle },
+                                            { "IsConfiguracionSeleccionDisabled", listadoDetallesActivosFijosViewModel.IsConfiguracionSeleccionDisabled }
+                                        });
+                                    }
+                                </td>
                             }
                             <td id="@String.Format("{0}{1}Codigosecuencial", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.CodigoActivoFijo?.Codigosecuencial ?? "-");}</td>
                             if (listadoDetallesActivosFijosViewModel.IsConfiguracionDatosActivo)
@@ -130,7 +144,7 @@
                                 if (listadoDetallesActivosFijosViewModel.IsConfiguracionSeleccionMovilizaciones)
                                 {
                                     <td id="@String.Format("{0}{1}Observaciones", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">
-                                        <a href="form-x-editable.html#" class="btntextAreaEditable" data-idrecepcionactivofijodetalle="@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" data-type="textarea" data-pk="@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" data-original-title="Observaciones">@{await ViewContext.Writer.WriteAsync(item?.Observaciones);}</a>
+                                        <a href="form-x-editable.html#" id="textAreaEditable_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" class="btntextAreaEditable" data-idrecepcionactivofijodetalle="@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" data-type="textarea" data-pk="@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" data-original-title="Observaciones">@{await ViewContext.Writer.WriteAsync(item?.Observaciones);}</a>
                                         <input type="hidden" id="hTextAreaEditable_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" name="hTextAreaEditable_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" />
                                     </td>
                                 }
@@ -210,4 +224,11 @@
             }
         </tbody>
     </table>
+    @{ 
+        string idsArrRecepcionActivoFijoDetalleTodos = String.Join(",", Model.Select(c => c.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle));
+    }
+    <input type="hidden" id="hIdsRecepcionActivoFijoDetalleTodos" value="@idsArrRecepcionActivoFijoDetalleTodos" />
 </div>
+<script>
+    arrRecepcionActivoFijoDetalleTodos = "@idsArrRecepcionActivoFijoDetalleTodos".split(",");
+</script>

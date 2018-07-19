@@ -6,13 +6,13 @@
     initDataTableFiltrado("tableDetallesActivoFijoSeleccionados", [13, 15, 16, 17, 18, 19, 20, 21]);
     eventoGuardar();
     Init_XEditable(function (idRecepcionActivoFijoDetalle, newValue) {
-        callbackXEditableSuccess(idRecepcionActivoFijoDetalle, newValue);
+        callbackXEditableSuccess(idRecepcionActivoFijoDetalle, newValue.toUpperCase());
     });
 });
 
 function callbackXEditableSuccess(idRecepcionActivoFijoDetalle, newValue)
 {
-    $("#hTextAreaEditable_" + idRecepcionActivoFijoDetalle).val(newValue);
+    $("#hTextAreaEditable_" + idRecepcionActivoFijoDetalle).val(newValue.toUpperCase());
 }
 
 function callBackInicializarTableListadoSeleccion() {
@@ -35,7 +35,7 @@ function callBackFunctionSeleccionAlta(idRecepcionActivoFijoDetalle, seleccionad
 
         var valueObservaciones = $("#tableDetallesActivoFijoAltas" + idRecepcionActivoFijoDetalle + "Observaciones").html().toString().trim();
         var observaciones = valueObservaciones == "" || valueObservaciones == "-" || valueObservaciones == null ? "" : valueObservaciones;
-        var btnObserbaciones = '<a href="form-x-editable.html#" class="btntextAreaEditable" data-idrecepcionactivofijodetalle="' + idRecepcionActivoFijoDetalle + '" data-type="textarea" data-pk="' + idRecepcionActivoFijoDetalle + '" data-original-title="Observaciones">' + observaciones + '</a>' + '<input type="hidden" id="hTextAreaEditable_' + idRecepcionActivoFijoDetalle + '" name="hTextAreaEditable_' + idRecepcionActivoFijoDetalle + '" value="' + observaciones + '" />';
+        var btnObserbaciones = '<a href="form-x-editable.html#" id="textAreaEditable_' + idRecepcionActivoFijoDetalle + '" class="btntextAreaEditable" data-idrecepcionactivofijodetalle="' + idRecepcionActivoFijoDetalle + '" data-type="textarea" data-pk="' + idRecepcionActivoFijoDetalle + '" data-original-title="Observaciones">' + observaciones + '</a>' + '<input type="hidden" id="hTextAreaEditable_' + idRecepcionActivoFijoDetalle + '" name="hTextAreaEditable_' + idRecepcionActivoFijoDetalle + '" value="' + observaciones + '" />';
         arrValores.push(btnObserbaciones);
 
         arrValores.push(hIdRecepcionActivoFijoDetalle + btnEliminarMovilizacion);
@@ -45,7 +45,7 @@ function callBackFunctionSeleccionAlta(idRecepcionActivoFijoDetalle, seleccionad
         mostrarOcultarColumnas("tableDetallesActivoFijoAltas", arrColumnasVisibleTableACopiando);
 
         Init_XEditable(function (idRecepcionActivoFijoDetalle, newValue) {
-            callbackXEditableSuccess(idRecepcionActivoFijoDetalle, newValue);
+            callbackXEditableSuccess(idRecepcionActivoFijoDetalle, newValue.toUpperCase());
         });
     }
     else

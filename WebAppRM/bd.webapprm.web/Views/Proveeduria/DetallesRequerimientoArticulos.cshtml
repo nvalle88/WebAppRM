@@ -13,9 +13,18 @@
                         <div class="jarviswidget-editbox"></div>
                         <div class="widget-body no-padding">
                             <div class="smart-form">
-                                <fieldset>
-                                    @{await Html.RenderPartialAsync("_DetallesRequerimientoArticulos", Model);}
-                                </fieldset>
+                                @{await Html.RenderPartialAsync("_DetallesRequerimientoArticulos", Model);}
+
+                                <footer>
+                                    @{ 
+                                        if (Model.Estado.Nombre == Estados.Solicitado)
+                                        {
+                                            <a href="javascript:void(0);" id="btn_aprobar" class="btn btn-primary" onclick="abrirVentanaConfirmacion('btn_aprobar')" data-url="@Url.Action("DespacharRequerimiento", values: new { id = Model.IdRequerimientoArticulos })" data-titulo="Dar salida" data-descripcion="&#191;Desea dar salida al Requerimiento de art&iacute;los?">Dar salida</a>
+                                        }
+                                    }
+                                    <a asp-action="ListadoRequerimientosSolicitados" class="btn btn-default">Cancelar</a>
+                                </footer>
+                                
                             </div>
                         </div>
                     </div>

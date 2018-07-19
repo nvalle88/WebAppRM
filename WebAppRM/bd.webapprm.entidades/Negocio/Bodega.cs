@@ -9,9 +9,10 @@ namespace bd.webapprm.entidades
     {
         public Bodega()
         {
+            AjusteInventarioArticulos = new HashSet<AjusteInventarioArticulos>();
             Dependencia = new HashSet<Dependencia>();
             InventarioArticulos = new HashSet<InventarioArticulos>();
-            RecepcionArticulos = new HashSet<RecepcionArticulos>();
+            OrdenCompra = new HashSet<OrdenCompra>();
             UbicacionActivoFijo = new HashSet<UbicacionActivoFijo>();
         }
 
@@ -35,9 +36,10 @@ namespace bd.webapprm.entidades
         public int IdEmpleadoResponsable { get; set; }
         public virtual Empleado EmpleadoResponsable { get; set; }
 
+        public virtual ICollection<AjusteInventarioArticulos> AjusteInventarioArticulos { get; set; }
         public virtual ICollection<Dependencia> Dependencia { get; set; }
-        public virtual ICollection<UbicacionActivoFijo> UbicacionActivoFijo { get; set; }
         public virtual ICollection<InventarioArticulos> InventarioArticulos { get; set; }
-        public virtual ICollection<RecepcionArticulos> RecepcionArticulos { get; set; }
+        public virtual ICollection<OrdenCompra> OrdenCompra { get; set; }
+        public virtual ICollection<UbicacionActivoFijo> UbicacionActivoFijo { get; set; }
     }
 }

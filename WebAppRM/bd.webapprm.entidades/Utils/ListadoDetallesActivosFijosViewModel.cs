@@ -35,6 +35,7 @@ namespace bd.webapprm.entidades.Utils
         public bool IsConfiguracionListadoMovilizaciones { get; set; }
         public bool MostrarFiltradoUltimaColumna { get; set; }
         public string CallbackFunctionCheckBox { get; set; }
+        public string CallbackFunctionRemoveTodos { get; set; } = "callBackFunctionEliminarDatoEspecifico";
         public string NombreTabla { get; set; } = "tableDetallesActivoFijo";
         public int Cantidad { get; set; } = 16;
 

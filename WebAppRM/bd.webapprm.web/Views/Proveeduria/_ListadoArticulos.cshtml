@@ -1,35 +1,46 @@
-@model List<ArticuloSeleccionado>
-
-@{ 
+@model List<MaestroArticuloSucursalSeleccionado>
+@inject bd.webapprm.servicios.Interfaces.IClaimsTransfer claimsTransfer
+@{
     string nombreTabla = "tableDetallesArticulos";
+    bool isFuncionarioSolicitante = claimsTransfer.IsADMIGrupo(ADMI_Grupos.FuncionarioSolicitante);
 }
 <div class="table-responsive">
     <table id="@nombreTabla" class="table table-striped table-bordered table-hover" style="width:100%;">
         <thead>
             <tr>
                 @{ await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", 8, new ViewDataDictionary(ViewData) { { "MostrarFiltradoUltimaColumna", true } });}
-                <th></th>
                 <th>
-                    @Html.DisplayNameFor(model => model.FirstOrDefault().Articulo.Nombre)
+                    @{
+                        await Html.RenderPartialAsync("_CheckBoxSeleccion", new ViewDataDictionary(ViewData){
+                            { "Seleccionado", false },
+                            { "IdRecepcionActivoFijoDetalle", 0 },
+                            { "CallbackFunctionAddRowDetalleTodos", "CallbackFunctionCheckBoxArticulo" },
+                            { "CallbackFunctionRemoveRowDetalleTodos", "callBackFunctionEliminarDatoEspecifico" }
+                        });
+                    }
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.FirstOrDefault().Articulo.SubClaseArticulo.ClaseArticulo.IdTipoArticulo)
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().MaestroArticuloSucursal.IdArticulo)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.FirstOrDefault().Articulo.SubClaseArticulo.IdClaseArticulo)
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().MaestroArticuloSucursal.Articulo.SubClaseArticulo.ClaseArticulo.IdTipoArticulo)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.FirstOrDefault().Articulo.IdSubClaseArticulo)
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().MaestroArticuloSucursal.Articulo.SubClaseArticulo.IdClaseArticulo)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.FirstOrDefault().Articulo.IdUnidadMedida)
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().MaestroArticuloSucursal.Articulo.IdSubClaseArticulo)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.FirstOrDefault().Articulo.Modelo.IdMarca)
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().MaestroArticuloSucursal.Articulo.IdUnidadMedida)
                 </th>
                 <th>
-                    @Html.DisplayNameFor(model => model.FirstOrDefault().Articulo.IdModelo)
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().MaestroArticuloSucursal.Articulo.Modelo.IdMarca)
                 </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().MaestroArticuloSucursal.Articulo.IdModelo)
+                </th>
+                <th class="hide"></th>
                 <th class="hide"></th>
                 <th class="hide"></th>
                 <th class="hide"></th>
@@ -39,59 +50,72 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    @{ 
-                        await Html.RenderPartialAsync("_CheckBoxSeleccion", new ViewDataDictionary(ViewData){
-                            { "Seleccionado", item.Seleccionado },
-                            { "CallbackFunctionCheckBox", "CallbackFunctionCheckBoxArticulo" },
-                            { "IdRecepcionActivoFijoDetalle", item.Articulo.IdArticulo }
-                        });
-                    }
-
-                    <td id="@String.Format("{0}{1}NombreArticulo", nombreTabla, item.Articulo.IdArticulo)">
-                        @Html.DisplayFor(modelItem => item.Articulo.Nombre)
+                    <td>
+                        @{
+                            await Html.RenderPartialAsync("_CheckBoxSeleccion", new ViewDataDictionary(ViewData){
+                                { "Seleccionado", item.Seleccionado },
+                                { "CallbackFunctionCheckBox", "CallbackFunctionCheckBoxArticulo" },
+                                { "IdRecepcionActivoFijoDetalle", item.MaestroArticuloSucursal.IdMaestroArticuloSucursal }
+                            });
+                        }
                     </td>
 
-                    <td id="@String.Format("{0}{1}TipoArticulo", nombreTabla, item.Articulo.IdArticulo)">
-                        @Html.DisplayFor(modelItem => item.Articulo.SubClaseArticulo.ClaseArticulo.TipoArticulo.Nombre)
+
+                    <td id="@String.Format("{0}{1}NombreArticulo", nombreTabla, item.MaestroArticuloSucursal.IdMaestroArticuloSucursal)">
+                        @Html.DisplayFor(modelItem => item.MaestroArticuloSucursal.Articulo.Nombre)
                     </td>
 
-                    <td id="@String.Format("{0}{1}ClaseArticulo", nombreTabla, item.Articulo.IdArticulo)">
-                        @Html.DisplayFor(modelItem => item.Articulo.SubClaseArticulo.ClaseArticulo.Nombre)
+                    <td id="@String.Format("{0}{1}TipoArticulo", nombreTabla, item.MaestroArticuloSucursal.IdMaestroArticuloSucursal)">
+                        @Html.DisplayFor(modelItem => item.MaestroArticuloSucursal.Articulo.SubClaseArticulo.ClaseArticulo.TipoArticulo.Nombre)
                     </td>
 
-                    <td id="@String.Format("{0}{1}SubclaseArticulo", nombreTabla, item.Articulo.IdArticulo)">
-                        @Html.DisplayFor(modelItem => item.Articulo.SubClaseArticulo.Nombre)
+                    <td id="@String.Format("{0}{1}ClaseArticulo", nombreTabla, item.MaestroArticuloSucursal.IdMaestroArticuloSucursal)">
+                        @Html.DisplayFor(modelItem => item.MaestroArticuloSucursal.Articulo.SubClaseArticulo.ClaseArticulo.Nombre)
                     </td>
 
-                    <td id="@String.Format("{0}{1}UnidadMedida", nombreTabla, item.Articulo.IdArticulo)">
-                        @Html.DisplayFor(modelItem => item.Articulo.UnidadMedida.Nombre)
+                    <td id="@String.Format("{0}{1}SubclaseArticulo", nombreTabla, item.MaestroArticuloSucursal.IdMaestroArticuloSucursal)">
+                        @Html.DisplayFor(modelItem => item.MaestroArticuloSucursal.Articulo.SubClaseArticulo.Nombre)
                     </td>
 
-                    <td id="@String.Format("{0}{1}Marca", nombreTabla, item.Articulo.IdArticulo)">
-                        @Html.DisplayFor(modelItem => item.Articulo.Modelo.Marca.Nombre)
+                    <td id="@String.Format("{0}{1}UnidadMedida", nombreTabla, item.MaestroArticuloSucursal.IdMaestroArticuloSucursal)">
+                        @Html.DisplayFor(modelItem => item.MaestroArticuloSucursal.Articulo.UnidadMedida.Nombre)
                     </td>
 
-                    <td id="@String.Format("{0}{1}Modelo", nombreTabla, item.Articulo.IdArticulo)">
-                        @Html.DisplayFor(modelItem => item.Articulo.Modelo.Nombre)
+                    <td id="@String.Format("{0}{1}Marca", nombreTabla, item.MaestroArticuloSucursal.IdMaestroArticuloSucursal)">
+                        @Html.DisplayFor(modelItem => item.MaestroArticuloSucursal.Articulo.Modelo.Marca.Nombre)
                     </td>
 
-                    <td id="@String.Format("{0}{1}Cantidad", nombreTabla, item.Articulo.IdArticulo)" class="hide">
-                        <div class="input-group spinner" data-trigger="spinner" id="spinner_@item.Articulo.IdArticulo">
-                            <input type="text" id="cantidad_@item.Articulo.IdArticulo" name="cantidad_@item.Articulo.IdArticulo" class="form-control" data-rule="quantity"  style="padding-left:6px !important;" />
+                    <td id="@String.Format("{0}{1}Modelo", nombreTabla, item.MaestroArticuloSucursal.IdMaestroArticuloSucursal)">
+                        @Html.DisplayFor(modelItem => item.MaestroArticuloSucursal.Articulo.Modelo.Nombre)
+                    </td>
+
+                    <td id="@String.Format("{0}{1}Cantidad", nombreTabla, item.MaestroArticuloSucursal.IdMaestroArticuloSucursal)" class="hide">
+                        <div class="input-group spinner" data-trigger="spinner" id="spinner_@item.MaestroArticuloSucursal.IdMaestroArticuloSucursal">
+                            <input type="text" id="cantidad_@item.MaestroArticuloSucursal.IdMaestroArticuloSucursal" name="cantidad_@item.MaestroArticuloSucursal.IdMaestroArticuloSucursal" class="form-control" @{await ViewContext.Writer.WriteAsync(isFuncionarioSolicitante ? $"data-max='{item.CantidadBodega}'" : "");} data-rule="quantity" style="padding-left:6px !important;" />
                             <div class="input-group-addon" style="padding-left:17px !important;">
                                 <a href="javascript:;" class="spin-up" data-spin="up"><i class="fa fa-caret-up"></i></a>
                                 <a href="javascript:;" class="spin-down" data-spin="down"><i class="fa fa-caret-down"></i></a>
                             </div>
                         </div>
                     </td>
-                    <td id="@String.Format("{0}{1}ValorUnitario", nombreTabla, item.Articulo.IdArticulo)" class="hide">
+                    <td id="@String.Format("{0}{1}ValorUnitario", nombreTabla, item.MaestroArticuloSucursal.IdMaestroArticuloSucursal)" class="hide">
                         <label class="input">
-                            <input id="valorUnitario_@item.Articulo.IdArticulo" name="valorUnitario_@item.Articulo.IdArticulo" class="form-control touchspin_tasa" onchange="calcularCostos();" />
+                            <input id="valorUnitario_@item.MaestroArticuloSucursal.IdMaestroArticuloSucursal" name="valorUnitario_@item.MaestroArticuloSucursal.IdMaestroArticuloSucursal" class="form-control touchspin_tasa" onchange="calcularCostos();" />
                         </label>
                     </td>
-                    <td id="@String.Format("{0}{1}ValorTotal", nombreTabla, item.Articulo.IdArticulo)" class="hide"><span id="spanValorTotal_@item.Articulo.IdArticulo">0.00</span></td>
+                    <td id="@String.Format("{0}{1}ValorTotal", nombreTabla, item.MaestroArticuloSucursal.IdMaestroArticuloSucursal)" class="hide"><span id="spanValorTotal_@item.MaestroArticuloSucursal.IdMaestroArticuloSucursal">0.00</span></td>
+                    <td id="@String.Format("{0}{1}CantidadBodega", nombreTabla, item.MaestroArticuloSucursal.IdMaestroArticuloSucursal)" class="hide">
+                        @Html.DisplayFor(modelItem => item.CantidadBodega)
+                    </td>
                 </tr>
             }
         </tbody>
     </table>
+    @{ 
+        string idsArrRecepcionActivoFijoDetalleTodos = String.Join(",", Model.Select(c => c.MaestroArticuloSucursal.IdMaestroArticuloSucursal));
+    }
+    <input type="hidden" id="hIdsRecepcionActivoFijoDetalleTodos" value="@idsArrRecepcionActivoFijoDetalleTodos" />
 </div>
+<script>
+    arrRecepcionActivoFijoDetalleTodos = "@idsArrRecepcionActivoFijoDetalleTodos".split(",");
+</script>

@@ -1,0 +1,173 @@
+@model AjusteInventarioArticulos
+@inject bd.webapprm.servicios.Interfaces.IClaimsTransfer claimsTransfer
+@{
+    var claimTransfer = claimsTransfer.ObtenerClaimsTransferHttpContext();
+}
+
+@section css{
+    <link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
+    <link rel="stylesheet" href="~/lib/jquery.spinner-master/dist/css/bootstrap-spinner.min.css" />
+    <link rel="stylesheet" href="~/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/tableSmartForm.min.css" />
+}
+<div id="content">
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-sm-12 col-md-12 col-lg-12">
+                <div class="jarviswidget jarviswidget-color-red" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+                        <h2>Ajuste de Inventario</h2>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox"></div>
+                        <div class="widget-body no-padding">
+                            <form asp-action="AjustarInventario" id="checkout-form" class="smart-form" novalidate="novalidate">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <fieldset>
+                                    <legend>Datos de ubicaci&oacute;n</legend>
+                                    @{
+                                        if (claimsTransfer.IsADMIGrupo(ADMI_Grupos.AdminNacionalProveeduria))
+                                        {
+                                            <div class="row">
+                                                <section class="col col-4">
+                                                    <label asp-for="Bodega.IdSucursal"></label>
+                                                </section>
+
+                                                <section class="col col-8">
+                                                    <label class="input">
+                                                        <select asp-for="Bodega.IdSucursal" class="form-control" asp-items="ViewBag.Sucursal"></select>
+                                                        <span asp-validation-for="Bodega.IdSucursal" class="text-danger"></span>
+                                                    </label>
+                                                </section>
+                                            </div>
+
+                                            <div id="divBodega">
+                                                @{await Html.RenderPartialAsync("_BodegaProcesarSelect", new OrdenCompra());}
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="row">
+                                                <section class="col col-4">
+                                                    <label asp-for="Bodega.IdSucursal"></label>
+                                                </section>
+
+                                                <section class="col col-8">
+                                                    <label class="input">
+                                                        <input value="@claimTransfer.NombreSucursal" class="form-control" disabled="disabled" style="background:#e8e6e6;" />
+                                                    </label>
+                                                </section>
+                                            </div>
+
+                                            var bodega = ViewBag.Bodega as Bodega;
+                                            <div class="row">
+                                                <section class="col col-4">
+                                                    <label asp-for="IdBodega"></label>
+                                                </section>
+
+                                                <section class="col col-8">
+                                                    <label class="input">
+                                                        <input value="@bodega?.Nombre" class="form-control" disabled="disabled" style="background:#e8e6e6;" />
+                                                        @{
+                                                            if (bodega == null)
+                                                            {
+                                                                <span class="text-danger">Tiene que asignar una Bodega a la sucursal:</span>
+                                                            }
+                                                        }
+                                                        <input type="hidden" asp-for="IdBodega" value="@bodega?.IdBodega" />
+                                                    </label>
+                                                </section>
+                                            </div>
+                                        }
+                                    }
+
+                                    <legend>Datos generales</legend>
+                                    <div class="row margin-top-25">
+                                        <section class="col col-4">
+                                            <label asp-for="Fecha"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <input type="text" asp-for="Fecha" class="form-control" />
+                                                <span asp-validation-for="Fecha" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="Motivo"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <textarea asp-for="Motivo" class="form-control paddingTextArea98"></textarea>
+                                                <span asp-validation-for="Motivo" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    <div id="divDetallesEmpleadoDevolucion">
+                                        @{await Html.RenderPartialAsync("_EmpleadoAutorizaSelect", Model);}
+                                    </div>
+
+                                    <legend>Detalles</legend>
+                                    <p class="margin-top-10">
+                                        <button type="button" class="btn btn-primary" style="padding:7px !important;margin-left:7px !important;" onclick="cargarListadoActivosFijosParaSeleccion(this)" data-funcioncallback="callBackInicializarTableListadoSeleccion" id="btnAdicionarArticulos" data-toggle="modal" data-target="#myModal">Adicionar / Eliminar Art&iacute;culos</button>
+                                    </p>
+
+                                    <div class="table-responsive" id="divArticulosInventario">
+                                        @{await Html.RenderPartialAsync("_ListadoArticulosAjusteInventario", Model?.InventarioArticulos);}
+                                    </div>
+
+                                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg" style="margin-left:8% !important;margin-top:30px !important;width:85% !important;">
+                                            <div class="modal-content" id="modalContentDatosEspecificos">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="padding:10px !important;">
+                                                        &times;
+                                                    </button>
+                                                    <h4 class="modal-title" id="myModalLabel" style="padding:12px !important;">Listado de Art&iacute;culos</h4>
+                                                </div>
+                                                <div class="modal-body" style="padding:15px !important;padding-top:10px !important;" id="modalBodyDatosEspecificos"></div>
+                                                <div class="modal-footer" style="padding:15px !important;">
+                                                    <button type="button" class="btn btn-default" id="btnCancelarDatosEspecificos" data-dismiss="modal" style="padding:7px !important;">Cancelar</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <footer>
+                                    <button type="button" class="btn btn-primary" id="btn-guardar">Guardar</button>
+                                    <a asp-action="ListadoAjusteInventario" class="btn btn-default">Cancelar</a>
+                                </footer>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_Select2ScriptsPartial");}
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{await Html.RenderPartialAsync("_DatetimePickerScriptsPartial");}
+    <script src='~/lib/jquery.spinner-master/dist/js/jquery.spinner.min.js'></script>
+    <script src='~/js/activoFijo/listadoSeleccion.min.js'></script>
+    <script src="~/js/proveeduria/ajustarInventario.min.js"></script>
+    <script>
+        var urlListadoActivosFijosSeleccionResult = "@Url.Action("ArticulosResult")";
+        var urlEmpleadoAutorizaSelectResult = "@Url.Action("EmpleadoAutorizaSelectResult")";
+        var urlArticulosInventarioSelectResult = "@Url.Action("ArticulosAjusteInventarioResult")";
+        var bodegaSelectResult = "@Url.Action("BodegaResult")";
+        var isAdminZonalProveeduria = "@claimsTransfer.IsADMIGrupo(ADMI_Grupos.AdminZonalProveeduria)".toLowerCase() === 'true';
+        var isAdminNacionalProveeduria = "@claimsTransfer.IsADMIGrupo(ADMI_Grupos.AdminNacionalProveeduria)".toLowerCase() === 'true';
+
+        if (!isAdminNacionalProveeduria) {
+            objAdicional = parseInt("@claimTransfer.IdSucursal");
+        }
+    </script>
+}

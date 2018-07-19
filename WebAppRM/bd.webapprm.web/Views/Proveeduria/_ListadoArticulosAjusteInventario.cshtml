@@ -1,0 +1,40 @@
+@model List<InventarioArticulos>
+
+<table id="tableDetallesAjustesInventario" class="table table-striped table-bordered table-hover" style="width:100%;">
+    <thead>
+        @{ await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", 3);}
+        <tr>
+            <th>@Html.DisplayNameFor(m => m.FirstOrDefault().MaestroArticuloSucursal.Articulo.Nombre)</th>
+            <th>Cantidad en bodega</th>
+            <th>Opciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            if (Model != null)
+            {
+                foreach (var item in Model)
+                {
+                    <tr id="@String.Format("tableDetallesAjustesInventario{0}", item.IdMaestroArticuloSucursal)">
+                        <td>
+                            @Html.DisplayFor(m => item.MaestroArticuloSucursal.Articulo.Nombre)
+                        </td>
+                        <td>
+                            <div class="input-group spinner" data-trigger="spinner" id="spinner_@item.IdMaestroArticuloSucursal">
+                                <input type="text" id="cantidad_@item.IdMaestroArticuloSucursal" name="cantidad_@item.IdMaestroArticuloSucursal" value="@item.Cantidad" class="form-control" data-rule="quantityCero" style="padding-left:6px !important;" />
+                                <div class="input-group-addon" style="padding-left:17px !important;">
+                                    <a href="javascript:;" class="spin-up" data-spin="up"><i class="fa fa-caret-up"></i></a>
+                                    <a href="javascript:;" class="spin-down" data-spin="down"><i class="fa fa-caret-down"></i></a>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <input type="hidden" class="hiddenIdRecepcionActivoFijoDetalle" id="hIdRecepcionActivoFijoDetalle_@item.IdMaestroArticuloSucursal" name="hIdRecepcionActivoFijoDetalle_@item.IdMaestroArticuloSucursal" value="@item.IdMaestroArticuloSucursal">
+                            <div id="divEliminarDatosEspecificos_@item.IdMaestroArticuloSucursal" class="btnEliminarDatosEspecificos" style="display:inline;"><a href="javascript: void(0);" id="btnEliminarDatosEspecifico_@item.IdMaestroArticuloSucursal" onclick="abrirVentanaConfirmacion('btnEliminarDatosEspecifico_@item.IdMaestroArticuloSucursal')" data-funcioncallback="callBackFunctionEliminarDatoEspecifico('@item.IdMaestroArticuloSucursal')" data-titulo="Eliminar" data-descripcion="&#191; Desea eliminar el Art&iacute;culo seleccionado... ?">Eliminar</a></div>
+                        </td>
+                    </tr>
+                }
+            }
+        }
+    </tbody>
+</table>

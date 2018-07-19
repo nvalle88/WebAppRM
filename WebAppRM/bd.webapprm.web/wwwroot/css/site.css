@@ -140,3 +140,7 @@ ul.ColVis_collection {
 .noBorder{
     border: none !important;
 }
+
+input, textarea{
+    text-transform:uppercase !important;
+}

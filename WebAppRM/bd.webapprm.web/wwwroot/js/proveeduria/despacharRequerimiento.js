@@ -1,5 +1,7 @@
 ﻿$(document).ready(function () {
     Init_Select2();
+    inicializarDetallesActivoSeleccion();
+    initDataTableFiltrado("tableDetallesRequerimientos", []);
     eventoMotivoSalidaArticulos();
     partialViewBajaDevolucionDespacho();
     eventoGuardar();
@@ -11,11 +13,16 @@ function eventoMotivoSalidaArticulos() {
     });
 }
 
+function callBackFunctionEliminarDatoEspecifico(idRecepcionActivoFijoDetalle) {
+    deleteRowDetallesActivosFijos("tableDetallesRequerimientos", idRecepcionActivoFijoDetalle);
+    eliminarRecepcionActivoFijoDetalleSeleccionado(idRecepcionActivoFijoDetalle);
+}
+
 function partialViewBajaDevolucionDespacho() {
     var motivoSalidaArticulos = $("#IdMotivoSalidaArticulos option:selected").text();
     $("#MotSalida").val(motivoSalidaArticulos);
 
-    if (motivoSalidaArticulos == "Baja de inventarios" || motivoSalidaArticulos == "Despacho") {
+    if (motivoSalidaArticulos.toLowerCase() == "baja de inventarios" || motivoSalidaArticulos.toLowerCase() == "despacho") {
         mostrarLoadingPanel("checkout-form", "Cargando empleados...");
         $.ajax({
             url: urlEmpleadoDevolucionSelectResult,
@@ -74,6 +81,7 @@ function mostrarOcultarFieldsetEmpleadoDevolucion(mostrar) {
 
 function eventoGuardar() {
     $("#btn-guardar").on("click", function (e) {
+        var api = $("#tableDetallesRequerimientos").dataTable().api();
         var form = $("#checkout-form");
         var validar = true;
 
@@ -81,7 +89,7 @@ function eventoGuardar() {
         var valorEmpleadoProveedor = null;
         var idEmpleado = true;
 
-        if (motivoSalidaArticulos == "Baja de inventarios" || motivoSalidaArticulos == "Despacho") {
+        if (motivoSalidaArticulos.toLowerCase() == "baja de inventarios" || motivoSalidaArticulos.toLowerCase() == "despacho") {
             valorEmpleadoProveedor = $("#IdEmpleadoDevolucion").val();
         }
         else {
@@ -93,6 +101,11 @@ function eventoGuardar() {
             mostrarNotificacion("Error", "Tiene que seleccionar un " + (idEmpleado ? "Empleado" : "Proveedor") + ".");
             validar = false;
         }
+        if (api.rows().nodes().length == 0) {
+            mostrarNotificacion("Error", "Tiene que seleccionar al menos un Artículo.");
+            validar = false;
+        }
+
         if (!form.valid())
             validar = false;
 

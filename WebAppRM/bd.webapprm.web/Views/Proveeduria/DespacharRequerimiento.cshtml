@@ -2,11 +2,12 @@
 @inject bd.webapprm.servicios.Interfaces.IClaimsTransfer claimsTransfer
 @{
     var claimTransfer = claimsTransfer.ObtenerClaimsTransferHttpContext();
-    var requerimientoArticulos = ViewData["RequerimientoArticulos"] as RequerimientoArticulos;
 }
 
 @section css{
     <link rel="stylesheet" href="~/lib/select2/dist/css/select2.min.css" />
+    <link rel="stylesheet" href="~/lib/jquery.spinner-master/dist/css/bootstrap-spinner.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/tableSmartForm.min.css" />
 }
 <div id="content">
     <section id="widget-grid" class="">
@@ -23,12 +24,58 @@
                             <form asp-action="DespacharRequerimiento" id="checkout-form" class="smart-form" novalidate="novalidate">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <input type="hidden" id="IdSucursal" value="@claimTransfer.IdSucursal" />
-                                <input type="hidden" asp-for="IdRequerimientoArticulos" value="@requerimientoArticulos.IdRequerimientoArticulos" />
-                                <input type="hidden" id="FuncionarioSolicitante_IdDependencia" name="FuncionarioSolicitante_IdDependencia" value="@requerimientoArticulos.FuncionarioSolicitante.IdDependencia" />
+                                <input type="hidden" asp-for="IdRequerimientoArticulos" value="@Model.RequerimientoArticulos.IdRequerimientoArticulos" />
+                                <input type="hidden" id="FuncionarioSolicitante_IdDependencia" name="FuncionarioSolicitante_IdDependencia" value="@Model.RequerimientoArticulos.FuncionarioSolicitante.IdDependencia" />
                                 <input type="hidden" id="MotSalida" name="MotSalida" />
                                 <fieldset>
-                                    <legend>Datos generales</legend>
+                                    <legend>Datos de ubicaci&oacute;n</legend>
                                     <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="RequerimientoArticulos.FuncionarioSolicitante.Dependencia.IdSucursal"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <input value="@Model.RequerimientoArticulos.FuncionarioSolicitante.Dependencia.Sucursal.Nombre" class="form-control" disabled="disabled" style="background:#e8e6e6;" />
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="RequerimientoArticulos.FuncionarioSolicitante.IdDependencia"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <input value="@Model.RequerimientoArticulos.FuncionarioSolicitante.Dependencia.Nombre" class="form-control" disabled="disabled" style="background:#e8e6e6;" />
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    @{ 
+                                        var bodega = ViewBag.Bodega as Bodega;
+                                        <div class="row">
+                                            <section class="col col-4">
+                                                <label asp-for="RequerimientoArticulos.FuncionarioSolicitante.Dependencia.IdBodega"></label>
+                                            </section>
+
+                                            <section class="col col-8">
+                                                <label class="input">
+                                                    <input value="@bodega?.Nombre" class="form-control" disabled="disabled" style="background:#e8e6e6;" />
+                                                    @{ 
+                                                        if (bodega == null)
+                                                        {
+                                                            <span class="text-danger">Tiene que asignar una Bodega a la dependencia:</span>
+                                                        }
+                                                    }
+                                                </label>
+                                            </section>
+                                        </div>
+                                    }
+
+                                    <legend>Datos generales</legend>
+                                    <div class="row margin-top-25">
                                         <section class="col col-4">
                                             <label asp-for="IdMotivoSalidaArticulos"></label>
                                         </section>
@@ -60,16 +107,48 @@
                                     <legend id="legendDetallesEmpleadoDevolucion" class="hide">Empleado al que se realiza el despacho o la baja de art&iacute;culos</legend>
                                     <div id="divDetallesEmpleadoDevolucion" class="margin-top-25 hide"></div>
 
-                                    <div class="row padding-right-10 padding-left-10 margin-top-10">
-                                        <div class="alert alert-info alert-block" style="border-left-width:5px !important;padding-left:20px !important;">
-                                            <h4 class="alert-heading">Informaci&oacute;n</h4>
-                                            Si desea editar el requerimiento, b&uacute;squelo en <b>Requerimiento solicitados</b> y haga clic en la opci&oacute;n <b>Editar</b> del listado.
-                                        </div>
-                                    </div>
-
                                     <legend>Detalles de requerimiento de art&iacute;culos</legend>
-                                    <div class="margin-top-25">
-                                        @{await Html.RenderPartialAsync("_DetallesRequerimientoArticulos", requerimientoArticulos);}
+                                    <div class="table-responsive margin-top-10">
+                                        <table id="tableDetallesRequerimientos" class="table table-striped table-bordered table-hover" style="width:100%;">
+                                            <thead>
+                                                @{ await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", 4);}
+                                                <tr>
+                                                    <th>@Html.DisplayNameFor(m => m.RequerimientoArticulos.RequerimientosArticulosDetalles.FirstOrDefault().MaestroArticuloSucursal.Articulo.Nombre)</th>
+                                                    <th>@Html.DisplayNameFor(m => m.RequerimientoArticulos.RequerimientosArticulosDetalles.FirstOrDefault().CantidadSolicitada)</th>
+                                                    <th>Cantidad en bodega</th>
+                                                    <th>Opciones</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @{
+                                                    if (Model != null)
+                                                    {
+                                                        foreach (var item in Model.RequerimientoArticulos.RequerimientosArticulosDetalles)
+                                                        {
+                                                            <tr id="@String.Format("tableDetallesRequerimientos{0}", item.IdMaestroArticuloSucursal)">
+                                                                <td>
+                                                                    @Html.DisplayFor(m => item.MaestroArticuloSucursal.Articulo.Nombre)
+                                                                </td>
+                                                                <td>
+                                                                    <div class="input-group spinner spinnerCantidadSolicitada" data-trigger="spinner" id="spinner_@item.IdMaestroArticuloSucursal">
+                                                                        <input type="text" id="cantidad_@item.IdMaestroArticuloSucursal" name="cantidad_@item.IdMaestroArticuloSucursal" value="@item.CantidadSolicitada" data-max="@item.CantidadBodega" class="form-control" data-rule="quantity" style="padding-left:6px !important;" />
+                                                                        <div class="input-group-addon" style="padding-left:17px !important;">
+                                                                            <a href="javascript:;" class="spin-up" data-spin="up"><i class="fa fa-caret-up"></i></a>
+                                                                            <a href="javascript:;" class="spin-down" data-spin="down"><i class="fa fa-caret-down"></i></a>
+                                                                        </div>
+                                                                    </div>
+                                                                </td>
+                                                                <td>@Html.DisplayFor(m => item.CantidadBodega)</td>
+                                                                <td>
+                                                                    <input type="hidden" class="hiddenIdRecepcionActivoFijoDetalle" id="hIdRecepcionActivoFijoDetalle_@item.IdMaestroArticuloSucursal" name="hIdRecepcionActivoFijoDetalle_@item.IdMaestroArticuloSucursal" value="@item.IdMaestroArticuloSucursal">
+                                                                    <div id="divEliminarDatosEspecificos_@item.IdMaestroArticuloSucursal" class="btnEliminarDatosEspecificos" style="display:inline;"><a href="javascript: void(0);" id="btnEliminarDatosEspecifico_@item.IdMaestroArticuloSucursal" onclick="abrirVentanaConfirmacion('btnEliminarDatosEspecifico_@item.IdMaestroArticuloSucursal')" data-funcioncallback="callBackFunctionEliminarDatoEspecifico('@item.IdMaestroArticuloSucursal')" data-titulo="Eliminar" data-descripcion="&#191; Desea eliminar el Art&iacute;culo seleccionado... ?">Eliminar</a></div>
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </fieldset>
                                 <footer>
@@ -87,11 +166,13 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_Select2ScriptsPartial");}
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src='~/lib/jquery.spinner-master/dist/js/jquery.spinner.min.js'></script>
+    <script src='~/js/activoFijo/listadoSeleccion.min.js'></script>
     <script src="~/js/proveeduria/despacharRequerimiento.min.js"></script>
     <script>
         var proveedorSelectResult = "@Url.Action("ProveedorSelectResult")";
         var urlEmpleadoDevolucionSelectResult = "@Url.Action("EmpleadoDevolucionSelectResult")";
         var bodegaExisteResult = "@Url.Action("BodegaExisteResult")";
-        var dependenciaRequerimiento = "@requerimientoArticulos.FuncionarioSolicitante.Dependencia.Nombre";
+        var dependenciaRequerimiento = "@Model.RequerimientoArticulos.FuncionarioSolicitante.Dependencia.Nombre";
     </script>
 }

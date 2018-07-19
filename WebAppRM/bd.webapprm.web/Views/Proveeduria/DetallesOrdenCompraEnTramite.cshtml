@@ -13,9 +13,17 @@
                         <div class="jarviswidget-editbox"></div>
                         <div class="widget-body no-padding">
                             <div class="smart-form">
-                                <fieldset>
-                                    @{await Html.RenderPartialAsync("_DetallesOrdenCompra", Model);}
-                                </fieldset>
+                                @{await Html.RenderPartialAsync("_DetallesOrdenCompra", Model);}
+
+                                <footer>
+                                    @{
+                                        if (Model.Estado.Nombre == Estados.EnTramite)
+                                        {
+                                            <a href="javascript:void(0);" id="btn_aprobar" class="btn btn-primary" onclick="abrirVentanaConfirmacion('btn_aprobar')" data-url="@Url.Action("ProcesarOrdenCompra", values: new { id = Model.IdOrdenCompra })" data-titulo="Procesar" data-descripcion="&#191;Desea procesar la Orden de compra?">Procesar</a>
+                                        }
+                                    }
+                                    <a asp-action="ListadoOrdenCompraEntramite" class="btn btn-default">Cancelar</a>
+                                </footer>
                             </div>
                         </div>
                     </div>
