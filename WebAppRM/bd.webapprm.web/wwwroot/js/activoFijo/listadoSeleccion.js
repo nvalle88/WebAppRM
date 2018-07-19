@@ -17,6 +17,17 @@ function inicializarDetallesActivoSeleccion() {
     });
 }
 
+function inicializarIdsArrRecepcionActivoFijoDetalleTodos() {
+    arrRecepcionActivoFijoDetalleTodos = [];
+    var idsArrRecepcionActivoFijoDetalleTodosAux = $("#hIdsRecepcionActivoFijoDetalleTodos").val();
+    if (idsArrRecepcionActivoFijoDetalleTodosAux != null && idsArrRecepcionActivoFijoDetalleTodosAux != "") {
+        var idsArrRecepcionActivoFijoDetalleTodos = idsArrRecepcionActivoFijoDetalleTodosAux.split(",");
+        for (var i = 0; i < idsArrRecepcionActivoFijoDetalleTodos.length; i++) {
+            arrRecepcionActivoFijoDetalleTodos.push(idsArrRecepcionActivoFijoDetalleTodos[i]);
+        }
+    }
+}
+
 function inicializarObjetoAdicional()
 {
     $.each(arrRecepcionActivoFijoDetalleSeleccionado, function (index, value) {
@@ -96,6 +107,16 @@ function obtenerRecepcionActivoFijoDetalleSeleccionado(valor) {
     return null;
 }
 
+function obtenerListadoRecepcionActivoFijoDetalleSeleccionado()
+{
+    var listaRecepcionActivoFijoDetalleSeleccionado = [];
+    for (var i = 0; i < arrRecepcionActivoFijoDetalleSeleccionado.length; i++) {
+        if (arrRecepcionActivoFijoDetalleSeleccionado[i].seleccionado)
+            listaRecepcionActivoFijoDetalleSeleccionado.push(arrRecepcionActivoFijoDetalleSeleccionado[i]);
+    }
+    return listaRecepcionActivoFijoDetalleSeleccionado;
+}
+
 function eliminarRecepcionActivoFijoDetalleSeleccionado(idRecepcionActivoFijoDetalle)
 {
     for (var i = 0; i < arrRecepcionActivoFijoDetalleSeleccionado.length; i++) {
@@ -110,7 +131,11 @@ function eliminarRecepcionActivoFijoDetalleSeleccionado(idRecepcionActivoFijoDet
 function eventoCheckboxDetallesActivoFijo(checkbox)
 {
     var chk = $(checkbox);
-    var isSeleccionTodos = chk.data("isselecciontodos").toLowerCase() === 'true';
+    var dataIsSeleccionTodos = chk.data("isselecciontodos");
+    if (!dataIsSeleccionTodos)
+        dataIsSeleccionTodos = "false";
+
+    var isSeleccionTodos = dataIsSeleccionTodos.toLowerCase() === 'true';
     if (isSeleccionTodos)
         callBackFunctionSeleccionTodos(chk);
     else {
@@ -134,7 +159,7 @@ function callBackFunctionSeleccionTodos(chk)
     if (isSeleccionado) {
         for (var i = 0; i < arrRecepcionActivoFijoDetalleTodos.length; i++) {
             var rafd = obtenerRecepcionActivoFijoDetalleSeleccionado(arrRecepcionActivoFijoDetalleTodos[i]);
-            if (rafd == null)
+            if (rafd == null || !rafd.seleccionado)
                 $("#chkDetalleActivoFijo_" + arrRecepcionActivoFijoDetalleTodos[i]).click();
         }
     }
@@ -148,7 +173,8 @@ function callBackFunctionSeleccionTodos(chk)
 
 function tryMarcarCheckBoxTodos()
 {
-    if (arrRecepcionActivoFijoDetalleSeleccionado.length == arrRecepcionActivoFijoDetalleTodos.length)
+    var listadoRecepcionActivoFijoDetalleSeleccionado = obtenerListadoRecepcionActivoFijoDetalleSeleccionado();
+    if (listadoRecepcionActivoFijoDetalleSeleccionado.length == arrRecepcionActivoFijoDetalleTodos.length)
         $("#chkDetalleActivoFijo_0").prop("checked", "checked");
     else
         $("#chkDetalleActivoFijo_0").prop("checked", "");
@@ -234,9 +260,9 @@ function deleteRowDetallesActivosFijos(idTableEliminar, idRecepcionActivoFijoDet
     $('#' + idTableEliminar).dataTable().fnDeleteRow(row);
 }
 
-function addRowCheckBox(idRecepcionActivoFijoDetalle, isChecked, callbackFunctionCheckBox, isConfiguracionSeleccionDisabled)
+function addRowCheckBox(idRecepcionActivoFijoDetalle, isChecked, callbackFunctionCheckBox, isConfiguracionSeleccionDisabled, callbackFunctionAddRowDetalleTodos, callbackFunctionRemoveRowDetalleTodos, isSeleccionTodos)
 {
-    return '<div class="checkbox"><label><input class="checkbox style-0 chkDetallesActivoFijo"' + (isChecked ? 'checked="checked"' : '') + ' type="checkbox" onchange="eventoCheckboxDetallesActivoFijo(this)" data-funcioncallback="' + callbackFunctionCheckBox + '" data-idrecepcionactivofijodetalle="' + idRecepcionActivoFijoDetalle + '" id= "chkDetalleActivoFijo_' + idRecepcionActivoFijoDetalle + '"' + (isConfiguracionSeleccionDisabled ? 'disabled="disabled"' : '') + '><span>&nbsp;</span></label ></div>';
+    return '<div class="checkbox"><label><input class="checkbox style-0 chkDetallesActivoFijo"' + (isChecked ? 'checked="checked"' : '') + ' type="checkbox" onchange="eventoCheckboxDetallesActivoFijo(this)" data-funcioncallback="' + callbackFunctionCheckBox + '" data-functioncallbackselectiontodos="' + callbackFunctionAddRowDetalleTodos + '" data-functioncallbackremovetodos="' + callbackFunctionRemoveRowDetalleTodos + '" data-isselecciontodos="' + isSeleccionTodos + '" data-idrecepcionactivofijodetalle="' + idRecepcionActivoFijoDetalle + '" id= "chkDetalleActivoFijo_' + idRecepcionActivoFijoDetalle + '"' + (isConfiguracionSeleccionDisabled ? 'disabled="disabled"' : '') + '><span>&nbsp;</span></label ></div>';
 }
 
 function agregarDashValorEmpty(valor)

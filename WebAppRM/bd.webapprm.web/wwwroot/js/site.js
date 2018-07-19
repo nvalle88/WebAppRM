@@ -1,4 +1,14 @@
-﻿function Init_Touchspin()
+﻿$(document).ready(function () {
+    eventoInputMayuscula();
+});
+
+function eventoInputMayuscula() {
+    $(":input").on("keyup", function (e) {
+        e.currentTarget.value = e.currentTarget.value.toUpperCase();
+    });
+}
+
+function Init_Touchspin()
 {
     $('.touchspin_tasa').TouchSpin({
         min: 0.00,
@@ -103,6 +113,13 @@ function Init_XEditable(callbackFunction)
         success: function (response, newValue) {
             var idRecepcionActivoFijoDetalle = $(this).data("idrecepcionactivofijodetalle");
             callbackFunction(idRecepcionActivoFijoDetalle, newValue);
+        },
+        display: function (value, sourceData) {
+            if (!value) {
+                $(this).empty();
+                return;
+            }
+            $(this).html(value.toUpperCase());
         }
     });
 }

@@ -3,7 +3,7 @@
     Init_DatetimePicker("FechaInforme", true);
     Init_Select2();
     adicionarArrRecepcionActivoFijoDetalle();
-    initDataTableFiltrado("tableDetallesActivoFijoBajas", [14, 16, 17, 18, 19 , 20, 21, 22, 23], function () {
+    initDataTableFiltrado("tableDetallesActivoFijoBajas", [14, 16, 17, 18, 19, 20, 21, 22, 23], function () {
         var table = $("#tableDetallesActivoFijoBajas").dataTable();
         var api = table.api();
         var rows = api.rows({ page: 'current' }).nodes();
@@ -16,6 +16,7 @@
     });
     eventoGuardar();
     eventoLectorCodigoBarras();
+    inicializarIdsArrRecepcionActivoFijoDetalleTodos();
 });
 
 function eventoLectorCodigoBarras()
@@ -102,7 +103,7 @@ function callBackFunctionSeleccionConstatado(idRecepcionActivoFijoDetalle, selec
     
     addRowDetallesActivosFijosPorArray("tableDetallesActivoFijoBajas", idRecepcionActivoFijoDetalle, ['', 'Codigosecuencial', 'TipoActivoFijo', 'ClaseActivoFijo', 'SubclaseActivoFijo', 'NombreActivoFijo', 'Marca', 'Modelo', 'Serie', 'NumeroChasis', 'NumeroMotor', 'Placa', 'NumeroClaveCatastral', 'Sucursal', 'Bodega', 'Empleado', 'Proveedor', 'MotivoAlta', 'FechaRecepcion', 'OrdenCompra', 'FondoFinanciamiento', 'FechaAlta', 'MotivoAlta', 'NumeroFactura', ''],
         [
-        addRowCheckBox(idRecepcionActivoFijoDetalle, seleccionado, "callBackFunctionSeleccionBaja", false),
+        addRowCheckBox(idRecepcionActivoFijoDetalle, seleccionado, "callBackFunctionSeleccionBaja", false, "", "", false),
         $("#CodigoActivoFijo_Codigosecuencial").val(),
         $("#ActivoFijo_SubClaseActivoFijo_ClaseActivoFijo_TipoActivoFijo_Nombre").val(),
         $("#ActivoFijo_SubClaseActivoFijo_ClaseActivoFijo_Nombre").val(),
@@ -140,9 +141,11 @@ function eventoRegistrar()
 {
     $("#btn-registrar").on("click", function (e) {
         var idRecepcionActivoFijoDetalle = $("#IdRecepcionActivoFijoDetalle").val();
+        arrRecepcionActivoFijoDetalleTodos.push(idRecepcionActivoFijoDetalle);
         var seleccionado = $("#chkConstatado").prop("checked");
         callBackFunctionSeleccionConstatado(idRecepcionActivoFijoDetalle, seleccionado);
         limpiarCampos();
+        tryMarcarCheckBoxTodos();
     });
 }
 
