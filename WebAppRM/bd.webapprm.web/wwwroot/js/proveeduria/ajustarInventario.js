@@ -77,7 +77,7 @@ function CallbackFunctionCheckBoxArticulo(idRecepcionActivoFijoDetalle, seleccio
         adicionarRecepcionActivoFijoDetalleSeleccionado(idRecepcionActivoFijoDetalle, true);
         var hIdRecepcionActivoFijoDetalle = '<input type="hidden" class="hiddenIdRecepcionActivoFijoDetalle" id="hIdRecepcionActivoFijoDetalle_' + idRecepcionActivoFijoDetalle + '" name="hIdRecepcionActivoFijoDetalle_' + idRecepcionActivoFijoDetalle + '" value="' + idRecepcionActivoFijoDetalle + '" />';
         var btnEliminarArticulo = "<div id='divEliminarDatosEspecificos_" + idRecepcionActivoFijoDetalle + "' class='btnEliminarDatosEspecificos' style='display:inline;'><a href='javascript: void(0);' id='btnEliminarDatosEspecifico_" + idRecepcionActivoFijoDetalle + "' onclick=abrirVentanaConfirmacion('btnEliminarDatosEspecifico_" + idRecepcionActivoFijoDetalle + "') data-funcioncallback=callBackFunctionEliminarDatoEspecifico('" + idRecepcionActivoFijoDetalle + "') data-titulo='Eliminar' data-descripcion='&#191; Desea eliminar el Artículo seleccionado... ?'>Eliminar</a></div>";
-        addRowDetallesActivosFijos("tableDetallesAjustesInventario", "tableDetallesArticulos", idRecepcionActivoFijoDetalle, ['NombreArticulo', 'Cantidad', hIdRecepcionActivoFijoDetalle + btnEliminarArticulo], true);
+        addRowDetallesActivosFijos("tableDetallesAjustesInventario", "tableDetallesArticulos", idRecepcionActivoFijoDetalle, [thClassName.nombreArticulo, thClassName.cantidad, hIdRecepcionActivoFijoDetalle + btnEliminarArticulo], true);
         $('#spinner_' + idRecepcionActivoFijoDetalle).spinner();
     }
     else

@@ -2,7 +2,7 @@
     Init_Select2();
     Init_DatetimePicker("FechaTransferencia", true);
     inicializarDetallesActivoSeleccion();
-    initDataTableFiltrado("tableDetallesActivoFijoBajas", !idEditar ? [14, 16, 17, 18, 19, 20, 21, 22] : [13, 15, 16, 17, 18, 19, 20, 21]);
+    initDataTableFiltrado("tableDetallesActivoFijoBajas", [thClassName.bodega, thClassName.proveedor, thClassName.motivoAlta, thClassName.fechaRecepcion, thClassName.ordenCompra, thClassName.fondoFinanciamiento, thClassName.fechaAlta, thClassName.numeroFactura]);
     $('#tableDetallesActivoFijoBajas').DataTable().page.len(-1).draw();
     eventoCustodioEntrega();
     eventoGuardar();
@@ -92,7 +92,7 @@ function partialViewActivosFijosPorCustodio() {
         data: { idEmpleado: $("#IdEmpleadoEntrega").val() },
         success: function (data) {
             $("#divActivosFijosATransferir").html(data);
-            initDataTableFiltrado("tableDetallesActivoFijoBajas", [14, 16, 17, 18, 19, 20, 21, 22]);
+            initDataTableFiltrado("tableDetallesActivoFijoBajas", [thClassName.bodega, thClassName.proveedor, thClassName.motivoAlta, thClassName.fechaRecepcion, thClassName.ordenCompra, thClassName.fondoFinanciamiento, thClassName.fechaAlta, thClassName.numeroFactura]);
             $('#tableDetallesActivoFijoBajas').DataTable().page.len(-1).draw();
             arrRecepcionActivoFijoDetalleSeleccionado = [];
         },

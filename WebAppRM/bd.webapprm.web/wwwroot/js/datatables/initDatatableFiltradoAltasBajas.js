@@ -1,3 +1,3 @@
 ﻿$(document).ready(function () {
-    initDataTableFiltrado("dt_basic", [13, 15, 16, 17, 18, 19]);
+    initDataTableFiltrado("dt_basic", [thClassName.bodega, thClassName.proveedor, thClassName.motivoAlta, thClassName.fechaRecepcion, thClassName.ordenCompra, thClassName.fondoFinanciamiento, thClassName.fechaAlta, thClassName.numeroFactura]);
 });
