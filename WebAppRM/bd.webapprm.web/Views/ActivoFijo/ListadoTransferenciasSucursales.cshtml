@@ -126,17 +126,28 @@
                                             </td>
                                             <td>
                                                 @{ 
+                                                    if (isCambioCustodio)
+                                                    {
+                                                        <a asp-action="DetallesCambioCustodio" asp-route-id="@item.IdTransferenciaActivoFijo">Detalles</a>
+                                                    }
+                                                    else
+                                                    {
+                                                        <a asp-action="DetallesTransferenciaSucursal" asp-route-id="@item.IdTransferenciaActivoFijo">Detalles</a>
+                                                        if (!isTransferenciasAceptadas)
+                                                        {
+                                                            <span> | </span>
+                                                        }
+                                                    }
                                                     if (isTransferenciasCreadas)
                                                     {
-                                                        <a asp-action="GestionarTransferenciaSucursal" asp-route-id="@item.IdTransferenciaActivoFijo">Editar<span> | </span></a>
+                                                        <a asp-action="GestionarTransferenciaSucursal" asp-route-id="@item.IdTransferenciaActivoFijo">Editar</a>
                                                     }
                                                     else if (isSolicitudesTransferencia)
                                                     {
-                                                        <a href="javascript:void(0);" id="btn_aprobar" onclick="abrirVentanaConfirmacion('btn_aprobar')" data-url="@Url.Action("GestionarAprobacionTransferenciaSucursal", values: new { id = item.IdTransferenciaActivoFijo, id2 = true })" data-titulo="Emitir aprobaci&oacute;n" data-descripcion="&#191;Desea aprobar el Cambio de ubicaci&oacute;n entre Sucursales?">Aprobar<span> | </span></a>
-                                                        <a href="javascript:void(0);" id="btn_rechazar" onclick="abrirVentanaConfirmacion('btn_rechazar')" data-url="@Url.Action("GestionarAprobacionTransferenciaSucursal", values: new { id = item.IdTransferenciaActivoFijo, id2 = false })" data-titulo="Emitir desaprobaci&oacute;n" data-descripcion="&#191;Desea rechazar el Cambio de ubicaci&oacute;n entre Sucursales?">Rechazar<span> | </span></a>
+                                                        <a href="javascript:void(0);" id="btn_aprobar" onclick="abrirVentanaConfirmacion('btn_aprobar')" data-url="@Url.Action("GestionarAprobacionTransferenciaSucursal", values: new { id = item.IdTransferenciaActivoFijo, id2 = true })" data-titulo="Emitir aprobaci&oacute;n" data-descripcion="&#191;Desea aprobar el Cambio de ubicaci&oacute;n entre Sucursales?">Aprobar</a><span> | </span>
+                                                        <a href="javascript:void(0);" id="btn_rechazar" onclick="abrirVentanaConfirmacion('btn_rechazar')" data-url="@Url.Action("GestionarAprobacionTransferenciaSucursal", values: new { id = item.IdTransferenciaActivoFijo, id2 = false })" data-titulo="Emitir desaprobaci&oacute;n" data-descripcion="&#191;Desea rechazar el Cambio de ubicaci&oacute;n entre Sucursales?">Rechazar</a>
                                                     }
                                                 }
-                                                <a href="javascript:void(0);" class="btnDetallesActivosFijos" id="btnDetallesActivoFijo_@item.IdTransferenciaActivoFijo" onclick="abrirVentanaDetallesActivoFijo('@item.IdTransferenciaActivoFijo')" data-ids="@String.Join(",", item.TransferenciaActivoFijoDetalle.Select(c => $"{c.IdRecepcionActivoFijoDetalle}_true"))" data-url="@Url.Action("DetallesActivoFijoResult", "ActivoFijo")" data-toggle="modal" data-target="#myModalTableActivosFijos">Detalles</a>
                                             </td>
                                         </tr>
                                     }
@@ -148,31 +159,8 @@
             </article>
         </div>
     </section>
-    <div class="modal fade" id="myModalTableActivosFijos" tabindex="-3" role="dialog" aria-labelledby="myModalTableActivosFijosLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" style="margin-left:8% !important;margin-top:30px !important;width:85% !important;">
-            <div class="modal-content" id="modalContentTableActivosFijos">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                        &times;
-                    </button>
-                    <h4 class="modal-title" id="myModalTableActivosFijosLabel">Detalles de Activo Fijo</h4>
-                </div>
-                <div class="modal-body" id="modalBodyTableActivosFijos"></div>
-                <div class="modal-footer" id="divFooterTableActivosFijos">
-                    <button type="button" class="btn btn-default" id="btnCancelarTableActivosFijos" data-dismiss="modal">Cancelar</button>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 
 @section Scripts {
     <script src='~/js/datatables/initDatatableFiltrado.min.js'></script>
-    <script src="~/js/activoFijo/listadoSeleccion.min.js"></script>
-    <script>
-        var arrConfiguraciones = {
-            IsConfiguracionDatosActivo: true,
-            IsConfiguracionListadoAltas: true
-        };
-    </script>
 }

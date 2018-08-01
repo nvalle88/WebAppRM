@@ -44,13 +44,22 @@
                     @{await ViewContext.Writer.WriteAsync(item.InventarioManual ? "Manual" : "Autom\u00E1tico");}
                 </td>
                 <td>
+                    
                     @{
+                        if (item.InventarioManual)
+                        {
+                            <a asp-action="DetallesInventarioManual" asp-route-id="@item.IdInventarioActivoFijo">Detalles</a>
+                        }
+                        else
+                        {
+                            <a asp-action="DetallesInventarioAutomatico" asp-route-id="@item.IdInventarioActivoFijo">Detalles</a>
+                        }
                         if (item.Estado.Nombre == Estados.EnEjecucion)
                         {
-                            <a asp-action="@String.Format("{0}", item.InventarioManual ? "GestionarInventarioManual" : "GestionarInventarioAutomatico")" asp-route-id="@item.IdInventarioActivoFijo">Editar<span> | </span></a>
+                            <span> | </span>
+                            <a asp-action="@String.Format("{0}", item.InventarioManual ? "GestionarInventarioManual" : "GestionarInventarioAutomatico")" asp-route-id="@item.IdInventarioActivoFijo">Editar</a>
                         }
                     }
-                    <a href="javascript:void(0);" class="btnDetallesActivosFijos" id="btnDetallesActivoFijo_@item.IdInventarioActivoFijo" onclick="abrirVentanaDetallesActivoFijo('@item.IdInventarioActivoFijo')" data-ids="@String.Join(",", item.InventarioActivoFijoDetalle.Select(c=> $"{c.IdRecepcionActivoFijoDetalle}_{c.Constatado}"))" data-url="@Url.Action("DetallesActivoFijoResult", "ActivoFijo")" data-toggle="modal" data-target="#myModalTableActivosFijos">Detalles</a>
                 </td>
             </tr>
         }

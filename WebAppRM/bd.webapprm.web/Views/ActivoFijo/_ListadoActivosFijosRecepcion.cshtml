@@ -1,0 +1,188 @@
+@model List<RecepcionActivoFijoDetalleSeleccionado>
+@{
+    var igrouping = Model.GroupBy(c => new { c.RecepcionActivoFijoDetalle.ActivoFijo.IdSubClaseActivoFijo, c.RecepcionActivoFijoDetalle.ActivoFijo.IdModelo, c.RecepcionActivoFijoDetalle.ActivoFijo.Nombre });
+    bool isSeleccion = ViewBag.IsSeleccion ?? false;
+    bool isVistaDetalles = ViewBag.IsVistaDetalles ?? false;
+}
+
+<table id="tableDetallesRecepcion" class="table table-striped table-bordered table-hover" style="width:100%;">
+    <thead>
+        @{await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", isSeleccion ? 11 : 10);}
+        <tr>
+            @{
+                if (isSeleccion)
+                {
+                    <th>
+                        @{
+                            await Html.RenderPartialAsync("_CheckBoxSeleccion", new ViewDataDictionary(ViewData){
+                                { "Seleccionado", false },
+                                { "IdRecepcionActivoFijoDetalle", 0 },
+                                { "CallbackFunctionAddRowDetalleTodos", "callBackFunctionSeleccionActivoFijo" },
+                                { "CallbackFunctionRemoveRowDetalleTodos", "callBackFunctionSeleccionActivoFijo" }
+                            });
+                        }
+                    </th>
+                }
+            }
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.IdTipoActivoFijo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.IdClaseActivoFijo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.IdSubClaseActivoFijo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.Modelo.IdMarca)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.IdModelo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.Cantidad)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.Depreciacion)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.ValidacionTecnica)
+            </th>
+            <th>
+                Opciones
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            if (Model.Count > 0)
+            {
+                int cantidad = igrouping.Count();
+                for (int i = 0; i < cantidad; i++)
+                {
+                    var listadoRafd = igrouping.ElementAtOrDefault(i).ToList();
+                    <tr id="@String.Format("tableDetallesRecepcion{0}", i)">
+                        @{
+                            if (isSeleccion)
+                            {
+                                <td>
+                                    @{
+                                        await Html.RenderPartialAsync("_CheckBoxSeleccion", new ViewDataDictionary(ViewData){
+                                            { "Seleccionado", listadoRafd[0].Seleccionado },
+                                            { "CallbackFunctionCheckBox", "callBackFunctionSeleccionActivoFijo" },
+                                            { "IdRecepcionActivoFijoDetalle", listadoRafd[0].RecepcionActivoFijoDetalle.IdActivoFijo }
+                                        });
+                                    }
+                                </td>
+                            }
+                        }
+                        <td id="@String.Format("tableDetallesRecepcion{0}TipoActivoFijo", i)">@Html.DisplayFor(modelItem => listadoRafd[0].RecepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.Nombre)</td>
+                        <td id="@String.Format("tableDetallesRecepcion{0}ClaseActivoFijo", i)">@Html.DisplayFor(modelItem => listadoRafd[0].RecepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.Nombre)</td>
+                        <td id="@String.Format("tableDetallesRecepcion{0}SubclaseActivoFijo", i)">@Html.DisplayFor(modelItem => listadoRafd[0].RecepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.Nombre)</td>
+                        <td id="@String.Format("tableDetallesRecepcion{0}NombreActivoFijo", i)">@Html.DisplayFor(modelItem => listadoRafd[0].RecepcionActivoFijoDetalle.ActivoFijo.Nombre)</td>
+                        <td id="@String.Format("tableDetallesRecepcion{0}Marca", i)">@Html.DisplayFor(modelItem => listadoRafd[0].RecepcionActivoFijoDetalle.ActivoFijo.Modelo.Marca.Nombre)</td>
+                        <td id="@String.Format("tableDetallesRecepcion{0}Modelo", i)">@Html.DisplayFor(modelItem => listadoRafd[0].RecepcionActivoFijoDetalle.ActivoFijo.Modelo.Nombre)</td>
+                        <td id="@String.Format("tableDetallesRecepcion{0}Cantidad", i)">@listadoRafd.Count</td>
+                        <td id="@String.Format("tableDetallesRecepcion{0}Depreciacion", i)">
+                            @{
+                                await Html.RenderPartialAsync("_CheckBoxSeleccion", new ViewDataDictionary(ViewData){
+                                    { "Seleccionado", listadoRafd[0].RecepcionActivoFijoDetalle.ActivoFijo.Depreciacion },
+                                    { "IdRecepcionActivoFijoDetalle", i },
+                                    { "IsConfiguracionSeleccionDisabled", true }
+                                });
+                            }
+                        </td>
+                        <td id="@String.Format("tableDetallesRecepcion{0}ValidacionTecnica", i)">
+                            @{
+                                await Html.RenderPartialAsync("_CheckBoxSeleccion", new ViewDataDictionary(ViewData){
+                                    { "Seleccionado", listadoRafd[0].RecepcionActivoFijoDetalle.ActivoFijo.ValidacionTecnica },
+                                    { "IdRecepcionActivoFijoDetalle", i },
+                                    { "IsConfiguracionSeleccionDisabled", true }
+                                });
+                            }
+                        </td>
+                        <td>
+                            @{
+                                string numeroClaveCatastral = String.Empty;
+                                string numeroChasis = String.Empty;
+                                string numeroMotor = String.Empty;
+                                string placa = String.Empty;
+
+                                if (listadoRafd[0].RecepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.CategoriaActivoFijo.Nombre == Categorias.Edificio)
+                                {
+                                    numeroClaveCatastral = String.Join(",", listadoRafd.Select(c => c.RecepcionActivoFijoDetalle.RecepcionActivoFijoDetalleEdificio.NumeroClaveCatastral));
+                                }
+                                else if (listadoRafd[0].RecepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.CategoriaActivoFijo.Nombre == Categorias.Vehiculo)
+                                {
+                                    numeroChasis = String.Join(",", listadoRafd.Select(c => c.RecepcionActivoFijoDetalle.RecepcionActivoFijoDetalleVehiculo.NumeroChasis));
+                                    numeroMotor = String.Join(",", listadoRafd.Select(c => c.RecepcionActivoFijoDetalle.RecepcionActivoFijoDetalleVehiculo.NumeroMotor));
+                                    placa = String.Join(",", listadoRafd.Select(c => c.RecepcionActivoFijoDetalle.RecepcionActivoFijoDetalleVehiculo.Placa));
+                                }
+
+                                List<string> listadoEmpleados = new List<string>();
+                                List<string> listadoBodegas = new List<string>();
+                                var listadoUbicacionActual = listadoRafd.Select(c => c.RecepcionActivoFijoDetalle.UbicacionActivoFijoActual);
+                                foreach (var item in listadoUbicacionActual)
+                                {
+                                    listadoEmpleados.Add(!String.IsNullOrEmpty(item.IdEmpleado.ToString()) ? item.IdEmpleado.ToString() : "-");
+                                    listadoBodegas.Add(!String.IsNullOrEmpty(item.IdBodega.ToString()) ? item.IdBodega.ToString() : "-");
+                                }
+                                
+                                List<string> listadoComponentes = new List<string>();
+                                foreach (var comp in listadoRafd)
+                                {
+                                    var listaAux = comp.RecepcionActivoFijoDetalle.ComponentesActivoFijoOrigen.Select(x => x.IdRecepcionActivoFijoDetalleComponente);
+                                    listadoComponentes.Add(listaAux.Count() > 0 ? String.Join(",", listaAux) : "-");
+                                }
+                            }
+                            <input type="hidden" class="hiddenNumeroClaveCatastral" id="hhNumeroClaveCatastral_@i" name="hhNumeroClaveCatastral_@i" value="@numeroClaveCatastral" />
+                            <input type="hidden" class="hiddenNumeroChasis" id="hhNumeroChasis_@i" name="hhNumeroChasis_@i" value="@numeroChasis" />
+                            <input type="hidden" class="hiddenNumeroMotor" id="hhNumeroMotor_@i" name="hhNumeroMotor_@i" value="@numeroMotor" />
+                            <input type="hidden" class="hiddenPlaca" id="hhPlaca_@i" name="hhPlaca_@i" value="@placa" />
+                            <input type="hidden" class="hiddenSerie" id="hhSerie_@i" name="hhSerie_@i" value="@String.Join(",", listadoRafd.Select(c=> c.RecepcionActivoFijoDetalle.Serie))" />
+                            <input type="hidden" class="hiddenBodega" id="hhBodega_@i" name="hhBodega_@i" value="@String.Join(",", listadoBodegas)" />
+                            <input type="hidden" class="hiddenEmpleado" id="hhEmpleado_@i" name="hhEmpleado_@i" value="@String.Join(",", listadoEmpleados)" />
+                            <input type="hidden" class="hiddenIdRecepcionActivoFijoDetalle" id="hhIdRecepcionActivoFijoDetalle_@i" name="hhIdRecepcionActivoFijoDetalle_@i" value="@String.Join(",", listadoRafd.Select(c=> c.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle))" />
+                            <input type="hidden" class="hiddenIdActivoFijo" id="hhIdActivoFijo_@i" name="hhIdActivoFijo_@i" value="@listadoRafd[0].RecepcionActivoFijoDetalle.ActivoFijo.IdActivoFijo" />
+                            <input type="hidden" class="hiddenUbicacion" id="hhUbicacion_@i" name="hhUbicacion_@i" value="@String.Join(",", listadoRafd.Select(c=> c.RecepcionActivoFijoDetalle.UbicacionActivoFijoActual.IdUbicacionActivoFijo))" />
+                            <input type="hidden" class="hiddenComponentes" id="hhComponentes_@i" name="hhComponentes_@i" value="@String.Join("_", listadoComponentes)" />
+                            <input type="hidden" class="hiddenCodigoSecuencial" id="hhCodigoSecuencial_@i" name="hhCodigoSecuencial_@i" value="@String.Join(",", listadoRafd.Select(c=> c.RecepcionActivoFijoDetalle.CodigoActivoFijo.Codigosecuencial))" />
+                            <input type="hidden" class="hiddenCodigoActivoFijo" id="hhIdCodigoActivoFijo_@i" name="hhIdCodigoActivoFijo_@i" value="@String.Join(",", listadoRafd.Select(c=> c.RecepcionActivoFijoDetalle.CodigoActivoFijo.IdCodigoActivoFijo))" />
+                            <input type="hidden" class="hiddenTipoActivoFijo" id="hhIdTipoActivoFijo_@i" name="hhIdTipoActivoFijo_@i" value="@listadoRafd[0].RecepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.IdTipoActivoFijo" />
+                            <input type="hidden" class="hiddenClaseActivoFijo" id="hhIdClaseActivoFijo_@i" name="hhIdClaseActivoFijo_@i" value="@listadoRafd[0].RecepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.IdClaseActivoFijo" />
+                            <input type="hidden" class="hiddenSubclaseActivoFijo" id="hhIdSubclaseActivoFijo_@i" name="hhIdSubclaseActivoFijo_@i" value="@listadoRafd[0].RecepcionActivoFijoDetalle.ActivoFijo.IdSubClaseActivoFijo" />
+                            <input type="hidden" class="hiddenMarca" id="hhMarca_@i" name="hhMarca_@i" value="@listadoRafd[0].RecepcionActivoFijoDetalle.ActivoFijo.Modelo.IdMarca" />
+                            <input type="hidden" class="hiddenModelo" id="hhModelo_@i" name="hhModelo_@i" value="@listadoRafd[0].RecepcionActivoFijoDetalle.ActivoFijo.IdModelo" />
+                            <input type="hidden" class="hiddenCantidad" id="hhCantidad_@i" name="hhCantidad_@i" value="@listadoRafd.Count" />
+                            <input type="hidden" class="hiddenNombreActivoFijo" id="hhNombreActivoFijo_@i" name="hhNombreActivoFijo_@i" value="@listadoRafd[0].RecepcionActivoFijoDetalle.ActivoFijo.Nombre" />
+                            <input type="hidden" class="hiddenValorCompra" id="hhValorCompra_@i" name="hhValorCompra_@i" value="@listadoRafd[0].RecepcionActivoFijoDetalle.ActivoFijo.ValorCompra" />
+                            <input type="hidden" class="hiddenDepreciacion" id="hhDepreciacion_@i" name="hhDepreciacion_@i" value="@listadoRafd[0].RecepcionActivoFijoDetalle.ActivoFijo.Depreciacion.ToString().ToLower()" />
+                            <input type="hidden" class="hiddenValidacionTecnica" id="hhValidacionTecnica_@i" name="hhValidacionTecnica_@i" value="@listadoRafd[0].RecepcionActivoFijoDetalle.ActivoFijo.ValidacionTecnica.ToString().ToLower()" />
+                            <a href="javascript: void(0);" onclick="cargarModalDatosActivoFijo(@i,true)">Detalles</a>
+                            @{
+                                if (!isVistaDetalles)
+                                {
+                                    <span> | </span>
+                                    <a href="javascript: void(0);" onclick="cargarModalDatosActivoFijo(@i,false)">Editar</a><span> | </span>
+                                    <div id="divEliminarDatosActivoFijo_@i" style="display:inline;">
+                                        <a href="javascript:void(0);" id="btnEliminarDatosActivoFijo_@i" onclick="abrirVentanaConfirmacion('btnEliminarDatosActivoFijo_@i')" data-funcioncallback="callBackFunctionEliminarDatoActivoFijo('@i')" data-titulo="Eliminar" data-descripcion="&#191;Desea eliminar elActivo Fijo seleccionado... ?">Eliminar</a>
+                                    </div>
+                                }
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+        }
+    </tbody>
+</table>
+@{
+    string idsArrRecepcionActivoFijoDetalleTodos = String.Join(",", Model.Select(c => c.RecepcionActivoFijoDetalle.IdActivoFijo));
+}
+<input type="hidden" id="hIdsRecepcionActivoFijoDetalleTodos" value="@idsArrRecepcionActivoFijoDetalleTodos" />
+<script>
+    arrRecepcionActivoFijoDetalleTodos = "@idsArrRecepcionActivoFijoDetalleTodos".split(",");
+</script>

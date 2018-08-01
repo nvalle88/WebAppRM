@@ -14,8 +14,16 @@
         crearGrupo(api, rows, last, groupadmin, 3, "Clase de activo fijo", 6, 23);
         crearGrupo(api, rows, last, groupadmin, 4, "Subclase de activo fijo", 12, 23);
     });
+    $('#tableDetallesActivoFijoBajas').DataTable().page.len(-1).draw();
     eventoGuardar();
     inicializarIdsArrRecepcionActivoFijoDetalleTodos();
+
+    if (isVistaDetalles) {
+        $("#NumeroInforme").prop("disabled", "disabled");
+        $("#FechaCorteInventario").prop("disabled", "disabled");
+        $("#FechaInforme").prop("disabled", "disabled");
+        $("#IdEstado").prop("disabled", "disabled");
+    }
 });
 
 function adicionarArrRecepcionActivoFijoDetalle() {

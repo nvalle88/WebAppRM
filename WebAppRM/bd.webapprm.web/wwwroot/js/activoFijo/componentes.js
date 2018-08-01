@@ -1,12 +1,19 @@
 ﻿var arrRecepcionActivoFijoDetalleComponentes = Array();
 var idFilaDatoEspecificoActual = -1;
+var isComponentes = false;
+var cantComponentesSeleccionados = 0;
 jQuery(document).ready(function () {
+    initComponentes();
+});
+
+function initComponentes()
+{
     $.each($(".btnComponentesDatosEspecificos"), function (index, value) {
         var btnComponente = $(value);
         var idFilaDatoEspecifico = btnComponente.data("idfila");
         addComponenteToArray(idFilaDatoEspecifico, btnComponente.data("idorigen"), $("#hComponentes_" + idFilaDatoEspecifico).val().split(","));
     });
-});
+}
 
 function addComponenteToArray(idFilaDatoEspecifico, idRecepcionActivoDetalleOrigen, arrIdsComponentes)
 {
@@ -18,7 +25,7 @@ function addComponenteToArray(idFilaDatoEspecifico, idRecepcionActivoDetalleOrig
 }
 
 function cargarFormularioComponentesDatosEspecificos(idFila) {
-    mostrarLoadingPanel("modalContentComponente", "Cargando componentes, por favor espere...");
+    mostrarLoadingPanel("checkout-form", "Cargando componentes, por favor espere...");
     $("#btnAdicionarComponentes").data("idFila", idFila);
     idFilaDatoEspecificoActual = idFila;
     $.ajax({
@@ -26,21 +33,29 @@ function cargarFormularioComponentesDatosEspecificos(idFila) {
         method: "POST",
         data: { componentesActivo: obtenerRecepcionActivoFijoDetalleComponente(), idsComponentesExcluir: obtenerIdsComponentesExcluir(idFila) },
         success: function (data) {
-            $("#modalBodyComponente").html(data);
-            initDataTableFiltrado("tableDetallesActivoFijo", [15, 16, 17, 18, 19, 20, 21]);
+            var dataComponentes = '<div id="divContenedorComponentes"><p><button type="button" class="btn btn-primary" style="padding:7px !important;margin-top:7px !important;margin-left:7px !important;" onclick="cargarListadoActivosFijosParaComponentes()" id="btnAdicionarComponentes">Adicionar / Eliminar Componentes</button></p>';
+            Init_BootBox("Componentes", dataComponentes + data + "</div>", "large", null, null, function () {
+                isComponentes = false;
+                cantComponentesSeleccionados = 0;
+            });
         },
         error: function (errorMessage) {
             mostrarNotificacion("Error", "Ocurrió un error al cargar el formulario.");
         },
         complete: function (data) {
-            $("#modalContentComponente").waitMe("hide");
+            initDataTableFiltrado("tableDetallesActivoFijo", [15, 16, 17, 18, 19, 20, 21]);
+            $("#tableDetallesActivoFijo_filter > label > span").prop("style", "height:32px !important;");
+            ajustarBootboxPorCiento(80);
+            isComponentes = true;
+            cantComponentesSeleccionados = 0;
+            $("#checkout-form").waitMe("hide");
         }
     });
 }
 
 function cargarListadoActivosFijosParaComponentes()
 {
-    mostrarLoadingPanel("modalContentComponenteActivoFijo", "Cargando listado de activos fijos, por favor espere...");
+    mostrarLoadingPanel("divContenedorComponentes", "Cargando listado de activos fijos, por favor espere...");
     var idFila = $("#btnAdicionarComponentes").data("idFila");
 
     var componentesActivo = obtenerRecepcionActivoFijoDetalleComponente();
@@ -52,17 +67,32 @@ function cargarListadoActivosFijosParaComponentes()
         method: "POST",
         data: { componentesActivo: componentesActivo, idsComponentesExcluir: idsComponentesExcluir },
         success: function (data) {
-            $("#modalBodyComponenteActivoFijo").html(data);
-            initDataTableFiltrado("tableDetallesActivoFijoComponentes", [16, 17, 18, 19, 20, 21, 22]);
-            eventoCheckboxDetallesActivoFijo();
+            Init_BootBox("Listado de Activos Fijos", data, "large", null, null, function () {
+                isComponentes = false;
+                cantComponentesSeleccionados = 0;
+            });
         },
         error: function (errorMessage) {
             mostrarNotificacion("Error", "Ocurrió un error al cargar el formulario.");
         },
         complete: function (data) {
-            $("#modalContentComponenteActivoFijo").waitMe("hide");
+            initDataTableFiltrado("tableDetallesActivoFijoComponentes", [16, 17, 18, 19, 20, 21, 22]);
+            eventoCheckboxDetallesActivoFijo();
+            $("#tableDetallesActivoFijoComponentes_filter > label > span").prop("style", "height:32px !important;");
+            ajustarBootboxPorCiento(80);
+            $("#divContenedorComponentes").waitMe("hide");
         }
     });
+}
+
+function tryMarcarCheckBoxTodosComponentes() {
+    var api = $("#tableDetallesActivoFijoComponentes").dataTable().api();
+    var cantFilas = api.rows().nodes().length;
+
+    if (cantComponentesSeleccionados == cantFilas)
+        $("#chkDetalleActivoFijo_0").prop("checked", "checked");
+    else
+        $("#chkDetalleActivoFijo_0").prop("checked", "");
 }
 
 function obtenerIdsComponentesExcluir(idFila)
@@ -107,6 +137,16 @@ function obtenerRecepcionActivoFijoDetalleComponente()
         }
     }
     return null;
+}
+
+function existeIdComponente(idComponente)
+{
+    var rafdComponente = obtenerRecepcionActivoFijoDetalleComponente();
+    for (var i = 0; i < rafdComponente.arrIdsComponentes.length; i++) {
+        if (rafdComponente.arrIdsComponentes[i] == idComponente)
+            return true;
+    }
+    return false;
 }
 
 function callBackFunctionSeleccionComponente(idRecepcionActivoFijoDetalle, seleccionado)

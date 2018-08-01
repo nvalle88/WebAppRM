@@ -4,10 +4,20 @@
     Init_DatetimePicker("FechaRetorno", false, true);
     inicializarDetallesActivoSeleccion();
     initDataTableFiltrado("tableDetallesActivoFijoSeleccionados", [13, 15, 16, 17, 18, 19, 20, 21]);
+    $('#tableDetallesActivoFijoSeleccionados').DataTable().page.len(-1).draw();
     eventoGuardar();
     Init_XEditable(function (idRecepcionActivoFijoDetalle, newValue) {
         callbackXEditableSuccess(idRecepcionActivoFijoDetalle, newValue.toUpperCase());
     });
+
+    if (isVistaDetalles) {
+        $("#FechaSalida").prop("disabled", "disabled");
+        $("#FechaRetorno").prop("disabled", "disabled");
+        $("#IdMotivoTraslado").prop("disabled", "disabled");
+        $("#IdEmpleadoResponsable").prop("disabled", "disabled");
+        $("#IdEmpleadoSolicita").prop("disabled", "disabled");
+        $("#IdEmpleadoAutorizado").prop("disabled", "disabled");
+    }
 });
 
 function callbackXEditableSuccess(idRecepcionActivoFijoDetalle, newValue)

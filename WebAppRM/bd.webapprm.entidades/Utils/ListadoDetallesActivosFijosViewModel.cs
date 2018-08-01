@@ -33,6 +33,7 @@ namespace bd.webapprm.entidades.Utils
         public bool IsConfiguracionSeleccionMovilizaciones { get; set; }
         public bool IsConfiguracionListadoMovilizacionesGestionar { get; set; }
         public bool IsConfiguracionListadoMovilizaciones { get; set; }
+        public bool IsConfiguracionListadoGenerales { get; set; }
         public bool MostrarFiltradoUltimaColumna { get; set; }
         public string CallbackFunctionCheckBox { get; set; }
         public string CallbackFunctionRemoveTodos { get; set; } = "callBackFunctionEliminarDatoEspecifico";
@@ -63,7 +64,8 @@ namespace bd.webapprm.entidades.Utils
             bool? IsConfiguracionGestionarInventarioAutomatico = null,
             bool? IsConfiguracionSeleccionMovilizaciones = null, 
             bool? IsConfiguracionListadoMovilizacionesGestionar = null,
-            bool? IsConfiguracionListadoMovilizaciones = null)
+            bool? IsConfiguracionListadoMovilizaciones = null,
+            bool? IsConfiguracionListadoGenerales = null)
         {
             this.IsConfiguracionSeleccion = IsConfiguracionSeleccion ?? false;
             this.IsConfiguracionSeleccionDisabled = IsConfiguracionSeleccionDisabled ?? false;
@@ -75,6 +77,7 @@ namespace bd.webapprm.entidades.Utils
             this.IsConfiguracionListadoComponentes = IsConfiguracionListadoComponentes ?? false;
             this.IsConfiguracionSeleccionComponentes = IsConfiguracionSeleccionComponentes ?? false;
             this.IsConfiguracionListadoAltasGestionar = IsConfiguracionListadoAltasGestionar ?? false;
+            this.IsConfiguracionAltasGestionarEditar = IsConfiguracionAltasGestionarEditar ?? false;
             this.IsConfiguracionSeleccionAltas = IsConfiguracionSeleccionAltas ?? false;
             this.IsConfiguracionSeleccionBajas = IsConfiguracionSeleccionBajas ?? false;
             this.IsConfiguracionDetallesRecepcion = IsConfiguracionDetallesRecepcion ?? false;
@@ -89,6 +92,7 @@ namespace bd.webapprm.entidades.Utils
             this.IsConfiguracionSeleccionMovilizaciones = IsConfiguracionSeleccionMovilizaciones ?? false;
             this.IsConfiguracionListadoMovilizacionesGestionar = IsConfiguracionListadoMovilizacionesGestionar ?? false;
             this.IsConfiguracionListadoMovilizaciones = IsConfiguracionListadoMovilizaciones ?? false;
+            this.IsConfiguracionListadoGenerales = IsConfiguracionListadoGenerales ?? false;
 
             if (this.IsConfiguracionSeleccionComponentes || this.IsConfiguracionDetallesRecepcion || this.IsConfiguracionSeleccionAltas || this.IsConfiguracionListadoAltas || this.IsConfiguracionListadoBajas || (this.IsConfiguracionSeleccionBajas && !this.IsConfiguracionGestionarInventarioAutomatico) || (this.IsConfiguracionListadoBajasGestionar && this.IsConfiguracionBajasGestionarEditar) || this.IsConfiguracionListadoMovilizacionesGestionar || this.IsConfiguracionListadoMovilizaciones)
                 MostrarFiltradoUltimaColumna = true;
@@ -131,6 +135,8 @@ namespace bd.webapprm.entidades.Utils
                 NombreTabla += "Altas";
                 CallbackFunctionCheckBox = "callBackFunctionSeleccionAlta";
             }
+            else if (this.IsConfiguracionListadoGenerales)
+                NombreTabla = "dt_basic";
 
             if (this.IsConfiguracionOpciones)
                 Cantidad++;

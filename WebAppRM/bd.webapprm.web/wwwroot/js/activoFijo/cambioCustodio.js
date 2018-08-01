@@ -3,9 +3,16 @@
     eventoCustodioEntrega();
     eventoGuardar();
     inicializarDetallesActivoSeleccion();
-    initDataTableFiltrado("tableDetallesActivoFijoBajas", [14, 16, 17, 18, 19, 20, 21, 22]);
+    initDataTableFiltrado("tableDetallesActivoFijoBajas", isVistaDetalles ? [14, 16, 17, 18, 19, 20, 21] : [14, 16, 17, 18, 19, 20, 21, 22]);
+    $('#tableDetallesActivoFijoBajas').DataTable().page.len(-1).draw();
     copiarEmpleados();
     adicionarArrRecepcionActivoFijoDetalle();
+
+    if (isVistaDetalles) {
+        $("#IdEmpleadoRecibe").prop("disabled", "disabled");
+        $("#IdEmpleadoEntrega").prop("disabled", "disabled");
+        $("#Observaciones").prop("disabled", "disabled");
+    }
 });
 
 function adicionarArrRecepcionActivoFijoDetalle()

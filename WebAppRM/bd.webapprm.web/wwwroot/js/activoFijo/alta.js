@@ -8,9 +8,17 @@
     initDataTableFiltrado("tableDetallesActivoFijoSeleccionados", [13, 15, 16, 17, 18, 19]);
     Init_FileInput("file");
     Init_FileInput("fileFactura");
-    eventoGuardarDatosEmpleado();
     eventoGuardar();
     partialViewFacturaActivoFijoIsCompra();
+    $('#tableDetallesActivoFijoSeleccionados').DataTable().page.len(-1).draw();
+
+    if (isVistaDetalles) {
+        $("#IdMotivoAlta").prop("disabled", "disabled");
+        $("#FechaAlta").prop("disabled", "disabled");
+        $("#IdTipoUtilizacionAlta").prop("disabled", "disabled");
+        $("#FacturaActivoFijo_NumeroFactura").prop("disabled", "disabled");
+        $("#FacturaActivoFijo_FechaFactura").prop("disabled", "disabled");
+    }
 });
 
 function eventoMotivoAlta() {
@@ -22,21 +30,25 @@ function eventoMotivoAlta() {
 function partialViewFacturaActivoFijoIsCompra()
 {
     var motivoAlta = $("#IdMotivoAlta option:selected").text();
-    if (motivoAlta.indexOf("Compra") != -1) {
-        mostrarLoadingPanel("checkout-form", "Cargando detalles de factura...");
-        $.ajax({
-            url: urlDetalleFacturaAltaActivos,
-            method: "POST",
-            data: { idFacturaActivoFijo: $("#IdFacturaActivoFijo").val() },
-            success: function (data) {
-                $("#divOpcionCompra").html(data);
-                Init_DatetimePicker("FacturaActivoFijo_FechaFactura", true);
-                Init_FileInput("fileFactura");
-            },
-            complete: function (data) {
-                $("#checkout-form").waitMe("hide");
-            }
-        });
+    if (motivoAlta && motivoAlta != "" && motivoAlta != null) {
+        if (motivoAlta.toLowerCase().indexOf("compra") != -1) {
+            mostrarLoadingPanel("checkout-form", "Cargando detalles de factura...");
+            $.ajax({
+                url: urlDetalleFacturaAltaActivos,
+                method: "POST",
+                data: { idFacturaActivoFijo: $("#IdFacturaActivoFijo").val() },
+                success: function (data) {
+                    $("#divOpcionCompra").html(data);
+                    Init_DatetimePicker("FacturaActivoFijo_FechaFactura", true);
+                    Init_FileInput("fileFactura");
+                },
+                complete: function (data) {
+                    $("#checkout-form").waitMe("hide");
+                }
+            });
+        }
+        else
+            $("#divOpcionCompra").html("");
     }
     else
         $("#divOpcionCompra").html("");
@@ -60,18 +72,17 @@ function callBackFunctionSeleccionAlta(idRecepcionActivoFijoDetalle, seleccionad
         adicionarRecepcionActivoFijoDetalleSeleccionado(idRecepcionActivoFijoDetalle, true);
         addComponenteToArray(idRecepcionActivoFijoDetalle, idRecepcionActivoFijoDetalle, componentes.split(","));
         var idSucursal = $("#tableDetallesActivoFijoAltas" + idRecepcionActivoFijoDetalle + "Sucursal").data("idsucursal");
-        var idLibroActivoFijo = $("#tableDetallesActivoFijoAltas" + idRecepcionActivoFijoDetalle + "Sucursal").data("idlibroactivofijo");
         var idEmpleado = $("#tableDetallesActivoFijoAltas" + idRecepcionActivoFijoDetalle + "Empleado").data("idempleado");
         
         var hComponentes = '<input type="hidden" id="hComponentes_' + idRecepcionActivoFijoDetalle + '" name="hComponentes_' + idRecepcionActivoFijoDetalle + '" value="' + componentes + '" />';
         var hIdRecepcionActivoFijoDetalle = '<input type="hidden" class="hiddenIdRecepcionActivoFijoDetalle" id="hIdRecepcionActivoFijoDetalle_' + idRecepcionActivoFijoDetalle + '" name="hIdRecepcionActivoFijoDetalle_' + idRecepcionActivoFijoDetalle + '" value="' + idRecepcionActivoFijoDetalle + '" />';
         var hEmpleado = '<input type="hidden" class="hiddenHEmpleado" id="hEmpleado_' + idRecepcionActivoFijoDetalle + '" name="hEmpleado_' + idRecepcionActivoFijoDetalle + '" value="' + idEmpleado + '" />';
         var hSucursal = '<input type="hidden" id="hSucursal_' + idRecepcionActivoFijoDetalle + '" name="hSucursal_' + idRecepcionActivoFijoDetalle + '" value="' + idSucursal + '" />';
-        var hLibroActivoFijo = '<input type="hidden" id="hLibroActivoFijo_' + idRecepcionActivoFijoDetalle + '" name="hLibroActivoFijo_' + idRecepcionActivoFijoDetalle + '" value="' + idLibroActivoFijo + '" />';
-        var btnEmpleado = '<a href="javascript:void(0);" onclick="cargarFormularioDatosEmpleado(' + idRecepcionActivoFijoDetalle + ')" class="btnDatosEmpleado" data-idfila="' + idRecepcionActivoFijoDetalle + '" data-toggle="modal" data-target="#myModalEmpleado">Custodio</a>';
-        var btnComponentes = '<span> | </span><a href="javascript:void(0);" onclick="cargarFormularioComponentesDatosEspecificos(' + idRecepcionActivoFijoDetalle + ')" class="btnComponentesDatosEspecificos" data-idfila="' + idRecepcionActivoFijoDetalle + '" data-idorigen="' + idRecepcionActivoFijoDetalle + '" data-toggle="modal" data-target="#myModalComponente">Componentes</a>';
+        var hUbicacion = '<input type="hidden" id="hUbicacion_' + idRecepcionActivoFijoDetalle + '" name="hUbicacion_' + idRecepcionActivoFijoDetalle + '" value="' + 0 + '" />';
+        var btnEmpleado = '<a href="javascript:void(0);" onclick="cargarFormularioDatosEmpleado(' + idRecepcionActivoFijoDetalle + ')" class="btnDatosEmpleado" data-idfila="' + idRecepcionActivoFijoDetalle + '">Custodio</a>';
+        var btnComponentes = '<span> | </span><a href="javascript:void(0);" onclick="cargarFormularioComponentesDatosEspecificos(' + idRecepcionActivoFijoDetalle + ')" class="btnComponentesDatosEspecificos" data-idfila="' + idRecepcionActivoFijoDetalle + '" data-idorigen="' + idRecepcionActivoFijoDetalle + '">Componentes</a>';
         var btnEliminarAlta = "<div id='divEliminarDatosEspecificos_" + idRecepcionActivoFijoDetalle + "' class='btnEliminarDatosEspecificos' style='display:inline;'><span> | </span><a href='javascript: void(0);' id='btnEliminarDatosEspecifico_" + idRecepcionActivoFijoDetalle + "' onclick=abrirVentanaConfirmacion('btnEliminarDatosEspecifico_" + idRecepcionActivoFijoDetalle + "') data-funcioncallback=callBackFunctionEliminarDatoEspecifico('" + idRecepcionActivoFijoDetalle + "') data-titulo='Eliminar' data-descripcion='&#191; Desea eliminar el Activo Fijo seleccionado... ?'>Eliminar</a></div>";
-        addRowDetallesActivosFijos("tableDetallesActivoFijoSeleccionados", "tableDetallesActivoFijoAltas", idRecepcionActivoFijoDetalle, ['Codigosecuencial', 'TipoActivoFijo', 'ClaseActivoFijo', 'SubclaseActivoFijo', 'NombreActivoFijo', 'Marca', 'Modelo', 'Serie', 'NumeroChasis', 'NumeroMotor', 'Placa', 'NumeroClaveCatastral', 'Sucursal', 'Bodega', 'Empleado', 'Proveedor', 'MotivoAlta', 'FechaRecepcion', 'OrdenCompra', 'FondoFinanciamiento', hComponentes + hIdRecepcionActivoFijoDetalle + hEmpleado + hSucursal + hLibroActivoFijo + btnEmpleado + btnComponentes + btnEliminarAlta], true);
+        addRowDetallesActivosFijos("tableDetallesActivoFijoSeleccionados", "tableDetallesActivoFijoAltas", idRecepcionActivoFijoDetalle, ['Codigosecuencial', 'TipoActivoFijo', 'ClaseActivoFijo', 'SubclaseActivoFijo', 'NombreActivoFijo', 'Marca', 'Modelo', 'Serie', 'NumeroChasis', 'NumeroMotor', 'Placa', 'NumeroClaveCatastral', 'Sucursal', 'Bodega', 'Empleado', 'Proveedor', 'MotivoAlta', 'FechaRecepcion', 'OrdenCompra', 'FondoFinanciamiento', hComponentes + hIdRecepcionActivoFijoDetalle + hEmpleado + hSucursal + hUbicacion + btnEmpleado + btnComponentes + btnEliminarAlta], true);
     }
     else
         callBackFunctionEliminarDatoEspecifico(idRecepcionActivoFijoDetalle);
@@ -81,49 +92,50 @@ function cargarFormularioDatosEmpleado(idRecepcionActivoFijoDetalle)
 {
     var idSucursal = $("#hSucursal_" + idRecepcionActivoFijoDetalle).val();
     var idEmpleado = $("#hEmpleado_" + idRecepcionActivoFijoDetalle).val();
-    mostrarLoadingPanel("modalContentEmpleado", "Cargando listados de custodios por sucursal...");
+    mostrarLoadingPanel("checkout-form", "Cargando listados de custodios por sucursal...");
     $.ajax({
         url: urlModalEmpleadosResult,
         method: "POST",
         data: { idSucursal: idSucursal, idEmpleado: idEmpleado, idRecepcionActivoFijoDetalle: idRecepcionActivoFijoDetalle },
         success: function (data) {
-            $("#inputEmpleado").html(data);
-            Init_Select2();
+            Init_BootBox("Selecci&oacute;n de Custodio", data, null, null, {
+                isGuardar: true, hideAlGuardar: false, callbackGuardar: function () {
+                    guardarDatosEmpleado();
+                }
+            });
         },
         complete: function (data) {
-            $("#modalContentEmpleado").waitMe("hide");
+            Init_Select2();
             $("#chkTodosEmpleadosDatosEspecificos").prop("checked", "");
+            $("#checkout-form").waitMe("hide");
         }
     });
 }
 
-function eventoGuardarDatosEmpleado()
+function guardarDatosEmpleado()
 {
-    $("#btnGuardarDatosEmpleado").on("click", function (e) {
-        mostrarLoadingPanel("modalContentEmpleado", "Validando datos, por favor espere...");
-        var idEmpleado = $("#IdEmpleado").val();
-        if (idEmpleado != "" && idEmpleado != null) {
-            var idRecepcionActivoFijoDetalle = $("#hIdRecepcionActivoFijoDetalleEmpleado").val();
-            var idSucursal = $("#hSucursal_" + idRecepcionActivoFijoDetalle).val();
-            var isTodosEmpleado = $("#chkTodosEmpleadosDatosEspecificos").prop("checked");
-            if (isTodosEmpleado)
-            {
-                var arrHEmpleado = $(".hiddenIdRecepcionActivoFijoDetalle");
-                $.each(arrHEmpleado, function (index, value) {
-                    var idrafd = $(value).val();
-                    var idSuc = $("#hSucursal_" + idrafd).val();
-                    if (idSucursal == idSuc)
-                        putDatoEmpleadoTable(idrafd, idEmpleado);
-                });
-            }
-            else
-                putDatoEmpleadoTable(idRecepcionActivoFijoDetalle, idEmpleado);
-            $("#btnCancelarDatosEmpleado").click();
+    mostrarLoadingPanel("divEmpleadoModal", "Validando datos, por favor espere...");
+    var idEmpleado = $("#IdEmpleado").val();
+    if (idEmpleado != "" && idEmpleado != null) {
+        var idRecepcionActivoFijoDetalle = $("#hIdRecepcionActivoFijoDetalleEmpleado").val();
+        var idSucursal = $("#hSucursal_" + idRecepcionActivoFijoDetalle).val();
+        var isTodosEmpleado = $("#chkTodosEmpleadosDatosEspecificos").prop("checked");
+        if (isTodosEmpleado) {
+            var arrHEmpleado = $(".hiddenIdRecepcionActivoFijoDetalle");
+            $.each(arrHEmpleado, function (index, value) {
+                var idrafd = $(value).val();
+                var idSuc = $("#hSucursal_" + idrafd).val();
+                if (idSucursal == idSuc)
+                    putDatoEmpleadoTable(idrafd, idEmpleado);
+            });
         }
         else
-            $("#valIdEmpleado").html("Tiene que seleccionar un Custodio.");
-        $("#modalContentEmpleado").waitMe("hide");
-    });
+            putDatoEmpleadoTable(idRecepcionActivoFijoDetalle, idEmpleado);
+        closeBootBox();
+    }
+    else
+        $("#valIdEmpleado").html("Tiene que seleccionar un Custodio.");
+    $("#divEmpleadoModal").waitMe("hide");
 }
 
 function putDatoEmpleadoTable(idRecepcionActivoFijoDetalle, idEmpleado) {

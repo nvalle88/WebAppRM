@@ -6,7 +6,7 @@ namespace bd.webapprm.entidades.ObjectTransfer
 {
     public class AprobacionActivoFijoTransfer
     {
-        public int IdActivoFijo { get; set; }
+        public List<int> IdsActivoFijo { get; set; }
         public string NuevoEstadoActivoFijo { get; set; }
         public bool ValidacionTecnica { get; set; }
     }

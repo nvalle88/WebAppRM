@@ -6,39 +6,47 @@
     nameSerie: "Serie"
 };
 var objCategorias = {
-    Edificio: "Edificios",
-    MueblesEnseres: "Muebles y enseres",
-    EquiposOficina: "Equipos de oficina",
-    Vehiculo: "Vehículos",
-    EquiposComputoSoftware: "Equipos de cómputo y software",
+    Edificio: "EDIFICIOS",
+    MueblesEnseres: "MUEBLES Y ENSERES",
+    EquiposOficina: "EQUIPOS DE OFICINA",
+    Vehiculo: "VEHÍCULOS",
+    EquiposComputoSoftware: "EQUIPOS DE CÓMPUTO Y SOFTWARE"
 };
 var arrIdsfilas = Array();
 $(document).ready(function () {
     Init_Select2();
-    Init_Touchspin();
-    eventoTipoActivoFijo();
-    eventoClaseActivoFijo();
-    eventoMarca();
-    eventoRamo();
-    eventoSucursal();
-    gestionarWizard();
     Init_DatetimePicker("RecepcionActivoFijo_FechaRecepcion", true);
     Init_FileInput("file");
-    eventoSpinnerCantidad();
-    initArrIdFilas();
-    eventoRadioDatosEspecificos();
-    eventoGuardarDatosEspecificos();
-    initDataTableFiltrado("tbDatosEspecificos", []);
-    if (!isEditar) {
-        obtenerCategoria(function () {
-            crearFilas(1);
-            eventoCambiarCategoria();
-        });
+    $("#IdSucursal").prop("disabled", "disabled");
+
+    if (isRevisionActivoFijo)
+        adicionarArrRecepcionActivoFijoDetalle();
+
+    initDataTableFiltrado("tableDetallesRecepcion", [], function () {
+        var table = $("#tableDetallesRecepcion").dataTable();
+        var api = table.api();
+        var rows = api.rows({ page: 'current' }).nodes();
+        var last = null;
+        var groupadmin = [];        
+        crearGrupo(api, rows, last, groupadmin, 1, "Clase de activo fijo", 6, isSeleccion ? 11 : 10);
+    });
+    $('#tableDetallesRecepcion').DataTable().page.len(-1).draw();
+    if (isVistaDetalles)
+    {
+        $("#RecepcionActivoFijo_IdMotivoAlta").prop("disabled", "disabled");
+        $("#RecepcionActivoFijo_IdProveedor").prop("disabled", "disabled");
+        $("#RecepcionActivoFijo_IdFondoFinanciamiento").prop("disabled", "disabled");
+        $("#RecepcionActivoFijo_FechaRecepcion").prop("disabled", "disabled");
+        $("#RecepcionActivoFijo_OrdenCompra").prop("disabled", "disabled");
+        $("#RecepcionActivoFijo_PolizaSeguroActivoFijo_Subramo_IdRamo").prop("disabled", "disabled");
+        $("#RecepcionActivoFijo_PolizaSeguroActivoFijo_IdSubramo").prop("disabled", "disabled");
+        $("#RecepcionActivoFijo_PolizaSeguroActivoFijo_IdCompaniaSeguro").prop("disabled", "disabled");
+
+        if (!isPolizaSeguro)
+            $("#RecepcionActivoFijo_PolizaSeguroActivoFijo_NumeroPoliza").prop("disabled", "disabled");
     }
-    else
-        eventoCambiarCategoria();
-    ocultarDatosTablaEspecificos();
-    $("#LibroActivoFijo_IdSucursal").prop("disabled", "disabled");
+    if (isRevisionActivoFijo)
+        inicializarIdsArrRecepcionActivoFijoDetalleTodos();
 });
 
 function ocultarDatosTablaEspecificos()
@@ -48,39 +56,35 @@ function ocultarDatosTablaEspecificos()
     $(".dataTables_length").hide();
 }
 
-function gestionarWizard()
+function gestionarWizard(isVistaDetalles)
 {
-    var wizard = $('.wizard').wizard();
+    var wizard = $('.wizard').wizard({ disablePreviousStep: true});
     wizard.on('finished.fu.wizard', function (e, data) {
-        var validar = validarWizard();
-        if (validar)
-            $("#checkout-form").submit();
+        var validar = validarDatosEspecificosPertenecenBodegaEmpleadoCodigosecuencial();
+        if (!validar)
+            mostrarNotificacion("Error", "Tiene que asignar cada dato específico a una Bodega o Empleado y a un Código secuencial.");
         else
-            return false;
+            guardarDatosActivoFijoRow();
     });
     wizard.on('change.fu.wizard', function (e, data)
     {
         if (data.direction === 'previous')
-            return;
-
-        var validar = validarWizard();
-        if (validar)
         {
-            if (data.step == 2)
-            {
-                var validar = validarDatosEspecificosPertenecenBodegaEmpleadoCodigosecuencial();
-                if (!validar) {
-                    mostrarNotificacion("Error", "Tiene que asignar cada dato específico a una Bodega o Empleado y a un Código secuencial.");
-                    $("#spanError").html("El modelo es inválido.");
-                }
-            }
-            else if (data.step == 3 && isEditar)
-            {
-                $("#checkout-form").submit();
-                return false;
-            }
+            if (isVistaDetalles)
+                $(".btn-next").removeClass("hide");
+            return;
         }
-        return validar;
+        if (isVistaDetalles) {
+            $(".btn-next").addClass("hide");
+            return true;
+        }
+        return validarWizard();
+    });
+    wizard.on('stepclick', function (e, data) {
+        if (isVistaDetalles) {
+            $(".btn-next").removeClass("hide");
+            return true;
+        }
     });
 }
 
@@ -88,11 +92,53 @@ function generarCodigosecuencial()
 {
     $("#CodigoActivoFijo_SUBCAF").val($("#ActivoFijo_IdSubClaseActivoFijo").val());
     $("#CodigoActivoFijo_CAF").val($("#ActivoFijo_SubClaseActivoFijo_IdClaseActivoFijo").val());
-    $("#CodigoActivoFijo_SUC").val($("#LibroActivoFijo_IdSucursal").val());
-    var idSucursal = $("#LibroActivoFijo_IdSucursal").val() + ".";
+    $("#CodigoActivoFijo_SUC").val($("#IdSucursal").val());
+    var idSucursal = $("#IdSucursal").val() + ".";
     var idClase = agregarCeros($("#ActivoFijo_SubClaseActivoFijo_IdClaseActivoFijo").val(), 3) + ".";
     var idSubClase = agregarCeros($("#ActivoFijo_IdSubClaseActivoFijo").val(), 3) + ".";
     return idSucursal + idClase + idSubClase;
+}
+
+function actualizarCodigosSecuenciales()
+{
+    var validar = true;
+    for (var i = 0; i < arrIdsfilas.length; i++) {
+        var idFila = arrIdsfilas[i];
+        var codigoSecuencialOld = $("#hCodigoSecuencial_" + idFila).val();
+        if (codigoSecuencialOld != "" && codigoSecuencialOld != "-" && codigoSecuencialOld != null) {
+            var nuevoCodigoSecuencial = generarCodigosecuencial();
+            nuevoCodigoSecuencial += codigoSecuencialOld.split(".")[3];
+            if (validarCodificacionTablaActivosFijos(nuevoCodigoSecuencial)) {
+                mostrarLoadingPanel("checkout-form", "Actualizando códigos secuenciales...");
+                $.ajax({
+                    url: urlValidarCodigoUnico,
+                    method: "POST",
+                    data: { idCodigoActivoFijo: $("#hIdCodigoActivoFijo_" + idFila).val(), codigoSecuencial: nuevoCodigoSecuencial },
+                    success: function (data) {
+                        if (data.toString().toLowerCase() == "false")
+                            putDatoCodificacion(idFila, nuevoCodigoSecuencial);
+                        else {
+                            putDatoCodificacion(idFila, "");
+                            validar = false;
+                        }
+                    },
+                    error: function (errorMessage) {
+                        putDatoCodificacion(idFila, "");
+                        validar = false;
+                    },
+                    complete: function (data) {
+                        $("#checkout-form").waitMe("hide");
+                    }
+                });
+            }
+            else {
+                putDatoCodificacion(idFila, "");
+                validar = false;
+            }
+        }
+    }
+    if (!validar)
+        mostrarNotificacion("Aviso", "Se eliminaron algunos Códigos secuenciales pues se encuentran asignados a un Activo Fijo adicionado ó ya existen en el sistema.");
 }
 
 function validarWizard()
@@ -100,12 +146,27 @@ function validarWizard()
     var form = $("#checkout-form");
     if (!form.valid()) {
         mostrarNotificacion("Error", "Existen errores en el formulario.");
-        $("#spanError").html("El modelo es inválido.");
         return false;
     }
-    else
-        $("#spanError").html("");
-    return true;
+    return validarActivoFijoExiste($("#ActivoFijo_IdSubClaseActivoFijo").val(), $("#ActivoFijo_IdModelo").val(), $("#ActivoFijo_Nombre").val());
+}
+
+function validarRecepcion()
+{
+    var api = $("#tableDetallesRecepcion").dataTable().api();
+    var form = $("#formDatosActivo");
+    var validar = true;
+
+    if (api.rows().nodes().length == 0) {
+        mostrarNotificacion("Error", "Tiene que adicionar al menos un Activo Fijo.");
+        validar = false;
+    }
+    if (!form.valid()) {
+        mostrarNotificacion("Error", "Existen errores en el formulario.");
+        validar = false;
+    }
+    if (validar)
+        $("#formDatosActivo").submit();
 }
 
 function eventoTipoActivoFijo() {
@@ -117,6 +178,13 @@ function eventoTipoActivoFijo() {
 function eventoClaseActivoFijo() {
     $("#ActivoFijo_SubClaseActivoFijo_IdClaseActivoFijo").on("change", function (e) {
         partialViewClaseActivoFijo(e.val);
+    });
+}
+
+function eventoSubClaseActivoFijo()
+{
+    $("#ActivoFijo_IdSubClaseActivoFijo").on("change", function (e) {
+        actualizarCodigosSecuenciales();
     });
 }
 
@@ -140,7 +208,7 @@ function eventoMarca()
 }
 
 function eventoRamo() {
-    $("#ActivoFijo_PolizaSeguroActivoFijo_Subramo_IdRamo").on("change", function (e) {
+    $("#RecepcionActivoFijo_PolizaSeguroActivoFijo_Subramo_IdRamo").on("change", function (e) {
         mostrarLoadingPanel("checkout-form", "Cargando subramos...");
         $.ajax({
             url: urlSubramoSelectResult,
@@ -154,29 +222,6 @@ function eventoRamo() {
                 $("#checkout-form").waitMe("hide");
             }
         });
-    });
-}
-
-function eventoSucursal() {
-    $("#LibroActivoFijo_IdSucursal").on("change", function (e) {
-        partialViewLibroActivoFijo(e.val);
-    });
-}
-
-function partialViewLibroActivoFijo(idSucursal) {
-    mostrarLoadingPanel("checkout-form", "Cargando libros de activo fijo...");
-    $.ajax({
-        url: libroActivoFijoSelectResult,
-        method: "POST",
-        data: { idSucursal: obtenerIdAjax(idSucursal) },
-        success: function (data) {
-            $("#div_libroActivoFijo").html(data);
-            Init_Select2();
-        },
-        complete: function (data) {
-            clearDatosEspecificosBodegaEmpleado();
-            $("#checkout-form").waitMe("hide");
-        }
     });
 }
 
@@ -216,6 +261,7 @@ function partialViewClaseActivoFijo(idClaseActivoFijo) {
             obtenerCategoria(function () {
                 eventoCambiarCategoria();
             });
+            actualizarCodigosSecuenciales();
         }
     });
 }
@@ -241,7 +287,7 @@ function obtenerCategoria(callbackFunctionCategoria)
         method: "POST",
         data: { idClaseActivoFijo: $("#ActivoFijo_SubClaseActivoFijo_IdClaseActivoFijo").val() },
         success: function (data) {
-            categoria = data;
+            categoria = data.toUpperCase();
         },
         error: function ()
         {
@@ -279,14 +325,14 @@ function crearFilas(cantidad)
         var hComponentes = "<input type='hidden' id='hComponentes_" + nuevoIdFila + "' name='hComponentes_" + nuevoIdFila + "' />";
         var hCodigoSecuencial = "<input type='hidden' id='hCodigoSecuencial_" + nuevoIdFila + "' name='hCodigoSecuencial_" + nuevoIdFila + "' />";
         var hIdCodigoActivoFijo = "<input type='hidden' id='hIdCodigoActivoFijo_" + nuevoIdFila + "' name='hIdCodigoActivoFijo_" + nuevoIdFila + "' />";
-        var btnEditarDatosEspecificos = "<a href='javascript: void(0);' onclick='cargarFormularioDatosEspecificos(" + nuevoIdFila + ")' class='btnEditarDatosEspecificos' data-idfila='" + nuevoIdFila + "' data-toggle='modal' data-target='#myModal'>" + "Editar</a>";
-        var btnEditarCodificacion = "<span> | </span><a href='javascript: void(0);' onclick='cargarFormularioCodificacion(" + nuevoIdFila + ")' class='btnEditarCodificacion' data-idfila='" + nuevoIdFila + "' data-toggle='modal' data-target='#myModal'>" + "Codificaci&oacute;n</a>";
-        var btnComponentesDatosEspecificos = "<span> | </span><a href='javascript: void(0);' onclick='cargarFormularioComponentesDatosEspecificos(" + nuevoIdFila + ")' class='btnComponentesDatosEspecificos' data-idfila='" + nuevoIdFila + "' data-idorigen='' data-idscomponentes='' data-toggle='modal' data-target='#myModalComponente'>" + "Componentes</a>";
+        var btnEditarDatosEspecificos = "<a href='javascript: void(0);' onclick='cargarFormularioDatosEspecificos(" + nuevoIdFila + ")' class='btnEditarDatosEspecificos' data-idfila='" + nuevoIdFila + "'>" + "Editar</a>";
+        var btnEditarCodificacion = "<span> | </span><a href='javascript: void(0);' onclick='cargarFormularioCodificacion(" + nuevoIdFila + ")' class='btnEditarCodificacion' data-idfila='" + nuevoIdFila + "'>" + "Codificaci&oacute;n</a>";
+        var btnComponentesDatosEspecificos = "<span> | </span><a href='javascript: void(0);' onclick='cargarFormularioComponentesDatosEspecificos(" + nuevoIdFila + ")' class='btnComponentesDatosEspecificos' data-idfila='" + nuevoIdFila + "' data-idorigen='' data-idscomponentes=''>" + "Componentes</a>";
         var btnEliminarDatosEspecificos = "<div id='divEliminarDatosEspecificos_" + nuevoIdFila + "' class='btnEliminarDatosEspecificos" + (arrIdsfilas.length == 0 ? " hide" : "") + "' style='display:inline;'><span> | </span><a href='javascript: void(0);' id='btnEliminarDatosEspecifico_" + nuevoIdFila + "' onclick=abrirVentanaConfirmacion('btnEliminarDatosEspecifico_" + nuevoIdFila + "') data-funcioncallback='callBackFunctionEliminarDatoEspecifico(" + nuevoIdFila + ")' data-titulo='Eliminar' data-descripcion='&#191; Desea eliminar el Dato Espec&iacute; fico... ?'>Eliminar</a>";
 
         mostrarOcultarColumnas("tbDatosEspecificos", [true, true, true, true, true]);
         addRowTableDatosEspecificos(['-', '-', '-', '-', '-', '-', '-', '-',
-            hNumeroClaveCatastral + hNumeroChasis + hNumeroMotor + hPlaca + hSerie + hBodega + hEmpleado + hRecepcionActivoFijoDetalle + hUbicacion + hComponentes + hCodigoSecuencial + btnEditarDatosEspecificos + btnEditarCodificacion + btnComponentesDatosEspecificos + btnEliminarDatosEspecificos],
+            hNumeroClaveCatastral + hNumeroChasis + hNumeroMotor + hPlaca + hSerie + hBodega + hEmpleado + hRecepcionActivoFijoDetalle + hUbicacion + hComponentes + hCodigoSecuencial + hIdCodigoActivoFijo + btnEditarDatosEspecificos + btnEditarCodificacion + btnComponentesDatosEspecificos + btnEliminarDatosEspecificos],
             nuevoIdFila, [objName.nameNumeroClaveCatastral, objName.nameNumeroChasis, objName.nameNumeroMotor, objName.namePlaca, objName.nameSerie, "Bodega", "Empleado", "Codificacion"]);
         eventoCambiarCategoria();
 
@@ -346,21 +392,18 @@ function eventoCambiarCategoria()
 
 function cargarFormularioDatosEspecificos(idFila)
 {
-    mostrarLoadingPanel("modalContentDatosEspecificos", "Cargando datos, por favor espere...");
-    $("#hIdFilaModalDatosEspecificos").val(idFila);
-    $("#hIdRecepcionActivoFijoDetalle").val($("#hIdRecepcionActivoFijoDetalle_" + idFila).val());
-    $("#hIdUbicacionActivoFijo").val($("#hUbicacion_" + idFila).val());
-    $("#myModalLabel").html("Editar");
-    $("#mFuncionCallbak").val("guardarDatosEspecificos");
-
+    mostrarLoadingPanel("checkout-form", "Cargando datos, por favor espere...");
     var objData = new Object();
+    objData.RecepcionActivoFijoDetalleEdificio = new Object();
+    objData.RecepcionActivoFijoDetalleVehiculo = new Object();
+
     if (categoria == objCategorias.Edificio)
-        objData.NumeroClaveCatastral = $("#h" + objName.nameNumeroClaveCatastral + "_" + idFila).val();
+        objData.RecepcionActivoFijoDetalleEdificio.NumeroClaveCatastral = $("#h" + objName.nameNumeroClaveCatastral + "_" + idFila).val();
     else if (categoria == objCategorias.Vehiculo)
     {
-        objData.NumeroChasis = $("#h" + objName.nameNumeroChasis + "_" + idFila).val();
-        objData.NumeroMotor = $("#h" + objName.nameNumeroMotor + "_" + idFila).val();
-        objData.Placa = $("#h" + objName.namePlaca + "_" + idFila).val();
+        objData.RecepcionActivoFijoDetalleVehiculo.NumeroChasis = $("#h" + objName.nameNumeroChasis + "_" + idFila).val();
+        objData.RecepcionActivoFijoDetalleVehiculo.NumeroMotor = $("#h" + objName.nameNumeroMotor + "_" + idFila).val();
+        objData.RecepcionActivoFijoDetalleVehiculo.Placa = $("#h" + objName.namePlaca + "_" + idFila).val();
     }
     objData.Serie = $("#h" + objName.nameSerie + "_" + idFila).val();
     objData.IdBodega = $("#hBodega_" + idFila).val();
@@ -369,17 +412,25 @@ function cargarFormularioDatosEspecificos(idFila)
     $.ajax({
         url: urlModalDatosEspecificosResult,
         method: "POST",
-        data: { rafd: objData, categoria: categoria, idSucursal: $("#LibroActivoFijo_IdSucursal").val(), idBodega: objData.IdBodega, idEmpleado: objData.IdEmpleado },
+        data: { rafd: objData, categoria: categoria, idSucursal: $("#IdSucursal").val(), idBodega: objData.IdBodega, idEmpleado: objData.IdEmpleado },
         success: function (data) {
-            $("#modalBodyDatosEspecificos").html(data);
-            Init_Select2();
-            eventoRadioDatosEspecificos();
+            Init_BootBox("Editar", data, "large", null, {
+                isGuardar: true, hideAlGuardar: false, callbackGuardar: function () {
+                    guardarDatosEspecificos();
+                }
+            });
+            $("#hIdFilaModalDatosEspecificos").val(idFila);
+            $("#hIdRecepcionActivoFijoDetalle").val($("#hIdRecepcionActivoFijoDetalle_" + idFila).val());
+            $("#hIdUbicacionActivoFijo").val($("#hUbicacion_" + idFila).val());
+            $("#mFuncionCallbak").val("guardarDatosEspecificos");
         },
         error: function (errorMessage) {
-            mostrarNotificacion("Error", "Ocurrió un error al cargar el formulario.");
+            mostrarNotificacion("Error", "Ocurrió un error al cargar el formulario, inténtelo nuevamente.");
         },
         complete: function (data) {
-            $("#modalContentDatosEspecificos").waitMe("hide");
+            Init_Select2();
+            eventoRadioDatosEspecificos();
+            $("#checkout-form").waitMe("hide");
         }
     });
 }
@@ -403,28 +454,20 @@ function eventoRadioDatosEspecificos()
     });
 }
 
-function eventoGuardarDatosEspecificos()
-{
-    $("#btnGuardarDatosEspecificos").on("click", function (e) {
-        var funcionCallback = $("#mFuncionCallbak").val();
-        eval(funcionCallback + "()");
-    });
-}
-
 function guardarDatosEspecificos()
 {
-    mostrarLoadingPanel("modalContentDatosEspecificos", "Validando datos, por favor espere...");
+    mostrarLoadingPanel("divSmartFormModalDatosEspecificos", "Validando datos, por favor espere...");
     $.each($(".validationDatosEspecificos"), function (index, value) {
         $(value).html("");
     });
 
     var objData = new Object();
     if (categoria == objCategorias.Edificio)
-        objData.NumeroClaveCatastral = $("#" + objName.nameNumeroClaveCatastral).val();
+        objData.NumeroClaveCatastral = $("#RecepcionActivoFijoDetalleEdificio_" + objName.nameNumeroClaveCatastral).val();
     else if (categoria == objCategorias.Vehiculo) {
-        objData.NumeroChasis = $("#" + objName.nameNumeroChasis).val();
-        objData.NumeroMotor = $("#" + objName.nameNumeroMotor).val();
-        objData.Placa = $("#" + objName.namePlaca).val();
+        objData.NumeroChasis = $("#RecepcionActivoFijoDetalleVehiculo_" + objName.nameNumeroChasis).val();
+        objData.NumeroMotor = $("#RecepcionActivoFijoDetalleVehiculo_" + objName.nameNumeroMotor).val();
+        objData.Placa = $("#RecepcionActivoFijoDetalleVehiculo_" + objName.namePlaca).val();
     }
     objData.Serie = $("#" + objName.nameSerie).val();
     objData.IdFila = $("#hIdFilaModalDatosEspecificos").val();
@@ -433,7 +476,7 @@ function guardarDatosEspecificos()
     objData.IdEmpleado = $("#IdEmpleado").val();
     objData.IsBodega = $("#radioBodegaDatosEspecificos").prop("checked");
 
-    if (validarDatosEspecificosExisten(objData)) {
+    if (validarDatosEspecificosExisten(objData) && validarDatosEspecificosTablaActivosFijosAdicionados(objData)) {
         $.ajax({
             url: urlValidacionDatosEspecificosResult,
             method: "POST",
@@ -447,22 +490,14 @@ function guardarDatosEspecificos()
                 else {
                     var idFila = $("#hIdFilaModalDatosEspecificos").val();
                     var table = $('#tbDatosEspecificos').DataTable();
-                    if (categoria == objCategorias.Edificio) {
-                        table.cell($('#td' + objName.nameNumeroClaveCatastral + "_" + idFila)).data(formatearDatosEspecifico(objData.NumeroClaveCatastral)).draw();
-                        $("#h" + objName.nameNumeroClaveCatastral + "_" + idFila).val(objData.NumeroClaveCatastral);
-                    }
+                    if (categoria == objCategorias.Edificio)
+                        putDatoNumeroClaveCatastralFila(idFila, objData.NumeroClaveCatastral);
                     else if (categoria == objCategorias.Vehiculo) {
-                        table.cell($('#td' + objName.nameNumeroChasis + "_" + idFila)).data(formatearDatosEspecifico(objData.NumeroChasis)).draw();
-                        $("#h" + objName.nameNumeroChasis + "_" + idFila).val(objData.NumeroChasis);
-
-                        table.cell($('#td' + objName.nameNumeroMotor + "_" + idFila)).data(formatearDatosEspecifico(objData.NumeroMotor)).draw();
-                        $("#h" + objName.nameNumeroMotor + "_" + idFila).val(objData.NumeroMotor);
-
-                        table.cell($('#td' + objName.namePlaca + "_" + idFila)).data(formatearDatosEspecifico(objData.Placa)).draw();
-                        $("#h" + objName.namePlaca + "_" + idFila).val(objData.Placa);
+                        putDatoNumeroChasisFila(idFila, objData.NumeroChasis);
+                        putDatoNumeroMotorFila(idFila, objData.NumeroMotor);
+                        putDatoPlacaFila(idFila, objData.Placa);
                     }
-                    table.cell($('#td' + objName.nameSerie + "_" + idFila)).data(formatearDatosEspecifico(objData.Serie)).draw();
-                    $("#h" + objName.nameSerie + "_" + idFila).val(objData.Serie);
+                    putDatoSerieFila(idFila, objData.Serie);
 
                     if (objData.IsBodega) {
                         var isTodosBodegasDatosEspecificos = $("#chkTodosBodegasDatosEspecificos").prop("checked");
@@ -490,26 +525,34 @@ function guardarDatosEspecificos()
                             putDatoBodegaEmpleadoFila(idFila, "Bodega", "-", "");
                         }
                     }
-                    $("#btnCancelarDatosEspecificos").click();
+                    closeBootBox();
                 }
             },
             error: function (errorMessage) {
                 mostrarNotificacion("Error", "Ocurrió un error al validar el formulario.");
             },
             complete: function (data) {
-                $("#modalContentDatosEspecificos").waitMe("hide");
+                $("#divSmartFormModalDatosEspecificos").waitMe("hide");
             }
         });
     }
     else
-        $("#modalContentDatosEspecificos").waitMe("hide");
+        $("#divSmartFormModalDatosEspecificos").waitMe("hide");
 }
 
-function formatearDatosEspecifico(valor)
+function dash(valor)
 {
     valor = valor.toString().trim();
     if (valor == "")
         valor = "-";
+    return valor;
+}
+
+function undash(valor)
+{
+    valor = valor.toString().trim();
+    if (valor == "-")
+        valor = "";
     return valor;
 }
 
@@ -521,10 +564,43 @@ function clearDatosEspecificosBodegaEmpleado()
     }
 }
 
-function putDatoBodegaEmpleadoFila(idFila, selector, datoSpan, datoHiddeh)
+function putDatoBodegaEmpleadoFila(idFila, selector, datoSpan, datoHidden)
 {
     $('#tbDatosEspecificos').DataTable().cell($('#td' + selector + "_" + idFila)).data(datoSpan).draw();
-    $("#h" + selector + "_" + idFila).val(datoHiddeh);
+    $("#h" + selector + "_" + idFila).val(datoHidden);
+}
+
+function putDatoNumeroClaveCatastralFila(idFila, dato)
+{
+    $('#tbDatosEspecificos').DataTable().cell($('#td' + objName.nameNumeroClaveCatastral + "_" + idFila)).data(dash(dato)).draw();
+    $("#h" + objName.nameNumeroClaveCatastral + "_" + idFila).val(dato);
+}
+
+function putDatoNumeroChasisFila(idFila, dato)
+{
+    $('#tbDatosEspecificos').DataTable().cell($('#td' + objName.nameNumeroChasis + "_" + idFila)).data(dash(dato)).draw();
+    $("#h" + objName.nameNumeroChasis + "_" + idFila).val(dato);
+}
+
+function putDatoNumeroMotorFila(idFila, dato) {
+    $('#tbDatosEspecificos').DataTable().cell($('#td' + objName.nameNumeroMotor + "_" + idFila)).data(dash(dato)).draw();
+    $("#h" + objName.nameNumeroMotor + "_" + idFila).val(dato);
+}
+
+function putDatoPlacaFila(idFila, dato) {
+    $('#tbDatosEspecificos').DataTable().cell($('#td' + objName.namePlaca + "_" + idFila)).data(dash(dato)).draw();
+    $("#h" + objName.namePlaca + "_" + idFila).val(dato);
+}
+
+function putDatoSerieFila(idFila, dato) {
+    $('#tbDatosEspecificos').DataTable().cell($('#td' + objName.nameSerie + "_" + idFila)).data(dash(dato)).draw();
+    $("#h" + objName.nameSerie + "_" + idFila).val(dato);
+}
+
+function putDatoCodificacion(idFila, dato)
+{
+    $('#tbDatosEspecificos').DataTable().cell($('#tdCodificacion_' + idFila)).data(dash(dato)).draw();
+    $("#hCodigoSecuencial_" + idFila).val(dato);
 }
 
 function validarDatosEspecificosPertenecenBodegaEmpleadoCodigosecuencial()
@@ -541,8 +617,76 @@ function validarDatosEspecificosPertenecenBodegaEmpleadoCodigosecuencial()
     return true;
 }
 
+function validarDatosEspecificosTablaActivosFijosAdicionados(objData) {
+    var idFilaGestion = parseInt($("#IdFilaGestion").val());
+    var validar = true;
+    if (categoria == objCategorias.Edificio) {
+        var arrNumerosClaveCatastral = $(".hidden" + objName.nameNumeroClaveCatastral).toArray();
+        for (var j = 0; j < arrNumerosClaveCatastral.length; j++) {
+            var numClaveCatastral = $(arrNumerosClaveCatastral[j]);
+            var idFila = numClaveCatastral.prop("id").split("_")[1];
+            if (idFilaGestion != idFila && objData.NumeroClaveCatastral != null && objData.NumeroClaveCatastral != "") {
+                if (numClaveCatastral.val() == objData.NumeroClaveCatastral) {
+                    $("#val" + objName.nameNumeroClaveCatastral).html("El Número de clave catastral: está asignado a un Activo Fijo adicionado.");
+                    validar = false;
+                }
+            }
+        }
+    }
+    else if (categoria == objCategorias.Vehiculo) {
+        var arrNumerosChasis = $(".hidden" + objName.nameNumeroChasis).toArray();
+        for (var j = 0; j < arrNumerosChasis.length; j++) {
+            var numChasis = $(arrNumerosChasis[j]);
+            var idFila = numChasis.prop("id").split("_")[1];
+            if (idFilaGestion != idFila && objData.NumeroChasis != null && objData.NumeroChasis != "") {
+                if (numChasis.val() == objData.NumeroChasis) {
+                    $("#val" + objName.nameNumeroChasis).html("El Número de chasis: está asignado a un Activo Fijo adicionado.");
+                    validar = false;
+                }
+            }
+        }
+
+        var arrNumerosMotor = $(".hidden" + objName.nameNumeroMotor).toArray();
+        for (var j = 0; j < arrNumerosMotor.length; j++) {
+            var numMotor = $(arrNumerosMotor[j]);
+            var idFila = numMotor.prop("id").split("_")[1];
+            if (idFilaGestion != idFila && objData.NumeroMotor != null && objData.NumeroMotor != "") {
+                if (numMotor.val() == objData.NumeroMotor) {
+                    $("#val" + objName.nameNumeroMotor).html("El Número de motor: está asignado a un Activo Fijo adicionado.");
+                    validar = false;
+                }
+            }
+        }
+
+        var arrNumerosPlaca = $(".hidden" + objName.namePlaca).toArray();
+        for (var j = 0; j < arrNumerosPlaca.length; j++) {
+            var numPlaca = $(arrNumerosPlaca[j]);
+            var idFila = numPlaca.prop("id").split("_")[1];
+            if (idFilaGestion != idFila && objData.Placa != null && objData.Placa != "") {
+                if (numPlaca.val() == objData.Placa) {
+                    $("#val" + objName.namePlaca).html("La Placa: está asignada a un Activo Fijo adicionado.");
+                    validar = false;
+                }
+            }
+        }
+    }
+    var arrNumerosSerie = $(".hidden" + objName.nameSerie).toArray();
+    for (var j = 0; j < arrNumerosSerie.length; j++) {
+        var numSerie = $(arrNumerosSerie[j]);
+        var idFila = numSerie.prop("id").split("_")[1];
+        if (idFilaGestion != idFila && objData.Serie != null && objData.Serie != "") {
+            if (numSerie.val() == objData.Serie) {
+                $("#val" + objName.nameSerie).html("La Serie: está asignada a un Activo Fijo adicionado.");
+                validar = false;
+            }
+        }
+    }
+    return validar;
+}
+
 function validarDatosEspecificosExisten(objData)
 {
+    var validar = true;
     for (var i = 0; i < arrIdsfilas.length; i++) {
         var idFila = arrIdsfilas[i];
         if (objData.IdFila != idFila)
@@ -569,11 +713,28 @@ function validarDatosEspecificosExisten(objData)
                     $("#val" + objName.namePlaca).html("La Placa: ya existe.");
                     validar = false;
                 }
-                if (!validar)
-                    return false;
             }
             if (objData.Serie == $("#td" + objName.nameSerie + "_" + idFila).html()) {
                 $("#val" + objName.nameSerie).html("La Serie: ya existe.");
+                validar = false;
+            }
+        }
+    }
+    return validar;
+}
+
+function validarActivoFijoExiste(idSubClaseActivoFijo, idModelo, nombreActivoFijo)
+{
+    var idFilaGestion = parseInt($("#IdFilaGestion").val());
+    var arrNombresActivoFijo = $(".hiddenNombreActivoFijo").toArray();
+    for (var j = 0; j < arrNombresActivoFijo.length; j++) {
+        var nombreAF = $(arrNombresActivoFijo[j]);
+        var idFila = nombreAF.prop("id").split("_")[1];
+        if (idFilaGestion != idFila) {
+            var idSubclaseAF = $("#hhIdSubclaseActivoFijo_" + idFila).val();
+            var idModeloAF = $("#hhModelo_" + idFila).val();
+            if (nombreAF.val() == nombreActivoFijo && idSubclaseAF == idSubClaseActivoFijo && idModeloAF == idModelo) {
+                mostrarNotificacion("Error", "Ya existe un Activo Fijo con la misma Subclase de activo fijo, Modelo y Nombre.");
                 return false;
             }
         }
@@ -584,10 +745,10 @@ function validarDatosEspecificosExisten(objData)
 function callBackFunctionEliminarDatoEspecifico(idFila)
 {
     var posFila = obtenerPosIdFila(idFila);
-    deleteRowTableDatosEspecificos(posFila);
+    deleteRowTableDatosEspecificos(idFila);
     arrIdsfilas.splice(posFila, 1);
     eliminarComponente(idFila);
-    $("#RecepcionActivoFijo_Cantidad").val(arrIdsfilas.length);
+    $("#ActivoFijo_Cantidad").val(arrIdsfilas.length);
 
     if (arrIdsfilas.length == 1)
         $("#divEliminarDatosEspecificos_" + arrIdsfilas[0]).addClass("hide");
@@ -595,12 +756,7 @@ function callBackFunctionEliminarDatoEspecifico(idFila)
 
 function cargarFormularioCodificacion(idFila)
 {
-    mostrarLoadingPanel("modalContentDatosEspecificos", "Cargando datos, por favor espere...");
-    $("#hIdFilaModalDatosEspecificos").val(idFila);
-    $("#hIdRecepcionActivoFijoDetalle").val($("#hIdRecepcionActivoFijoDetalle_" + idFila).val());
-    $("#myModalLabel").html("Codificaci&oacute;n");
-    $("#mFuncionCallbak").val("guardarCodificacion");
-
+    mostrarLoadingPanel("checkout-form", "Cargando datos, por favor espere...");
     var hCodificacion = $("#hCodigoSecuencial_" + idFila).val();
     var numeroConsecutivo = 1;
     if (hCodificacion != "" && hCodificacion != null) {
@@ -615,7 +771,16 @@ function cargarFormularioCodificacion(idFila)
         method: "POST",
         data: { Codigosecuencial: $("#hCodigoSecuencial_" + idFila).val() },
         success: function (data) {
-            $("#modalBodyDatosEspecificos").html(data);
+            Init_BootBox("Codificación", data, "large", null, {
+                isGuardar: true, hideAlGuardar: false, callbackGuardar: function () {
+                    guardarCodificacion();
+                }
+            });
+
+            $("#hIdFilaModalDatosEspecificos").val(idFila);
+            $("#hIdRecepcionActivoFijoDetalle").val($("#hIdRecepcionActivoFijoDetalle_" + idFila).val());
+            $("#mFuncionCallbak").val("guardarCodificacion");
+            
             $("#CodigoActivoFijo_Consecutivo").val(numeroConsecutivo);
             $(".spinnerNumeroConsecutivo").spinner();
             $("#spanCodigoSecuencial").html(generarCodigosecuencial());
@@ -626,7 +791,7 @@ function cargarFormularioCodificacion(idFila)
             mostrarNotificacion("Error", "Ocurrió un error al cargar el formulario.");
         },
         complete: function (data) {
-            $("#modalContentDatosEspecificos").waitMe("hide");
+            $("#checkout-form").waitMe("hide");
         }
     });
 }
@@ -634,16 +799,17 @@ function cargarFormularioCodificacion(idFila)
 function guardarCodificacion()
 {
     asignarNumeroConsecutivoCodigoBarras();
-    mostrarLoadingPanel("modalContentDatosEspecificos", "Validando datos, por favor espere...");
+    mostrarLoadingPanel("checkout-form", "Validando datos, por favor espere...");
     $.each($(".validationCodificacion"), function (index, value) {
         $(value).html("");
     });
+    var idFila = $("#hIdFilaModalDatosEspecificos").val();
 
     var objData = {
-        IdFila: $("#hIdFilaModalDatosEspecificos").val(),
+        IdFila: idFila,
         IdRecepcionActivoFijoDetalle: $("#hIdRecepcionActivoFijoDetalle").val(),
         Codigosecuencial: $("#spanCodigoSecuencial").html() + $("#spanNumeroConsecutivo").html(),
-        IdCodigoActivoFijo: $("#hIdCodigoActivoFijo_").val()
+        IdCodigoActivoFijo: $("#hIdCodigoActivoFijo_" + idFila).val()
     };
     if (validarCodificacionNoExiste(objData))
     {
@@ -655,9 +821,8 @@ function guardarCodificacion()
             {
                 if (data.toString().toLowerCase() == "false")
                 {
-                    $('#tbDatosEspecificos').DataTable().cell($('#tdCodificacion_' + objData.IdFila)).data(objData.Codigosecuencial).draw();
-                    $("#hCodigoSecuencial_" + objData.IdFila).val(objData.Codigosecuencial);
-                    $("#btnCancelarDatosEspecificos").click();
+                    putDatoCodificacion(objData.IdFila, objData.Codigosecuencial);
+                    closeBootBox();
                 }
                 else
                     $("#valConsecutivo").html("El Código secuencial: ya existe.");
@@ -666,12 +831,12 @@ function guardarCodificacion()
                 mostrarNotificacion("Error", "Ocurrió un error al validar el formulario.");
             },
             complete: function (data) {
-                $("#modalContentDatosEspecificos").waitMe("hide");
+                $("#checkout-form").waitMe("hide");
             }
         });
     }
     else
-        $("#modalContentDatosEspecificos").waitMe("hide");
+        $("#checkout-form").waitMe("hide");
 }
 
 function validarCodificacionNoExiste(objData)
@@ -686,5 +851,392 @@ function validarCodificacionNoExiste(objData)
             }
         }
     }
+    return validarCodificacionTablaActivosFijos(objData.Codigosecuencial); 
+}
+
+function validarCodificacionTablaActivosFijos(codigoSecuencial)
+{
+    var idFilaGestion = parseInt($("#IdFilaGestion").val());
+    var arrCodigosSecuenciales = $(".hiddenCodigoSecuencial").toArray();
+    for (var j = 0; j < arrCodigosSecuenciales.length; j++) {
+        var codSecuencial = $(arrCodigosSecuenciales[j]);
+        var idFila = codSecuencial.prop("id").split("_")[1];
+        if (idFilaGestion != idFila) {
+            if (codSecuencial.val() == codigoSecuencial) {
+                $("#valConsecutivo").html("El Código secuencial: está asignado a un Activo Fijo adicionado.");
+                return false;
+            }
+        }
+    }
     return true;
+}
+
+function obtenerObjVacioRafd()
+{
+    return {
+        ActivoFijo: {
+            SubClaseActivoFijo: {
+                ClaseActivoFijo: {}
+            },
+            Modelo: {
+                Marca: {}
+            }
+        },
+        RecepcionActivoFijoDetalleEdificio: {},
+        RecepcionActivoFijoDetalleVehiculo: {},
+        UbicacionActivoFijoActual: {},
+        CodigoActivoFijo: {},
+        ComponentesActivoFijoOrigen: []
+    };
+}
+
+function cargarModalDatosActivoFijo(idFila, isVistaDetalles)
+{
+    mostrarLoadingPanel("formDatosActivo", "Cargando datos de activo fijo...");
+    arrIdsfilas = [];
+    maxIdFila = 0;
+
+    var rafd = obtenerObjVacioRafd();
+    var listadoRafd = [];
+    if (idFila != -1) {
+        rafd.ActivoFijo.IdActivoFijo = $("#hhIdActivoFijo_" + idFila).val();
+        rafd.ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.IdTipoActivoFijo = $("#hhIdTipoActivoFijo_" + idFila).val();
+        rafd.ActivoFijo.SubClaseActivoFijo.IdClaseActivoFijo = $("#hhIdClaseActivoFijo_" + idFila).val();
+        rafd.ActivoFijo.IdSubClaseActivoFijo = $("#hhIdSubclaseActivoFijo_" + idFila).val();
+        rafd.ActivoFijo.Cantidad = $("#hhCantidad_" + idFila).val();
+        rafd.ActivoFijo.Modelo.IdMarca = $("#hhMarca_" + idFila).val();
+        rafd.ActivoFijo.IdModelo = $("#hhModelo_" + idFila).val();
+        rafd.ActivoFijo.Nombre = $("#hhNombreActivoFijo_" + idFila).val();
+        rafd.ActivoFijo.ValorCompra = $("#hhValorCompra_" + idFila).val();
+        rafd.ActivoFijo.Depreciacion = $("#hhDepreciacion_" + idFila).val();
+        rafd.ActivoFijo.ValidacionTecnica = $("#hhValidacionTecnica_" + idFila).val();
+
+        try { var arrNumeroClaveCatastral = $("#hh" + objName.nameNumeroClaveCatastral + "_" + idFila).val().split(","); } catch (e) { var arrNumeroClaveCatastral = []; }
+        try { var arrNumeroChasis = $("#hh" + objName.nameNumeroChasis + "_" + idFila).val().split(","); } catch (e) { var arrNumeroChasis = []; }
+        try { var arrNumeroMotor = $("#hh" + objName.nameNumeroMotor + "_" + idFila).val().split(","); } catch (e) { var arrNumeroMotor = []; }
+        try { var arrPlaca = $("#hh" + objName.namePlaca + "_" + idFila).val().split(","); } catch (e) { var arrPlaca = []; }
+        try { var arrSerie = $("#hh" + objName.nameSerie + "_" + idFila).val().split(","); } catch (e) { var arrSerie = []; }
+        try { var arrEmpleado = $("#hhEmpleado_" + idFila).val().split(","); } catch (e) { var arrEmpleado = []; }
+        try { var arrCodigoSecuencial = $("#hhCodigoSecuencial_" + idFila).val().split(","); } catch (e) { var arrCodigoSecuencial = []; }
+        try { var arrCodigoActivoFijo = $("#hhIdCodigoActivoFijo_" + idFila).val().split(","); } catch (e) { var arrCodigoActivoFijo = []; }
+        try { var arrUbicacion = $("#hhUbicacion_" + idFila).val().split(","); } catch (e) { var arrUbicacion = []; }
+        try { var arrComponentes = $("#hhComponentes_" + idFila).val().split("_"); } catch (e) { var arrComponentes = []; }
+        try { var arrIdsRecepcionActivoFijoDetalle = $("#hhIdRecepcionActivoFijoDetalle_" + idFila).val().split(","); } catch (e) { var arrIdsRecepcionActivoFijoDetalle = []; }
+
+        var arrBodega = $("#hhBodega_" + idFila).val().split(",");
+        for (var i = 0; i < arrBodega.length; i++) {
+            var rafdDatoEspecifico = obtenerObjVacioRafd();
+
+            try { rafdDatoEspecifico.RecepcionActivoFijoDetalleEdificio.NumeroClaveCatastral = undash(arrNumeroClaveCatastral[i]); } catch (e) { }
+            try { rafdDatoEspecifico.RecepcionActivoFijoDetalleVehiculo.NumeroChasis = undash(arrNumeroChasis[i]); } catch (e) { }
+            try { rafdDatoEspecifico.RecepcionActivoFijoDetalleVehiculo.NumeroMotor = undash(arrNumeroMotor[i]); } catch (e) { }
+            try { rafdDatoEspecifico.RecepcionActivoFijoDetalleVehiculo.Placa = undash(arrPlaca[i]); } catch (e) { }
+            try { rafdDatoEspecifico.Serie = undash(arrSerie[i]); } catch (e) { }
+            try { rafdDatoEspecifico.CodigoActivoFijo.Codigosecuencial = arrCodigoSecuencial[i]; } catch (e) { }
+            try { rafdDatoEspecifico.CodigoActivoFijo.IdCodigoActivoFijo = arrCodigoActivoFijo[i]; } catch (e) { }
+            try { rafdDatoEspecifico.UbicacionActivoFijoActual.IdUbicacionActivoFijo = arrUbicacion[i]; } catch (e) { }
+            try { rafdDatoEspecifico.IdRecepcionActivoFijoDetalle = arrIdsRecepcionActivoFijoDetalle[i]; } catch (e) { }
+            try {
+                var idBodega = undash(arrBodega[i]);
+                if (idBodega != null && idBodega != "")
+                    rafdDatoEspecifico.UbicacionActivoFijoActual.IdBodega = idBodega;
+            } catch (e) { }
+
+            try {
+                var idEmpleado = undash(arrEmpleado[i]);
+                if (idEmpleado != null && idEmpleado != "")
+                    rafdDatoEspecifico.UbicacionActivoFijoActual.IdEmpleado = idEmpleado;
+            } catch (e) { }
+
+            if (arrComponentes.length > 0) {
+                try {
+                    var arrComp = undash(arrComponentes[i]).split(",");
+                    for (var j = 0; j < arrComp.length; j++) {
+                        rafdDatoEspecifico.ComponentesActivoFijoOrigen.push({
+                            IdRecepcionActivoFijoDetalleComponente: arrComp[j]
+                        });
+                    }
+                } catch (e) { }
+            }
+            listadoRafd.push(rafdDatoEspecifico);
+        }
+    }
+    $.ajax({
+        url: urlDatosActivoFijoResult,
+        method: "POST",
+        data: { recepcionActivoFijoDetalle: rafd, listadoRecepcionActivoFijoDetalle: listadoRafd, isEditar: isEditar, isVistaDetalles: isVistaDetalles },
+        success: function (data) {
+            var texto = isVistaDetalles ? "Detalles de" : "Gestionar";
+            Init_BootBox(texto + " activo fijo", data, "large", null);
+            $.validator.unobtrusive.parse(document);
+        },
+        error: function (errorMessage) {
+            mostrarNotificacion("Error", "Ocurrió un error al cargar el formulario de activos fijos, inténtelo nuevamente.");
+        },
+        complete: function (data) {
+            Init_Select2();
+            Init_Touchspin();
+            eventoTipoActivoFijo();
+            eventoClaseActivoFijo();
+            eventoSubClaseActivoFijo();
+            eventoMarca();
+            eventoRamo();
+            gestionarWizard(isVistaDetalles);
+            eventoSpinnerCantidad();
+            initArrIdFilas();
+            eventoRadioDatosEspecificos();
+            initComponentes();
+            initDataTableFiltrado("tbDatosEspecificos", []);
+            obtenerCategoria(function () {
+                if (idFila == -1)
+                    crearFilas(1);
+                eventoCambiarCategoria();
+            });
+            ocultarDatosTablaEspecificos();
+            $("#IdFilaGestion").val(idFila);
+
+            if (isVistaDetalles) {
+                $("#ActivoFijo_SubClaseActivoFijo_ClaseActivoFijo_IdTipoActivoFijo").prop("disabled", "disabled");
+                $("#ActivoFijo_SubClaseActivoFijo_IdClaseActivoFijo").prop("disabled", "disabled");
+                $("#ActivoFijo_IdSubClaseActivoFijo").prop("disabled", "disabled");
+                $("#ActivoFijo_Cantidad").prop("disabled", "disabled");
+                $("#ActivoFijo_Modelo_IdMarca").prop("disabled", "disabled");
+                $("#ActivoFijo_IdModelo").prop("disabled", "disabled");
+                $("#ActivoFijo_Nombre").prop("disabled", "disabled");
+                $("#ActivoFijo_ValorCompra").prop("disabled", "disabled");
+                $("#ActivoFijo_Depreciacion").prop("disabled", "disabled");
+                $("#ActivoFijo_ValidacionTecnica").prop("disabled", "disabled");
+            }
+            $("#formDatosActivo").waitMe("hide");
+        }
+    });
+}
+
+function guardarDatosActivoFijoRow()
+{
+    var idFilaGestion = parseInt($("#IdFilaGestion").val());
+    var idFila = -1;
+    if (idFilaGestion == -1) {
+        var api = $("#tableDetallesRecepcion").dataTable().api();
+        idFila = api.rows().nodes().length + 1;
+    }
+    else
+        idFila = idFilaGestion;
+
+    var idActivoFijo = $("#IdActivoFijo").val();
+    var idTipoActivoFijo = $("#ActivoFijo_SubClaseActivoFijo_ClaseActivoFijo_IdTipoActivoFijo").val();
+    var idClaseActivoFijo = $("#ActivoFijo_SubClaseActivoFijo_IdClaseActivoFijo").val();
+    var idSubClaseActivoFijo = $("#ActivoFijo_IdSubClaseActivoFijo").val();
+    var idMarca = $("#ActivoFijo_Modelo_IdMarca").val();
+    var idModelo = $("#ActivoFijo_IdModelo").val();
+    var cantidad = $("#ActivoFijo_Cantidad").val();
+    var nombreActivoFijo = $("#ActivoFijo_Nombre").val();
+    var valorCompra = $("#ActivoFijo_ValorCompra").val();
+    var depreciacion = $("#ActivoFijo_Depreciacion").prop("checked");
+    var validacionTecnica = $("#ActivoFijo_ValidacionTecnica").prop("checked");
+
+    var textIdTipoActivoFijo = $("#ActivoFijo_SubClaseActivoFijo_ClaseActivoFijo_IdTipoActivoFijo option:selected").text();
+    var textIdClaseActivoFijo = $("#ActivoFijo_SubClaseActivoFijo_IdClaseActivoFijo option:selected").text();
+    var textIdSubclaseActivoFijo = $("#ActivoFijo_IdSubClaseActivoFijo option:selected").text();
+    var textMarca = $("#ActivoFijo_Modelo_IdMarca option:selected").text();
+    var textModelo = $("#ActivoFijo_IdModelo option:selected").text();
+
+    if (validarActivoFijoExiste(idFila, idSubClaseActivoFijo, idModelo, nombreActivoFijo)) {
+        var arrIdsRecepcionActivoFijoDetalle = [];
+        var arrIdsUbicacionActivoFijo = [];
+        var arrIdsCodigoActivoFijo = [];
+        var arrNumeroClaveCatastral = [];
+        var arrNumeroChasis = [];
+        var arrNumeroMotor = [];
+        var arrPlacas = [];
+        var arrSeries = [];
+        var arrBodegas = [];
+        var arrEmpleados = [];
+        var arrCodigosSecuencial = [];
+        var arrComponentes = [];
+
+        for (var i = 0; i < arrIdsfilas.length; i++) {
+            var row = arrIdsfilas[i];
+            if (categoria == objCategorias.Edificio) {
+                arrNumeroClaveCatastral.push($("#td" + objName.nameNumeroClaveCatastral + "_" + row).html());
+            }
+            else if (categoria == objCategorias.Vehiculo) {
+                arrNumeroChasis.push($("#td" + objName.nameNumeroChasis + "_" + row).html());
+                arrNumeroMotor.push($("#td" + objName.nameNumeroMotor + "_" + row).html());
+                arrPlacas.push($("#td" + objName.namePlaca + "_" + row).html());
+            }
+            arrSeries.push($("#td" + objName.nameSerie + "_" + row).html());
+            arrBodegas.push(dash($("#hBodega_" + row).val()));
+            arrEmpleados.push(dash($("#hEmpleado_" + row).val()));
+            arrCodigosSecuencial.push(dash($("#hCodigoSecuencial_" + row).val()));
+            arrComponentes.push(dash($("#hComponentes_" + row).val()));
+            arrIdsRecepcionActivoFijoDetalle.push(dash($("#hIdRecepcionActivoFijoDetalle_" + row).val()));
+            arrIdsUbicacionActivoFijo.push(dash($("#hUbicacion_" + row).val()));
+            arrIdsCodigoActivoFijo.push(dash($("#hIdCodigoActivoFijo_" + row).val()));
+        }
+        var numerosClaveCatastral = arrNumeroClaveCatastral.join(',');
+        var numerosChasis = arrNumeroChasis.join(',');
+        var numerosMotor = arrNumeroMotor.join(',');
+        var numerosPlaca = arrPlacas.join(',');
+        var numerosSerie = arrSeries.join(',');
+        var bodegas = arrBodegas.join(',');
+        var empleados = arrEmpleados.join(',');
+        var codigosSecuenciales = arrCodigosSecuencial.join(',');
+        var componentes = arrComponentes.join('_');
+        var idsRecepcionesActivoFijoDetalle = arrIdsRecepcionActivoFijoDetalle.join(',');
+        var idsUbicacionesActivoFijo = arrIdsUbicacionActivoFijo.join(',');
+        var idsCodigosActivoFijo = arrIdsCodigoActivoFijo.join(',');
+
+        if (idFilaGestion == -1) {
+            var hRecepcionActivoFijoDetalle = '<input type="hidden" class="hiddenIdRecepcionActivoFijoDetalle" id="hhIdRecepcionActivoFijoDetalle_' + idFila + '" name="hhIdRecepcionActivoFijoDetalle_' + idFila + '" value="' + idsRecepcionesActivoFijoDetalle + '" />';
+            var hIdActivoFijo = '<input type="hidden" class="hiddenIdActivoFijo" id="hhIdActivoFijo_' + idFila + '" name="hhIdActivoFijo_' + idFila + '" value="' + idActivoFijo + '" />';
+            var hNumeroClaveCatastral = "<input type='hidden' class='hiddenNumeroClaveCatastral' id='hhNumeroClaveCatastral_" + idFila + "'" + "name='hhNumeroClaveCatastral_" + idFila + "' value='" + numerosClaveCatastral + "' />";
+            var hNumeroChasis = "<input type='hidden' class='hiddenNumeroChasis' id='hhNumeroChasis_" + idFila + "'" + "name='hhNumeroChasis_" + idFila + "' value='" + numerosChasis + "' />";
+            var hNumeroMotor = "<input type='hidden' class='hiddenNumeroMotor' id='hhNumeroMotor_" + idFila + "'" + "name='hhNumeroMotor_" + idFila + "' value='" + numerosMotor + "' />";
+            var hPlaca = "<input type='hidden' class='hiddenPlaca' id='hhPlaca_" + idFila + "'" + "name='hhPlaca_" + idFila + "' value='" + numerosPlaca + "' />";
+            var hSerie = "<input type='hidden' class='hiddenSerie' id='hhSerie_" + idFila + "'" + "name='hhSerie_" + idFila + "' value='" + numerosSerie + "' />";
+            var hBodega = "<input type='hidden' class='hiddenBodega' id='hhBodega_" + idFila + "'" + "name='hhBodega_" + idFila + "' value='" + bodegas + "' />";
+            var hEmpleado = "<input type='hidden' class='hiddenEmpleado' id='hhEmpleado_" + idFila + "'" + "name='hhEmpleado_" + idFila + "' value='" + empleados + "' />";
+            var hUbicacion = "<input type='hidden' class='hiddenUbicacion' id='hhUbicacion_" + idFila + "' name='hhUbicacion_" + idFila + "' value='" + idsUbicacionesActivoFijo + "' />";
+            var hComponentes = "<input type='hidden' class='hiddenComponentes' id='hhComponentes_" + idFila + "' name='hhComponentes_" + idFila + "' value='" + componentes + "' />";
+            var hCodigoSecuencial = "<input type='hidden' class='hiddenCodigoSecuencial' id='hhCodigoSecuencial_" + idFila + "' name='hhCodigoSecuencial_" + idFila + "' value='" + codigosSecuenciales + "' />";
+            var hIdCodigoActivoFijo = "<input type='hidden' class='hiddenCodigoActivoFijo' id='hhIdCodigoActivoFijo_" + idFila + "' name='hhIdCodigoActivoFijo_" + idFila + "' value='" + idsCodigosActivoFijo + "' />";
+            var hTipoActivoFijo = "<input type='hidden' class='hiddenTipoActivoFijo' id='hhIdTipoActivoFijo_" + idFila + "' name='hhIdTipoActivoFijo_" + idFila + "' value='" + idTipoActivoFijo + "' />";
+            var hClaseActivoFijo = "<input type='hidden' class='hiddenClaseActivoFijo' id='hhIdClaseActivoFijo_" + idFila + "' name='hhIdClaseActivoFijo_" + idFila + "' value='" + idClaseActivoFijo + "' />";
+            var hSubclaseActivoFijo = "<input type='hidden' class='hiddenSubclaseActivoFijo' id='hhIdSubclaseActivoFijo_" + idFila + "' name='hhIdSubclaseActivoFijo_" + idFila + "' value='" + idSubClaseActivoFijo + "' />";
+            var hMarca = "<input type='hidden' class='hiddenMarca' id='hhMarca_" + idFila + "' name='hhMarca_" + idFila + "' value='" + idMarca + "' />";
+            var hModelo = "<input type='hidden' class='hiddenModelo' id='hhModelo_" + idFila + "' name='hhModelo_" + idFila + "' value='" + idModelo + "' />";
+            var hCantidad = "<input type='hidden' class='hiddenCantidad' id='hhCantidad_" + idFila + "' name='hhCantidad_" + idFila + "' value='" + cantidad + "' />";
+            var hNombreActivoFijo = "<input type='hidden' class='hiddenNombreActivoFijo' id='hhNombreActivoFijo_" + idFila + "' name='hhNombreActivoFijo_" + idFila + "' value='" + nombreActivoFijo + "' />";
+            var hValorCompra = "<input type='hidden' class='hiddenValorCompra' id='hhValorCompra_" + idFila + "' name='hhValorCompra_" + idFila + "' value='" + valorCompra + "' />";
+            var hDepreciacion = "<input type='hidden' class='hiddenDepreciacion' id='hhDepreciacion_" + idFila + "' name='hhDepreciacion_" + idFila + "' value='" + depreciacion + "' />";
+            var hValidacionTecnica = "<input type='hidden' class='hiddenValidacionTecnica' id='hhValidacionTecnica_" + idFila + "' name='hhValidacionTecnica_" + idFila + "' value='" + validacionTecnica + "' />";
+            var btnDetallesActivoFijo = '<a href="javascript: void(0);" onclick="cargarModalDatosActivoFijo(' + idFila + ',true)">Detalles</a><span> | </span>';
+            var btnEditarActivoFijo = '<a href="javascript: void(0);" onclick="cargarModalDatosActivoFijo(' + idFila + ',false)">Editar</a><span> | </span>';
+            var btnEliminarActivoFijo = "<div id='divEliminarDatosActivoFijo_" + idFila + "' style='display:inline;'><a href='javascript: void(0);' id='btnEliminarDatosActivoFijo_" + idFila + "' onclick=abrirVentanaConfirmacion('btnEliminarDatosActivoFijo_" + idFila + "') data-funcioncallback=callBackFunctionEliminarDatoActivoFijo('" + idFila + "') data-titulo='Eliminar' data-descripcion='&#191; Desea eliminar el Activo Fijo seleccionado... ?'>Eliminar</a></div>";
+
+            addRowDetallesActivosFijosPorArray("tableDetallesRecepcion", idFila, ['TipoActivoFijo', 'ClaseActivoFijo', 'SubclaseActivoFijo', 'NombreActivoFijo', 'Marca', 'Modelo', 'Cantidad', 'Depreciacion', 'ValidacionTecnica', ''],
+                [
+                    textIdTipoActivoFijo,
+                    textIdClaseActivoFijo,
+                    textIdSubclaseActivoFijo,
+                    nombreActivoFijo,
+                    textMarca,
+                    textModelo,
+                    cantidad,
+                    addRowCheckBox(idFila, depreciacion, null, true),
+                    addRowCheckBox(idFila, validacionTecnica, null, true),
+                    hNumeroClaveCatastral + hNumeroChasis + hNumeroMotor + hPlaca + hSerie + hBodega + hEmpleado + hRecepcionActivoFijoDetalle + hIdActivoFijo + hUbicacion + hComponentes + hCodigoSecuencial + hIdCodigoActivoFijo + hTipoActivoFijo + hClaseActivoFijo + hSubclaseActivoFijo + hMarca + hModelo + hCantidad + hNombreActivoFijo + hValorCompra + hDepreciacion + hValidacionTecnica + btnDetallesActivoFijo + btnEditarActivoFijo + btnEliminarActivoFijo
+                ], true);
+        }
+        else {
+            $("#hhNumeroClaveCatastral_" + idFila).val(numerosClaveCatastral);
+            $("#hhNumeroChasis_" + idFila).val(numerosChasis);
+            $("#hhNumeroMotor_" + idFila).val(numerosMotor);
+            $("#hhPlaca_" + idFila).val(numerosPlaca);
+            $("#hhSerie_" + idFila).val(numerosSerie);
+            $("#hhBodega_" + idFila).val(bodegas);
+            $("#hhEmpleado_" + idFila).val(empleados);
+            $("#hhIdRecepcionActivoFijoDetalle_" + idFila).val(idsRecepcionesActivoFijoDetalle);
+            $("#hhUbicacion_" + idFila).val(idsUbicacionesActivoFijo);
+            $("#hhComponentes_" + idFila).val(componentes);
+            $("#hhCodigoSecuencial_" + idFila).val(codigosSecuenciales);
+            $("#hhIdCodigoActivoFijo_" + idFila).val(idsCodigosActivoFijo);
+            $("#hhIdTipoActivoFijo_" + idFila).val(idTipoActivoFijo);
+            $("#hhIdClaseActivoFijo_" + idFila).val(idClaseActivoFijo);
+            $("#hhIdSubclaseActivoFijo_" + idFila).val(idSubClaseActivoFijo);
+            $("#hhMarca_" + idFila).val(idMarca);
+            $("#hhModelo_" + idFila).val(idModelo);
+            $("#hhCantidad_" + idFila).val(cantidad);
+            $("#hhNombreActivoFijo_" + idFila).val(nombreActivoFijo);
+            $("#hhValorCompra_" + idFila).val(valorCompra);
+            $("#hhDepreciacion_" + idFila).val(depreciacion);
+            $("#hhValidacionTecnica_" + idFila).val(validacionTecnica);
+            $("#tableDetallesRecepcion" + idFila + "TipoActivoFijo").html(textIdTipoActivoFijo);
+            $("#tableDetallesRecepcion" + idFila + "ClaseActivoFijo").html(textIdClaseActivoFijo);
+            $("#tableDetallesRecepcion" + idFila + "SubclaseActivoFijo").html(textIdSubclaseActivoFijo);
+            $("#tableDetallesRecepcion" + idFila + "NombreActivoFijo").html(nombreActivoFijo);
+            $("#tableDetallesRecepcion" + idFila + "Marca").html(textMarca);
+            $("#tableDetallesRecepcion" + idFila + "Modelo").html(textModelo);
+            $("#tableDetallesRecepcion" + idFila + "Cantidad").html(cantidad);
+            $("#tableDetallesRecepcion" + idFila + "Depreciacion").html(addRowCheckBox(idFila, depreciacion, null, true));
+            $("#tableDetallesRecepcion" + idFila + "ValidacionTecnica").html(addRowCheckBox(idFila, validacionTecnica, null, true));
+        }
+        closeBootBox();
+    }
+}
+
+function callBackFunctionEliminarDatoActivoFijo(idFila)
+{
+    deleteRowDetallesActivosFijos("tableDetallesRecepcion", idFila);
+}
+
+function adicionarArrRecepcionActivoFijoDetalle() {
+    var arrIds = idsRecepcionActivoFijoDetalle.split(",");
+    $.each(arrIds, function (index, value) {
+        if (value != "" && value != null) {
+            var arrValores = value.split("_");
+            adicionarRecepcionActivoFijoDetalleSeleccionado(arrValores[0], arrValores[1].toLowerCase() === "true");
+        }
+    });
+}
+
+function callBackFunctionSeleccionActivoFijo(idRecepcionActivoFijoDetalle, seleccionado) {
+    var rafd = obtenerRecepcionActivoFijoDetalleSeleccionado(idRecepcionActivoFijoDetalle);
+    if (seleccionado)
+        rafd.seleccionado = true;
+    else
+        rafd.seleccionado = false;
+}
+
+function callBackEmitirAprobacion(aprobacion)
+{
+    var arrIdsActivoFijo = [];
+    for (var i = 0; i < arrRecepcionActivoFijoDetalleSeleccionado.length; i++) {
+        if (arrRecepcionActivoFijoDetalleSeleccionado[i].seleccionado)
+            arrIdsActivoFijo.push(arrRecepcionActivoFijoDetalleSeleccionado[i].idRecepcionActivoFijoDetalle);
+    }
+
+    if (arrIdsActivoFijo.length == 0)
+        mostrarNotificacion("Error", "Tiene que seleccionar al menos un Activo Fijo.");
+    else {
+        mostrarLoadingPanel("formDatosActivo", "Procesando datos, por favor espere...");
+        $.ajax({
+            url: urlGestionarRevisionActivoFijo,
+            method: "POST",
+            data: { arrIdsActivoFijo: arrIdsActivoFijo, aprobacion: aprobacion },
+            success: function (data) {
+                mostrarNotificacion("Información", "La acción se ha realizado satisfactoriamente.");
+                for (var i = 0; i < arrIdsActivoFijo.length; i++) {
+                    var idFila = obtenerPosArrRecepcionActivoFijoDetalleTodos(arrIdsActivoFijo[i]);
+                    callBackFunctionEliminarDatoActivoFijo(idFila);
+                }
+                $("#formDatosActivo").waitMe("hide");
+
+                var api = $("#tableDetallesRecepcion").dataTable().api();
+                if (api.rows().nodes().length == 0)
+                {
+                    mostrarLoadingPanel("formDatosActivo", "Redireccionando a listado de Validaciones técnicas...");
+                    window.location.href = urlListadoValidacionesTecnicas;
+                }
+            },
+            error: function (errorMessage)
+            {
+                mostrarNotificacion("Error", "Ocurrió un error al procesar los datos, inténtelo nuevamente.");
+                $("#formDatosActivo").waitMe("hide");
+            }
+        });
+    }
+}
+
+function validarPolizaSeguro()
+{
+    var numeroPoliza = $("#RecepcionActivoFijo_PolizaSeguroActivoFijo_NumeroPoliza").val().trim();
+    if (numeroPoliza == "" || numeroPoliza == null)
+    {
+        $("#errorNumeroPoliza").html("Debe introducir el Número de póliza:");
+        mostrarNotificacion("Error", "Existen errores en el formulario.");
+    }
+    else
+        $("#formDatosActivo").submit();
 }

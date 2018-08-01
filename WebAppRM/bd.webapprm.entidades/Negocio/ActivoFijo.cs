@@ -29,6 +29,15 @@ namespace bd.webapprm.entidades
         [Display(Name = "¿Depreciación?")]
         public bool Depreciacion { get; set; }
 
+        [Required(ErrorMessage = "Debe introducir la {0}")]
+        [Display(Name = "¿Validacion técnica?")]
+        public bool ValidacionTecnica { get; set; }
+
+        [Required(ErrorMessage = "Debe introducir la {0}")]
+        [Display(Name = "Cantidad:")]
+        [NotMapped]
+        public int Cantidad { get; set; }
+
         //Propiedades Virtuales Referencias a otras clases
 
         [Display(Name = "Subclase de activo fijo:")]
@@ -38,11 +47,10 @@ namespace bd.webapprm.entidades
         public virtual SubClaseActivoFijo SubClaseActivoFijo { get; set; }
 
         [Display(Name = "Modelo:")]
+        [Required(ErrorMessage = "Debe seleccionar el {0}")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
         public int IdModelo { get; set; }
         public virtual Modelo Modelo { get; set; }
-
-        public virtual PolizaSeguroActivoFijo PolizaSeguroActivoFijo { get; set; }
 
         public virtual ICollection<DocumentoActivoFijo> DocumentosActivoFijo { get; set; }
 

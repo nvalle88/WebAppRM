@@ -4,7 +4,14 @@
     inicializarDetallesActivoSeleccion();
     inicializarObjetoAdicional();
     initDataTableFiltrado("tableDetallesActivoFijoSeleccionados", [13, 15, 16, 17, 18, 19, 20, 21]);
+    $('#tableDetallesActivoFijoSeleccionados').DataTable().page.len(-1).draw();
     eventoGuardar();
+
+    if (isVistaDetalles) {
+        $("#IdMotivoBaja").prop("disabled", "disabled");
+        $("#FechaBaja").prop("disabled", "disabled");
+        $("#MemoOficioResolucion").prop("disabled", "disabled");
+    }
 });
 
 function callBackFunctionEliminarDatoEspecifico(idRecepcionActivoFijoDetalle) {

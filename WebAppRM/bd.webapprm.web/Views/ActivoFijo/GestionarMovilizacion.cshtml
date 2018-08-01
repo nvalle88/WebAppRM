@@ -1,6 +1,7 @@
 @model MovilizacionActivoFijo
 @{
     List<RecepcionActivoFijoDetalleSeleccionado> listadoRecepcionActivoFijoDetalleSeleccionado = ViewBag.ListadoRecepcionActivoFijoDetalleSeleccionado;
+    bool isVistaDetalles = ViewBag.IsVistaDetalles ?? false;
 }
 
 @section css{
@@ -111,29 +112,23 @@
                                     </div>
 
                                     <legend>Activos Fijos autorizados</legend>
-                                    <p class="margin-top-10">
-                                        <button type="button" class="btn btn-primary" style="padding:7px !important;margin-left:7px !important;" onclick="cargarListadoActivosFijosParaSeleccion(this)" data-funcioncallback="callBackInicializarTableListadoSeleccion" id="btnAdicionarActivosFijos" data-toggle="modal" data-target="#myModal">Adicionar / Eliminar Activos Fijos</button>
-                                    </p>
+                                    @{ 
+                                        if (!isVistaDetalles)
+                                        {
+                                            <p class="margin-top-10">
+                                                <button type="button" class="btn btn-primary" style="padding:7px !important;margin-left:7px !important;" onclick="cargarListadoActivosFijosParaSeleccion(this)" data-funcioncallback="callBackInicializarTableListadoSeleccion" id="btnAdicionarActivosFijos">Adicionar / Eliminar Activos Fijos</button>
+                                            </p>
+                                        }
+                                    }
                                     @{await Html.RenderPartialAsync("_ListadoDetallesActivosFijos", listadoRecepcionActivoFijoDetalleSeleccionado);}
-                                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog modal-lg" style="margin-left:8% !important;margin-top:30px !important;width:85% !important;">
-                                            <div class="modal-content" id="modalContentDatosEspecificos">
-                                                <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="padding:10px !important;">
-                                                        &times;
-                                                    </button>
-                                                    <h4 class="modal-title" id="myModalLabel" style="padding:12px !important;">Listado de Activos Fijos</h4>
-                                                </div>
-                                                <div class="modal-body" style="padding:15px !important;padding-top:10px !important;" id="modalBodyDatosEspecificos"></div>
-                                                <div class="modal-footer" style="padding:15px !important;">
-                                                    <button type="button" class="btn btn-default" id="btnCancelarDatosEspecificos" data-dismiss="modal" style="padding:7px !important;">Cancelar</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                 </fieldset>
                                 <footer>
-                                    <button type="button" class="btn btn-primary" id="btn-guardar">Guardar</button>
+                                    @{
+                                        if (!isVistaDetalles)
+                                        {
+                                            <button type="button" class="btn btn-primary" id="btn-guardar">Guardar</button>
+                                        }
+                                    }
                                     <a asp-action="ListadoMovilizacionActivosFijos" class="btn btn-default">Cancelar</a>
                                 </footer>
                             </form>
@@ -151,10 +146,12 @@
     <script src="~/js/plugin/x-editable/moment.min.js"></script>
     <script src="~/js/plugin/x-editable/jquery.mockjax.min.js"></script>
     <script src="~/js/plugin/x-editable/x-editable.min.js"></script>
+    <script src="~/lib/bootbox/bootbox.min.js"></script>
     <script src='~/js/activoFijo/listadoSeleccion.min.js'></script>
     <script src="~/js/activoFijo/movilizacion.min.js"></script>
     <script>
         var urlListadoActivosFijosSeleccionResult = "@Url.Action("ListadoActivosFijosSeleccionMovilizacionResult")";
         objAdicional = "@String.Format("{0}", Model != null ? Model.IdMovilizacionActivoFijo.ToString() : "")";
+        var isVistaDetalles = "@isVistaDetalles".toLowerCase() === 'true';
     </script>
 }

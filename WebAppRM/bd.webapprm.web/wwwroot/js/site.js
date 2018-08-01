@@ -124,6 +124,104 @@ function Init_XEditable(callbackFunction)
     });
 }
 
+var arrBootBox = [];
+function closeBootBox()
+{
+    arrBootBox[arrBootBox.length - 1].modal("hide");
+}
+
+function ajustarBootboxPorCiento(porCiento)
+{
+    var innerDialog = arrBootBox[arrBootBox.length - 1].find(".modal-dialog");
+    innerDialog.prop("style", "width:" + porCiento + "% !important;");
+}
+
+function ajustarHeightBootbox()
+{
+    $('.modal-body').attr('style', 'max-height:' + (($(window).height() - $(window).height() / 4)) + 'px;overflow-y:auto;');
+}
+
+function Init_BootBox(titulo, cuerpo, size, buttonsAdicionales, objConfiguracionGuardar, callbackCancelar) {
+    var objBootBox = {
+        title: titulo,
+        message: cuerpo
+    };
+
+    if (size)
+        objBootBox.size = size;
+
+    objBootBox.buttons = {
+        cancel: {
+            label: "Cancelar",
+            className: 'btn-default',
+            callback: function () {
+                if (callbackCancelar)
+                    callbackCancelar();
+
+                closeBootBox();
+                return false;
+            }
+        }
+    };
+
+    if (buttonsAdicionales && buttonsAdicionales != null) {
+        $.each(buttonsAdicionales, function (index, value) {
+            objBootBox.buttons[value.key] = value.obj;
+        });
+    }
+
+    if (objConfiguracionGuardar && objConfiguracionGuardar != null) {
+        if (objConfiguracionGuardar.isGuardar) {
+            objBootBox.buttons.confirm = {
+                label: "Guardar",
+                className: 'btn-primary',
+                callback: function () {
+                    if (objConfiguracionGuardar.callbackGuardar)
+                        objConfiguracionGuardar.callbackGuardar();
+
+                    if (objConfiguracionGuardar.hideAlGuardar)
+                        closeBootBox();
+                    return false;
+                }
+            };
+        }
+    }
+    var openedDialog = bootbox.dialog(objBootBox);
+    arrBootBox.push(openedDialog);
+
+    ajustarHeightBootbox();
+    eventoInputMayuscula();
+
+    openedDialog.on("hidden.bs.modal", function () {
+        arrBootBox.splice(arrBootBox.length - 1, 1);
+
+        if (callbackCancelar)
+            callbackCancelar();
+    });
+
+    //Ejemplo de llamada cargando de datos todos los parámetros
+    //Los botones adicionales tienen que manejar su función de callback y si cierran el modal o no.
+    //Init_BootBox("Hola mundo", "Soy Carlos Avila", "large",
+    //    [{
+    //        key: "create",
+    //        obj: {
+    //            label: "Crear",
+    //            className: 'btn-success',
+    //            callback: function () {
+    //                alert("Crear");
+    //                this.openedDialog.modal("hide");
+    //                return false;
+    //            }
+    //        }
+    //    }], {
+    //        isGuardar: true, hideAlGuardar: true, callbackGuardar: function () {
+    //            alert("Aceptar");
+    //        }
+    //    }, function () {
+    //        alert("Cancelar");
+    //    });
+}
+
 function mostrarLoadingPanel(idElemento, texto)
 {
     $('#' + idElemento).waitMe({
@@ -310,4 +408,17 @@ function initTreeView()
         }
         e.stopPropagation();
     });
+}
+
+function animacionAnclas() {
+    $('.ancla_enlace').click(function (e) {
+        e.preventDefault();
+        irAncla($(this));
+    });
+}
+
+function irAncla(elemento) {
+    try {
+        $('html, body').stop().animate({ scrollTop: $(elemento.attr('href')).offset().top }, 1000);
+    } catch (e) { }
 }

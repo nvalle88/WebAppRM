@@ -13,5 +13,6 @@ namespace bd.webapprm.entidades.ObjectTransfer
         public int? IdAltaActivoFijo { get; set; }
         public int? IdFacturaActivoFijo { get; set; }
         public int? IdProcesoJudicialActivoFijo { get; set; }
+        public int? IdRecepcionActivoFijo { get; set; }
     }
 }

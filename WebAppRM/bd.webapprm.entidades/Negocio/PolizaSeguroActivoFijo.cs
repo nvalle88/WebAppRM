@@ -8,7 +8,7 @@ namespace bd.webapprm.entidades
     public partial class PolizaSeguroActivoFijo
     {
         [Key]
-        public int IdActivo { get; set; }
+        public int IdRecepcionActivoFijo { get; set; }
 
         [Display(Name = "Subramo:")]
         [Required(ErrorMessage = "Debe seleccionar el {0}")]
@@ -27,6 +27,6 @@ namespace bd.webapprm.entidades
         [RegularExpression(@"^\d*$", ErrorMessage = "El {0} solo puede contener números.")]
         public string NumeroPoliza { get; set; }
 
-        public virtual ActivoFijo ActivoFijo { get; set; }
+        public virtual RecepcionActivoFijo RecepcionActivoFijo { get; set; }
     }
 }

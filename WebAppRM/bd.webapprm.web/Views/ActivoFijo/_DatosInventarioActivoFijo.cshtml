@@ -7,10 +7,10 @@
     <input type="hidden" asp-for="ActivoFijo.Modelo.Marca.Nombre" />
     <input type="hidden" asp-for="ActivoFijo.Modelo.Nombre" />
     <input type="hidden" asp-for="Serie" />
-    <input type="hidden" asp-for="NumeroChasis" />
-    <input type="hidden" asp-for="NumeroMotor" />
-    <input type="hidden" asp-for="Placa" />
-    <input type="hidden" asp-for="NumeroClaveCatastral" />
+    <input type="hidden" asp-for="RecepcionActivoFijoDetalleVehiculo.NumeroChasis" />
+    <input type="hidden" asp-for="RecepcionActivoFijoDetalleVehiculo.NumeroMotor" />
+    <input type="hidden" asp-for="RecepcionActivoFijoDetalleVehiculo.Placa" />
+    <input type="hidden" asp-for="RecepcionActivoFijoDetalleEdificio.NumeroClaveCatastral" />
     <input type="hidden" asp-for="UbicacionActivoFijoActual.Bodega.Nombre" />
     <input type="hidden" asp-for="RecepcionActivoFijo.IdProveedor" value="@String.Format("{0} {1}", Model?.RecepcionActivoFijo?.Proveedor?.Nombre, Model?.RecepcionActivoFijo?.Proveedor?.Apellidos)" />
     <input type="hidden" asp-for="RecepcionActivoFijo.MotivoAlta.Descripcion" />

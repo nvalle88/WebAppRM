@@ -1,6 +1,7 @@
 @model InventarioActivoFijo
 @{
     List<RecepcionActivoFijoDetalleSeleccionado> listadoRecepcionActivoFijoDetalleSeleccionado = ViewBag.ListadoRecepcionActivoFijoDetalleSeleccionado;
+    bool isVistaDetalles = ViewBag.IsVistaDetalles ?? false;
 }
 
 @section css{
@@ -34,18 +35,23 @@
                                     <legend>Datos Generales</legend>
                                     @{await Html.RenderPartialAsync("_DatosGeneralesInventario", Model);}
 
-                                    <div class="row" style="padding-left:15px !important;padding-right:15px !important;">
-                                        <div class="alert alert-info alert-block" style="border-left-width:5px !important;">
-                                            <h4 class="alert-heading">Informaci&oacute;n</h4>
-                                            1. Seleccione el campo <span style="text-transform:uppercase">C&oacute;digo secuencial</span> antes de realizar la acci&oacute;n de escanear con el Lector de C&oacute;digo de Barras.<br />
-                                            2. Si desea actualizar el estado de un Activo Fijo que se encuentra en el listado a No Constatado, desmarque la casilla de selecci&oacute;n correspondiente.
-                                        </div>
-                                    </div>
+                                    @{ 
+                                        if (!isVistaDetalles)
+                                        {
+                                            <div class="row" style="padding-left:15px !important;padding-right:15px !important;">
+                                                <div class="alert alert-info alert-block" style="border-left-width:5px !important;">
+                                                    <h4 class="alert-heading">Informaci&oacute;n</h4>
+                                                    1. Seleccione el campo <span style="text-transform:uppercase">C&oacute;digo secuencial</span> antes de realizar la acci&oacute;n de escanear con el Lector de C&oacute;digo de Barras.<br />
+                                                    2. Si desea actualizar el estado de un Activo Fijo que se encuentra en el listado a No Constatado, desmarque la casilla de selecci&oacute;n correspondiente.
+                                                </div>
+                                            </div>
 
-                                    <legend>Datos de Activo Fijo</legend>
-                                    <div id="divDatosInventarioActivoFijo">
-                                        @{await Html.RenderPartialAsync("_DatosInventarioActivoFijo", new RecepcionActivoFijoDetalle());}
-                                    </div>
+                                            <legend>Datos de Activo Fijo</legend>
+                                            <div id="divDatosInventarioActivoFijo">
+                                                @{await Html.RenderPartialAsync("_DatosInventarioActivoFijo", new RecepcionActivoFijoDetalle());}
+                                            </div>
+                                        }
+                                    }
 
                                     <legend>Activos Fijos en Alta</legend>
                                     <div class="margin-top-10" id="divActivosFijosATransferir">
@@ -55,7 +61,12 @@
                                     </div>
                                 </fieldset>
                                 <footer>
-                                    <button type="submit" class="btn btn-primary" id="btn-guardar">Guardar</button>
+                                    @{ 
+                                        if (!isVistaDetalles)
+                                        {
+                                            <button type="submit" class="btn btn-primary" id="btn-guardar">Guardar</button>
+                                        }
+                                    }
                                     <a asp-action="ListadoInventarioActivosFijos" class="btn btn-default">Cancelar</a>
                                 </footer>
                             </form>
@@ -77,5 +88,6 @@
     <script>
         var urlDatosInventarioActivoFijo = "@Url.Action("DatosInventarioActivoFijoResult")";
         var idsRecepcionActivoFijoDetalle = "@String.Join(",", listadoRecepcionActivoFijoDetalleSeleccionado.Select(c => $"{c.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle}_{c.Seleccionado}"))";
+        var isVistaDetalles = "@isVistaDetalles".toLowerCase() === 'true';
     </script>
 }

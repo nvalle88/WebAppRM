@@ -13,7 +13,7 @@
         /// <summary>
         ///     Retrieves the entry value for the following composed key: "config:Project" as a string.
         /// </summary>
-        public string Project { get; set; }
+        public string Project { get; set; } = "Recursos Materiales";
 
         /// <summary>
         ///     Retrieves the entry value for the following composed key: "config:EnableTiles" as a boolean.
