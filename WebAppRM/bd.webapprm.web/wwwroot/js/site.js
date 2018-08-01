@@ -1,4 +1,45 @@
-﻿$(document).ready(function () {
+﻿var thClassName = {
+    seleccion: "Seleccion",
+    codigoSecuencial: "Codigosecuencial",
+    tipoActivoFijo: "TipoActivoFijo",
+    claseActivoFijo: "ClaseActivoFijo",
+    subClaseActivoFijo: "SubclaseActivoFijo",
+    nombreActivoFijo: "NombreActivoFijo",
+    marca: "Marca",
+    modelo: "Modelo",
+    serie: "Serie",
+    numeroChasis: "NumeroChasis",
+    numeroMotor: "NumeroMotor",
+    placa: "Placa",
+    numeroClaveCatastral: "NumeroClaveCatastral",
+    sucursal: "Sucursal",
+    dependencia: "Dependencia",
+    bodega: "Bodega",
+    empleado: "Empleado",
+    proveedor: "Proveedor",
+    motivoAlta: "MotivoAlta",
+    fechaRecepcion: "FechaRecepcion",
+    ordenCompra: "OrdenCompra",
+    fondoFinanciamiento: "FondoFinanciamiento",
+    fechaAlta: "FechaAlta",
+    numeroFactura: "NumeroFactura",
+    fechaBaja: "FechaBaja",
+    motivoBaja: "MotivoBaja",
+    componentes: "Componentes",
+    observaciones: "Observaciones",
+    opciones: "Opciones",
+    nombreArticulo: "NombreArticulo",
+    cantidad: "Cantidad",
+    cantidadBodega: "CantidadBodega",
+    unidadMedida: "UnidadMedida",
+    valorUnitario: "ValorUnitario",
+    valorTotal: "ValorTotal",
+    tipoArticulo: "TipoArticulo",
+    claseArticulo: "ClaseArticulo",
+    subclaseArticulo: "SubclaseArticulo"
+};
+
+$(document).ready(function () {
     eventoInputMayuscula();
 });
 
@@ -352,9 +393,6 @@ function initDataTableFiltrado(idTabla, arrColumnHidden, fnDrawCallBack)
     };
 
     var otable = $('#' + idTabla).DataTable({
-        "columnDefs": [
-            { "visible": false, "targets": arrColumnHidden }
-        ],
         "lengthMenu": [[10, 25, 50, 100, -1], [10, 25, 50, 100, "Todos"]],
         "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-6 hidden-xs'l'C>r>" +
         "t" +
@@ -378,7 +416,7 @@ function initDataTableFiltrado(idTabla, arrColumnHidden, fnDrawCallBack)
     });
 
     for (var i = 0; i < arrColumnHidden.length; i++) {
-        otable.column(arrColumnHidden[i]).visible(false);
+        otable.column(".th" + arrColumnHidden[i]).visible(false);
     }
 }
 

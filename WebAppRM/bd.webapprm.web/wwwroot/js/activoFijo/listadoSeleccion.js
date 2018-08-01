@@ -4,6 +4,7 @@ var objAdicional = [];
 var mostrarNoSeleccionados = false;
 var isPrimeraSeleccion = true;
 var cantCheckSeleccionados = 0;
+var isComponentes = false;
 
 jQuery(document).ready(function (e) {
     initDataTableFiltrado("tableActivosFijos", []);

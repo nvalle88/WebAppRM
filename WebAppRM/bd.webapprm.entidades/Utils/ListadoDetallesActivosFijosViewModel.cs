@@ -38,7 +38,7 @@ namespace bd.webapprm.entidades.Utils
         public string CallbackFunctionCheckBox { get; set; }
         public string CallbackFunctionRemoveTodos { get; set; } = "callBackFunctionEliminarDatoEspecifico";
         public string NombreTabla { get; set; } = "tableDetallesActivoFijo";
-        public int Cantidad { get; set; } = 16;
+        public int Cantidad { get; set; } = 17;
 
         public ListadoDetallesActivosFijosViewModel(bool? IsConfiguracionSeleccion = null,
             bool? IsConfiguracionSeleccionDisabled = null,
@@ -97,7 +97,7 @@ namespace bd.webapprm.entidades.Utils
             if (this.IsConfiguracionSeleccionComponentes || this.IsConfiguracionDetallesRecepcion || this.IsConfiguracionSeleccionAltas || this.IsConfiguracionListadoAltas || this.IsConfiguracionListadoBajas || (this.IsConfiguracionSeleccionBajas && !this.IsConfiguracionGestionarInventarioAutomatico) || (this.IsConfiguracionListadoBajasGestionar && this.IsConfiguracionBajasGestionarEditar) || this.IsConfiguracionListadoMovilizacionesGestionar || this.IsConfiguracionListadoMovilizaciones)
                 MostrarFiltradoUltimaColumna = true;
 
-            if (this.IsConfiguracionListadoComponentes || this.IsConfiguracionSeleccionComponentes || this.IsConfiguracionListadoAltas || this.IsConfiguracionListadoMantenimientos || this.IsConfiguracionListadoRevalorizaciones || this.IsConfiguracionListadoProcesosJudiciales || this.IsConfiguracionListadoBajas || this.IsConfiguracionListadoBajasGestionar || this.IsConfiguracionSeleccionBajas || this.IsConfiguracionSeleccionMovilizaciones || this.IsConfiguracionListadoMovilizacionesGestionar || this.IsConfiguracionListadoMovilizaciones)
+            if (this.IsConfiguracionListadoComponentes || this.IsConfiguracionSeleccionComponentes || this.IsConfiguracionListadoAltas || this.IsConfiguracionListadoMantenimientos || this.IsConfiguracionListadoRevalorizaciones || this.IsConfiguracionListadoProcesosJudiciales || this.IsConfiguracionListadoBajas || this.IsConfiguracionListadoBajasGestionar || this.IsConfiguracionSeleccionBajas || this.IsConfiguracionSeleccionMovilizaciones || this.IsConfiguracionListadoMovilizacionesGestionar || this.IsConfiguracionListadoMovilizaciones || this.IsConfiguracionListadoGenerales)
                 this.IsConfiguracionDatosAlta = true;
 
             if (this.IsConfiguracionListadoBajas)

@@ -1,6 +1,5 @@
 ﻿var arrRecepcionActivoFijoDetalleComponentes = Array();
 var idFilaDatoEspecificoActual = -1;
-var isComponentes = false;
 var cantComponentesSeleccionados = 0;
 jQuery(document).ready(function () {
     initComponentes();
@@ -43,7 +42,7 @@ function cargarFormularioComponentesDatosEspecificos(idFila) {
             mostrarNotificacion("Error", "Ocurrió un error al cargar el formulario.");
         },
         complete: function (data) {
-            initDataTableFiltrado("tableDetallesActivoFijo", [15, 16, 17, 18, 19, 20, 21]);
+            initDataTableFiltrado("tableDetallesActivoFijo", [thClassName.bodega, thClassName.proveedor, thClassName.motivoAlta, thClassName.fechaRecepcion, thClassName.ordenCompra, thClassName.fondoFinanciamiento, thClassName.fechaAlta, thClassName.numeroFactura]);
             $("#tableDetallesActivoFijo_filter > label > span").prop("style", "height:32px !important;");
             ajustarBootboxPorCiento(80);
             isComponentes = true;
@@ -76,7 +75,7 @@ function cargarListadoActivosFijosParaComponentes()
             mostrarNotificacion("Error", "Ocurrió un error al cargar el formulario.");
         },
         complete: function (data) {
-            initDataTableFiltrado("tableDetallesActivoFijoComponentes", [16, 17, 18, 19, 20, 21, 22]);
+            initDataTableFiltrado("tableDetallesActivoFijoComponentes", [thClassName.bodega, thClassName.proveedor, thClassName.motivoAlta, thClassName.fechaRecepcion, thClassName.ordenCompra, thClassName.fondoFinanciamiento, thClassName.fechaAlta, thClassName.numeroFactura]);
             eventoCheckboxDetallesActivoFijo();
             $("#tableDetallesActivoFijoComponentes_filter > label > span").prop("style", "height:32px !important;");
             ajustarBootboxPorCiento(80);
@@ -153,7 +152,7 @@ function callBackFunctionSeleccionComponente(idRecepcionActivoFijoDetalle, selec
 {
     if (seleccionado) {
         var btnEliminarComponente = "<div id='divEliminarComponente_" + idRecepcionActivoFijoDetalle + "' class='btnEliminarComponentes' style='display:inline;'><a href='javascript: void(0);' id='btnEliminarComponente_" + idRecepcionActivoFijoDetalle + "' onclick=abrirVentanaConfirmacion('btnEliminarComponente_" + idRecepcionActivoFijoDetalle + "') data-funcioncallback=callBackEliminarComponente('" + idRecepcionActivoFijoDetalle + "') data-titulo='Eliminar' data-descripcion='&#191; Desea eliminar el Componente... ?'>Eliminar</a></div>";
-        addRowDetallesActivosFijos("tableDetallesActivoFijo", "tableDetallesActivoFijoComponentes", idRecepcionActivoFijoDetalle, ['Codigosecuencial', 'TipoActivoFijo', 'ClaseActivoFijo', 'SubclaseActivoFijo', 'NombreActivoFijo', 'Marca', 'Modelo', 'Serie', 'NumeroChasis', 'NumeroMotor', 'Placa', 'NumeroClaveCatastral', 'Sucursal', 'Bodega', 'Empleado', 'Proveedor', 'MotivoAlta', 'FechaRecepcion', 'OrdenCompra', 'FondoFinanciamiento', 'FechaAlta', 'NumeroFactura', btnEliminarComponente], true);
+        addRowDetallesActivosFijos("tableDetallesActivoFijo", "tableDetallesActivoFijoComponentes", idRecepcionActivoFijoDetalle, [thClassName.codigoSecuencial, thClassName.tipoActivoFijo, thClassName.claseActivoFijo, thClassName.subClaseActivoFijo, thClassName.nombreActivoFijo, thClassName.marca, thClassName.modelo, thClassName.serie, thClassName.numeroChasis, thClassName.numeroMotor, thClassName.placa, thClassName.numeroClaveCatastral, thClassName.sucursal, thClassName.dependencia, thClassName.bodega, thClassName.empleado, thClassName.proveedor, thClassName.motivoAlta, thClassName.fechaRecepcion, thClassName.ordenCompra, thClassName.fondoFinanciamiento, thClassName.fechaAlta, thClassName.numeroFactura, btnEliminarComponente], true);
         var rafdComponente = obtenerRecepcionActivoFijoDetalleComponente();
         rafdComponente.arrIdsComponentes.push(idRecepcionActivoFijoDetalle);
     }
