@@ -1,5 +1,26 @@
-@model List<ActivoFijo>
-@{await Html.RenderPartialAsync("_ListadoActivosFijos");}
+@model List<RecepcionActivoFijoDetalleSeleccionado>
+
+<div id="content">
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                        <h2>Listado de Activos Fijos</h2>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox">
+                        </div>
+                        <div class="widget-body no-padding">
+                            @{await Html.RenderPartialAsync("_ListadoDetallesActivosFijos");}
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
 @section Scripts {
-    <script src='~/js/activoFijo/listadoSeleccion.min.js'></script>
+    <script src='~/js/datatables/initDatatableFiltradoAltasBajas.min.js'></script>
 }

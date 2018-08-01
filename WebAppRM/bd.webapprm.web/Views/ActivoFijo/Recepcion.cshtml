@@ -1,6 +1,11 @@
 @model bd.webapprm.entidades.RecepcionActivoFijoDetalle
 @{
-    var ubicacionActivoFijo = ViewBag.UbicacionActivoFijo as bd.webapprm.entidades.UbicacionActivoFijo ?? new bd.webapprm.entidades.UbicacionActivoFijo();
+    List<RecepcionActivoFijoDetalleSeleccionado> listadoRecepcionActivoFijoDetalle = ViewBag.ListadoRecepcionActivoFijoDetalle ?? new List<RecepcionActivoFijoDetalleSeleccionado>();
+    bool isSeleccion = ViewBag.IsSeleccion ?? false;
+    bool isVistaDetalles = ViewBag.IsVistaDetalles ?? false;
+    bool isRevisionActivoFijo = ViewBag.IsRevisionActivoFijo ?? false;
+    bool isPolizaSeguro = ViewBag.IsPolizaSeguro ?? false;
+    string actionForm = isPolizaSeguro ? "AsignarPolizaSeguro" : "Recepcion";
 }
 
 @section css{
@@ -20,304 +25,68 @@
                 <div class="jarviswidget jarviswidget-color-red" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
                     <header>
                         <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
-                        <h2>Recepci&oacute;n de Activo Fijo</h2>
+                        @{ 
+                            if (isRevisionActivoFijo)
+                            {
+                                <h2>Revisi&oacute;n de Activo Fijo</h2>
+                            }
+                            else
+                            {
+                                <h2>Recepci&oacute;n de Activo Fijo</h2>
+                            }
+                        }
                     </header>
                     <div>
                         <div class="jarviswidget-editbox"></div>
                         <div class="widget-body no-padding">
-                            <form asp-action="Recepcion" id="checkout-form" class="smart-form" novalidate="novalidate" enctype="multipart/form-data">
-                                <input type="hidden" asp-for="ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.CategoriaActivoFijo.Nombre" value="@ViewBag.Categoria" />
+                            <form asp-action="@actionForm" id="formDatosActivo" class="smart-form" novalidate="novalidate" enctype="multipart/form-data">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                @{
+                                    if (Model != null)
+                                    {
+                                        <input type="hidden" asp-for="IdRecepcionActivoFijo" />
+                                    }
+                                    if (isRevisionActivoFijo)
+                                    {
+                                        <input type="hidden" id="idsRecepcionActivoFijoDetalleSeleccionado" name="idsRecepcionActivoFijoDetalleSeleccionado" />
+                                        <input type="hidden" id="accion" name="accion" />
+                                    }
+                                }
                                 <fieldset>
-                                    <div class="widget-body fuelux">
-                                        <div class="wizard">
-                                            <ul class="steps">
-                                                <li data-target="#step1" class="active">
-                                                    <span class="badge badge-info" style="padding:3px 4px !important;">1</span>Datos Generales<span class="chevron"></span>
-                                                </li>
-                                                <li data-target="#step2">
-                                                    <span class="badge badge-info" style="padding:3px 4px !important;">2</span>Datos Espec&Iacute;ficos<span class="chevron"></span>
-                                                </li>
-                                                <li data-target="#step3">
-                                                    <span class="badge badge-info" style="padding:3px 4px !important;">3</span>P&oacute;liza de Seguro<span class="chevron"></span>
-                                                </li>
-                                            </ul>
-                                            <div class="actions">
-                                                <button type="button" class="btn btn-sm btn-primary btn-prev" disabled="disabled" id="btn-atras"><i class="fa fa-arrow-left"></i>Atr&aacute;s</button>
-                                                <button type="button" class="btn btn-sm btn-success btn-next" data-last="Guardar" id="btn-guardar">Siguiente<i class="fa fa-arrow-right"></i></button>
-                                            </div>
-                                        </div>
-                                        <div class="step-content" style="margin-top:15px;">
-                                            <div id="fuelux-wizard">
-                                                <div class="step-pane active" id="step1">
-                                                    <fieldset>
-                                                        <legend>Clasificaci&oacute;n</legend>
-                                                        <div class="row">
-                                                            <section class="col col-4">
-                                                                <label asp-for="ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.Nombre"></label>
-                                                            </section>
-
-                                                            <section class="col col-8">
-                                                                <label class="input">
-                                                                    <select asp-for="ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.IdTipoActivoFijo" class="form-control" asp-items="ViewBag.TipoActivoFijo"></select>
-                                                                    <span asp-validation-for="ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.IdTipoActivoFijo" class="text-danger"></span>
-                                                                </label>
-                                                            </section>
-                                                        </div>
-
-                                                        <div class="row">
-                                                            <section class="col col-4">
-                                                                <label asp-for="ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.Nombre"></label>
-                                                            </section>
-
-                                                            <div id="div_claseActivoFijo">
-                                                                @{ await Html.RenderPartialAsync("_ClaseActivoFijoSelect", Model); }
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="row">
-                                                            <section class="col col-4">
-                                                                <label asp-for="ActivoFijo.SubClaseActivoFijo.Nombre"></label>
-                                                            </section>
-
-                                                            <div id="div_subClaseActivoFijo">
-                                                                @{ await Html.RenderPartialAsync("_SubClaseActivoFijoSelect", Model); }
-                                                            </div>
-                                                        </div>
-
-                                                        <legend>Distribuci&oacute;n</legend>
-                                                        <div class="row margin-top-25">
-                                                            <section class="col col-4">
-                                                                <label>@Html.LabelFor(c => ubicacionActivoFijo.LibroActivoFijo.Sucursal.Nombre)</label>
-                                                            </section>
-
-                                                            <div id="div_sucursal">
-                                                                @{ await Html.RenderPartialAsync("_SucursalSelect", new bd.webapprm.entidades.UbicacionActivoFijo()); }
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="row">
-                                                            <section class="col col-4">
-                                                                <label>@Html.LabelFor(c => ubicacionActivoFijo.IdLibroActivoFijo)</label>
-                                                            </section>
-
-                                                            <div id="div_libroActivoFijo">
-                                                                @{ await Html.RenderPartialAsync("_LibroActivoFijoSelect", new bd.webapprm.entidades.UbicacionActivoFijo()); }
-                                                            </div>
-                                                        </div>
-
-                                                        <legend>Datos Generales</legend>
-                                                        <div class="row margin-top-25">
-                                                            <section class="col col-4">
-                                                                <label asp-for="RecepcionActivoFijo.IdMotivoAlta"></label>
-                                                            </section>
-
-                                                            <section class="col col-8">
-                                                                <label class="input">
-                                                                    <select asp-for="RecepcionActivoFijo.IdMotivoAlta" class="form-control" asp-items="ViewBag.MotivoAlta"></select>
-                                                                    <span asp-validation-for="RecepcionActivoFijo.IdMotivoAlta" class="text-danger"></span>
-                                                                </label>
-                                                            </section>
-                                                        </div>
-
-                                                        <div class="row">
-                                                            <section class="col col-4">
-                                                                <label asp-for="RecepcionActivoFijo.IdProveedor"></label>
-                                                            </section>
-
-                                                            <section class="col col-8">
-                                                                <label class="input">
-                                                                    <select asp-for="RecepcionActivoFijo.IdProveedor" class="form-control" asp-items="ViewBag.Proveedor"></select>
-                                                                    <span asp-validation-for="RecepcionActivoFijo.IdProveedor" class="text-danger"></span>
-                                                                </label>
-                                                            </section>
-                                                        </div>
-
-                                                        <div class="row">
-                                                            <section class="col col-4">
-                                                                <label asp-for="RecepcionActivoFijo.IdFondoFinanciamiento"></label>
-                                                            </section>
-
-                                                            <section class="col col-8">
-                                                                <label class="input">
-                                                                    <select asp-for="RecepcionActivoFijo.IdFondoFinanciamiento" class="form-control" asp-items="ViewBag.FondoFinanciamiento"></select>
-                                                                    <span asp-validation-for="RecepcionActivoFijo.IdFondoFinanciamiento" class="text-danger"></span>
-                                                                </label>
-                                                            </section>
-                                                        </div>
-
-                                                        <div class="row">
-                                                            <section class="col col-4">
-                                                                <label asp-for="RecepcionActivoFijo.FechaRecepcion"></label>
-                                                            </section>
-
-                                                            <section class="col col-8">
-                                                                <label class="input">
-                                                                    <input asp-for="RecepcionActivoFijo.FechaRecepcion" class="form-control" />
-                                                                    <span asp-validation-for="RecepcionActivoFijo.FechaRecepcion" class="text-danger"></span>
-                                                                </label>
-                                                            </section>
-                                                        </div>
-
-                                                        <div class="row">
-                                                            <section class="col col-4">
-                                                                <label asp-for="RecepcionActivoFijo.Cantidad"></label>
-                                                            </section>
-
-                                                            <section class="col col-8">
-                                                                <div class="input-group spinner spinnerCantidad" data-trigger="spinner">
-                                                                    <input asp-for="RecepcionActivoFijo.Cantidad" type="text" class="form-control" data-rule="quantity" style="padding-left:10px !important;" />
-                                                                    <div class="input-group-addon" style="padding-left:23px !important;">
-                                                                        <a href="javascript:;" class="spin-up" data-spin="up"><i class="fa fa-caret-up"></i></a>
-                                                                        <a href="javascript:;" class="spin-down" data-spin="down"><i class="fa fa-caret-down"></i></a>
-                                                                    </div>
-                                                                </div>
-                                                                <span asp-validation-for="RecepcionActivoFijo.Cantidad" class="text-danger"></span>
-                                                            </section>
-                                                        </div>
-
-                                                        <div class="row">
-                                                            <section class="col col-4">
-                                                                <label asp-for="ActivoFijo.Modelo.Marca.Nombre"></label>
-                                                            </section>
-
-                                                            <section class="col col-8">
-                                                                <label class="input">
-                                                                    <select asp-for="ActivoFijo.Modelo.IdMarca" class="form-control" asp-items="ViewBag.Marca"></select>
-                                                                    <span asp-validation-for="ActivoFijo.Modelo.IdMarca" class="text-danger"></span>
-                                                                </label>
-                                                            </section>
-                                                        </div>
-
-                                                        <div class="row">
-                                                            <section class="col col-4">
-                                                                <label asp-for="ActivoFijo.Modelo.Nombre"></label>
-                                                            </section>
-
-                                                            <div id="div_modelo">
-                                                                @{ await Html.RenderPartialAsync("_ModeloSelect", Model); }
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="row">
-                                                            <section class="col col-4">
-                                                                <label asp-for="ActivoFijo.Nombre"></label>
-                                                            </section>
-
-                                                            <section class="col col-8">
-                                                                <label class="input">
-                                                                    <input asp-for="ActivoFijo.Nombre" class="form-control" />
-                                                                    <span asp-validation-for="ActivoFijo.Nombre" class="text-danger"></span>
-                                                                </label>
-                                                            </section>
-                                                        </div>
-
-                                                        <div class="row">
-                                                            <section class="col col-4">
-                                                                <label asp-for="ActivoFijo.ValorCompra"></label>
-                                                            </section>
-
-                                                            <section class="col col-8">
-                                                                <label class="input">
-                                                                    <input asp-for="ActivoFijo.ValorCompra" class="form-control touchspin_tasa" />
-                                                                    <span asp-validation-for="ActivoFijo.ValorCompra" class="text-danger"></span>
-                                                                </label>
-                                                            </section>
-                                                        </div>
-
-                                                        <div class="row">
-                                                            <section class="col col-4">
-                                                                <label asp-for="RecepcionActivoFijo.OrdenCompra"></label>
-                                                            </section>
-
-                                                            <section class="col col-8">
-                                                                <label class="input">
-                                                                    <textarea asp-for="RecepcionActivoFijo.OrdenCompra" class="form-control paddingTextArea98"></textarea>
-                                                                    <span asp-validation-for="RecepcionActivoFijo.OrdenCompra" class="text-danger"></span>
-                                                                </label>
-                                                            </section>
-                                                        </div>
-
-                                                        <div class="row">
-                                                            <section class="col col-4">
-                                                                <label asp-for="ActivoFijo.Depreciacion"></label>
-                                                            </section>
-
-                                                            <section class="col col-8">
-                                                                <label class="toggle" style="float:left;padding-right:50px !important;">
-                                                                    <input type="checkbox" name="checkbox-toggle" asp-for="ActivoFijo.Depreciacion" checked="checked">
-                                                                    <i data-swchon-text="SI" data-swchoff-text="NO"></i>
-                                                                </label>
-                                                            </section>
-                                                        </div>
-
-                                                        <div class="row">
-                                                            <section class="col col-4">
-                                                                <label asp-for="RecepcionActivoFijo.ValidacionTecnica"></label>
-                                                            </section>
-
-                                                            <section class="col col-8">
-                                                                <label class="toggle" style="float:left;padding-right:50px !important;">
-                                                                    <input type="checkbox" name="checkbox-toggle" asp-for="RecepcionActivoFijo.ValidacionTecnica">
-                                                                    <i data-swchon-text="SI" data-swchoff-text="NO"></i>
-                                                                </label>
-                                                            </section>
-                                                        </div>
-
-                                                        <legend>Documentaci&oacute;n adicional</legend>
-                                                        <div class="row margin-top-25">
-                                                            <section class="col col-12 width100">
-                                                                <input type="file" id="file" name="file" multiple="multiple" />
-                                                            </section>
-                                                        </div>
-                                                    </fieldset>
-                                                </div>
-                                                <div class="step-pane" id="step2">
-                                                    @{ await Html.RenderPartialAsync("_DatosEspecificos", ViewBag.ListadoRecepcionActivoFijoDetalle as List<RecepcionActivoFijoDetalle>); }
-                                                </div>
-                                                <div class="step-pane" id="step3">
-                                                    <div class="row margin-top-25">
-                                                        <section class="col col-4">
-                                                            <label asp-for="ActivoFijo.PolizaSeguroActivoFijo.Subramo.Ramo.Nombre"></label>
-                                                        </section>
-
-                                                        <section class="col col-8">
-                                                            <label class="input">
-                                                                <select asp-for="ActivoFijo.PolizaSeguroActivoFijo.Subramo.IdRamo" class="form-control" asp-items="ViewBag.Ramo"></select>
-                                                                <span asp-validation-for="ActivoFijo.PolizaSeguroActivoFijo.Subramo.IdRamo" class="text-danger"></span>
-                                                            </label>
-                                                        </section>
-                                                    </div>
-
-                                                    <div class="row">
-                                                        <section class="col col-4">
-                                                            <label asp-for="ActivoFijo.PolizaSeguroActivoFijo.Subramo.Nombre"></label>
-                                                        </section>
-
-                                                        <div id="div_subramo">
-                                                            @{ await Html.RenderPartialAsync("_SubramoSelect", Model); }
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="row">
-                                                        <section class="col col-4">
-                                                            <label asp-for="ActivoFijo.PolizaSeguroActivoFijo.CompaniaSeguro.Nombre"></label>
-                                                        </section>
-
-                                                        <section class="col col-8">
-                                                            <label class="input">
-                                                                <select asp-for="ActivoFijo.PolizaSeguroActivoFijo.IdCompaniaSeguro" class="form-control" asp-items="ViewBag.CompaniaSeguro"></select>
-                                                                <span asp-validation-for="ActivoFijo.PolizaSeguroActivoFijo.IdCompaniaSeguro" class="text-danger"></span>
-                                                            </label>
-                                                        </section>
-                                                    </div>
+                                    <legend>Datos generales</legend>
+                                    @{await Html.RenderPartialAsync("_DetalleDatosGeneralesRecepcion", Model);}
+                                    @{ 
+                                        if (isRevisionActivoFijo)
+                                        {
+                                            <div class="row" style="padding-left:15px !important;padding-right:15px !important;">
+                                                <div class="alert alert-info alert-block" style="border-left-width:5px !important;">
+                                                    <h4 class="alert-heading">Informaci&oacute;n</h4>
+                                                    Seleccione los Activos Fijos que ser&aacute;n revisados marcando las casillas de selecci&oacute;n.
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
+                                        }
+                                    }
+                                    @{await Html.RenderPartialAsync("_ListadoActivosFijosRecepcion", listadoRecepcionActivoFijoDetalle);}
                                 </fieldset>
                                 <footer>
-                                    <span class="text-danger" id="spanError">@ViewData["Error"]</span>
+                                    @{ 
+                                        if (!isVistaDetalles && !isPolizaSeguro)
+                                        {
+                                            <button type="button" class="btn btn-primary" id="btn-guardar" onclick="validarRecepcion()">Guardar</button>
+                                            <a asp-action="ActivosFijosRecepcionados" class="btn btn-default">Cancelar</a>
+                                        }
+                                        if (isPolizaSeguro)
+                                        {
+                                            <button type="button" class="btn btn-primary" id="btn-guardar" onclick="validarPolizaSeguro()">Guardar</button>
+                                            <a asp-action="ActivosFijosRecepcionadosSinPoliza" class="btn btn-default">Cancelar</a>
+                                        }
+                                        if (isRevisionActivoFijo)
+                                        {
+                                            <a href="javascript:void(0);" id="btn_aprobar" class="btn btn-primary" onclick="abrirVentanaConfirmacion('btn_aprobar')" data-funcioncallback="callBackEmitirAprobacion(true)" data-titulo="Emitir aprobaci&oacute;n" data-descripcion="&#191;Desea aprobar los Activos Fijos seleccionados?">Aprobar</a>
+                                            <a href="javascript:void(0);" id="btn_desaprobar" class="btn btn-danger" onclick="abrirVentanaConfirmacion('btn_desaprobar')" data-funcioncallback="callBackEmitirAprobacion(false)" data-titulo="Emitir desaprobaci&oacute;n" data-descripcion="&#191;Desea desaprobar los Activos Fijos seleccionados?">Desaprobar</a>
+                                            <a asp-action="ActivosFijosValidacionTecnica" class="btn btn-default">Cancelar</a>
+                                        }
+                                    }
                                 </footer>
                             </form>
                         </div>
@@ -337,6 +106,7 @@
     <script src='~/lib/jquery.spinner-master/dist/js/jquery.spinner.min.js'></script>
     @{await Html.RenderPartialAsync("_FileInputScriptsPartial");}
     <script src="~/lib/JsBarcode-master/dist/JsBarcode.all.min.js"></script>
+    <script src="~/lib/bootbox/bootbox.min.js"></script>
     <script src='~/js/activoFijo/codificacion.min.js'></script>
     <script src='~/js/activoFijo/recepcion.min.js'></script>
     <script src='~/js/activoFijo/listadoSeleccion.min.js'></script>
@@ -344,7 +114,6 @@
     <script>
         var urlEliminarActivoFijo = "@Url.Action("EliminarArchivo")";
         var urlModeloSelectResult = "@Url.Action("Modelo_SelectResult")";
-        var libroActivoFijoSelectResult = "@Url.Action("LibroActivoFijo_SelectResult")";
         var claseActivoFijoSelectResult = "@Url.Action("ClaseActivoFijo_SelectResult")";
         var subClaseActivoFijoSelectResult = "@Url.Action("SubClaseActivoFijo_SelectResult")";
         var urlSubramoSelectResult = "@Url.Action("Subramo_SelectResult")";
@@ -355,6 +124,14 @@
         var urlCategoria = "@Url.Action("CategoriaResult")";
         var urlCodificacion = "@Url.Action("CodificacionResult")";
         var urlValidarCodigoUnico = "@Url.Action("ValidarCodigoUnico")";
-        var isEditar = false;
+        var urlDatosActivoFijoResult = "@Url.Action("DatosActivoFijoResult")";
+        var urlGestionarRevisionActivoFijo = "@Url.Action("GestionarAprobacionActivoFijo")";
+        var urlListadoValidacionesTecnicas = "@Url.Action("ActivosFijosValidacionTecnica")";
+        var isEditar = "@String.Format("{0}", Model != null && Model.IdRecepcionActivoFijo != 0 ? true : false)".toLowerCase() === 'true';
+        var isVistaDetalles = "@isVistaDetalles".toLowerCase() === 'true';
+        var isSeleccion = "@isSeleccion".toLowerCase() === 'true';
+        var isRevisionActivoFijo = "@isRevisionActivoFijo".toLowerCase() === 'true';
+        var isPolizaSeguro = "@isPolizaSeguro".toLowerCase() === 'true';
+        var idsRecepcionActivoFijoDetalle = "@String.Join(",", listadoRecepcionActivoFijoDetalle.Select(c => $"{c.RecepcionActivoFijoDetalle.IdActivoFijo}_{c.Seleccionado}"))";
     </script>
 }

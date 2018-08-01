@@ -1,19 +1,6 @@
 @model CambioUbicacionSucursalViewModel
 <div class="row">
     <section class="col col-4">
-        <label asp-for="IdEmpleadoResponsableEnvio"></label>
-    </section>
-
-    <section class="col col-8">
-        <label class="input">
-            <select asp-for="IdEmpleadoResponsableEnvio" class="form-control" asp-items="ViewBag.EmpleadoResponsableEnvio"></select>
-            <span asp-validation-for="IdEmpleadoResponsableEnvio" class="text-danger"></span>
-        </label>
-    </section>
-</div>
-
-<div class="row">
-    <section class="col col-4">
         <label asp-for="IdEmpleadoEntrega"></label>
     </section>
 
@@ -21,6 +8,19 @@
         <label class="input">
             <select asp-for="IdEmpleadoEntrega" class="form-control" asp-items="ViewBag.EmpleadoEntrega"></select>
             <span asp-validation-for="IdEmpleadoEntrega" class="text-danger"></span>
+        </label>
+    </section>
+</div>
+
+<div class="row">
+    <section class="col col-4">
+        <label asp-for="IdEmpleadoResponsableEnvio"></label>
+    </section>
+
+    <section class="col col-8">
+        <label class="input">
+            <select asp-for="IdEmpleadoResponsableEnvio" class="form-control" asp-items="ViewBag.EmpleadoResponsableEnvio"></select>
+            <span asp-validation-for="IdEmpleadoResponsableEnvio" class="text-danger"></span>
         </label>
     </section>
 </div>

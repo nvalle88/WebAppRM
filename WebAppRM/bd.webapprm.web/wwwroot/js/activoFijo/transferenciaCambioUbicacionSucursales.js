@@ -3,6 +3,7 @@
     Init_DatetimePicker("FechaTransferencia", true);
     inicializarDetallesActivoSeleccion();
     initDataTableFiltrado("tableDetallesActivoFijoBajas", !idEditar ? [14, 16, 17, 18, 19, 20, 21, 22] : [13, 15, 16, 17, 18, 19, 20, 21]);
+    $('#tableDetallesActivoFijoBajas').DataTable().page.len(-1).draw();
     eventoCustodioEntrega();
     eventoGuardar();
     adicionarArrRecepcionActivoFijoDetalle();
@@ -12,6 +13,14 @@
 
     if (idEditar)
         deshabilitarCamposFormulario();
+
+    if (isVistaDetalles) {
+        deshabilitarCamposFormulario();
+        $("#FechaTransferencia").prop("disabled", "disabled");
+        $("#Observaciones").prop("disabled", "disabled");
+        $("#IdEmpleadoResponsableEnvio").prop("disabled", "disabled");
+        $("#IdEmpleadoResponsableRecibo").prop("disabled", "disabled");
+    }
 });
 
 function deshabilitarCamposFormulario()
@@ -84,6 +93,7 @@ function partialViewActivosFijosPorCustodio() {
         success: function (data) {
             $("#divActivosFijosATransferir").html(data);
             initDataTableFiltrado("tableDetallesActivoFijoBajas", [14, 16, 17, 18, 19, 20, 21, 22]);
+            $('#tableDetallesActivoFijoBajas').DataTable().page.len(-1).draw();
             arrRecepcionActivoFijoDetalleSeleccionado = [];
         },
         complete: function (data) {

@@ -21,7 +21,7 @@
                                     @{await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", 7);}
                                     <tr>
                                         <th>
-                                            @Html.DisplayNameFor(model => model.FirstOrDefault().AltaActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijo.LibroActivoFijo.IdSucursal)
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().AltaActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijo.Bodega.IdSucursal)
                                         </th>
                                         <th>
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().AltaActivoFijoDetalle.FirstOrDefault().IdTipoUtilizacionAlta)
@@ -64,8 +64,8 @@
                                                 @{await ViewContext.Writer.WriteAsync(item?.FacturaActivoFijo?.FechaFactura.ToString("dd/MM/yyyy hh:mm tt") ?? "-");}
                                             </td>
                                             <td>
-                                                @Html.ActionLink("Editar", "GestionarAlta", new { id = item.IdAltaActivoFijo }) |
-                                                <a href="javascript:void(0);" class="btnDetallesActivosFijos" id="btnDetallesActivoFijo_@item.IdAltaActivoFijo" onclick="abrirVentanaDetallesActivoFijo('@item.IdAltaActivoFijo')" data-ids="@String.Join(",", item.AltaActivoFijoDetalle.Select(c => $"{c.IdRecepcionActivoFijoDetalle}_true"))" data-url="@Url.Action("DetallesActivoFijoResult", "ActivoFijo")" data-toggle="modal" data-target="#myModalTableActivosFijos">Detalles</a>
+                                                @Html.ActionLink("Detalles", "DetallesAlta", new { id = item.IdAltaActivoFijo }) |
+                                                @Html.ActionLink("Editar", "GestionarAlta", new { id = item.IdAltaActivoFijo })
                                             </td>
                                         </tr>
                                     }
@@ -77,31 +77,8 @@
             </article>
         </div>
     </section>
-    <div class="modal fade" id="myModalTableActivosFijos" tabindex="-3" role="dialog" aria-labelledby="myModalTableActivosFijosLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" style="margin-left:8% !important;margin-top:30px !important;width:85% !important;">
-            <div class="modal-content" id="modalContentTableActivosFijos">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                        &times;
-                    </button>
-                    <h4 class="modal-title" id="myModalTableActivosFijosLabel">Detalles de Activo Fijo</h4>
-                </div>
-                <div class="modal-body" id="modalBodyTableActivosFijos"></div>
-                <div class="modal-footer" id="divFooterTableActivosFijos">
-                    <button type="button" class="btn btn-default" id="btnCancelarTableActivosFijos" data-dismiss="modal">Cancelar</button>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 
 @section Scripts {
     <script src='~/js/datatables/initDatatableFiltrado.min.js'></script>
-    <script src="~/js/activoFijo/listadoSeleccion.js"></script>
-    <script>
-    var arrConfiguraciones = {
-            IsConfiguracionDatosActivo: true,
-            IsConfiguracionListadoAltas: true
-        };
-    </script>
 }

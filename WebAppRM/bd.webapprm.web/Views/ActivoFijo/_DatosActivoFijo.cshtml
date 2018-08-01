@@ -1,0 +1,166 @@
+@model bd.webapprm.entidades.RecepcionActivoFijoDetalle
+@{ 
+    bool isVistaDetalles = ViewBag.IsVistaDetalles ?? false;
+}
+<form id="checkout-form" class="smart-form" novalidate="novalidate">
+    <div class="widget-body fuelux">
+        <div class="wizard">
+            <ul class="steps">
+                <li data-target="#step1" class="active">
+                    <span class="badge badge-info" style="padding:3px 4px !important;">1</span>Datos Generales<span class="chevron"></span>
+                </li>
+                <li data-target="#step2">
+                    <span class="badge badge-info" style="padding:3px 4px !important;">2</span>Datos Espec&iacute;ficos<span class="chevron"></span>
+                </li>
+            </ul>
+            <div class="actions">
+                <button type="button" class="btn btn-sm btn-primary btn-prev" disabled="disabled" id="btn-atras"><i class="fa fa-arrow-left"></i>Atr&aacute;s</button>
+                <button type="button" class="btn btn-sm btn-success btn-next" data-last="Guardar" id="btn-guardar">Siguiente<i class="fa fa-arrow-right"></i></button>
+            </div>
+        </div>
+        <div class="step-content" style="margin-top:15px;">
+            <div id="fuelux-wizard">
+                <div class="step-pane active" id="step1">
+                    <input type="hidden" asp-for="IdRecepcionActivoFijoDetalle" />
+                    <input type="hidden" asp-for="IdActivoFijo" />
+                    <input type="hidden" asp-for="IdCodigoActivoFijo" />
+                    <input type="hidden" asp-for="UbicacionActivoFijoActual.IdUbicacionActivoFijo" />
+                    <input type="hidden" id="IdFilaGestion" />
+                    <fieldset>
+                        <legend>Clasificaci&oacute;n</legend>
+                        <div class="row">
+                            <section class="col col-4">
+                                <label asp-for="ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.Nombre"></label>
+                            </section>
+
+                            <section class="col col-8">
+                                <label class="input">
+                                    <select asp-for="ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.IdTipoActivoFijo" class="form-control" asp-items="ViewBag.TipoActivoFijo"></select>
+                                    <span asp-validation-for="ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.IdTipoActivoFijo" class="text-danger"></span>
+                                </label>
+                            </section>
+                        </div>
+
+                        <div class="row">
+                            <section class="col col-4">
+                                <label asp-for="ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.Nombre"></label>
+                            </section>
+
+                            <div id="div_claseActivoFijo">
+                                @{ await Html.RenderPartialAsync("_ClaseActivoFijoSelect", Model); }
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <section class="col col-4">
+                                <label asp-for="ActivoFijo.SubClaseActivoFijo.Nombre"></label>
+                            </section>
+
+                            <div id="div_subClaseActivoFijo">
+                                @{ await Html.RenderPartialAsync("_SubClaseActivoFijoSelect", Model); }
+                            </div>
+                        </div>
+
+                        <legend>Datos Generales</legend>
+                        <div class="row margin-top-25">
+                            <section class="col col-4">
+                                <label asp-for="ActivoFijo.Cantidad"></label>
+                            </section>
+
+                            <section class="col col-8">
+                                <div class="input-group spinner spinnerCantidad" data-trigger="spinner">
+                                    <input asp-for="ActivoFijo.Cantidad" type="text" class="form-control" data-rule="quantity" style="padding-left:10px !important;" />
+                                    <div class="input-group-addon" style="padding-left:23px !important;">
+                                        <a href="javascript:;" class="spin-up" data-spin="up"><i class="fa fa-caret-up"></i></a>
+                                        <a href="javascript:;" class="spin-down" data-spin="down"><i class="fa fa-caret-down"></i></a>
+                                    </div>
+                                </div>
+                                <span asp-validation-for="ActivoFijo.Cantidad" class="text-danger"></span>
+                            </section>
+                        </div>
+
+                        <div class="row">
+                            <section class="col col-4">
+                                <label asp-for="ActivoFijo.Modelo.Marca.Nombre"></label>
+                            </section>
+
+                            <section class="col col-8">
+                                <label class="input">
+                                    <select asp-for="ActivoFijo.Modelo.IdMarca" class="form-control" asp-items="ViewBag.Marca"></select>
+                                    <span asp-validation-for="ActivoFijo.Modelo.IdMarca" class="text-danger"></span>
+                                </label>
+                            </section>
+                        </div>
+
+                        <div class="row">
+                            <section class="col col-4">
+                                <label asp-for="ActivoFijo.Modelo.Nombre"></label>
+                            </section>
+
+                            <div id="div_modelo">
+                                @{ await Html.RenderPartialAsync("_ModeloSelect", Model); }
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <section class="col col-4">
+                                <label asp-for="ActivoFijo.Nombre"></label>
+                            </section>
+
+                            <section class="col col-8">
+                                <label class="input">
+                                    <input asp-for="ActivoFijo.Nombre" class="form-control" />
+                                    <span asp-validation-for="ActivoFijo.Nombre" class="text-danger"></span>
+                                </label>
+                            </section>
+                        </div>
+
+                        <div class="row">
+                            <section class="col col-4">
+                                <label asp-for="ActivoFijo.ValorCompra"></label>
+                            </section>
+
+                            <section class="col col-8">
+                                <label class="input">
+                                    <input asp-for="ActivoFijo.ValorCompra" class="form-control touchspin_tasa" />
+                                    <span asp-validation-for="ActivoFijo.ValorCompra" class="text-danger"></span>
+                                </label>
+                            </section>
+                        </div>
+
+                        <div class="row">
+                            <section class="col col-4">
+                                <label asp-for="ActivoFijo.Depreciacion"></label>
+                            </section>
+
+                            <section class="col col-8">
+                                <label class="toggle" style="float:left;padding-right:50px !important;">
+                                    <input type="checkbox" name="checkbox-toggle" asp-for="ActivoFijo.Depreciacion" checked="checked">
+                                    <i data-swchon-text="SI" data-swchoff-text="NO"></i>
+                                </label>
+                            </section>
+                        </div>
+
+                        <div class="row">
+                            <section class="col col-4">
+                                <label asp-for="ActivoFijo.ValidacionTecnica"></label>
+                            </section>
+
+                            <section class="col col-8">
+                                <label class="toggle" style="float:left;padding-right:50px !important;">
+                                    <input type="checkbox" name="checkbox-toggle" asp-for="ActivoFijo.ValidacionTecnica">
+                                    <i data-swchon-text="SI" data-swchoff-text="NO"></i>
+                                </label>
+                            </section>
+                        </div>
+
+                        
+                    </fieldset>
+                </div>
+                <div class="step-pane" id="step2">
+                    @{ await Html.RenderPartialAsync("_DatosEspecificos", ViewBag.ListadoRecepcionActivoFijoDetalle as List<RecepcionActivoFijoDetalle>); }
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

@@ -1,6 +1,7 @@
 @model AltaActivoFijo
 @{
     List<RecepcionActivoFijoDetalleSeleccionado> listadoRecepcionActivoFijoDetalleSeleccionado = ViewBag.ListadoRecepcionActivoFijoDetalleSeleccionado;
+    bool isVistaDetalles = ViewBag.IsVistaDetalles ?? false;
 }
 
 @section css{
@@ -74,88 +75,36 @@
 
                                     <div id="divOpcionCompra"></div>
 
-                                    <legend>Documentaci&oacute;n adicional de los bienes</legend>
-                                    <div class="row margin-top-25">
-                                        <section class="col col-12 width100">
-                                            <input type="file" id="file" name="file" multiple="multiple" />
-                                        </section>
-                                    </div>
+                                    @{ 
+                                        if (!isVistaDetalles)
+                                        {
+                                            <legend>Documentaci&oacute;n adicional de los bienes</legend>
+                                            <div class="row margin-top-25">
+                                                <section class="col col-12 width100">
+                                                    <input type="file" id="file" name="file" multiple="multiple" />
+                                                </section>
+                                            </div>
+                                        }
+                                    }
 
                                     <legend>Activos Fijos seleccionados</legend>
-                                    @{ 
-                                        if (Model == null)
+                                    @{
+                                        if (Model == null && !isVistaDetalles)
                                         {
                                             <p class="margin-top-10">
-                                                <button type="button" class="btn btn-primary" style="padding:7px !important;margin-left:7px !important;" onclick="cargarListadoActivosFijosParaSeleccion(this)" data-funcioncallback="callBackInicializarTableListadoSeleccion" id="btnAdicionarActivosFijos" data-toggle="modal" data-target="#myModal">Adicionar / Eliminar Activos Fijos</button>
+                                                <button type="button" class="btn btn-primary" style="padding:7px !important;margin-left:7px !important;" onclick="cargarListadoActivosFijosParaSeleccion(this)" data-funcioncallback="callBackInicializarTableListadoSeleccion" id="btnAdicionarActivosFijos">Adicionar / Eliminar Activos Fijos</button>
                                             </p>
                                         }
                                     }
                                     @{await Html.RenderPartialAsync("_ListadoDetallesActivosFijos", listadoRecepcionActivoFijoDetalleSeleccionado);}
-                                    @{ 
-                                        if (Model == null)
-                                        {
-                                            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-lg" style="margin-left:8% !important;margin-top:30px !important;width:85% !important;">
-                                                    <div class="modal-content" id="modalContentDatosEspecificos">
-                                                        <div class="modal-header">
-                                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="padding:10px !important;">
-                                                                &times;
-                                                            </button>
-                                                            <h4 class="modal-title" id="myModalLabel" style="padding:12px !important;">Listado de Activos Fijos</h4>
-                                                        </div>
-                                                        <div class="modal-body" style="padding:15px !important;padding-top:10px !important;" id="modalBodyDatosEspecificos"></div>
-                                                        <div class="modal-footer" style="padding:15px !important;">
-                                                            <button type="button" class="btn btn-default" id="btnCancelarDatosEspecificos" data-dismiss="modal" style="padding:7px !important;">Cancelar</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        }
-                                    }
-                                    <div class="modal fade" id="myModalEmpleado" tabindex="-1" role="dialog" aria-labelledby="myModalEmpleadoLabel" aria-hidden="true">
-                                        <div class="modal-dialog" style="margin-left:28% !important;margin-top:30px !important;">
-                                            <div class="modal-content" id="modalContentEmpleado">
-                                                <div class="modal-header">
-                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" style="padding:10px !important;">
-                                                        &times;
-                                                    </button>
-                                                    <h4 class="modal-title" id="myModalEmpleadoLabel" style="padding:12px !important;">Selecci&oacute;n de Custodio</h4>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <div class="row" style="margin:0px !important;padding:20px !important;">
-                                                        <section class="col col-4">
-                                                            <label>@Html.DisplayNameFor(model => model.AltaActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijoDetalle.UbicacionActivoFijoActual.IdEmpleado)</label>
-                                                        </section>
-
-                                                        <section class="col col-8">
-                                                            <label class="input" id="inputEmpleado">
-
-                                                            </label>
-                                                            <div class="inline-group margin-top-10">
-                                                                <label class="checkbox">
-                                                                    <input name="checkbox-inline" type="checkbox" id="chkTodosEmpleadosDatosEspecificos">
-                                                                    <i></i>Asignar este Empleado a todos los Activos Fijos pertenecientes a la misma Sucursal.
-                                                                </label>
-                                                            </div>
-                                                        </section>
-                                                    </div>
-                                                </div>
-                                                <div class="modal-footer" style="padding:15px !important;">
-                                                    <button type="button" class="btn btn-default" id="btnCancelarDatosEmpleado" data-dismiss="modal" style="padding:7px !important;">Cancelar</button>
-                                                    <button type="button" class="btn btn-primary" id="btnGuardarDatosEmpleado" style="padding:7px !important;padding-left:15px !important;padding-right:15px !important;">Guardar</button>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    @{ 
-                                        if (Model == null)
-                                        {
-                                            await Html.RenderPartialAsync("_ModalComponentes", listadoRecepcionActivoFijoDetalleSeleccionado);
-                                        }
-                                    }
                                 </fieldset>
                                 <footer>
-                                    <button type="button" class="btn btn-primary" id="btn-guardar">Guardar</button>
+                                    @{ 
+                                        if (!isVistaDetalles)
+                                        {
+                                            <button type="button" class="btn btn-primary" id="btn-guardar">Guardar</button>
+                                        }
+                                    }
                                     <a asp-action="ListadoActivosFijosAlta" class="btn btn-default">Cancelar</a>
                                 </footer>
                             </form>
@@ -171,6 +120,7 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     @{await Html.RenderPartialAsync("_DatetimePickerScriptsPartial");}
     @{await Html.RenderPartialAsync("_FileInputScriptsPartial");}
+    <script src="~/lib/bootbox/bootbox.min.js"></script>
     <script src='~/js/activoFijo/listadoSeleccion.min.js'></script>
     <script src='~/js/activoFijo/componentes.min.js'></script>
     <script src="~/js/activoFijo/alta.min.js"></script>
@@ -180,5 +130,6 @@
         var urlModalComponentesResult = "@Url.Action("ModalComponentesResult")";
         var urlComponentesActivosFijos = "@Url.Action("ComponentesActivosFijosResult")";
         var urlModalEmpleadosResult = "@Url.Action("ModalEmpleadosResult")";
+        var isVistaDetalles = "@isVistaDetalles".toLowerCase() === 'true';
     </script>
 }

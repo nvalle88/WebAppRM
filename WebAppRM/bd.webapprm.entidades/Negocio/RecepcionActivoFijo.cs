@@ -3,11 +3,13 @@ namespace bd.webapprm.entidades
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
 
     public partial class RecepcionActivoFijo
     {
         public RecepcionActivoFijo()
         {
+            DocumentoActivoFijo = new HashSet<DocumentoActivoFijo>();
             RecepcionActivoFijoDetalle = new HashSet<RecepcionActivoFijoDetalle>();
         }
 
@@ -19,14 +21,6 @@ namespace bd.webapprm.entidades
         [DataType(DataType.DateTime)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy hh:mm tt}", ApplyFormatInEditMode = true)]
         public DateTime FechaRecepcion { get; set; }
-
-        [Required(ErrorMessage = "Debe introducir la {0}")]
-        [Display(Name = "Cantidad:")]
-        public int Cantidad { get; set; }
-
-        [Required(ErrorMessage = "Debe introducir la {0}")]
-        [Display(Name = "¿Validacion técnica?")]
-        public bool ValidacionTecnica { get; set; }
 
         [Required(ErrorMessage = "Debe introducir la {0}")]
         [Display(Name = "Orden de compra:")]
@@ -53,6 +47,8 @@ namespace bd.webapprm.entidades
         public int IdFondoFinanciamiento { get; set; }
         public virtual FondoFinanciamiento FondoFinanciamiento { get; set; }
 
+        public virtual PolizaSeguroActivoFijo PolizaSeguroActivoFijo { get; set; }
+        public virtual ICollection<DocumentoActivoFijo> DocumentoActivoFijo { get; set; }
         public virtual ICollection<RecepcionActivoFijoDetalle> RecepcionActivoFijoDetalle { get; set; }
     }
 }

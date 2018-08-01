@@ -71,8 +71,8 @@
                                             </td>
 
                                             <td>
+                                                <a asp-action="DetallesMovilizacion" asp-route-id="@item.IdMovilizacionActivoFijo">Detalles</a><span> | </span>
                                                 @Html.ActionLink("Editar", "GestionarMovilizacion", new { id = item.IdMovilizacionActivoFijo })<span> | </span>
-                                                <a href="javascript:void(0);" class="btnDetallesActivosFijos" id="btnDetallesActivoFijo_@item.IdMovilizacionActivoFijo" onclick="abrirVentanaDetallesActivoFijo('@item.IdMovilizacionActivoFijo')" data-ids="@String.Join(",", item.MovilizacionActivoFijoDetalle.Select(c => $"{c.IdRecepcionActivoFijoDetalle}_true"))" data-url="@Url.Action("DetallesMovilizacionActivoFijoResult", "ActivoFijo")" data-toggle="modal" data-target="#myModalTableActivosFijos">Detalles</a><span> | </span>
                                                 <a href="javascript:void(0);" id="@item.IdMovilizacionActivoFijo" onclick="abrirVentanaConfirmacion('@item.IdMovilizacionActivoFijo')" data-url="@Url.Action("EliminarMovilizacion", values: new { id = item.IdMovilizacionActivoFijo })" data-titulo="Eliminar" data-descripcion="&#191;Desea eliminar la Movilizaci&oacute;n... ?">Eliminar</a>
                                             </td>
 
@@ -86,30 +86,7 @@
             </article>
         </div>
     </section>
-    <div class="modal fade" id="myModalTableActivosFijos" tabindex="-3" role="dialog" aria-labelledby="myModalTableActivosFijosLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" style="margin-left:8% !important;margin-top:30px !important;width:85% !important;">
-            <div class="modal-content" id="modalContentTableActivosFijos">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
-                        &times;
-                    </button>
-                    <h4 class="modal-title" id="myModalTableActivosFijosLabel">Detalles de Activo Fijo</h4>
-                </div>
-                <div class="modal-body" id="modalBodyTableActivosFijos"></div>
-                <div class="modal-footer" id="divFooterTableActivosFijos">
-                    <button type="button" class="btn btn-default" id="btnCancelarTableActivosFijos" data-dismiss="modal">Cancelar</button>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 @section Scripts {
     <script src='~/js/datatables/initDatatableFiltrado.min.js'></script>
-    <script src="~/js/activoFijo/listadoSeleccion.min.js"></script>
-    <script>
-        var arrConfiguraciones = {
-            IsConfiguracionDatosActivo: true,
-            IsConfiguracionListadoMovilizaciones: true
-        };
-    </script>
 }

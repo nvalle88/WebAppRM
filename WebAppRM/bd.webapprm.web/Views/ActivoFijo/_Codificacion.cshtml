@@ -1,47 +1,53 @@
 @model bd.webapprm.entidades.RecepcionActivoFijoDetalle
-@{ 
+@{
     bool isSmartAdmin = ViewBag.IsSmartAdmin ?? false;
 }
 <input type="hidden" asp-for="IdCodigoActivoFijo" />
-<fieldset>
-    <legend>Generaci&oacute;n y asignaci&oacute;n del C&oacute;digo &Uacute;nico</legend>
-    <div class="row" style="@String.Format("{0}", isSmartAdmin ? "padding-left:15px !important;padding-right:15px !important;" : "")">
-        <div class="alert alert-info alert-block" style="border-left-width:5px !important;">
-            <h4 class="alert-heading">Informaci&oacute;n</h4>
-            El c&oacute;digo &uacute;nico de cada detalle de activo se generar&aacute; a partir del Fondo y Sucursal, Clase de Activo y Subclase de Activo al cual pertenece, adem&aacute;s de un n&uacute;mero consecutivo.
+<input type="hidden" id="hIdFilaModalDatosEspecificos" />
+<input type="hidden" id="hIdRecepcionActivoFijoDetalle" />
+<input type="hidden" id="mFuncionCallbak" />
+
+<div class="smart-form" id="divSmartFormModalDatosCodificacion">
+    <fieldset>
+        <legend>Generaci&oacute;n y asignaci&oacute;n del C&oacute;digo &Uacute;nico</legend>
+        <div class="row" style="@String.Format("{0}", isSmartAdmin ? "padding-left:15px !important;padding-right:15px !important;" : "")">
+            <div class="alert alert-info alert-block" style="border-left-width:5px !important;">
+                <h4 class="alert-heading">Informaci&oacute;n</h4>
+                El c&oacute;digo &uacute;nico de cada detalle de activo se generar&aacute; a partir del Fondo y Sucursal, Clase de Activo y Subclase de Activo al cual pertenece, adem&aacute;s de un n&uacute;mero consecutivo.
+            </div>
         </div>
-    </div>
 
-    <div class="row">
-        <section class="col col-4">
-            <label>C&oacute;digo &Uacute;nico</label>
-        </section>
+        <div class="row">
+            <section class="col col-4">
+                <label>C&oacute;digo &Uacute;nico</label>
+            </section>
 
-        <section class="col col-8">
-            <div class="input-group spinner spinnerNumeroConsecutivo" data-trigger="spinner">
-                <input type="text" asp-for="CodigoActivoFijo.Consecutivo" class="form-control" data-rule="quantity" style="padding-left:10px !important;" onkeyup="asignarNumeroConsecutivoCodigoBarras();" />
-                <div class="input-group-addon" style="padding-left:23px !important;">
-                    <a href="javascript:;" class="spin-up" data-spin="up"><i class="fa fa-caret-up"></i></a>
-                    <a href="javascript:;" class="spin-down" data-spin="down"><i class="fa fa-caret-down"></i></a>
+            <section class="col col-8">
+                <div class="input-group spinner spinnerNumeroConsecutivo" data-trigger="spinner">
+                    <input type="text" asp-for="CodigoActivoFijo.Consecutivo" class="form-control" data-rule="quantity" style="padding-left:10px !important;" onkeyup="asignarNumeroConsecutivoCodigoBarras();" />
+                    <div class="input-group-addon" style="padding-left:23px !important;">
+                        <a href="javascript:;" class="spin-up" data-spin="up"><i class="fa fa-caret-up"></i></a>
+                        <a href="javascript:;" class="spin-down" data-spin="down"><i class="fa fa-caret-down"></i></a>
+                    </div>
                 </div>
-            </div>
-            <div class="note">
-                <strong>C&oacute;digo Secuencial:</strong> <span id="spanCodigoSecuencial"></span><span id="spanNumeroConsecutivo"></span>
-            </div>
-            <span id="valConsecutivo" class="text-danger validationCodificacion"></span>
-        </section>
-    </div>
+                <div class="note">
+                    <strong>C&oacute;digo Secuencial:</strong> <span id="spanCodigoSecuencial"></span><span id="spanNumeroConsecutivo"></span>
+                </div>
+                <span id="valConsecutivo" class="text-danger validationCodificacion"></span>
+            </section>
+        </div>
 
-    <legend>C&oacute;digo de Barras a partir del C&oacute;digo &Uacute;nico</legend>
-    <div class="row margin-top-25">
-        <section class="col col-4">
-            <label asp-for="CodigoActivoFijo.CodigoBarras"></label>
-        </section>
+        <legend>C&oacute;digo de Barras a partir del C&oacute;digo &Uacute;nico</legend>
+        <div class="row margin-top-25">
+            <section class="col col-4">
+                <label asp-for="CodigoActivoFijo.CodigoBarras"></label>
+            </section>
 
-        <section class="col col-8">
-            <label class="input">
-                <img class="imgBarCode" id="barcode1" />
-            </label>
-        </section>
-    </div>
-</fieldset>
+            <section class="col col-8">
+                <label class="input">
+                    <img class="imgBarCode" id="barcode1" />
+                </label>
+            </section>
+        </div>
+    </fieldset>
+</div>

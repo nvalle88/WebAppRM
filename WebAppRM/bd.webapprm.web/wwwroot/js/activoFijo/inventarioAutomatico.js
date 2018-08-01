@@ -3,7 +3,7 @@
     Init_DatetimePicker("FechaInforme", true);
     Init_Select2();
     adicionarArrRecepcionActivoFijoDetalle();
-    initDataTableFiltrado("tableDetallesActivoFijoBajas", [14, 16, 17, 18, 19, 20, 21, 22, 23], function () {
+    initDataTableFiltrado("tableDetallesActivoFijoBajas", [14, 16, 17, 18, 19, 20, 21, 22], function () {
         var table = $("#tableDetallesActivoFijoBajas").dataTable();
         var api = table.api();
         var rows = api.rows({ page: 'current' }).nodes();
@@ -14,9 +14,20 @@
         crearGrupo(api, rows, last, groupadmin, 3, "Clase de activo fijo", 6, 23);
         crearGrupo(api, rows, last, groupadmin, 4, "Subclase de activo fijo", 12, 23);
     });
+    $('#tableDetallesActivoFijoBajas').DataTable().page.len(-1).draw();
     eventoGuardar();
     eventoLectorCodigoBarras();
     inicializarIdsArrRecepcionActivoFijoDetalleTodos();
+
+    //Simula la detección de un código (El parámetro debe ser un código de un activo fijo en alta)
+    //$("#CodigoActivoFijo_Codigosecuencial").scannerDetection('1.002.001.1');
+
+    if (isVistaDetalles) {
+        $("#NumeroInforme").prop("disabled", "disabled");
+        $("#FechaCorteInventario").prop("disabled", "disabled");
+        $("#FechaInforme").prop("disabled", "disabled");
+        $("#IdEstado").prop("disabled", "disabled");
+    }
 });
 
 function eventoLectorCodigoBarras()
@@ -112,10 +123,10 @@ function callBackFunctionSeleccionConstatado(idRecepcionActivoFijoDetalle, selec
         $("#ActivoFijo_Modelo_Marca_Nombre").val(),
         $("#ActivoFijo_Modelo_Nombre").val(),
         agregarDashValorEmpty($("#Serie").val()),
-        agregarDashValorEmpty($("#NumeroChasis").val()),
-        agregarDashValorEmpty($("#NumeroMotor").val()),
-        agregarDashValorEmpty($("#Placa").val()),
-        agregarDashValorEmpty($("#NumeroClaveCatastral").val()),
+        agregarDashValorEmpty($("#RecepcionActivoFijoDetalleVehiculo_NumeroChasis").val()),
+        agregarDashValorEmpty($("#RecepcionActivoFijoDetalleVehiculo_NumeroMotor").val()),
+        agregarDashValorEmpty($("#RecepcionActivoFijoDetalleVehiculo_Placa").val()),
+        agregarDashValorEmpty($("#RecepcionActivoFijoDetalleEdificio_NumeroClaveCatastral").val()),
         $("#SucursalActual_Nombre").val(),
         agregarDashValorEmpty($("#UbicacionActivoFijoActual_Bodega_Nombre").val()),
         $("#UbicacionActivoFijoActual_IdEmpleado").val(),

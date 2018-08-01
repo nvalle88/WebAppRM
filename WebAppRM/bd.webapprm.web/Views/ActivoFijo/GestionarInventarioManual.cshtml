@@ -1,6 +1,7 @@
 @model InventarioActivoFijo
 @{
     List<RecepcionActivoFijoDetalleSeleccionado> listadoRecepcionActivoFijoDetalleSeleccionado = ViewBag.ListadoRecepcionActivoFijoDetalleSeleccionado;
+    bool isVistaDetalles = ViewBag.IsVistaDetalles ?? false;
 }
 
 @section css{
@@ -34,12 +35,17 @@
                                     <legend>Datos Generales</legend>
                                     @{await Html.RenderPartialAsync("_DatosGeneralesInventario", Model);}
 
-                                    <div class="row" style="padding-left:15px !important;padding-right:15px !important;">
-                                        <div class="alert alert-info alert-block" style="border-left-width:5px !important;">
-                                            <h4 class="alert-heading">Informaci&oacute;n</h4>
-                                            Seleccione los Activos Fijos que est&aacute;n Constatados marcando las casillas de selecci&oacute;n.
-                                        </div>
-                                    </div>
+                                    @{ 
+                                        if (!isVistaDetalles)
+                                        {
+                                            <div class="row" style="padding-left:15px !important;padding-right:15px !important;">
+                                                <div class="alert alert-info alert-block" style="border-left-width:5px !important;">
+                                                    <h4 class="alert-heading">Informaci&oacute;n</h4>
+                                                    Seleccione los Activos Fijos que est&aacute;n Constatados marcando las casillas de selecci&oacute;n.
+                                                </div>
+                                            </div>
+                                        }
+                                    }                                    
                                     <legend>Activos Fijos en Alta</legend>
                                     <div class="margin-top-10" id="divActivosFijosATransferir">
                                         @{
@@ -48,7 +54,12 @@
                                     </div>
                                 </fieldset>
                                 <footer>
-                                    <button type="button" class="btn btn-primary" id="btn-guardar">Guardar</button>
+                                    @{ 
+                                        if (!isVistaDetalles)
+                                        {
+                                            <button type="button" class="btn btn-primary" id="btn-guardar">Guardar</button>
+                                        }
+                                    }
                                     <a asp-action="ListadoInventarioActivosFijos" class="btn btn-default">Cancelar</a>
                                 </footer>
                             </form>
@@ -67,5 +78,6 @@
     <script src="~/js/activoFijo/inventarioManual.min.js"></script>
     <script>
         var idsRecepcionActivoFijoDetalle = "@String.Join(",", listadoRecepcionActivoFijoDetalleSeleccionado.Select(c => $"{c.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle}_{c.Seleccionado}"))";
+        var isVistaDetalles = "@isVistaDetalles".toLowerCase() === 'true';
     </script>
 }

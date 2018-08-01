@@ -1,7 +1,15 @@
 @model bd.webapprm.entidades.RecepcionActivoFijoDetalle
+@{ 
+    bool isPolizaSeguro = ViewBag.IsPolizaSeguro ?? false;
+}
 <section class="col col-8">
     <label class="input">
-        <select asp-for="ActivoFijo.PolizaSeguroActivoFijo.IdSubramo" class="form-control" asp-items="ViewBag.Subramo"></select>
-        <span asp-validation-for="ActivoFijo.PolizaSeguroActivoFijo.IdSubramo" class="text-danger"></span>
+        <select asp-for="RecepcionActivoFijo.PolizaSeguroActivoFijo.IdSubramo" class="form-control" asp-items="ViewBag.Subramo"></select>
+        @{
+            if (!isPolizaSeguro)
+            {
+                <span asp-validation-for="RecepcionActivoFijo.PolizaSeguroActivoFijo.IdSubramo" class="text-danger"></span>
+            }
+        }
     </label>
 </section>

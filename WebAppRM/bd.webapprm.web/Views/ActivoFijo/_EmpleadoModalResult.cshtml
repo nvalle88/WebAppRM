@@ -1,3 +1,22 @@
-<select id="IdEmpleado" class="form-control" asp-items="ViewBag.Empleado"></select>
-<span id="valIdEmpleado" class="text-danger validationDatosEspecificos"></span>
-<input type="hidden" id="hIdRecepcionActivoFijoDetalleEmpleado" value="@ViewBag.IdRecepcionActivoFijoDetalle" />
+@model AltaActivoFijo
+<div class="smart-form" id="divEmpleadoModal">
+    <div class="row">
+        <section class="col col-3">
+            <label>@Html.DisplayNameFor(model => model.AltaActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijoDetalle.UbicacionActivoFijoActual.IdEmpleado)</label>
+        </section>
+
+        <section class="col col-9">
+            <label class="input">
+                <select id="IdEmpleado" class="form-control" asp-items="ViewBag.Empleado"></select>
+                <span id="valIdEmpleado" class="text-danger validationDatosEspecificos"></span>
+                <input type="hidden" id="hIdRecepcionActivoFijoDetalleEmpleado" value="@ViewBag.IdRecepcionActivoFijoDetalle" />
+            </label>
+            <div class="inline-group margin-top-10">
+                <label class="checkbox">
+                    <input name="checkbox-inline" type="checkbox" id="chkTodosEmpleadosDatosEspecificos">
+                    <i></i>Asignar este Empleado a todos los Activos Fijos pertenecientes a la misma Sucursal.
+                </label>
+            </div>
+        </section>
+    </div>
+</div>

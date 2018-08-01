@@ -12,6 +12,16 @@ namespace bd.webapprm.web.Helpers
     /// </summary>
     public static class StringExtensions
     {
+        public static string Dash(this object value)
+        {
+            return (value as string ?? string.Empty).Dash();
+        }
+
+        public static string Dash(this string value)
+        {
+            return (value ?? string.Empty).Replace(string.Empty, "-");
+        }
+
         /// <summary>
         ///     Removes dashes ("-") from the given object value represented as a string and returns an empty string ("")
         ///     when the instance type could not be represented as a string.

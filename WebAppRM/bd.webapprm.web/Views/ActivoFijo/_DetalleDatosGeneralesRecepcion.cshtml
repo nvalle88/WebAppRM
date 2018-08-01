@@ -1,0 +1,196 @@
+@model bd.webapprm.entidades.RecepcionActivoFijoDetalle
+@{
+    bool isVistaDetalles = ViewBag.IsVistaDetalles ?? false;
+    bool isPolizaSeguro = ViewBag.IsPolizaSeguro ?? false;
+}
+
+<div class="row">
+    <section class="col col-4">
+        <label asp-for="RecepcionActivoFijo.IdMotivoAlta"></label>
+    </section>
+
+    <section class="col col-8">
+        <label class="input">
+            <select asp-for="RecepcionActivoFijo.IdMotivoAlta" class="form-control" asp-items="ViewBag.MotivoAlta"></select>
+            @{
+                if (!isPolizaSeguro)
+                {
+                    <span asp-validation-for="RecepcionActivoFijo.IdMotivoAlta" class="text-danger"></span>
+                }
+            }
+        </label>
+    </section>
+</div>
+
+<div class="row">
+    <section class="col col-4">
+        <label asp-for="RecepcionActivoFijo.IdProveedor"></label>
+    </section>
+
+    <section class="col col-8">
+        <label class="input">
+            <select asp-for="RecepcionActivoFijo.IdProveedor" class="form-control" asp-items="ViewBag.Proveedor"></select>
+            @{
+                if (!isPolizaSeguro)
+                {
+                    <span asp-validation-for="RecepcionActivoFijo.IdProveedor" class="text-danger"></span>
+                }
+            }
+        </label>
+    </section>
+</div>
+
+<div class="row">
+    <section class="col col-4">
+        <label asp-for="RecepcionActivoFijo.IdFondoFinanciamiento"></label>
+    </section>
+
+    <section class="col col-8">
+        <label class="input">
+            <select asp-for="RecepcionActivoFijo.IdFondoFinanciamiento" class="form-control" asp-items="ViewBag.FondoFinanciamiento"></select>
+            @{
+                if (!isPolizaSeguro)
+                {
+                    <span asp-validation-for="RecepcionActivoFijo.IdFondoFinanciamiento" class="text-danger"></span>
+                }
+            }
+        </label>
+    </section>
+</div>
+
+<div class="row">
+    <section class="col col-4">
+        <label asp-for="RecepcionActivoFijo.FechaRecepcion"></label>
+    </section>
+
+    <section class="col col-8">
+        <label class="input">
+            <input asp-for="RecepcionActivoFijo.FechaRecepcion" class="form-control" />
+            @{
+                if (!isPolizaSeguro)
+                {
+                    <span asp-validation-for="RecepcionActivoFijo.FechaRecepcion" class="text-danger"></span>
+                }
+            }
+        </label>
+    </section>
+</div>
+
+<div class="row">
+    <section class="col col-4">
+        <label asp-for="RecepcionActivoFijo.OrdenCompra"></label>
+    </section>
+
+    <section class="col col-8">
+        <label class="input">
+            <textarea asp-for="RecepcionActivoFijo.OrdenCompra" class="form-control paddingTextArea98"></textarea>
+            @{
+                if (!isPolizaSeguro)
+                {
+                    <span asp-validation-for="RecepcionActivoFijo.OrdenCompra" class="text-danger"></span>
+                }
+            }
+        </label>
+    </section>
+</div>
+
+<legend>Distribuci&oacute;n</legend>
+<div class="row margin-top-25">
+    <section class="col col-4">
+        <label>@Html.LabelFor(c => c.SucursalActual.Nombre)</label>
+    </section>
+
+    <section class="col col-8">
+        <label class="input">
+            <select class="form-control" id="IdSucursal" asp-items="ViewBag.Sucursal" disabled="disabled"></select>
+        </label>
+    </section>
+</div>
+
+<legend>P&oacute;liza de Seguro</legend>
+<div class="row margin-top-25">
+    <section class="col col-4">
+        <label asp-for="RecepcionActivoFijo.PolizaSeguroActivoFijo.Subramo.Ramo.Nombre"></label>
+    </section>
+
+    <section class="col col-8">
+        <label class="input">
+            <select asp-for="RecepcionActivoFijo.PolizaSeguroActivoFijo.Subramo.IdRamo" class="form-control" asp-items="ViewBag.Ramo"></select>
+            @{
+                if (!isPolizaSeguro)
+                {
+                    <span asp-validation-for="RecepcionActivoFijo.PolizaSeguroActivoFijo.Subramo.IdRamo" class="text-danger"></span>
+                }
+            }
+        </label>
+    </section>
+</div>
+
+<div class="row">
+    <section class="col col-4">
+        <label asp-for="RecepcionActivoFijo.PolizaSeguroActivoFijo.Subramo.Nombre"></label>
+    </section>
+
+    <div id="div_subramo">
+        @{ await Html.RenderPartialAsync("_SubramoSelect", Model); }
+    </div>
+</div>
+
+<div class="row">
+    <section class="col col-4">
+        <label asp-for="RecepcionActivoFijo.PolizaSeguroActivoFijo.CompaniaSeguro.Nombre"></label>
+    </section>
+
+    <section class="col col-8">
+        <label class="input">
+            <select asp-for="RecepcionActivoFijo.PolizaSeguroActivoFijo.IdCompaniaSeguro" class="form-control" asp-items="ViewBag.CompaniaSeguro"></select>
+            @{
+                if (!isPolizaSeguro)
+                {
+                    <span asp-validation-for="RecepcionActivoFijo.PolizaSeguroActivoFijo.IdCompaniaSeguro" class="text-danger"></span>
+                }
+            }
+        </label>
+    </section>
+</div>
+
+@{
+    if ((isVistaDetalles && Model?.RecepcionActivoFijo?.PolizaSeguroActivoFijo?.NumeroPoliza != null) || isPolizaSeguro)
+    {
+        <div class="row" style="padding-left:15px !important;padding-right:15px !important;">
+            <div class="alert alert-info alert-block" style="border-left-width:5px !important;">
+                <h4 class="alert-heading">Informaci&oacute;n</h4>
+                Establezca el N&uacute;mero de P&oacute;liza de seguro para la recepci&oacute;n de Activos Fijos.
+            </div>
+        </div>
+
+        <div class="row">
+            <section class="col col-4">
+                <label asp-for="RecepcionActivoFijo.PolizaSeguroActivoFijo.NumeroPoliza"></label>
+            </section>
+
+            <section class="col col-8">
+                <label class="input">
+                    <input asp-for="RecepcionActivoFijo.PolizaSeguroActivoFijo.NumeroPoliza" class="form-control" />
+                    <span asp-validation-for="RecepcionActivoFijo.PolizaSeguroActivoFijo.NumeroPoliza" class="text-danger"></span>
+                    <span id="errorNumeroPoliza" class="text-danger"></span>
+                </label>
+            </section>
+        </div>
+    }
+
+    if (!isVistaDetalles && !isPolizaSeguro)
+    {
+        <legend>Documentaci&oacute;n adicional</legend>
+        <div class="row margin-top-25">
+            <section class="col col-12 width100">
+                <input type="file" id="file" name="file" multiple="multiple" />
+            </section>
+        </div>
+
+        <legend>Activos Fijos adicionados</legend>
+        <p class="margin-top-10">
+            <button type="button" class="btn btn-primary" style="padding:7px !important;margin-left:7px !important;" onclick="cargarModalDatosActivoFijo(-1)" id="btnAdicionarActivosFijos">Adicionar activo fijo</button>
+        </p>
+    }
+}

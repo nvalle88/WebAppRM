@@ -2,131 +2,138 @@
 @{ 
     int idTipoUbicacion = ViewBag.IdTipoUbicacion;
 }
-<fieldset>
-    <legend>Ubicaci&oacute;n</legend>
-    <section>
-        <div class="inline-group">
-            <label class="radio">
-                <input type="radio" name="radio-inline" id="radioBodegaDatosEspecificos" data-ubicacion="Bodega" class="radioDatosEspecificos" @{await ViewContext.Writer.WriteAsync(idTipoUbicacion == 1 ? "checked='checked'" : "");}>
-                <i></i>@Html.DisplayNameFor(model => model.UbicacionActivoFijoActual.IdBodega)
-            </label>
-            <label class="radio">
-                <input type="radio" name="radio-inline" id="radioEmpleadoDatosEspecificos" data-ubicacion="Empleado" class="radioDatosEspecificos" @{await ViewContext.Writer.WriteAsync(idTipoUbicacion == 2 ? "checked='checked'" : "");}>
-                <i></i>@Html.DisplayNameFor(model => model.UbicacionActivoFijoActual.IdEmpleado)
-            </label>
-        </div>
-    </section>
+<div class="smart-form" id="divSmartFormModalDatosEspecificos">
+    <input type="hidden" id="hIdFilaModalDatosEspecificos" />
+    <input type="hidden" id="hIdRecepcionActivoFijoDetalle" />
+    <input type="hidden" id="hIdUbicacionActivoFijo" />
+    <input type="hidden" id="mFuncionCallbak" />
 
-    <div id="divDatosEspecificosBodega" class="row margin-top-10 @{await ViewContext.Writer.WriteAsync(idTipoUbicacion == 1 ? "" : "hide");}">
-        <section class="col col-4">
-            <label>@Html.DisplayNameFor(model => model.UbicacionActivoFijoActual.IdBodega)</label>
-        </section>
-
-        <section class="col col-8">
-            <label class="input">
-                <select id="IdBodega" class="form-control" asp-items="ViewBag.Bodega"></select>
-                <span id="valIdBodega" class="text-danger validationDatosEspecificos"></span>
-            </label>
-            <div class="inline-group margin-top-10">
-                <label class="checkbox">
-                    <input name="checkbox-inline" type="checkbox" id="chkTodosBodegasDatosEspecificos">
-                    <i></i>Asignar esta Bodega a todos los datos espec&iacute;ficos.
+    <fieldset>
+        <legend>Ubicaci&oacute;n</legend>
+        <section>
+            <div class="inline-group">
+                <label class="radio">
+                    <input type="radio" name="radio-inline" id="radioBodegaDatosEspecificos" data-ubicacion="Bodega" class="radioDatosEspecificos" @{await ViewContext.Writer.WriteAsync(idTipoUbicacion == 1 ? "checked='checked'" : "");}>
+                    <i></i>@Html.DisplayNameFor(model => model.UbicacionActivoFijoActual.IdBodega)
+                </label>
+                <label class="radio">
+                    <input type="radio" name="radio-inline" id="radioEmpleadoDatosEspecificos" data-ubicacion="Empleado" class="radioDatosEspecificos" @{await ViewContext.Writer.WriteAsync(idTipoUbicacion == 2 ? "checked='checked'" : "");}>
+                    <i></i>@Html.DisplayNameFor(model => model.UbicacionActivoFijoActual.IdEmpleado)
                 </label>
             </div>
         </section>
-    </div>
 
-    <div id="divDatosEspecificosEmpleado" class="row margin-top-10 @{await ViewContext.Writer.WriteAsync(idTipoUbicacion == 2 ? "" : "hide");}">
-        <section class="col col-4">
-            <label>@Html.DisplayNameFor(model => model.UbicacionActivoFijoActual.IdEmpleado)</label>
-        </section>
-
-        <section class="col col-8">
-            <label class="input">
-                <select id="IdEmpleado" class="form-control" asp-items="ViewBag.Empleado"></select>
-                <span id="valIdEmpleado" class="text-danger validationDatosEspecificos"></span>
-            </label>
-            <div class="inline-group margin-top-10">
-                <label class="checkbox">
-                    <input name="checkbox-inline" type="checkbox" id="chkTodosEmpleadosDatosEspecificos">
-                    <i></i>Asignar este Empleado a todos los datos espec&iacute;ficos.
-                </label>
-            </div>
-        </section>
-    </div>
-
-    @{
-        string categoria = ViewBag.Categoria;
-
-        <legend>Datos Espec&iacute;ficos</legend>
-        <div class="row margin-top-25">
+        <div id="divDatosEspecificosBodega" class="row margin-top-10 @{await ViewContext.Writer.WriteAsync(idTipoUbicacion == 1 ? "" : "hide");}">
             <section class="col col-4">
-                <label asp-for="Serie"></label>
+                <label>@Html.DisplayNameFor(model => model.UbicacionActivoFijoActual.IdBodega)</label>
             </section>
 
             <section class="col col-8">
                 <label class="input">
-                    <input asp-for="Serie" class="form-control" />
-                    <span id="valSerie" class="text-danger validationDatosEspecificos"></span>
+                    <select id="IdBodega" class="form-control" asp-items="ViewBag.Bodega"></select>
+                    <span id="valIdBodega" class="text-danger validationDatosEspecificos"></span>
                 </label>
+                <div class="inline-group margin-top-10">
+                    <label class="checkbox">
+                        <input name="checkbox-inline" type="checkbox" id="chkTodosBodegasDatosEspecificos">
+                        <i></i>Asignar esta Bodega a todos los datos espec&iacute;ficos.
+                    </label>
+                </div>
             </section>
         </div>
 
-        if (categoria == Categorias.Edificio)
-        {
-            <div class="row">
+        <div id="divDatosEspecificosEmpleado" class="row margin-top-10 @{await ViewContext.Writer.WriteAsync(idTipoUbicacion == 2 ? "" : "hide");}">
+            <section class="col col-4">
+                <label>@Html.DisplayNameFor(model => model.UbicacionActivoFijoActual.IdEmpleado)</label>
+            </section>
+
+            <section class="col col-8">
+                <label class="input">
+                    <select id="IdEmpleado" class="form-control" asp-items="ViewBag.Empleado"></select>
+                    <span id="valIdEmpleado" class="text-danger validationDatosEspecificos"></span>
+                </label>
+                <div class="inline-group margin-top-10">
+                    <label class="checkbox">
+                        <input name="checkbox-inline" type="checkbox" id="chkTodosEmpleadosDatosEspecificos">
+                        <i></i>Asignar este Empleado a todos los datos espec&iacute;ficos.
+                    </label>
+                </div>
+            </section>
+        </div>
+
+        @{
+            string categoria = ViewBag.Categoria;
+
+            <legend>Datos Espec&iacute;ficos</legend>
+            <div class="row margin-top-25">
                 <section class="col col-4">
-                    <label asp-for="NumeroClaveCatastral"></label>
+                    <label asp-for="Serie"></label>
                 </section>
 
                 <section class="col col-8">
                     <label class="input">
-                        <input asp-for="NumeroClaveCatastral" class="form-control" />
-                        <span id="valNumeroClaveCatastral" class="text-danger validationDatosEspecificos"></span>
+                        <input asp-for="Serie" class="form-control" />
+                        <span id="valSerie" class="text-danger validationDatosEspecificos"></span>
                     </label>
                 </section>
             </div>
+
+            if (categoria == Categorias.Edificio)
+            {
+                <div class="row">
+                    <section class="col col-4">
+                        <label asp-for="RecepcionActivoFijoDetalleEdificio.NumeroClaveCatastral"></label>
+                    </section>
+
+                    <section class="col col-8">
+                        <label class="input">
+                            <input asp-for="RecepcionActivoFijoDetalleEdificio.NumeroClaveCatastral" class="form-control" />
+                            <span id="valNumeroClaveCatastral" class="text-danger validationDatosEspecificos"></span>
+                        </label>
+                    </section>
+                </div>
+            }
+            else if (categoria == Categorias.Vehiculo)
+            {
+                <div class="row">
+                    <section class="col col-4">
+                        <label asp-for="RecepcionActivoFijoDetalleVehiculo.NumeroChasis"></label>
+                    </section>
+
+                    <section class="col col-8">
+                        <label class="input">
+                            <input asp-for="RecepcionActivoFijoDetalleVehiculo.NumeroChasis" class="form-control" />
+                            <span id="valNumeroChasis" class="text-danger validationDatosEspecificos"></span>
+                        </label>
+                    </section>
+                </div>
+
+                <div class="row">
+                    <section class="col col-4">
+                        <label asp-for="RecepcionActivoFijoDetalleVehiculo.NumeroMotor"></label>
+                    </section>
+
+                    <section class="col col-8">
+                        <label class="input">
+                            <input asp-for="RecepcionActivoFijoDetalleVehiculo.NumeroMotor" class="form-control" />
+                            <span id="valNumeroMotor" class="text-danger validationDatosEspecificos"></span>
+                        </label>
+                    </section>
+                </div>
+
+                <div class="row">
+                    <section class="col col-4">
+                        <label asp-for="RecepcionActivoFijoDetalleVehiculo.Placa"></label>
+                    </section>
+
+                    <section class="col col-8">
+                        <label class="input">
+                            <input asp-for="RecepcionActivoFijoDetalleVehiculo.Placa" class="form-control" />
+                            <span id="valPlaca" class="text-danger validationDatosEspecificos"></span>
+                        </label>
+                    </section>
+                </div>
+            }
         }
-        else if (categoria == Categorias.Vehiculo)
-        {
-            <div class="row">
-                <section class="col col-4">
-                    <label asp-for="NumeroChasis"></label>
-                </section>
-
-                <section class="col col-8">
-                    <label class="input">
-                        <input asp-for="NumeroChasis" class="form-control" />
-                        <span id="valNumeroChasis" class="text-danger validationDatosEspecificos"></span>
-                    </label>
-                </section>
-            </div>
-
-            <div class="row">
-                <section class="col col-4">
-                    <label asp-for="NumeroMotor"></label>
-                </section>
-
-                <section class="col col-8">
-                    <label class="input">
-                        <input asp-for="NumeroMotor" class="form-control" />
-                        <span id="valNumeroMotor" class="text-danger validationDatosEspecificos"></span>
-                    </label>
-                </section>
-            </div>
-
-            <div class="row">
-                <section class="col col-4">
-                    <label asp-for="Placa"></label>
-                </section>
-
-                <section class="col col-8">
-                    <label class="input">
-                        <input asp-for="Placa" class="form-control" />
-                        <span id="valPlaca" class="text-danger validationDatosEspecificos"></span>
-                    </label>
-                </section>
-            </div>
-        }
-    }
-</fieldset>
+    </fieldset>
+</div>

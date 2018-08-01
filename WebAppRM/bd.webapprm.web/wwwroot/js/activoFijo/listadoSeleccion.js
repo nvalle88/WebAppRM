@@ -2,6 +2,8 @@
 var arrRecepcionActivoFijoDetalleTodos = [];
 var objAdicional = [];
 var mostrarNoSeleccionados = false;
+var isPrimeraSeleccion = true;
+var cantCheckSeleccionados = 0;
 
 jQuery(document).ready(function (e) {
     initDataTableFiltrado("tableActivosFijos", []);
@@ -28,6 +30,15 @@ function inicializarIdsArrRecepcionActivoFijoDetalleTodos() {
     }
 }
 
+function obtenerPosArrRecepcionActivoFijoDetalleTodos(valor)
+{
+    for (var i = 0; i < arrRecepcionActivoFijoDetalleTodos.length; i++) {
+        if (arrRecepcionActivoFijoDetalleTodos[i] == valor)
+            return i;
+    }
+    return -1;
+}
+
 function inicializarObjetoAdicional()
 {
     $.each(arrRecepcionActivoFijoDetalleSeleccionado, function (index, value) {
@@ -47,8 +58,7 @@ function adicionarRecepcionActivoFijoDetalleSeleccionado(idRecepcionActivoFijoDe
 }
 
 function abrirVentanaDetallesActivoFijo(id) {
-    mostrarLoadingPanel("modalContentTableActivosFijos", "Cargando detalles, por favor espere...");
-    $("#modalBodyTableActivosFijos").html("");
+    mostrarLoadingPanel("checkout-form", "Cargando detalles, por favor espere...");
     var btn_detalles = $("#btnDetallesActivoFijo_" + id);
     var arrIds = btn_detalles.data("ids").toString().split(",");
 
@@ -66,24 +76,28 @@ function abrirVentanaDetallesActivoFijo(id) {
         method: "POST",
         data: { listadoRecepcionActivoFijoDetalleSeleccionado: arrAux, arrConfiguraciones: arrConfiguraciones, mostrarNoSeleccionados: mostrarNoSeleccionados, objAdicional: id },
         success: function (data) {
-            $("#modalBodyTableActivosFijos").html(data);
+            Init_BootBox("Listado de Activos Fijos", data, "large", null);
         },
         complete: function (data) {
             initDataTableFiltrado("tableDetallesActivoFijo", []);
             tryMarcarCheckBoxTodos();
-            $("#modalContentTableActivosFijos").waitMe("hide");
+            $("#tableDetallesActivoFijo_filter > label > span").prop("style", "height:32px !important;");
+            ajustarBootboxPorCiento(80);
+            $("#checkout-form").waitMe("hide");
         }
     });
 }
 
-function cargarListadoActivosFijosParaSeleccion(objeto) {
-    mostrarLoadingPanel("modalContentDatosEspecificos", "Cargando listado, por favor espere...");
+function cargarListadoActivosFijosParaSeleccion(objeto, texto) {
+    mostrarLoadingPanel("checkout-form", "Cargando listado, por favor espere...");
     $.ajax({
         url: urlListadoActivosFijosSeleccionResult,
         method: "POST",
         data: { listadoRecepcionActivoFijoDetalleSeleccionado: arrRecepcionActivoFijoDetalleSeleccionado, objAdicional: objAdicional },
         success: function (data) {
-            $("#modalBodyDatosEspecificos").html(data);
+            if (!texto)
+                texto = "Activos Fijos";
+            Init_BootBox("Listado de " + texto, data, "large", null);
             try {
                 var nombreFuncionCallback = $(objeto).data("funcioncallback");
                 eval(nombreFuncionCallback + "()");
@@ -94,7 +108,11 @@ function cargarListadoActivosFijosParaSeleccion(objeto) {
         },
         complete: function (data) {
             tryMarcarCheckBoxTodos();
-            $("#modalContentDatosEspecificos").waitMe("hide");
+            $("#tableDetallesActivoFijoAltas_filter > label > span").prop("style", "height:32px !important;");
+            $("#tableDetallesActivoFijoBajas_filter > label > span").prop("style", "height:32px !important;");
+            $("#tableDetallesArticulos_filter > label > span").prop("style", "height:32px !important;");
+            ajustarBootboxPorCiento(80);
+            $("#checkout-form").waitMe("hide");
         }
     });
 }
@@ -139,17 +157,35 @@ function eventoCheckboxDetallesActivoFijo(checkbox)
     if (isSeleccionTodos)
         callBackFunctionSeleccionTodos(chk);
     else {
-        try {
-            var idRecepcionActivoFijoDetalle = chk.data("idrecepcionactivofijodetalle");
-            var rafdSeleccionado = obtenerRecepcionActivoFijoDetalleSeleccionado(idRecepcionActivoFijoDetalle);
-            rafdSeleccionado.seleccionado = chk.prop("checked");
+        var seleccionado = chk.prop("checked");
+        var idRecepcionActivoFijoDetalle = chk.data("idrecepcionactivofijodetalle");
+        if (!isComponentes) {
+            try {
+                if (idRecepcionActivoFijoDetalle) {
+                    var rafdSeleccionado = obtenerRecepcionActivoFijoDetalleSeleccionado(idRecepcionActivoFijoDetalle);
+                    rafdSeleccionado.seleccionado = seleccionado;
+                }
+            } catch (e) { }
         }
-        catch (e) { }
         try {
+            cantCheckSeleccionados--;
             var nombreFuncionCallback = chk.data("funcioncallback");
-            eval(nombreFuncionCallback + "(" + idRecepcionActivoFijoDetalle + "," + chk.prop("checked") + ")");
+            if (nombreFuncionCallback)
+                eval(nombreFuncionCallback + "(" + idRecepcionActivoFijoDetalle + "," + seleccionado + ")");
         } catch (e) { }
-        tryMarcarCheckBoxTodos();
+
+        if (isComponentes)
+        {
+            if (idRecepcionActivoFijoDetalle) {
+                if (seleccionado)
+                    cantComponentesSeleccionados++;
+                else
+                    cantComponentesSeleccionados--;
+            }
+            tryMarcarCheckBoxTodosComponentes();
+        }
+        else
+            tryMarcarCheckBoxTodos();
     }
 }
 
@@ -157,18 +193,30 @@ function callBackFunctionSeleccionTodos(chk)
 {
     var isSeleccionado = chk.prop("checked");
     if (isSeleccionado) {
+        var arrIds = [];
         for (var i = 0; i < arrRecepcionActivoFijoDetalleTodos.length; i++) {
-            var rafd = obtenerRecepcionActivoFijoDetalleSeleccionado(arrRecepcionActivoFijoDetalleTodos[i]);
-            if (rafd == null || !rafd.seleccionado)
-                $("#chkDetalleActivoFijo_" + arrRecepcionActivoFijoDetalleTodos[i]).click();
+            if (isComponentes) {
+                if (!existeIdComponente(arrRecepcionActivoFijoDetalleTodos[i]))
+                    arrIds.push(arrRecepcionActivoFijoDetalleTodos[i]);
+            }
+            else {
+                var rafd = obtenerRecepcionActivoFijoDetalleSeleccionado(arrRecepcionActivoFijoDetalleTodos[i]);
+                if (rafd == null || !rafd.seleccionado)
+                    arrIds.push(arrRecepcionActivoFijoDetalleTodos[i]);
+            }
+        }
+        cantCheckSeleccionados = arrIds.length;
+        for (var i = 0; i < arrIds.length; i++) {
+            $("#chkDetalleActivoFijo_" + arrIds[i]).click();
+            isPrimeraSeleccion = false;
         }
     }
     else {
-        var functionCallbackRemoveTodos = chk.data("functioncallbackremovetodos");
         for (var i = 0; i < arrRecepcionActivoFijoDetalleTodos.length; i++) {
             $("#chkDetalleActivoFijo_" + arrRecepcionActivoFijoDetalleTodos[i]).click();
         }
     }
+    isPrimeraSeleccion = true;
 }
 
 function tryMarcarCheckBoxTodos()
@@ -199,6 +247,14 @@ function mostrarOcultarColumnas(idTable, arrObj) {
     }
 }
 
+function ocultarColumnasPorArray(idTable, arrObj) {
+    var otable = $('#' + idTable).dataTable();
+    for (var i = 0; i < arrObj.length; i++) {
+        if (arrObj[i] == false)
+            otable.fnSetColumnVis(i, false);
+    }
+}
+
 function mostrarOcultarColumnasPorArray(idTable, mostrarOcultar)
 {
     var table = $('#' + idTable).DataTable();
@@ -226,17 +282,25 @@ function obtenerArrValores(idTableCopiando, idRecepcionActivoFijoDetalle, arrCel
 }
 
 function addRowDetallesActivosFijos(idTableACopiar, idTableCopiando, idRecepcionActivoFijoDetalle, arrCeldasCopiando, isOpcionesUltimaColumna) {
-    var arrColumnasVisibleTableACopiar = obtenerArrColumnasVisible(idTableACopiar);
-    var arrColumnasVisibleTableACopiando = obtenerArrColumnasVisible(idTableCopiando);
+    if (isPrimeraSeleccion) {
+        arrColumnasVisibleTableACopiar = obtenerArrColumnasVisible(idTableACopiar);
+        arrColumnasVisibleTableACopiando = obtenerArrColumnasVisible(idTableCopiando);
 
-    mostrarOcultarColumnasPorArray(idTableACopiar, true);
-    mostrarOcultarColumnasPorArray(idTableCopiando, true);
+        mostrarOcultarColumnasPorArray(idTableACopiar, true);
+        mostrarOcultarColumnasPorArray(idTableCopiando, true);
+    }
 
     var arrValores = obtenerArrValores(idTableCopiando, idRecepcionActivoFijoDetalle, arrCeldasCopiando, isOpcionesUltimaColumna);
     addRowDetallesActivosFijosPorArray(idTableACopiar, idRecepcionActivoFijoDetalle, arrCeldasCopiando, arrValores, isOpcionesUltimaColumna);
+    
+    if (cantCheckSeleccionados <= 0) {
+        ocultarColumnasPorArray(idTableACopiar, arrColumnasVisibleTableACopiar);
+        ocultarColumnasPorArray(idTableCopiando, arrColumnasVisibleTableACopiando);
 
-    mostrarOcultarColumnas(idTableACopiar, arrColumnasVisibleTableACopiar);
-    mostrarOcultarColumnas(idTableCopiando, arrColumnasVisibleTableACopiando);
+        cantCheckSeleccionados = 0;
+        arrColumnasVisibleTableACopiar = [];
+        arrColumnasVisibleTableACopiando = [];
+    }
 }
 
 function addRowDetallesActivosFijosPorArray(idTableACopiar, idRecepcionActivoFijoDetalle, arrCeldasCopiando, arrValores, isOpcionesUltimaColumna)

@@ -29,11 +29,6 @@ namespace bd.webapprm.entidades.ObjectTransfer
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar la {0} ")]
         public int IdSucursalDestino { get; set; }
 
-        [Display(Name = "Libro de activo fijo:")]
-        [Required(ErrorMessage = "Debe seleccionar el {0} ")]
-        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
-        public int IdLibroActivoFijoDestino { get; set; }
-
         [Display(Name = "Custodio que recibe:")]
         [Required(ErrorMessage = "Debe seleccionar el {0} ")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
