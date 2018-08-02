@@ -18,8 +18,8 @@ namespace bd.webapprm.entidades
         [StringLength(200, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
         public string Nombre { get; set; }
 
-        [Display(Name = "Sub clase de artículo:")]
-        [Required(ErrorMessage = "Debe seleccionar la {0} ")]
+        [Display(Name = "Subclase de artículo:")]
+        [Required(ErrorMessage = "Debe seleccionar la {0}")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar la {0}")]
         public int IdSubClaseArticulo { get; set; }
         public virtual SubClaseArticulo SubClaseArticulo { get; set; }

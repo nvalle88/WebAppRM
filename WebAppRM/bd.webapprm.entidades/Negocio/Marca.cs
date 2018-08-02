@@ -9,7 +9,7 @@ namespace bd.webapprm.entidades
         public int IdMarca { get; set; }
 
         [Required(ErrorMessage = "Debe introducir la {0}")]
-        [Display(Name ="Marca:")]
+        [Display(Name = "Marca:")]
         [StringLength(200, MinimumLength = 2, ErrorMessage = "La {0} no puede tener menos de {2} y más de {1}")]
         public string Nombre { get; set; }
 

@@ -11,16 +11,16 @@ namespace bd.webapprm.entidades
         [Key]
         [Column(Order = 0)]
         [Display(Name = "Detalle de recepción de activo fijo:")]
-        [Required(ErrorMessage = "Debe seleccionar el {0} ")]
-        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
+        [Required(ErrorMessage = "Debe seleccionar el {0}")]
+        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0}")]
         public int IdRecepcionActivoFijoDetalle { get; set; }
         public virtual RecepcionActivoFijoDetalle RecepcionActivoFijoDetalle { get; set; }
 
         [Key]
         [Column(Order = 1)]
         [Display(Name = "Inventario de activo fijo:")]
-        [Required(ErrorMessage = "Debe seleccionar la {0} ")]
-        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar la {0} ")]
+        [Required(ErrorMessage = "Debe seleccionar el {0} ")]
+        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
         public int IdInventarioActivoFijo { get; set; }
         public virtual InventarioActivoFijo InventarioActivoFijo { get; set; }
 

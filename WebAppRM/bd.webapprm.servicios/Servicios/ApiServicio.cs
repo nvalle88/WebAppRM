@@ -208,6 +208,8 @@ namespace bd.webapprm.servicios.Servicios
                 client.DefaultRequestHeaders.Add("IsAdminNacionalProveeduria", claimsTransfer.IsADMIGrupo(ADMI_Grupos.AdminNacionalProveeduria).ToString());
                 client.DefaultRequestHeaders.Add("IsAdminZonalProveeduria", claimsTransfer.IsADMIGrupo(ADMI_Grupos.AdminZonalProveeduria).ToString());
                 client.DefaultRequestHeaders.Add("IsFuncionarioSolicitante", claimsTransfer.IsADMIGrupo(ADMI_Grupos.FuncionarioSolicitante).ToString());
+                client.DefaultRequestHeaders.Add("IsAdminAF", claimsTransfer.IsADMIGrupo(ADMI_Grupos.AdminAF).ToString());
+                client.DefaultRequestHeaders.Add("IsEncargadoSeguros", claimsTransfer.IsADMIGrupo(ADMI_Grupos.EncargadoSeguros).ToString());
             }
         }
     }

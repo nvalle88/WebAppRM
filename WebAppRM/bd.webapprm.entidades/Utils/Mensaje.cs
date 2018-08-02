@@ -67,6 +67,8 @@ namespace bd.webapprm.entidades.Utils
 
     public static class ADMI_Grupos
     {
+        public static string AdminAF { get { return "Administradores de Activos Fijos"; } }
+        public static string EncargadoSeguros { get { return "Encargados de seguro"; } }
         public static string AdminNacionalProveeduria { get { return "Admin Nacional de Proveeduría"; } }
         public static string AdminZonalProveeduria { get { return "Admin Zonal de Proveeduría"; } }
         public static string FuncionarioSolicitante { get { return "Funcionario solicitante"; } }

@@ -32,7 +32,7 @@ namespace bd.webapprm.entidades
 
         //Propiedades Virtuales Referencias a otras clases
 
-        [Display(Name = "Solicitud de Proveeduría:")]
+        [Display(Name = "Solicitud de proveeduría:")]
         [Required(ErrorMessage = "Debe seleccionar la {0}")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar la {0}")]
         public int IdSolicitudProveeduria { get; set; }
@@ -48,7 +48,7 @@ namespace bd.webapprm.entidades
 
         //Propiedades Virtuales Referencias a otras clases
 
-        [Display(Name = "Maestro de artículo de la sucursal:")]
+        [Display(Name = "Maestro de artículo de sucursal:")]
         [Required(ErrorMessage = "Debe seleccionar el {0}")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0}")]
         public int IdMaestroArticuloSucursal { get; set; }

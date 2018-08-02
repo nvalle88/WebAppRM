@@ -41,14 +41,14 @@ namespace bd.webapprm.entidades
         //Propiedades Virtuales Referencias a otras clases
 
         [Display(Name = "Subclase de activo fijo:")]
-        [Required(ErrorMessage = "Debe seleccionar el {0}")]
-        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
+        [Required(ErrorMessage = "Debe seleccionar la {0}")]
+        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar la {0}")]
         public int IdSubClaseActivoFijo { get; set; }
         public virtual SubClaseActivoFijo SubClaseActivoFijo { get; set; }
 
         [Display(Name = "Modelo:")]
         [Required(ErrorMessage = "Debe seleccionar el {0}")]
-        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
+        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0}")]
         public int IdModelo { get; set; }
         public virtual Modelo Modelo { get; set; }
 

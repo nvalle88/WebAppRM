@@ -18,8 +18,8 @@ namespace bd.webapprm.entidades
         public virtual MaestroArticuloSucursal MaestroArticuloSucursal { get; set; }
 
         [Display(Name = "Bodega:")]
-        [Required(ErrorMessage = "Debe seleccionar la {0} ")]
-        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar la {0} ")]
+        [Required(ErrorMessage = "Debe seleccionar la {0}")]
+        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar la {0}")]
         public int IdBodega { get; set; }
         public virtual Bodega Bodega { get; set; }
 

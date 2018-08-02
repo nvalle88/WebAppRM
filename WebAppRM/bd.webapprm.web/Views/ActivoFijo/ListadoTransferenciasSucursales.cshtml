@@ -2,7 +2,6 @@
 @{ 
     bool isSolicitudesTransferencia = ViewBag.IsSolicitudesTransferencia ?? false;
     bool isTransferenciasCreadas = ViewBag.IsTransferenciasCreadas ?? false;
-    bool isTransferenciasAceptadas = ViewBag.IsTransferenciasAceptadas ?? false;
     bool isCambioCustodio = ViewBag.IsCambioCustodio ?? false;
 }
 <div id="content">
@@ -10,11 +9,11 @@
         @{
             if (isTransferenciasCreadas)
             {
-                <a asp-action="GestionarCambioCustodio" class="btn btn-primary">Nuevo Cambio de Ubicaci&oacute;n entre Sucursales</a>
+                <a asp-action="GestionarTransferenciaSucursal" class="btn btn-primary">Nuevo cambio de ubicaci&oacute;n entre sucursales</a>
             }
             else if (isCambioCustodio)
             {
-                <a asp-action="GestionarCambioCustodio" class="btn btn-primary">Nuevo Cambio de Custodio</a>
+                <a asp-action="GestionarCambioCustodio" class="btn btn-primary">Nuevo cambio de custodio</a>
             }
         }
     </p>
@@ -28,15 +27,15 @@
                             @{
                                 if (isSolicitudesTransferencia)
                                 {
-                                    <span>Listado de Solicitudes de Cambios de Ubicaci&oacute;n entre Sucursales</span>
+                                    <span>Solicitudes de cambio de ubicaci&oacute;n entre sucursales</span>
                                 }
                                 else if (isTransferenciasCreadas)
                                 {
-                                    <span>Listado de Solicitudes creadas de Cambios de Ubicaci&oacute;n entre Sucursales</span>
+                                    <span>Solicitudes creadas de cambio de ubicaci&oacute;n entre sucursales</span>
                                 }
-                                else
+                                if (isCambioCustodio)
                                 {
-                                    <span>Listado de Solicitudes aceptadas de de Cambios de Ubicaci&oacute;n entre Sucursales</span>
+                                    <span>Cambios de custodio</span>
                                 }
                             }
                         </h2>
@@ -47,13 +46,13 @@
                         <div class="widget-body no-padding">
                             <table id="dt_basic" class="table table-striped table-bordered table-hover">
                                 <thead>
-                                    @{await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", (isSolicitudesTransferencia || isTransferenciasCreadas || isTransferenciasAceptadas) ? 9 : 6);}
+                                    @{await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", (isSolicitudesTransferencia || isTransferenciasCreadas) ? 10 : 7);}
                                     <tr>
                                         <th>
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().SucursalOrigen)
                                         </th>
                                         @{ 
-                                            if (isSolicitudesTransferencia || isTransferenciasCreadas || isTransferenciasAceptadas)
+                                            if (isSolicitudesTransferencia || isTransferenciasCreadas)
                                             {
                                                 <th>
                                                     @Html.DisplayNameFor(model => model.FirstOrDefault().IdEmpleadoResponsableEnvio)
@@ -64,7 +63,7 @@
                                             Custodio que entrega:
                                         </th>
                                         @{ 
-                                            if (isSolicitudesTransferencia || isTransferenciasCreadas || isTransferenciasAceptadas)
+                                            if (isSolicitudesTransferencia || isTransferenciasCreadas)
                                             {
                                                 <th>
                                                     @Html.DisplayNameFor(model => model.FirstOrDefault().IdEmpleadoResponsableRecibo)
@@ -81,6 +80,9 @@
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().FechaTransferencia)
                                         </th>
                                         <th>
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().IdEstado)
+                                        </th>
+                                        <th>
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().Observaciones)
                                         </th>
                                         <th>Opciones</th>
@@ -94,7 +96,7 @@
                                                 @Html.DisplayFor(modelItem => item.SucursalOrigen.Nombre)
                                             </td>
                                             @{ 
-                                                if (isSolicitudesTransferencia || isTransferenciasCreadas || isTransferenciasAceptadas)
+                                                if (isSolicitudesTransferencia || isTransferenciasCreadas)
                                                 {
                                                     <td>
                                                         @{await ViewContext.Writer.WriteAsync($"{item.EmpleadoResponsableEnvio.Persona.Nombres} {item.EmpleadoResponsableEnvio.Persona.Apellidos}");}
@@ -105,7 +107,7 @@
                                                 @{await ViewContext.Writer.WriteAsync($"{item.TransferenciaActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijoOrigen.Empleado.Persona.Nombres} {item.TransferenciaActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijoOrigen.Empleado.Persona.Apellidos}");}
                                             </td>
                                             @{ 
-                                                if (isSolicitudesTransferencia || isTransferenciasCreadas || isTransferenciasAceptadas)
+                                                if (isSolicitudesTransferencia || isTransferenciasCreadas)
                                                 {
                                                     <td>
                                                         @{await ViewContext.Writer.WriteAsync($"{item.EmpleadoResponsableRecibo.Persona.Nombres} {item.EmpleadoResponsableRecibo.Persona.Apellidos}");}
@@ -122,6 +124,9 @@
                                                 @Html.DisplayFor(modelItem => item.FechaTransferencia)
                                             </td>
                                             <td>
+                                                @Html.DisplayFor(modelItem => item.Estado.Nombre)
+                                            </td>
+                                            <td>
                                                 @Html.DisplayFor(modelItem => item.Observaciones)
                                             </td>
                                             <td>
@@ -133,19 +138,23 @@
                                                     else
                                                     {
                                                         <a asp-action="DetallesTransferenciaSucursal" asp-route-id="@item.IdTransferenciaActivoFijo">Detalles</a>
-                                                        if (!isTransferenciasAceptadas)
-                                                        {
-                                                            <span> | </span>
-                                                        }
                                                     }
                                                     if (isTransferenciasCreadas)
                                                     {
-                                                        <a asp-action="GestionarTransferenciaSucursal" asp-route-id="@item.IdTransferenciaActivoFijo">Editar</a>
+                                                        if (item.Estado.Nombre == Estados.Creada)
+                                                        {
+                                                            <span> | </span>
+                                                            <a asp-action="GestionarTransferenciaSucursal" asp-route-id="@item.IdTransferenciaActivoFijo">Editar</a>
+                                                        }
                                                     }
                                                     else if (isSolicitudesTransferencia)
                                                     {
-                                                        <a href="javascript:void(0);" id="btn_aprobar" onclick="abrirVentanaConfirmacion('btn_aprobar')" data-url="@Url.Action("GestionarAprobacionTransferenciaSucursal", values: new { id = item.IdTransferenciaActivoFijo, id2 = true })" data-titulo="Emitir aprobaci&oacute;n" data-descripcion="&#191;Desea aprobar el Cambio de ubicaci&oacute;n entre Sucursales?">Aprobar</a><span> | </span>
-                                                        <a href="javascript:void(0);" id="btn_rechazar" onclick="abrirVentanaConfirmacion('btn_rechazar')" data-url="@Url.Action("GestionarAprobacionTransferenciaSucursal", values: new { id = item.IdTransferenciaActivoFijo, id2 = false })" data-titulo="Emitir desaprobaci&oacute;n" data-descripcion="&#191;Desea rechazar el Cambio de ubicaci&oacute;n entre Sucursales?">Rechazar</a>
+                                                        if (item.Estado.Nombre == Estados.Creada)
+                                                        {
+                                                            <span> | </span>
+                                                            <a href="javascript:void(0);" id="btn_aprobar" onclick="abrirVentanaConfirmacion('btn_aprobar')" data-url="@Url.Action("GestionarAprobacionTransferenciaSucursal", values: new { id = item.IdTransferenciaActivoFijo, id2 = true })" data-titulo="Emitir aprobaci&oacute;n" data-descripcion="&#191;Desea aprobar el Cambio de ubicaci&oacute;n entre Sucursales?">Aprobar</a><span> | </span>
+                                                            <a href="javascript:void(0);" id="btn_rechazar" onclick="abrirVentanaConfirmacion('btn_rechazar')" data-url="@Url.Action("GestionarAprobacionTransferenciaSucursal", values: new { id = item.IdTransferenciaActivoFijo, id2 = false })" data-titulo="Emitir desaprobaci&oacute;n" data-descripcion="&#191;Desea rechazar el Cambio de ubicaci&oacute;n entre Sucursales?">Rechazar</a>
+                                                        }
                                                     }
                                                 }
                                             </td>
