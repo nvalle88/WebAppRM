@@ -199,7 +199,7 @@
                                             <input type="hidden" class="hiddenHEmpleado" id="hEmpleado_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" name="hEmpleado_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" value="@item.RecepcionActivoFijoDetalle.UbicacionActivoFijoActual.IdEmpleado" />
                                             <input type="hidden" class="hiddenHUbicacion" id="hUbicacion_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" name="hUbicacion_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" value="@item.RecepcionActivoFijoDetalle.UbicacionActivoFijoActual.IdUbicacionActivoFijo" />
                                             <input type="hidden" id="hSucursal_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" name="hSucursal_@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle" value="@item.RecepcionActivoFijoDetalle.SucursalActual.IdSucursal" />
-                                            if (item.RecepcionActivoFijoDetalle.Estado.Nombre == Estados.Alta)
+                                            if (item.RecepcionActivoFijoDetalle.Estado.Nombre == Estados.Alta || item.RecepcionActivoFijoDetalle.Estado.Nombre == Estados.Recepcionado)
                                             {
                                                 <a href="javascript:void(0);" onclick="cargarFormularioDatosEmpleado(@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)" class="btnDatosEmpleado" data-idfila="@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle">Custodio</a>
                                                 if (!listadoDetallesActivosFijosViewModel.IsConfiguracionAltasGestionarEditar)

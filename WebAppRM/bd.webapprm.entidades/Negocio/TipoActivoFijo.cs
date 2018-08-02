@@ -10,7 +10,7 @@ namespace bd.webapprm.entidades
         public int IdTipoActivoFijo { get; set; }
 
         [Required(ErrorMessage = "Debe introducir el {0}")]
-        [Display(Name = "Tipo de Activo Fijo:")]
+        [Display(Name = "Tipo de activo fijo:")]
         [StringLength(200, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
         public string Nombre { get; set; }
 

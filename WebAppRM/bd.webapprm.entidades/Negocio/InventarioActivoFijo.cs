@@ -34,8 +34,8 @@ namespace bd.webapprm.entidades
         public string NumeroInforme { get; set; }
 
         [Display(Name = "Estado:")]
-        [Required(ErrorMessage = "Debe seleccionar el {0} ")]
-        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
+        [Required(ErrorMessage = "Debe seleccionar el {0}")]
+        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0}")]
         public int IdEstado { get; set; }
         public virtual Estado Estado { get; set; }
 

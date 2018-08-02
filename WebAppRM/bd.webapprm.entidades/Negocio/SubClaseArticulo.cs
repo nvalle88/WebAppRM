@@ -17,8 +17,8 @@ namespace bd.webapprm.entidades
         //Propiedades Virtuales Referencias a otras clases
 
         [Display(Name = "Clase de artículo:")]
-        [Required(ErrorMessage = "Debe seleccionar la {0} ")]
-        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar la {0} ")]
+        [Required(ErrorMessage = "Debe seleccionar la {0}")]
+        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar la {0}")]
         public int IdClaseArticulo { get; set; }
         public virtual ClaseArticulo ClaseArticulo { get; set; }
 

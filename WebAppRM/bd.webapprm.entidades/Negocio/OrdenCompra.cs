@@ -21,7 +21,7 @@ namespace bd.webapprm.entidades
         public int IdMotivoRecepcionArticulos { get; set; }
         public virtual MotivoRecepcionArticulos MotivoRecepcionArticulos { get; set; }
 
-        [Required(ErrorMessage = "Debe introducir {0}")]
+        [Required(ErrorMessage = "Debe introducir la {0}")]
         [Display(Name = "Fecha:")]
         [DataType(DataType.Date)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]

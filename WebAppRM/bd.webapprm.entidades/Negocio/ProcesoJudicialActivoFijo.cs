@@ -22,8 +22,8 @@ namespace bd.webapprm.entidades
         public string NumeroDenuncia { get; set; }
 
         [Display(Name = "Detalle de recepción de activo fijo:")]
-        [Required(ErrorMessage = "Debe seleccionar el {0} ")]
-        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
+        [Required(ErrorMessage = "Debe seleccionar el {0}")]
+        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0}")]
         public int IdRecepcionActivoFijoDetalle { get; set; }
         public virtual RecepcionActivoFijoDetalle RecepcionActivoFijoDetalle { get; set; }
 

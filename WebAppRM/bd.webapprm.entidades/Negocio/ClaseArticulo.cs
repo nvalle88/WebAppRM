@@ -17,7 +17,7 @@ namespace bd.webapprm.entidades
 
         [Display(Name = "Tipo de artículo:")]
         [Required(ErrorMessage = "Debe seleccionar el {0}")]
-        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
+        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0}")]
         public int IdTipoArticulo { get; set; }
         public virtual TipoArticulo TipoArticulo { get; set; }
 

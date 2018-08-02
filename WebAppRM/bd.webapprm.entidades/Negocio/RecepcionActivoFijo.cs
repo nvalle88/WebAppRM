@@ -29,7 +29,7 @@ namespace bd.webapprm.entidades
 
         //Propiedades Virtuales Referencias a otras clases
 
-        [Display(Name = "Motivo de Recepción:")]
+        [Display(Name = "Motivo de recepción:")]
         [Required(ErrorMessage = "Debe seleccionar el {0}")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0}")]
         public int IdMotivoAlta { get; set; }
@@ -43,7 +43,7 @@ namespace bd.webapprm.entidades
 
         [Display(Name = "Fondo de financiamiento:")]
         [Required(ErrorMessage = "Debe seleccionar el {0}")]
-        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
+        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0}")]
         public int IdFondoFinanciamiento { get; set; }
         public virtual FondoFinanciamiento FondoFinanciamiento { get; set; }
 

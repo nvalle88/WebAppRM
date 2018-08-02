@@ -16,20 +16,20 @@ namespace bd.webapprm.entidades
         public int IdMovilizacionActivoFijo { get; set; }
 
         [Display(Name = "Autorizado a:")]
-        [Required(ErrorMessage = "Debe seleccionar el {0} ")]
-        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
+        [Required(ErrorMessage = "Debe seleccionar el {0}")]
+        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0}")]
         public int IdEmpleadoResponsable { get; set; }
         public virtual Empleado EmpleadoResponsable { get; set; }
 
         [Display(Name = "Solicitado por:")]
-        [Required(ErrorMessage = "Debe seleccionar el {0} ")]
-        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
+        [Required(ErrorMessage = "Debe seleccionar el {0}")]
+        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0}")]
         public int IdEmpleadoSolicita { get; set; }
         public virtual Empleado EmpleadoSolicita { get; set; }
 
         [Display(Name = "Autorizado por:")]
-        [Required(ErrorMessage = "Debe seleccionar el {0} ")]
-        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
+        [Required(ErrorMessage = "Debe seleccionar el {0}")]
+        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0}")]
         public int IdEmpleadoAutorizado { get; set; }
         public virtual Empleado EmpleadoAutorizado { get; set; }
 
@@ -46,8 +46,8 @@ namespace bd.webapprm.entidades
         public DateTime FechaRetorno { get; set; }
 
         [Display(Name = "Motivo de traslado:")]
-        [Required(ErrorMessage = "Debe seleccionar el {0} ")]
-        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
+        [Required(ErrorMessage = "Debe seleccionar el {0}")]
+        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0}")]
         public int IdMotivoTraslado { get; set; }
         public virtual MotivoTraslado MotivoTraslado { get; set; }
 

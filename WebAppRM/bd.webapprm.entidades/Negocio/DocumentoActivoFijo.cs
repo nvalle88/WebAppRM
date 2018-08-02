@@ -26,33 +26,33 @@ namespace bd.webapprm.entidades
         [StringLength(1024, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
         public string Url { get; set; }
 
-        [Display(Name = "Activo Fijo:")]
-        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
+        [Display(Name = "Activo fijo:")]
+        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0}")]
         public int? IdActivoFijo { get; set; }
         public virtual ActivoFijo ActivoFijo { get; set; }
 
-        [Display(Name = "Detalle de Recepción de Activo Fijo:")]
-        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
+        [Display(Name = "Detalle de recepción de activo Fijo:")]
+        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0}")]
         public int? IdRecepcionActivoFijoDetalle { get; set; }
         public virtual RecepcionActivoFijoDetalle RecepcionActivoFijoDetalle { get; set; }
 
-        [Display(Name = "Alta de Activo Fijo:")]
-        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
+        [Display(Name = "Alta de activo fijo:")]
+        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0}")]
         public int? IdAltaActivoFijo { get; set; }
         public virtual AltaActivoFijo AltaActivoFijo { get; set; }
 
-        [Display(Name = "Factura de Alta de Activo Fijo:")]
-        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
+        [Display(Name = "Factura de alta de activo fijo:")]
+        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0}")]
         public int? IdFacturaActivoFijo { get; set; }
         public virtual FacturaActivoFijo FacturaActivoFijo { get; set; }
 
-        [Display(Name = "Proceso judicial de Activo Fijo:")]
-        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
+        [Display(Name = "Proceso judicial de activo fijo:")]
+        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0}")]
         public int? IdProcesoJudicialActivoFijo { get; set; }
         public virtual ProcesoJudicialActivoFijo ProcesoJudicialActivoFijo { get; set; }
 
-        [Display(Name = "Recepción de Activo Fijo:")]
-        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar la {0} ")]
+        [Display(Name = "Recepción de activo fijo:")]
+        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar la {0}")]
         public int? IdRecepcionActivoFijo { get; set; }
         public virtual RecepcionActivoFijo RecepcionActivoFijo { get; set; }
     }

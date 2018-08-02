@@ -10,9 +10,9 @@
         var last = null;
         var groupadmin = [];
 
-        crearGrupo(api, rows, last, groupadmin, 20, "Fondo de financiamiento", 0, 23);
-        crearGrupo(api, rows, last, groupadmin, 3, "Clase de activo fijo", 6, 23);
-        crearGrupo(api, rows, last, groupadmin, 4, "Subclase de activo fijo", 12, 23);
+        crearGrupo(api, rows, last, groupadmin, 20, "Fondo de financiamiento", 0, 24);
+        crearGrupo(api, rows, last, groupadmin, 3, "Clase de activo fijo", 6, 24);
+        crearGrupo(api, rows, last, groupadmin, 4, "Subclase de activo fijo", 12, 24);
     });
     $('#tableDetallesActivoFijoBajas').DataTable().page.len(-1).draw();
     eventoGuardar();

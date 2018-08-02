@@ -28,11 +28,11 @@
                         @{ 
                             if (isRevisionActivoFijo)
                             {
-                                <h2>Revisi&oacute;n de Activo Fijo</h2>
+                                <h2>Revisi&oacute;n de activo fijo</h2>
                             }
                             else
                             {
-                                <h2>Recepci&oacute;n de Activo Fijo</h2>
+                                <h2>Recepci&oacute;n de activo fijo</h2>
                             }
                         }
                     </header>
@@ -127,7 +127,7 @@
         var urlDatosActivoFijoResult = "@Url.Action("DatosActivoFijoResult")";
         var urlGestionarRevisionActivoFijo = "@Url.Action("GestionarAprobacionActivoFijo")";
         var urlListadoValidacionesTecnicas = "@Url.Action("ActivosFijosValidacionTecnica")";
-        var isEditar = "@String.Format("{0}", Model != null && Model.IdRecepcionActivoFijo != 0 ? true : false)".toLowerCase() === 'true';
+        var isEditar = "@String.Format("{0}", Model != null && Model.IdRecepcionActivoFijo > 0 ? true : false)".toLowerCase() === 'true';
         var isVistaDetalles = "@isVistaDetalles".toLowerCase() === 'true';
         var isSeleccion = "@isSeleccion".toLowerCase() === 'true';
         var isRevisionActivoFijo = "@isRevisionActivoFijo".toLowerCase() === 'true';

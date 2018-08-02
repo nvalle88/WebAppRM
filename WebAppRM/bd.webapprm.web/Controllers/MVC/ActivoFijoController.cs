@@ -55,11 +55,7 @@ namespace bd.webapprm.web.Controllers.MVC
 
                 if (id != null)
                 {
-                    bool isRevisionActivoFijo = false;
-                    if (ViewData["IsRevisionActivoFijo"] != null)
-                        isRevisionActivoFijo = true;
-
-                    var response = await apiServicio.SeleccionarAsync<Response>(id.ToString(), new Uri(WebApp.BaseAddressRM), isRevisionActivoFijo ? "api/ActivosFijos/ObtenerRecepcionActivoFijoValidacionTecnica" : "api/ActivosFijos/ObtenerRecepcionActivoFijo");
+                    var response = await apiServicio.SeleccionarAsync<Response>(id.ToString(), new Uri(WebApp.BaseAddressRM), ViewData["IsRevisionActivoFijo"] != null ? "api/ActivosFijos/ObtenerRecepcionActivoFijoValidacionTecnica" : ViewData["IsPolizaSeguro"] != null || ViewData["IsVistaDetalles"] != null ? "api/ActivosFijos/ObtenerRecepcionPolizaSeguroActivoFijo" : "api/ActivosFijos/ObtenerRecepcionActivoFijo");
                     if (!response.IsSuccess)
                         return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}", nameof(ActivosFijosRecepcionados));
 
@@ -74,7 +70,7 @@ namespace bd.webapprm.web.Controllers.MVC
             }
             catch (Exception)
             {
-                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorCargarDatos}", nameof(ActivosFijosRecepcionados));
+                return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorCargarDatos}", claimsTransfer.IsADMIGrupo(ADMI_Grupos.AdminAF) ? nameof(ActivosFijosRecepcionados) : nameof(ActivosFijosRecepcionadosSinPoliza));
             }
         }
 
@@ -1024,22 +1020,6 @@ namespace bd.webapprm.web.Controllers.MVC
             return View("ListadoTransferenciasSucursales", lista);
         }
 
-        public async Task<IActionResult> ListadoTransferenciasAceptadas()
-        {
-            var lista = new List<TransferenciaActivoFijo>();
-            ViewData["IsTransferenciasAceptadas"] = true;
-            try
-            {
-                lista = await apiServicio.Listar<TransferenciaActivoFijo>(new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ListarTransferenciasCambiosUbicacionAceptadasActivosFijos");
-            }
-            catch (Exception ex)
-            {
-                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Listando transferencias aceptadas de activos fijos", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webapprm" });
-                TempData["Mensaje"] = $"{Mensaje.Error}|{Mensaje.ErrorListado}";
-            }
-            return View("ListadoTransferenciasSucursales", lista);
-        }
-
         public async Task<IActionResult> GestionarTransferenciaSucursal(int? id)
         {
             try
@@ -1133,11 +1113,10 @@ namespace bd.webapprm.web.Controllers.MVC
                 
                 ViewData["Configuraciones"] = new ListadoDetallesActivosFijosViewModel(IsConfiguracionSeleccion: true, IsConfiguracionDatosActivo: true, IsConfiguracionSeleccionBajas: true);
                 var claimTransfer = claimsTransfer.ObtenerClaimsTransferHttpContext();
-                var listaSucursales = (await apiServicio.Listar<Sucursal>(new Uri(WebApp.BaseAddressTH), "api/Sucursal/ListarSucursal")).Where(c => c.IdSucursal != claimTransfer.IdSucursal);
-                ViewData["SucursalOrigen"] = new SelectList(listaSucursales, "IdSucursal", "Nombre", cambioUbicacionSucursalViewModel.IdSucursalOrigen);
-                ViewData["SucursalDestino"] = new SelectList(listaSucursales, "IdSucursal", "Nombre", cambioUbicacionSucursalViewModel.IdSucursalDestino);
+                ViewData["SucursalOrigen"] = new SelectList(new List<Sucursal>(){ new Sucursal{ IdSucursal = claimTransfer.IdSucursal, Nombre = claimTransfer.NombreSucursal } }, "IdSucursal", "Nombre", cambioUbicacionSucursalViewModel.IdSucursalOrigen);
+                ViewData["SucursalDestino"] = new SelectList((await apiServicio.Listar<Sucursal>(new Uri(WebApp.BaseAddressTH), "api/Sucursal/ListarSucursal")).Where(c => c.IdSucursal != claimTransfer.IdSucursal), "IdSucursal", "Nombre", cambioUbicacionSucursalViewModel.IdSucursalDestino);
                 
-                var listadoEmpleadoSucursalOrigen = (await apiServicio.ObtenerElementoAsync<List<DatosBasicosEmpleadoViewModel>>(new EmpleadosPorSucursalViewModel { IdSucursal = cambioUbicacionSucursalViewModel.IdSucursalOrigen, EmpleadosActivos = true }, new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleadosPorSucursal")).Select(c => new ListaEmpleadoViewModel { IdEmpleado = c.IdEmpleado, NombreApellido = $"{c.Nombres} {c.Apellidos}" });
+                var listadoEmpleadoSucursalOrigen = (await apiServicio.ObtenerElementoAsync<List<DatosBasicosEmpleadoViewModel>>(new EmpleadosPorSucursalViewModel { IdSucursal = claimTransfer.IdSucursal, EmpleadosActivos = true }, new Uri(WebApp.BaseAddressTH), "api/Empleados/ListarEmpleadosPorSucursal")).Select(c => new ListaEmpleadoViewModel { IdEmpleado = c.IdEmpleado, NombreApellido = $"{c.Nombres} {c.Apellidos}" });
                 ViewData["EmpleadoEntrega"] = new SelectList(listadoEmpleadoSucursalOrigen, "IdEmpleado", "NombreApellido", cambioUbicacionSucursalViewModel.IdEmpleadoEntrega);
                 ViewData["EmpleadoResponsableEnvio"] = new SelectList(listadoEmpleadoSucursalOrigen, "IdEmpleado", "NombreApellido", cambioUbicacionSucursalViewModel.IdEmpleadoResponsableEnvio);
 
@@ -1192,7 +1171,7 @@ namespace bd.webapprm.web.Controllers.MVC
                     await apiServicio.InsertarAsync(new Estado { Nombre = Estados.Desaprobado }, new Uri(WebApp.BaseAddressTH), "api/Estados/InsertarEstado");
 
                 response = await apiServicio.InsertarAsync(new TransferenciaActivoFijoTransfer { IdTransferenciaActivoFijo = id, Aprobado = id2 }, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/AprobacionTransferenciaCambioUbicacionActivoFijo");
-                return this.Redireccionar(response.IsSuccess ? $"{Mensaje.Informacion}|{Mensaje.Satisfactorio}" : $"{Mensaje.Error}|{Mensaje.Excepcion}", nameof(ListadoTransferenciasAceptadas));
+                return this.Redireccionar(response.IsSuccess ? $"{Mensaje.Informacion}|{Mensaje.Satisfactorio}" : $"{Mensaje.Error}|{Mensaje.Excepcion}", nameof(ListadoTransferenciasCreadas));
             }
             catch (Exception ex)
             {

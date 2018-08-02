@@ -33,20 +33,20 @@ namespace bd.webapprm.entidades
 
         [Required(ErrorMessage = "Debe introducir las {0}")]
         [Display(Name = "Observaciones:")]
-        [StringLength(500, MinimumLength = 10, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
+        [StringLength(500, MinimumLength = 10, ErrorMessage = "Las {0} no pueden tener más de {1} y menos de {2}")]
         public string Observaciones { get; set; }
 
         //Propiedades Virtuales Referencias a otras clases
 
         [Display(Name = "Empleado:")]
-        [Required(ErrorMessage = "Debe seleccionar el {0} ")]
-        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
+        [Required(ErrorMessage = "Debe seleccionar el {0}")]
+        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0}")]
         public int IdEmpleado { get; set; }
         public virtual Empleado Empleado { get; set; }
 
-        [Display(Name = "Detalle de Recepción de Activo fijo:")]
-        [Required(ErrorMessage = "Debe seleccionar el {0} ")]
-        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
+        [Display(Name = "Detalle de recepción de activo fijo:")]
+        [Required(ErrorMessage = "Debe seleccionar el {0}")]
+        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0}")]
         public int IdRecepcionActivoFijoDetalle { get; set; }
         public virtual RecepcionActivoFijoDetalle RecepcionActivoFijoDetalle { get; set; }
     }

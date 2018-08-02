@@ -16,7 +16,7 @@
                 <div class="jarviswidget jarviswidget-color-red" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
                     <header>
                         <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
-                        <h2>Cambio de Ubicaci&oacute;n entre Sucursales de Activos Fijos</h2>
+                        <h2>Cambio de ubicaci&oacute;n entre sucursales</h2>
                     </header>
                     <div>
                         <div class="jarviswidget-editbox"></div>
@@ -67,7 +67,6 @@
                                         <section class="col col-8">
                                             <label class="input">
                                                 <select asp-for="IdSucursalOrigen" class="form-control" asp-items="ViewBag.SucursalOrigen"></select>
-                                                <span asp-validation-for="IdSucursalOrigen" class="text-danger"></span>
                                             </label>
                                         </section>
                                     </div>
@@ -140,7 +139,7 @@
         var urlListadoActivosFijosCustodioResult = "@Url.Action("ListadoActivosFijosCustodioResult")";
         var urlEmpleadoTransferenciaResult = "@Url.Action("EmpleadoTransferenciaResult", "ActivoFijo")";
         var idsRecepcionActivoFijoDetalle = "@String.Join(",", listadoRecepcionActivoFijoDetalleSeleccionado.Where(c=> c.Seleccionado).Select(c=> c.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle))";
-        var idEditar = "@String.Format("{0}", Model != null ? "true" : "false")" === 'true';
+        var idEditar = "@String.Format("{0}", Model != null && Model.IdTransferenciaActivoFijo > 0 ? "true" : "false")" === 'true';
         var isVistaDetalles = "@isVistaDetalles".toLowerCase() === 'true';
     </script>
 }
