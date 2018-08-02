@@ -7,6 +7,9 @@
     nombreActivoFijo: "NombreActivoFijo",
     marca: "Marca",
     modelo: "Modelo",
+    valorCompra: "ValorCompra",
+    depreciacion: "Depreciacion",
+    validacionTecnica: "ValidacionTecnica",
     serie: "Serie",
     numeroChasis: "NumeroChasis",
     numeroMotor: "NumeroMotor",
@@ -416,7 +419,10 @@ function initDataTableFiltrado(idTabla, arrColumnHidden, fnDrawCallBack)
     });
 
     for (var i = 0; i < arrColumnHidden.length; i++) {
-        otable.column(".th" + arrColumnHidden[i]).visible(false);
+        var columna = otable.column(".th" + arrColumnHidden[i]);
+        if (columna && columna != null) {
+            columna.visible(false);
+        }
     }
 }
 
@@ -424,12 +430,60 @@ function crearGrupo(api, rows, last, groupadmin, idColumna, textoLugar, paddingL
     api.column(idColumna, { page: 'current' }).data().each(function (group, i) {
         if (last !== group) {
             $(rows).eq(i).before(
-                '<tr class="group" id="' + i + '"><td colspan="' + colspan + '" style="font-weight:bold;">' + "<i class='fa fa-angle-down' style='font-weight:bold;padding-left:" + paddingLeft + "px;'></i> " + textoLugar + ": " + group + '</td ></tr > '
+                '<tr class="group" id="' + i + '"><td colspan="' + colspan + '" style="font-weight:bold;">' + "<i class='fa fa-angle-down' style='font-weight:bold;padding-left:" + paddingLeft + "px;'></i> " + textoLugar + ": " + group + '</td></tr>'
             );
             groupadmin.push(i);
             last = group;
         }
     });
+}
+
+function crearGrupoSubtotal(api, rows, last, groupadmin, idColumna, textoLugar, paddingLeft, colspan, idColumnaSubtotal)
+{
+    crearGrupo(api, rows, last, groupadmin, idColumna, textoLugar, paddingLeft, colspan);
+    var cantidadFilas = api.rows().nodes().length;
+    var total = 0;
+    if (cantidadFilas > 0) {
+        var posInicial = 0;
+        var posAnterior = 0;
+        do {
+            posInicial = obtenerPosArrMismoTextoDatatable(posInicial, api, idColumna);
+            posInicial--;
+
+            var subtotal = 0;
+            for (var i = posAnterior; i <= posInicial; i++) {
+                var textoSubtotal = (api.rows(i).data()[0][idColumnaSubtotal]).replace("$", "");
+                subtotal += parseFloat(textoSubtotal);
+                total += subtotal;
+            }
+
+            $(rows).eq(posInicial).after(
+                '<tr><td colspan="' + (colspan - 2) + '" style="background:white !important;">' + '</td>' +
+                '<td colspan="2" style="font-weight:bold;background:#ddd !important;">' + "Subtotal" + ": $" + subtotal + '</td></tr>' +
+                '<tr><td colspan="' + colspan + '" style="padding-top:20px !important;">' + '</td></tr>'
+            );
+            posInicial++;
+            posAnterior = posInicial;
+        } while ((posInicial < (cantidadFilas - 1)) || posInicial < 0);
+    }
+    $("#spanTotal").html(total.toFixed(2));
+}
+
+function obtenerPosArrMismoTextoDatatable(posInicial, api, columnaTexto)
+{
+    try {
+        var cantidadFilas = api.rows().nodes().length;
+        var texto = api.rows(posInicial).data()[0][columnaTexto];
+        for (var i = posInicial + 1; i < cantidadFilas; i++) {
+            var grupo = api.rows(i).data()[0][columnaTexto];
+            if (grupo != texto) {
+                return i;
+            }
+        }
+        return cantidadFilas;
+    } catch (e) {
+        return -1;
+    }
 }
 
 function initTreeView()

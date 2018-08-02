@@ -7,7 +7,7 @@
 
 <table id="tableDetallesRecepcion" class="table table-striped table-bordered table-hover" style="width:100%;">
     <thead>
-        @{await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", isSeleccion ? 11 : 10);}
+        @{await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", isSeleccion ? 12 : 11);}
         <tr>
             @{
                 if (isSeleccion)
@@ -44,6 +44,9 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.Cantidad)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.ValorCompra)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.Depreciacion)
@@ -86,6 +89,7 @@
                         <td id="@String.Format("tableDetallesRecepcion{0}Marca", i)">@Html.DisplayFor(modelItem => listadoRafd[0].RecepcionActivoFijoDetalle.ActivoFijo.Modelo.Marca.Nombre)</td>
                         <td id="@String.Format("tableDetallesRecepcion{0}Modelo", i)">@Html.DisplayFor(modelItem => listadoRafd[0].RecepcionActivoFijoDetalle.ActivoFijo.Modelo.Nombre)</td>
                         <td id="@String.Format("tableDetallesRecepcion{0}Cantidad", i)">@listadoRafd.Count</td>
+                        <td id="@String.Format("tableDetallesRecepcion{0}ValorCompra", i)">@Html.DisplayFor(modelItem => listadoRafd[0].RecepcionActivoFijoDetalle.ActivoFijo.ValorCompra)</td>
                         <td id="@String.Format("tableDetallesRecepcion{0}Depreciacion", i)">
                             @{
                                 await Html.RenderPartialAsync("_CheckBoxSeleccion", new ViewDataDictionary(ViewData){

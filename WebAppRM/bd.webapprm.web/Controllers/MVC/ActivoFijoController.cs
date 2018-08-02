@@ -1186,7 +1186,7 @@ namespace bd.webapprm.web.Controllers.MVC
         public async Task<IActionResult> ListadoActivosFijosBaja()
         {
             var lista = new List<RecepcionActivoFijoDetalleSeleccionado>();
-            ViewData["Configuraciones"] = new ListadoDetallesActivosFijosViewModel(IsConfiguracionDatosActivo: true, IsConfiguracionListadoGenerales: true);
+            ViewData["Configuraciones"] = new ListadoDetallesActivosFijosViewModel(IsConfiguracionDatosActivo: true, IsConfiguracionListadoGenerales: true, IsConfiguracionDatosBaja: true);
             try
             {
                 lista = await apiServicio.ObtenerElementoAsync<List<RecepcionActivoFijoDetalleSeleccionado>>(new IdRecepcionActivoFijoDetalleSeleccionadoEstado { Estados = new List<string> { Estados.Baja }, ListaIdRecepcionActivoFijoDetalleSeleccionado = new List<IdRecepcionActivoFijoDetalleSeleccionado>() }, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/DetallesActivoFijoSeleccionadoPorEstado");

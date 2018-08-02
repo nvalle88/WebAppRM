@@ -1,0 +1,11 @@
+@model int
+<div class="invoice-footer" style="padding:10px !important;">
+    <div class="row">
+        <div class="col-sm-7"></div>
+        <div class="col-sm-5">
+            <div class="invoice-sum-total pull-right bg-color-darken txt-color-white" style="padding:5px !important;border-radius:2px !important;">
+                <h3>Total:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $<span id="spanTotal">@String.Format("{0}", Model > 0 ? Model.ToString() : "0.00")</span></h3>
+            </div>
+        </div>
+    </div>
+</div>
