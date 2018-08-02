@@ -27,8 +27,8 @@ $(document).ready(function () {
         var api = table.api();
         var rows = api.rows({ page: 'current' }).nodes();
         var last = null;
-        var groupadmin = [];        
-        crearGrupo(api, rows, last, groupadmin, 1, "Clase de activo fijo", 6, isSeleccion ? 11 : 10);
+        var groupadmin = [];
+        crearGrupoSubtotal(api, rows, last, groupadmin, 1, "Clase de activo fijo", 6, isSeleccion ? 12 : 11, 7);
     });
     $('#tableDetallesRecepcion').DataTable().page.len(-1).draw();
     if (isVistaDetalles)
@@ -1115,7 +1115,7 @@ function guardarDatosActivoFijoRow()
             var btnEditarActivoFijo = '<a href="javascript: void(0);" onclick="cargarModalDatosActivoFijo(' + idFila + ',false)">Editar</a><span> | </span>';
             var btnEliminarActivoFijo = "<div id='divEliminarDatosActivoFijo_" + idFila + "' style='display:inline;'><a href='javascript: void(0);' id='btnEliminarDatosActivoFijo_" + idFila + "' onclick=abrirVentanaConfirmacion('btnEliminarDatosActivoFijo_" + idFila + "') data-funcioncallback=callBackFunctionEliminarDatoActivoFijo('" + idFila + "') data-titulo='Eliminar' data-descripcion='&#191; Desea eliminar el Activo Fijo seleccionado... ?'>Eliminar</a></div>";
 
-            addRowDetallesActivosFijosPorArray("tableDetallesRecepcion", idFila, ['TipoActivoFijo', 'ClaseActivoFijo', 'SubclaseActivoFijo', 'NombreActivoFijo', 'Marca', 'Modelo', 'Cantidad', 'Depreciacion', 'ValidacionTecnica', ''],
+            addRowDetallesActivosFijosPorArray("tableDetallesRecepcion", idFila, [thClassName.tipoActivoFijo, thClassName.claseActivoFijo, thClassName.subClaseActivoFijo, thClassName.nombreActivoFijo, thClassName.marca, thClassName.modelo, thClassName.cantidad, thClassName.valorCompra, thClassName.depreciacion, thClassName.validacionTecnica, ''],
                 [
                     textIdTipoActivoFijo,
                     textIdClaseActivoFijo,
@@ -1124,6 +1124,7 @@ function guardarDatosActivoFijoRow()
                     textMarca,
                     textModelo,
                     cantidad,
+                    "$" + valorCompra,
                     addRowCheckBox(idFila, depreciacion, null, true),
                     addRowCheckBox(idFila, validacionTecnica, null, true),
                     hNumeroClaveCatastral + hNumeroChasis + hNumeroMotor + hPlaca + hSerie + hBodega + hEmpleado + hRecepcionActivoFijoDetalle + hIdActivoFijo + hUbicacion + hComponentes + hCodigoSecuencial + hIdCodigoActivoFijo + hTipoActivoFijo + hClaseActivoFijo + hSubclaseActivoFijo + hMarca + hModelo + hCantidad + hNombreActivoFijo + hValorCompra + hDepreciacion + hValidacionTecnica + btnDetallesActivoFijo + btnEditarActivoFijo + btnEliminarActivoFijo
@@ -1159,6 +1160,7 @@ function guardarDatosActivoFijoRow()
             $("#tableDetallesRecepcion" + idFila + "Marca").html(textMarca);
             $("#tableDetallesRecepcion" + idFila + "Modelo").html(textModelo);
             $("#tableDetallesRecepcion" + idFila + "Cantidad").html(cantidad);
+            $("#tableDetallesRecepcion" + idFila + "ValorCompra").html(valorCompra);
             $("#tableDetallesRecepcion" + idFila + "Depreciacion").html(addRowCheckBox(idFila, depreciacion, null, true));
             $("#tableDetallesRecepcion" + idFila + "ValidacionTecnica").html(addRowCheckBox(idFila, validacionTecnica, null, true));
         }
