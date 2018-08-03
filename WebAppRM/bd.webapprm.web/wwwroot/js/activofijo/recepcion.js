@@ -28,7 +28,7 @@ $(document).ready(function () {
         var rows = api.rows({ page: 'current' }).nodes();
         var last = null;
         var groupadmin = [];
-        crearGrupoSubtotal(api, rows, last, groupadmin, 1, "Clase de activo fijo", 6, isSeleccion ? 12 : 11, 7);
+        crearGrupoSubtotal(api, rows, last, groupadmin, 1, "Clase de activo fijo", 6, isSeleccion ? 12 : 11, 7, "tableDetallesRecepcion");
     });
     $('#tableDetallesRecepcion').DataTable().page.len(-1).draw();
     if (isVistaDetalles)

@@ -438,7 +438,7 @@ function crearGrupo(api, rows, last, groupadmin, idColumna, textoLugar, paddingL
     });
 }
 
-function crearGrupoSubtotal(api, rows, last, groupadmin, idColumna, textoLugar, paddingLeft, colspan, idColumnaSubtotal)
+function crearGrupoSubtotal(api, rows, last, groupadmin, idColumna, textoLugar, paddingLeft, colspan, idColumnaSubtotal, nombreTabla)
 {
     crearGrupo(api, rows, last, groupadmin, idColumna, textoLugar, paddingLeft, colspan);
     var cantidadFilas = api.rows().nodes().length;
@@ -452,14 +452,14 @@ function crearGrupoSubtotal(api, rows, last, groupadmin, idColumna, textoLugar, 
 
             var subtotal = 0;
             for (var i = posAnterior; i <= posInicial; i++) {
-                var textoSubtotal = (api.rows(i).data()[0][idColumnaSubtotal]).replace("$", "");
-                subtotal += parseFloat(textoSubtotal);
-                total += subtotal;
+                var idFila = api.rows().nodes().to$().eq(i).prop("id").replace(nombreTabla, "");
+                subtotal += Number($("#hhValorCompra_" + idFila).val());
             }
+            total += subtotal;
 
             $(rows).eq(posInicial).after(
                 '<tr><td colspan="' + (colspan - 2) + '" style="background:white !important;">' + '</td>' +
-                '<td colspan="2" style="font-weight:bold;background:#ddd !important;">' + "Subtotal" + ": $" + subtotal + '</td></tr>' +
+                '<td colspan="2" style="font-weight:bold;background:#ddd !important;">' + "Subtotal" + ": $" + subtotal.toFixed(2) + '</td></tr>' +
                 '<tr><td colspan="' + colspan + '" style="padding-top:20px !important;">' + '</td></tr>'
             );
             posInicial++;
