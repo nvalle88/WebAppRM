@@ -77,7 +77,7 @@
                                                 @{await ViewContext.Writer.WriteAsync(item.EmpleadoDevolucion != null ? $"{item.EmpleadoDevolucion.Persona.Nombres} {item.EmpleadoDevolucion.Persona.Apellidos}" : "-");}
                                             </td>
                                             <td>
-                                                @{await ViewContext.Writer.WriteAsync(item.Proveedor != null ? $"{item.Proveedor.Nombre} {item.Proveedor.Apellidos}" : "-");}
+                                                @{await ViewContext.Writer.WriteAsync(item.Proveedor != null ? item.Proveedor.RazonSocial : "-");}
                                             </td>
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.Fecha)

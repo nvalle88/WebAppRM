@@ -41,11 +41,8 @@
                         <div class="widget-body no-padding">
                             <form asp-action="@actionForm" id="formDatosActivo" class="smart-form" novalidate="novalidate" enctype="multipart/form-data">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <input type="hidden" asp-for="IdRecepcionActivoFijo" />
                                 @{
-                                    if (Model != null)
-                                    {
-                                        <input type="hidden" asp-for="IdRecepcionActivoFijo" />
-                                    }
                                     if (isRevisionActivoFijo)
                                     {
                                         <input type="hidden" id="idsRecepcionActivoFijoDetalleSeleccionado" name="idsRecepcionActivoFijoDetalleSeleccionado" />
@@ -128,6 +125,7 @@
         var urlDatosActivoFijoResult = "@Url.Action("DatosActivoFijoResult")";
         var urlGestionarRevisionActivoFijo = "@Url.Action("GestionarAprobacionActivoFijo")";
         var urlListadoValidacionesTecnicas = "@Url.Action("ActivosFijosValidacionTecnica")";
+        var urlPolizaSeguroResult = "@Url.Action("PolizaSeguroResult")";
         var isEditar = "@String.Format("{0}", Model != null && Model.IdRecepcionActivoFijo > 0 ? true : false)".toLowerCase() === 'true';
         var isVistaDetalles = "@isVistaDetalles".toLowerCase() === 'true';
         var isSeleccion = "@isSeleccion".toLowerCase() === 'true';

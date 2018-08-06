@@ -4,11 +4,11 @@
 }
 <section class="col col-8">
     <label class="input">
-        <select asp-for="RecepcionActivoFijo.PolizaSeguroActivoFijo.IdSubramo" class="form-control" asp-items="ViewBag.Subramo"></select>
+        <select asp-for="ActivoFijo.SubClaseActivoFijo.IdSubramo" class="form-control" asp-items="ViewBag.Subramo"></select>
         @{
             if (!isPolizaSeguro)
             {
-                <span asp-validation-for="RecepcionActivoFijo.PolizaSeguroActivoFijo.IdSubramo" class="text-danger"></span>
+                <span asp-validation-for="ActivoFijo.SubClaseActivoFijo.IdSubramo" class="text-danger"></span>
             }
         }
     </label>

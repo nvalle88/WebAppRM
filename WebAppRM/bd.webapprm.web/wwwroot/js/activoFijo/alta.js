@@ -2,6 +2,7 @@
     Init_Select2();
     Init_DatetimePicker("FacturaActivoFijo_FechaFactura", true);
     Init_DatetimePicker("FechaAlta", true);
+    Init_DatetimePicker("FechaPago");
     eventoMotivoAlta();
     inicializarDetallesActivoSeleccion();
     inicializarObjetoAdicional();
@@ -15,6 +16,7 @@
     if (isVistaDetalles) {
         $("#IdMotivoAlta").prop("disabled", "disabled");
         $("#FechaAlta").prop("disabled", "disabled");
+        $("#FechaPago").prop("disabled", "disabled");
         $("#IdTipoUtilizacionAlta").prop("disabled", "disabled");
         $("#FacturaActivoFijo_NumeroFactura").prop("disabled", "disabled");
         $("#FacturaActivoFijo_FechaFactura").prop("disabled", "disabled");

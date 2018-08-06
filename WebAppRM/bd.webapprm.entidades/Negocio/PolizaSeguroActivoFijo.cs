@@ -10,12 +10,6 @@ namespace bd.webapprm.entidades
         [Key]
         public int IdRecepcionActivoFijo { get; set; }
 
-        [Display(Name = "Subramo:")]
-        [Required(ErrorMessage = "Debe seleccionar el {0}")]
-        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0}")]
-        public int IdSubramo { get; set; }
-        public virtual Subramo Subramo { get; set; }
-
         [Display(Name = "Compañía de seguro:")]
         [Required(ErrorMessage = "Debe seleccionar la {0}")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar la {0}")]

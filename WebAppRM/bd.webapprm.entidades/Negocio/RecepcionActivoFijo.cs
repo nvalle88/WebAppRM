@@ -14,17 +14,18 @@ namespace bd.webapprm.entidades
         }
 
         [Key]
+        [Display(Name = "No. de recepción:")]
         public int IdRecepcionActivoFijo { get; set; }
 
         [Required(ErrorMessage = "Debe introducir la {0}")]
-        [Display(Name = "Fecha de recepción:")]
+        [Display(Name = "Fecha de acta de entrega y recepción:")]
         [DataType(DataType.DateTime)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy hh:mm tt}", ApplyFormatInEditMode = true)]
         public DateTime FechaRecepcion { get; set; }
 
         [Required(ErrorMessage = "Debe introducir la {0}")]
-        [Display(Name = "Orden de compra:")]
-        [StringLength(200, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
+        [Display(Name = "Orden de compra / Contratos:")]
+        [StringLength(200, MinimumLength = 2, ErrorMessage = "La {0} no puede tener más de {1} y menos de {2}")]
         public string OrdenCompra { get; set; }
 
         //Propiedades Virtuales Referencias a otras clases

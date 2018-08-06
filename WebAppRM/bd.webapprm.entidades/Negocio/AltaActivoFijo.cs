@@ -21,6 +21,12 @@ namespace bd.webapprm.entidades
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy hh:mm tt}", ApplyFormatInEditMode = true)]
         public DateTime FechaAlta { get; set; }
 
+        [Required(ErrorMessage = "Debe introducir la {0}")]
+        [Display(Name = "Fecha de pago:")]
+        [DataType(DataType.DateTime)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy hh:mm tt}", ApplyFormatInEditMode = true)]
+        public DateTime FechaPago { get; set; }
+
         [Display(Name = "Motivo de alta:")]
         [Required(ErrorMessage = "Debe seleccionar el {0}")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0}")]

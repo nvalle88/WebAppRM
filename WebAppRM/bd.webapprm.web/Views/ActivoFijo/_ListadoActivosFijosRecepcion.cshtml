@@ -7,22 +7,22 @@
 
 <table id="tableDetallesRecepcion" class="table table-striped table-bordered table-hover" style="width:100%;">
     <thead>
-        @{await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", isSeleccion ? 12 : 11);}
+        @{await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", isSeleccion ? 14 : 13);}
         <tr>
             @{
-                if (isSeleccion)
-                {
-                    <th>
-                        @{
-                            await Html.RenderPartialAsync("_CheckBoxSeleccion", new ViewDataDictionary(ViewData){
-                                { "Seleccionado", false },
-                                { "IdRecepcionActivoFijoDetalle", 0 },
-                                { "CallbackFunctionAddRowDetalleTodos", "callBackFunctionSeleccionActivoFijo" },
-                                { "CallbackFunctionRemoveRowDetalleTodos", "callBackFunctionSeleccionActivoFijo" }
-                            });
-                        }
-                    </th>
+        if (isSeleccion)
+        {
+            <th>
+                @{
+            await Html.RenderPartialAsync("_CheckBoxSeleccion", new ViewDataDictionary(ViewData){
+                            { "Seleccionado", false },
+                            { "IdRecepcionActivoFijoDetalle", 0 },
+                            { "CallbackFunctionAddRowDetalleTodos", "callBackFunctionSeleccionActivoFijo" },
+                            { "CallbackFunctionRemoveRowDetalleTodos", "callBackFunctionSeleccionActivoFijo" }
+                        });
                 }
+            </th>
+}
             }
             <th>
                 @Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.IdTipoActivoFijo)
@@ -41,6 +41,12 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.IdModelo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.Subramo.IdRamo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.IdSubramo)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.Cantidad)
@@ -67,7 +73,7 @@
                 for (int i = 0; i < cantidad; i++)
                 {
                     var listadoRafd = igrouping.ElementAtOrDefault(i).ToList();
-                    <tr id="@String.Format("tableDetallesRecepcion{0}", i)">
+                    <tr id="@String.Format("tableDetallesRecepcion{0}", i)" class="trDetallesRecepcion">
                         @{
                             if (isSeleccion)
                             {
@@ -88,6 +94,8 @@
                         <td id="@String.Format("tableDetallesRecepcion{0}NombreActivoFijo", i)">@Html.DisplayFor(modelItem => listadoRafd[0].RecepcionActivoFijoDetalle.ActivoFijo.Nombre)</td>
                         <td id="@String.Format("tableDetallesRecepcion{0}Marca", i)">@Html.DisplayFor(modelItem => listadoRafd[0].RecepcionActivoFijoDetalle.ActivoFijo.Modelo.Marca.Nombre)</td>
                         <td id="@String.Format("tableDetallesRecepcion{0}Modelo", i)">@Html.DisplayFor(modelItem => listadoRafd[0].RecepcionActivoFijoDetalle.ActivoFijo.Modelo.Nombre)</td>
+                        <td id="@String.Format("tableDetallesRecepcion{0}Ramo", i)">@Html.DisplayFor(modelItem => listadoRafd[0].RecepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.Subramo.Ramo.Nombre)</td>
+                        <td id="@String.Format("tableDetallesRecepcion{0}Subramo", i)">@Html.DisplayFor(modelItem => listadoRafd[0].RecepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.Subramo.Nombre)</td>
                         <td id="@String.Format("tableDetallesRecepcion{0}Cantidad", i)">@listadoRafd.Count</td>
                         <td id="@String.Format("tableDetallesRecepcion{0}ValorCompra", i)">@Html.DisplayFor(modelItem => listadoRafd[0].RecepcionActivoFijoDetalle.ActivoFijo.ValorCompra)</td>
                         <td id="@String.Format("tableDetallesRecepcion{0}Depreciacion", i)">

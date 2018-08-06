@@ -4,14 +4,14 @@
     bool isListadoValidacionesTecnicas = ViewBag.IsListadoValidacionesTecnicas ?? false;
     bool isListadoPolizaSeguroSinAsignar = ViewBag.IsListadoPolizaSeguroSinAsignar ?? false;
     bool isListadoPolizaSeguroAsignadas = ViewBag.IsListadoPolizaSeguroAsignadas ?? false;
-    int cantidadFilasFiltrado = 7;
+    int cantidadFilasFiltrado = 8;
     if (isListadoPolizaSeguroSinAsignar)
     {
-        cantidadFilasFiltrado = 10;
+        cantidadFilasFiltrado += 1;
     }
     if (isListadoPolizaSeguroAsignadas)
     {
-        cantidadFilasFiltrado = 11;
+        cantidadFilasFiltrado += 2;
     }
 }
 
@@ -41,6 +41,9 @@
                                     <tr>
                                         @{await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", cantidadFilasFiltrado);}
                                         <th>
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().IdRecepcionActivoFijo)
+                                        </th>
+                                        <th>
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.FirstOrDefault().SucursalActual.Nombre)
                                         </th>
                                         <th>
@@ -62,12 +65,6 @@
                                             if (isListadoPolizaSeguroSinAsignar || isListadoPolizaSeguroAsignadas)
                                             {
                                                 <th>
-                                                    @Html.DisplayNameFor(model => model.FirstOrDefault().PolizaSeguroActivoFijo.Subramo.IdRamo)
-                                                </th>
-                                                <th>
-                                                    @Html.DisplayNameFor(model => model.FirstOrDefault().PolizaSeguroActivoFijo.IdSubramo)
-                                                </th>
-                                                <th>
                                                     @Html.DisplayNameFor(model => model.FirstOrDefault().PolizaSeguroActivoFijo.IdCompaniaSeguro)
                                                 </th>
                                                 if (isListadoPolizaSeguroAsignadas)
@@ -86,13 +83,16 @@
                                     {
                                         <tr>
                                             <td>
+                                                @Html.DisplayFor(modelItem => item.IdRecepcionActivoFijo)
+                                            </td>
+                                            <td>
                                                 @Html.DisplayFor(modelItem => item.RecepcionActivoFijoDetalle.FirstOrDefault().SucursalActual.Nombre)
                                             </td>
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.OrdenCompra)
                                             </td>
                                             <td>
-                                                @{await ViewContext.Writer.WriteAsync($"{item.Proveedor.Nombre} {item.Proveedor.Apellidos}");}
+                                                @Html.DisplayFor(modelItem => item.Proveedor.RazonSocial)
                                             </td>
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.FechaRecepcion)
@@ -106,12 +106,6 @@
                                             @{ 
                                                 if (isListadoPolizaSeguroSinAsignar || isListadoPolizaSeguroAsignadas)
                                                 {
-                                                    <td>
-                                                        @Html.DisplayFor(modelItem => item.PolizaSeguroActivoFijo.Subramo.Ramo.Nombre)
-                                                    </td>
-                                                    <td>
-                                                        @Html.DisplayFor(modelItem => item.PolizaSeguroActivoFijo.Subramo.Nombre)
-                                                    </td>
                                                     <td>
                                                         @Html.DisplayFor(modelItem => item.PolizaSeguroActivoFijo.CompaniaSeguro.Nombre)
                                                     </td>

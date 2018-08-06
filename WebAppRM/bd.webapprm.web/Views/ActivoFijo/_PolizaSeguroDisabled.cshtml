@@ -1,0 +1,23 @@
+@model bd.webapprm.entidades.RecepcionActivoFijoDetalle
+<legend>P&oacute;liza de seguro</legend>
+<div class="row margin-top-25">
+    <section class="col col-4">
+        <label asp-for="ActivoFijo.SubClaseActivoFijo.Subramo.Ramo.Nombre"></label>
+    </section>
+
+    <section class="col col-8">
+        <label class="input">
+            <select asp-for="ActivoFijo.SubClaseActivoFijo.Subramo.IdRamo" class="form-control" asp-items="ViewBag.Ramo" disabled="disabled"></select>
+        </label>
+    </section>
+</div>
+
+<div class="row">
+    <section class="col col-4">
+        <label asp-for="ActivoFijo.SubClaseActivoFijo.Subramo.Nombre"></label>
+    </section>
+
+    <div id="div_subramo">
+        @{ await Html.RenderPartialAsync("_SubramoSelect", Model); }
+    </div>
+</div>

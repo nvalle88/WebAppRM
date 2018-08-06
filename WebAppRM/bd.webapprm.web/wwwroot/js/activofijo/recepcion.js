@@ -13,6 +13,7 @@ var objCategorias = {
     EquiposComputoSoftware: "EQUIPOS DE CÓMPUTO Y SOFTWARE"
 };
 var arrIdsfilas = Array();
+var arrIdsFilasSeleccionados = [];
 $(document).ready(function () {
     Init_Select2();
     Init_DatetimePicker("RecepcionActivoFijo_FechaRecepcion", true);
@@ -22,13 +23,9 @@ $(document).ready(function () {
     if (isRevisionActivoFijo)
         adicionarArrRecepcionActivoFijoDetalle();
 
+    inicializarArrIdsFilasSeleccionados("tableDetallesRecepcion");
     initDataTableFiltrado("tableDetallesRecepcion", [], function () {
-        var table = $("#tableDetallesRecepcion").dataTable();
-        var api = table.api();
-        var rows = api.rows({ page: 'current' }).nodes();
-        var last = null;
-        var groupadmin = [];
-        crearGrupoSubtotal(api, rows, last, groupadmin, 1, "Clase de activo fijo", 6, isSeleccion ? 12 : 11, 7, "tableDetallesRecepcion");
+        actualizarSubtotales();
     });
     $('#tableDetallesRecepcion').DataTable().page.len(-1).draw();
     if (isVistaDetalles)
@@ -38,8 +35,6 @@ $(document).ready(function () {
         $("#RecepcionActivoFijo_IdFondoFinanciamiento").prop("disabled", "disabled");
         $("#RecepcionActivoFijo_FechaRecepcion").prop("disabled", "disabled");
         $("#RecepcionActivoFijo_OrdenCompra").prop("disabled", "disabled");
-        $("#RecepcionActivoFijo_PolizaSeguroActivoFijo_Subramo_IdRamo").prop("disabled", "disabled");
-        $("#RecepcionActivoFijo_PolizaSeguroActivoFijo_IdSubramo").prop("disabled", "disabled");
         $("#RecepcionActivoFijo_PolizaSeguroActivoFijo_IdCompaniaSeguro").prop("disabled", "disabled");
 
         if (!isPolizaSeguro)
@@ -48,6 +43,16 @@ $(document).ready(function () {
     if (isRevisionActivoFijo)
         inicializarIdsArrRecepcionActivoFijoDetalleTodos();
 });
+
+function actualizarSubtotales(isEditar)
+{
+    var table = $("#tableDetallesRecepcion").dataTable();
+    var api = table.api();
+    var rows = api.rows({ page: 'current' }).nodes();
+    var last = null;
+    var groupadmin = [];
+    crearGrupoSubtotal(api, rows, last, groupadmin, 1, "Clase de activo fijo", 6, isSeleccion ? 14 : 13, 9, "tableDetallesRecepcion", isEditar);
+}
 
 function ocultarDatosTablaEspecificos()
 {
@@ -185,6 +190,7 @@ function eventoSubClaseActivoFijo()
 {
     $("#ActivoFijo_IdSubClaseActivoFijo").on("change", function (e) {
         actualizarCodigosSecuenciales();
+        partialViewPolizaSeguro();
     });
 }
 
@@ -198,24 +204,6 @@ function eventoMarca()
             data: { idMarca: e.val },
             success: function (data) {
                 $("#div_modelo").html(data);
-                Init_Select2();
-            },
-            complete: function (data) {
-                $("#checkout-form").waitMe("hide");
-            }
-        });
-    });
-}
-
-function eventoRamo() {
-    $("#RecepcionActivoFijo_PolizaSeguroActivoFijo_Subramo_IdRamo").on("change", function (e) {
-        mostrarLoadingPanel("checkout-form", "Cargando subramos...");
-        $.ajax({
-            url: urlSubramoSelectResult,
-            method: "POST",
-            data: { idRamo: e.val },
-            success: function (data) {
-                $("#div_subramo").html(data);
                 Init_Select2();
             },
             complete: function (data) {
@@ -255,6 +243,7 @@ function partialViewClaseActivoFijo(idClaseActivoFijo) {
         success: function (data) {
             $("#div_subClaseActivoFijo").html(data);
             Init_Select2();
+            partialViewPolizaSeguro();
         },
         complete: function (data) {
             $("#checkout-form").waitMe("hide");
@@ -262,6 +251,27 @@ function partialViewClaseActivoFijo(idClaseActivoFijo) {
                 eventoCambiarCategoria();
             });
             actualizarCodigosSecuenciales();
+        }
+    });
+}
+
+function partialViewPolizaSeguro()
+{
+    mostrarLoadingPanel("checkout-form", "Cargando datos de póliza de seguro...");
+    $.ajax({
+        url: urlPolizaSeguroResult,
+        method: "POST",
+        data: { idSubclaseActivoFijo: $("#ActivoFijo_IdSubClaseActivoFijo").val() },
+        success: function (data) {
+            $("#divPolizaSeguro").html(data);
+            Init_Select2();
+        },
+        error: function (errorMessage) {
+            $("#divPolizaSeguro").html("");
+        },
+        complete: function (data) {
+            $("#ActivoFijo_SubClaseActivoFijo_IdSubramo").prop("disabled", "disabled");
+            $("#checkout-form").waitMe("hide");
         }
     });
 }
@@ -980,7 +990,6 @@ function cargarModalDatosActivoFijo(idFila, isVistaDetalles)
             eventoClaseActivoFijo();
             eventoSubClaseActivoFijo();
             eventoMarca();
-            eventoRamo();
             gestionarWizard(isVistaDetalles);
             eventoSpinnerCantidad();
             initArrIdFilas();
@@ -1008,6 +1017,7 @@ function cargarModalDatosActivoFijo(idFila, isVistaDetalles)
                 $("#ActivoFijo_ValidacionTecnica").prop("disabled", "disabled");
             }
             $("#formDatosActivo").waitMe("hide");
+            partialViewPolizaSeguro();
         }
     });
 }
@@ -1040,6 +1050,8 @@ function guardarDatosActivoFijoRow()
     var textIdSubclaseActivoFijo = $("#ActivoFijo_IdSubClaseActivoFijo option:selected").text();
     var textMarca = $("#ActivoFijo_Modelo_IdMarca option:selected").text();
     var textModelo = $("#ActivoFijo_IdModelo option:selected").text();
+    var textRamo = $("#ActivoFijo_SubClaseActivoFijo_Subramo_IdRamo option:selected").text();
+    var textSubramo = $("#ActivoFijo_SubClaseActivoFijo_IdSubramo option:selected").text();
 
     if (validarActivoFijoExiste(idFila, idSubClaseActivoFijo, idModelo, nombreActivoFijo)) {
         var arrIdsRecepcionActivoFijoDetalle = [];
@@ -1114,8 +1126,9 @@ function guardarDatosActivoFijoRow()
             var btnDetallesActivoFijo = '<a href="javascript: void(0);" onclick="cargarModalDatosActivoFijo(' + idFila + ',true)">Detalles</a><span> | </span>';
             var btnEditarActivoFijo = '<a href="javascript: void(0);" onclick="cargarModalDatosActivoFijo(' + idFila + ',false)">Editar</a><span> | </span>';
             var btnEliminarActivoFijo = "<div id='divEliminarDatosActivoFijo_" + idFila + "' style='display:inline;'><a href='javascript: void(0);' id='btnEliminarDatosActivoFijo_" + idFila + "' onclick=abrirVentanaConfirmacion('btnEliminarDatosActivoFijo_" + idFila + "') data-funcioncallback=callBackFunctionEliminarDatoActivoFijo('" + idFila + "') data-titulo='Eliminar' data-descripcion='&#191; Desea eliminar el Activo Fijo seleccionado... ?'>Eliminar</a></div>";
+            arrIdsFilasSeleccionados.push(idFila);
 
-            addRowDetallesActivosFijosPorArray("tableDetallesRecepcion", idFila, [thClassName.tipoActivoFijo, thClassName.claseActivoFijo, thClassName.subClaseActivoFijo, thClassName.nombreActivoFijo, thClassName.marca, thClassName.modelo, thClassName.cantidad, thClassName.valorCompra, thClassName.depreciacion, thClassName.validacionTecnica, ''],
+            addRowDetallesActivosFijosPorArray("tableDetallesRecepcion", idFila, [thClassName.tipoActivoFijo, thClassName.claseActivoFijo, thClassName.subClaseActivoFijo, thClassName.nombreActivoFijo, thClassName.marca, thClassName.modelo, thClassName.ramo, thClassName.subramo, thClassName.cantidad, thClassName.valorCompra, thClassName.depreciacion, thClassName.validacionTecnica, ''],
                 [
                     textIdTipoActivoFijo,
                     textIdClaseActivoFijo,
@@ -1123,12 +1136,15 @@ function guardarDatosActivoFijoRow()
                     nombreActivoFijo,
                     textMarca,
                     textModelo,
+                    textRamo,
+                    textSubramo,
                     cantidad,
                     "$" + valorCompra,
                     addRowCheckBox(idFila, depreciacion, null, true),
                     addRowCheckBox(idFila, validacionTecnica, null, true),
                     hNumeroClaveCatastral + hNumeroChasis + hNumeroMotor + hPlaca + hSerie + hBodega + hEmpleado + hRecepcionActivoFijoDetalle + hIdActivoFijo + hUbicacion + hComponentes + hCodigoSecuencial + hIdCodigoActivoFijo + hTipoActivoFijo + hClaseActivoFijo + hSubclaseActivoFijo + hMarca + hModelo + hCantidad + hNombreActivoFijo + hValorCompra + hDepreciacion + hValidacionTecnica + btnDetallesActivoFijo + btnEditarActivoFijo + btnEliminarActivoFijo
                 ], true);
+            $("#tableDetallesRecepcion" + idFila).addClass("trDetallesRecepcion");
         }
         else {
             $("#hhNumeroClaveCatastral_" + idFila).val(numerosClaveCatastral);
@@ -1159,10 +1175,13 @@ function guardarDatosActivoFijoRow()
             $("#tableDetallesRecepcion" + idFila + "NombreActivoFijo").html(nombreActivoFijo);
             $("#tableDetallesRecepcion" + idFila + "Marca").html(textMarca);
             $("#tableDetallesRecepcion" + idFila + "Modelo").html(textModelo);
+            $("#tableDetallesRecepcion" + idFila + "Ramo").html(textRamo);
+            $("#tableDetallesRecepcion" + idFila + "Subramo").html(textSubramo);
             $("#tableDetallesRecepcion" + idFila + "Cantidad").html(cantidad);
             $("#tableDetallesRecepcion" + idFila + "ValorCompra").html(valorCompra);
             $("#tableDetallesRecepcion" + idFila + "Depreciacion").html(addRowCheckBox(idFila, depreciacion, null, true));
             $("#tableDetallesRecepcion" + idFila + "ValidacionTecnica").html(addRowCheckBox(idFila, validacionTecnica, null, true));
+            actualizarSubtotales(true);
         }
         closeBootBox();
     }
@@ -1170,6 +1189,7 @@ function guardarDatosActivoFijoRow()
 
 function callBackFunctionEliminarDatoActivoFijo(idFila)
 {
+    eliminarElementoArrIdsFilasSeleccionados(idFila);
     deleteRowDetallesActivosFijos("tableDetallesRecepcion", idFila);
 }
 
@@ -1241,4 +1261,19 @@ function validarPolizaSeguro()
     }
     else
         $("#formDatosActivo").submit();
+}
+
+function obtenerPosArrIdsFilasSeleccionados(valor)
+{
+    for (var i = 0; i < arrIdsFilasSeleccionados.length; i++) {
+        if (arrIdsFilasSeleccionados[i] == valor)
+            return i;
+    }
+    return -1;
+}
+
+function eliminarElementoArrIdsFilasSeleccionados(idFila)
+{
+    var posArrIdsFilasSeleccionados = obtenerPosArrIdsFilasSeleccionados(idFila);
+    arrIdsFilasSeleccionados.splice(posArrIdsFilasSeleccionados, 1);
 }

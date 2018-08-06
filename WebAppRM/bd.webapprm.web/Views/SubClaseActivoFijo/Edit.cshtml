@@ -19,6 +19,7 @@
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <input type="hidden" asp-for="IdSubClaseActivoFijo" />
                                 <fieldset>
+                                    <legend>Datos generales</legend>
                                     <div class="row">
                                         <section class="col col-4">
                                             <label asp-for="ClaseActivoFijo.TipoActivoFijo.Nombre"></label>
@@ -54,6 +55,29 @@
                                             </label>
                                         </section>
                                     </div>
+
+                                    <legend>P&oacute;liza de seguro</legend>
+                                    <div class="row margin-top-25">
+                                        <section class="col col-4">
+                                            <label asp-for="Subramo.Ramo.Nombre"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <select asp-for="Subramo.IdRamo" class="form-control" asp-items="ViewBag.Ramo"></select>
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="Subramo.Nombre"></label>
+                                        </section>
+
+                                        <div id="div_subramo">
+                                            @{ await Html.RenderPartialAsync("_SubramoSelect", Model); }
+                                        </div>
+                                    </div>
                                 </fieldset>
                                 <footer>
                                     <button type="submit" class="btn btn-primary" id="btn-guardar">Guardar</button>
@@ -73,5 +97,6 @@
     <script src='~/js/subClaseActivoFijo/subClaseActivoFijo.min.js'></script>
     <script>
         var claseActivoFijoSelectResult = "@Url.Action("ClaseActivoFijo_SelectResult")";
+        var urlSubramoSelectResult = "@Url.Action("Subramo_SelectResult")";
     </script>
 }
