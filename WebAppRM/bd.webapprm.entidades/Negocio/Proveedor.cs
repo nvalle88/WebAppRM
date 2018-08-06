@@ -17,14 +17,14 @@ namespace bd.webapprm.entidades
         public int IdProveedor { get; set; }
 
         [Required(ErrorMessage = "Debe introducir el {0}")]
-        [Display(Name = "Nombre:")]
+        [Display(Name = "Representante legal:")]
         [StringLength(200, MinimumLength = 2, ErrorMessage = "El {0} no puede tener más de {1} y menos de {2}")]
-        public string Nombre { get; set; }
+        public string RepresentanteLegal { get; set; }
 
-        [Required(ErrorMessage = "Debe introducir los {0}")]
-        [Display(Name = "Apellidos:")]
-        [StringLength(200, MinimumLength = 2, ErrorMessage = "Los {0} no pueden tener más de {1} y menos de {2}")]
-        public string Apellidos { get; set; }
+        [Required(ErrorMessage = "Debe introducir la {0}")]
+        [Display(Name = "Persona de contacto:")]
+        [StringLength(200, MinimumLength = 2, ErrorMessage = "La {0} no pueden tener más de {1} y menos de {2}")]
+        public string PersonaContacto { get; set; }
 
         [Required(ErrorMessage = "Debe introducir la {0}")]
         [Display(Name = "Identificación:")]
