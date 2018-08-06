@@ -13,7 +13,7 @@
     <input type="hidden" asp-for="RecepcionActivoFijoDetalleEdificio.NumeroClaveCatastral" />
     <input type="hidden" asp-for="UbicacionActivoFijoActual.Bodega.Nombre" />
     <input type="hidden" asp-for="UbicacionActivoFijoActual.Empleado.Dependencia.Nombre" />
-    <input type="hidden" asp-for="RecepcionActivoFijo.IdProveedor" value="@String.Format("{0} {1}", Model?.RecepcionActivoFijo?.Proveedor?.Nombre, Model?.RecepcionActivoFijo?.Proveedor?.Apellidos)" />
+    <input type="hidden" asp-for="RecepcionActivoFijo.IdProveedor" value="@Model?.RecepcionActivoFijo?.Proveedor?.RazonSocial" />
     <input type="hidden" asp-for="RecepcionActivoFijo.MotivoAlta.Descripcion" />
     <input type="hidden" asp-for="RecepcionActivoFijo.FechaRecepcion" />
     <input type="hidden" asp-for="RecepcionActivoFijo.OrdenCompra" />

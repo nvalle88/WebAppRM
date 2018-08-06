@@ -62,6 +62,19 @@
 
                                     <div class="row">
                                         <section class="col col-4">
+                                            <label asp-for="FechaPago"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <input asp-for="FechaPago" class="form-control" />
+                                                <span asp-validation-for="FechaPago" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
                                             <label asp-for="AltaActivoFijoDetalle.FirstOrDefault().IdTipoUtilizacionAlta"></label>
                                         </section>
 

@@ -39,7 +39,7 @@ namespace bd.webapprm.entidades
         public int IdRecepcionActivoFijo { get; set; }
         public virtual RecepcionActivoFijo RecepcionActivoFijo { get; set; }
 
-        [Display(Name = "Activo fijo:")]
+        [Display(Name = "Descripción de activo fijo:")]
         [Required(ErrorMessage = "Debe seleccionar el {0}")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0}")]
         public int IdActivoFijo { get; set; }
@@ -51,7 +51,7 @@ namespace bd.webapprm.entidades
         public int IdEstado { get; set; }
         public virtual Estado Estado { get; set; }
 
-        [Display(Name = "Código de activo fijo")]
+        [Display(Name = "Código de activo fijo:")]
         [Required(ErrorMessage = "Debe seleccionar el {0}")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0}")]
         public int IdCodigoActivoFijo { get; set; }

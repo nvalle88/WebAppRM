@@ -46,6 +46,8 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 ViewData["TipoActivoFijo"] = new SelectList(await apiServicio.Listar<TipoActivoFijo>(new Uri(WebApp.BaseAddressRM), "api/TipoActivoFijo/ListarTipoActivoFijos"), "IdTipoActivoFijo", "Nombre");
                 ViewData["ClaseActivoFijo"] = await ObtenerSelectListClaseActivoFijo((ViewData["TipoActivoFijo"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["TipoActivoFijo"] as SelectList).FirstOrDefault().Value) : -1);
+                ViewData["Ramo"] = new SelectList(await apiServicio.Listar<Ramo>(new Uri(WebApp.BaseAddressRM), "api/Ramo/ListarRamo"), "IdRamo", "Nombre");
+                ViewData["Subramo"] = await ObtenerSelectListSubramo((ViewData["Ramo"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Ramo"] as SelectList).FirstOrDefault().Value) : -1);
                 return View();
             }
             catch (Exception)
@@ -60,7 +62,6 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                subClaseActivoFijo.ClaseActivoFijo = JsonConvert.DeserializeObject<ClaseActivoFijo>((await apiServicio.SeleccionarAsync<Response>(subClaseActivoFijo.IdClaseActivoFijo.ToString(), new Uri(WebApp.BaseAddressRM), "api/ClaseActivoFijo")).Resultado.ToString());
                 var response = await apiServicio.InsertarAsync(subClaseActivoFijo, new Uri(WebApp.BaseAddressRM), "api/SubClaseActivoFijo/InsertarSubClaseActivoFijo");
                 if (response.IsSuccess)
                 {
@@ -70,6 +71,8 @@ namespace bd.webapprm.web.Controllers.MVC
                 ViewData["Error"] = response.Message;
                 ViewData["TipoActivoFijo"] = new SelectList(await apiServicio.Listar<TipoActivoFijo>(new Uri(WebApp.BaseAddressRM), "api/TipoActivoFijo/ListarTipoActivoFijos"), "IdTipoActivoFijo", "Nombre");
                 ViewData["ClaseActivoFijo"] = await ObtenerSelectListClaseActivoFijo(subClaseActivoFijo?.ClaseActivoFijo?.IdTipoActivoFijo ?? -1);
+                ViewData["Ramo"] = new SelectList(await apiServicio.Listar<Ramo>(new Uri(WebApp.BaseAddressRM), "api/Ramo/ListarRamo"), "IdRamo", "Nombre");
+                ViewData["Subramo"] = await ObtenerSelectListSubramo(subClaseActivoFijo?.Subramo?.IdRamo ?? -1);
                 return View(subClaseActivoFijo);
             }
             catch (Exception ex)
@@ -92,6 +95,8 @@ namespace bd.webapprm.web.Controllers.MVC
                     var subClaseActivoFijo = JsonConvert.DeserializeObject<SubClaseActivoFijo>(respuesta.Resultado.ToString());
                     ViewData["TipoActivoFijo"] = new SelectList(await apiServicio.Listar<TipoActivoFijo>(new Uri(WebApp.BaseAddressRM), "api/TipoActivoFijo/ListarTipoActivoFijos"), "IdTipoActivoFijo", "Nombre");
                     ViewData["ClaseActivoFijo"] = await ObtenerSelectListClaseActivoFijo(subClaseActivoFijo.ClaseActivoFijo.IdTipoActivoFijo);
+                    ViewData["Ramo"] = new SelectList(await apiServicio.Listar<Ramo>(new Uri(WebApp.BaseAddressRM), "api/Ramo/ListarRamo"), "IdRamo", "Nombre");
+                    ViewData["Subramo"] = await ObtenerSelectListSubramo(subClaseActivoFijo?.Subramo?.IdRamo ?? -1);
                     return View(subClaseActivoFijo);
                 }
                 return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}");
@@ -110,7 +115,6 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 if (!string.IsNullOrEmpty(id))
                 {
-                    subClaseActivoFijo.ClaseActivoFijo = JsonConvert.DeserializeObject<ClaseActivoFijo>((await apiServicio.SeleccionarAsync<Response>(subClaseActivoFijo.IdClaseActivoFijo.ToString(), new Uri(WebApp.BaseAddressRM), "api/ClaseActivoFijo")).Resultado.ToString());
                     var response = await apiServicio.EditarAsync(id, subClaseActivoFijo, new Uri(WebApp.BaseAddressRM), "api/SubClaseActivoFijo");
                     if (response.IsSuccess)
                     {
@@ -120,6 +124,8 @@ namespace bd.webapprm.web.Controllers.MVC
                     ViewData["Error"] = response.Message;
                     ViewData["TipoActivoFijo"] = new SelectList(await apiServicio.Listar<TipoActivoFijo>(new Uri(WebApp.BaseAddressRM), "api/TipoActivoFijo/ListarTipoActivoFijos"), "IdTipoActivoFijo", "Nombre");
                     ViewData["ClaseActivoFijo"] = await ObtenerSelectListClaseActivoFijo(subClaseActivoFijo?.ClaseActivoFijo?.IdTipoActivoFijo ?? -1);
+                    ViewData["Ramo"] = new SelectList(await apiServicio.Listar<Ramo>(new Uri(WebApp.BaseAddressRM), "api/Ramo/ListarRamo"), "IdRamo", "Nombre");
+                    ViewData["Subramo"] = await ObtenerSelectListSubramo(subClaseActivoFijo?.Subramo?.IdRamo ?? -1);
                     return View(subClaseActivoFijo);
                 }
                 return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}");
@@ -169,5 +175,27 @@ namespace bd.webapprm.web.Controllers.MVC
             ViewBag.ClaseActivoFijo = await ObtenerSelectListClaseActivoFijo(idTipoActivoFijo);
             return PartialView("_ClaseActivoFijoSelect", new SubClaseActivoFijo());
         }
+
+        #region AJAX_Subramo
+        public async Task<SelectList> ObtenerSelectListSubramo(int idRamo)
+        {
+            try
+            {
+                var listaSubramo = idRamo != -1 ? await apiServicio.Listar<Subramo>(new Uri(WebApp.BaseAddressRM), $"api/Subramo/ListarSubramoPorRamo/{idRamo}") : new List<Subramo>();
+                return new SelectList(listaSubramo, "IdSubramo", "Nombre");
+            }
+            catch (Exception)
+            {
+                return new SelectList(new List<Subramo>());
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Subramo_SelectResult(int idRamo)
+        {
+            ViewBag.Subramo = await ObtenerSelectListSubramo(idRamo);
+            return PartialView("_SubramoSelect", new SubClaseActivoFijo());
+        }
+        #endregion
     }
 }

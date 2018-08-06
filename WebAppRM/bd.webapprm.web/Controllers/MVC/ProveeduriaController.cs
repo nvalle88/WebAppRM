@@ -55,7 +55,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                ViewData["Proveedor"] = new SelectList((await apiServicio.ObtenerElementoAsync<List<Proveedor>>(new ProveedorTransfer { LineaServicio = LineasServicio.Proveeduria, Activo = true }, new Uri(WebApp.BaseAddressRM), "api/Proveedor/ListarProveedoresPorLineaServicioEstado")).Select(c => new { c.IdProveedor, NombreApellidos = $"{c.Nombre} {c.Apellidos}" }), "IdProveedor", "NombreApellidos");
+                ViewData["Proveedor"] = new SelectList(await apiServicio.ObtenerElementoAsync<List<Proveedor>>(new ProveedorTransfer { LineaServicio = LineasServicio.Proveeduria, Activo = true }, new Uri(WebApp.BaseAddressRM), "api/Proveedor/ListarProveedoresPorLineaServicioEstado"), "IdProveedor", "RazonSocial");
                 ViewData["MotivoRecepcionArticulos"] = new SelectList(await apiServicio.Listar<MotivoRecepcionArticulos>(new Uri(WebApp.BaseAddressRM), "api/MotivoRecepcionArticulos/ListarMotivoRecepcionArticulos"), "IdMotivoRecepcionArticulos", "Descripcion");
                 var claimTransfer = claimsTransfer.ObtenerClaimsTransferHttpContext();
                 ViewData["Sucursal"] = new SelectList(claimsTransfer.IsADMIGrupo(ADMI_Grupos.AdminNacionalProveeduria) ? await apiServicio.Listar<Sucursal>(new Uri(WebApp.BaseAddressTH), "api/Sucursal/ListarSucursal") : new List<Sucursal> { new Sucursal { IdSucursal = claimTransfer.IdSucursal, Nombre = claimTransfer.NombreSucursal } }, "IdSucursal", "Nombre");
@@ -162,7 +162,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 if (response.IsSuccess)
                     return this.Redireccionar(responseFile.IsSuccess ? $"{Mensaje.Informacion}|{Mensaje.Satisfactorio}" : $"{Mensaje.Aviso}|{Mensaje.ErrorUploadFiles}", nameof(DetallesOrdenCompraEnTramite), routeValues: new { id = idOrdenCompra });
 
-                ViewData["Proveedor"] = new SelectList((await apiServicio.ObtenerElementoAsync<List<Proveedor>>(new ProveedorTransfer { LineaServicio = LineasServicio.Proveeduria, Activo = true }, new Uri(WebApp.BaseAddressRM), "api/Proveedor/ListarProveedoresPorLineaServicioEstado")).Select(c => new { c.IdProveedor, NombreApellidos = $"{c.Nombre} {c.Apellidos}" }), "IdProveedor", "NombreApellidos", ordenCompra.IdProveedor);
+                ViewData["Proveedor"] = new SelectList(await apiServicio.ObtenerElementoAsync<List<Proveedor>>(new ProveedorTransfer { LineaServicio = LineasServicio.Proveeduria, Activo = true }, new Uri(WebApp.BaseAddressRM), "api/Proveedor/ListarProveedoresPorLineaServicioEstado"), "IdProveedor", "RazonSocial", ordenCompra.IdProveedor);
                 ViewData["MotivoRecepcionArticulos"] = new SelectList(await apiServicio.Listar<MotivoRecepcionArticulos>(new Uri(WebApp.BaseAddressRM), "api/MotivoRecepcionArticulos/ListarMotivoRecepcionArticulos"), "IdMotivoRecepcionArticulos", "Descripcion");
 
                 var claimTransfer = claimsTransfer.ObtenerClaimsTransferHttpContext();
@@ -298,7 +298,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                ViewData["Proveedor"] = new SelectList((await apiServicio.ObtenerElementoAsync<List<Proveedor>>(new ProveedorTransfer { LineaServicio = LineasServicio.Proveeduria, Activo = true }, new Uri(WebApp.BaseAddressRM), "api/Proveedor/ListarProveedoresPorLineaServicioEstado")).Select(c => new { c.IdProveedor, NombreApellidos = $"{c.Nombre} {c.Apellidos}" }), "IdProveedor", "NombreApellidos");
+                ViewData["Proveedor"] = new SelectList(await apiServicio.ObtenerElementoAsync<List<Proveedor>>(new ProveedorTransfer { LineaServicio = LineasServicio.Proveeduria, Activo = true }, new Uri(WebApp.BaseAddressRM), "api/Proveedor/ListarProveedoresPorLineaServicioEstado"), "IdProveedor", "RazonSocial");
             }
             catch (Exception)
             { }
@@ -584,7 +584,7 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             try
             {
-                ViewData["Proveedor"] = new SelectList((await apiServicio.ObtenerElementoAsync<List<Proveedor>>(new ProveedorTransfer { LineaServicio = LineasServicio.Proveeduria, Activo = true }, new Uri(WebApp.BaseAddressRM), "api/Proveedor/ListarProveedoresPorLineaServicioEstado")).Select(c => new { c.IdProveedor, NombreApellidos = $"{c.Nombre} {c.Apellidos}" }), "IdProveedor", "NombreApellidos");
+                ViewData["Proveedor"] = new SelectList(await apiServicio.ObtenerElementoAsync<List<Proveedor>>(new ProveedorTransfer { LineaServicio = LineasServicio.Proveeduria, Activo = true }, new Uri(WebApp.BaseAddressRM), "api/Proveedor/ListarProveedoresPorLineaServicioEstado"), "IdProveedor", "RazonSocial");
             }
             catch (Exception)
             { }

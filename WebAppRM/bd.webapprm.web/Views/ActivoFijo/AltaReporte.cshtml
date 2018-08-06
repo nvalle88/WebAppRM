@@ -109,7 +109,7 @@
                                                     </td>
 
                                                     <td>
-                                                        @{ await ViewContext.Writer.WriteAsync(String.Format("{0} {1}", item.RecepcionActivoFijo.Proveedor.Nombre, item.RecepcionActivoFijo.Proveedor.Apellidos)); }
+                                                        @Html.DisplayFor(modelItem => item.RecepcionActivoFijo.Proveedor.RazonSocial)
                                                     </td>
                                                     <td>
                                                         @Html.DisplayFor(modelItem => item.ActivoFijo.ActivosFijosAlta.FechaAlta)

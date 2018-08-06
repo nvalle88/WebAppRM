@@ -10,7 +10,7 @@ namespace bd.webapprm.entidades
         [Key]
         public int IdComponenteActivoFijo { get; set; }
 
-        [Display(Name = "Activo fijo de origen:")]
+        [Display(Name = "Descripción de activo fijo de origen:")]
         [Required(ErrorMessage = "Debe seleccionar el {0}")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0}")]
         public int IdRecepcionActivoFijoDetalleOrigen { get; set; }

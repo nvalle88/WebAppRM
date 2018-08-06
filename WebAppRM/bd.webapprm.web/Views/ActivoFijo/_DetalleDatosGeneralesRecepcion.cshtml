@@ -4,6 +4,23 @@
     bool isPolizaSeguro = ViewBag.IsPolizaSeguro ?? false;
 }
 
+@{
+    if (Model != null && Model.IdRecepcionActivoFijo > 0)
+    {
+        <div class="row">
+            <section class="col col-4">
+                <label asp-for="IdRecepcionActivoFijo"></label>
+            </section>
+
+            <section class="col col-8">
+                <label class="input">
+                    <input asp-for="IdRecepcionActivoFijo" class="form-control" disabled="disabled" />
+                </label>
+            </section>
+        </div>
+    }
+}
+
 <div class="row">
     <section class="col col-4">
         <label asp-for="RecepcionActivoFijo.IdMotivoAlta"></label>
@@ -107,36 +124,9 @@
     </section>
 </div>
 
-<legend>P&oacute;liza de Seguro</legend>
+<legend>P&oacute;liza de seguro</legend>
+
 <div class="row margin-top-25">
-    <section class="col col-4">
-        <label asp-for="RecepcionActivoFijo.PolizaSeguroActivoFijo.Subramo.Ramo.Nombre"></label>
-    </section>
-
-    <section class="col col-8">
-        <label class="input">
-            <select asp-for="RecepcionActivoFijo.PolizaSeguroActivoFijo.Subramo.IdRamo" class="form-control" asp-items="ViewBag.Ramo"></select>
-            @{
-                if (!isPolizaSeguro)
-                {
-                    <span asp-validation-for="RecepcionActivoFijo.PolizaSeguroActivoFijo.Subramo.IdRamo" class="text-danger"></span>
-                }
-            }
-        </label>
-    </section>
-</div>
-
-<div class="row">
-    <section class="col col-4">
-        <label asp-for="RecepcionActivoFijo.PolizaSeguroActivoFijo.Subramo.Nombre"></label>
-    </section>
-
-    <div id="div_subramo">
-        @{ await Html.RenderPartialAsync("_SubramoSelect", Model); }
-    </div>
-</div>
-
-<div class="row">
     <section class="col col-4">
         <label asp-for="RecepcionActivoFijo.PolizaSeguroActivoFijo.CompaniaSeguro.Nombre"></label>
     </section>

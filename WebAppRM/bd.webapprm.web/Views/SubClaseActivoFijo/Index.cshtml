@@ -21,13 +21,17 @@
                                         <th>
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().Nombre)
                                         </th>
-
                                         <th>
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().IdClaseActivoFijo)
                                         </th>
-
                                         <th>
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().ClaseActivoFijo.IdTipoActivoFijo)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().Subramo.IdRamo)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().IdSubramo)
                                         </th>
                                         <th>Opciones</th>
                                     </tr>
@@ -39,15 +43,18 @@
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.Nombre)
                                             </td>
-
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.ClaseActivoFijo.Nombre)
                                             </td>
-
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.ClaseActivoFijo.TipoActivoFijo.Nombre)
                                             </td>
-
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Subramo.Ramo.Nombre)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Subramo.Nombre)
+                                            </td>
                                             <td>
                                                 @Html.ActionLink("Editar", "Edit", new { id = item.IdSubClaseActivoFijo }) |
                                                 <a href="javascript:void(0);" id="@item.IdSubClaseActivoFijo" onclick="abrirVentanaConfirmacion('@item.IdSubClaseActivoFijo')" data-url="@Url.Action("Delete", values: new { id = item.IdSubClaseActivoFijo })" data-titulo="Eliminar" data-descripcion="&#191;Desea eliminar la Subclase de Activo Fijo... ?">Eliminar</a>

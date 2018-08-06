@@ -81,7 +81,7 @@
 
             <tr>
                 <td><a href="javascript:void(0);"><label asp-for="RecepcionActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijo.Proveedor"></label></a></td>
-                <td>@{ await ViewContext.Writer.WriteAsync(String.Format("{0} {1}", Model.RecepcionActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijo.Proveedor.Nombre, Model.RecepcionActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijo.Proveedor.Apellidos)); }</td>
+                <td>@Html.DisplayFor(m => m.RecepcionActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijo.Proveedor.RazonSocial)</td>
             </tr>
 
             <tr>

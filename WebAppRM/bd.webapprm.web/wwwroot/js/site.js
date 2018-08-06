@@ -39,7 +39,9 @@
     valorTotal: "ValorTotal",
     tipoArticulo: "TipoArticulo",
     claseArticulo: "ClaseArticulo",
-    subclaseArticulo: "SubclaseArticulo"
+    subclaseArticulo: "SubclaseArticulo",
+    ramo: "Ramo",
+    subramo: "Subramo"
 };
 
 $(document).ready(function () {
@@ -438,9 +440,14 @@ function crearGrupo(api, rows, last, groupadmin, idColumna, textoLugar, paddingL
     });
 }
 
-function crearGrupoSubtotal(api, rows, last, groupadmin, idColumna, textoLugar, paddingLeft, colspan, idColumnaSubtotal, nombreTabla)
+function crearGrupoSubtotal(api, rows, last, groupadmin, idColumna, textoLugar, paddingLeft, colspan, idColumnaSubtotal, nombreTabla, isEditar)
 {
-    crearGrupo(api, rows, last, groupadmin, idColumna, textoLugar, paddingLeft, colspan);
+    if (!isEditar)
+        isEditar = false;
+
+    if (isEditar == false)
+        crearGrupo(api, rows, last, groupadmin, idColumna, textoLugar, paddingLeft, colspan);
+
     var cantidadFilas = api.rows().nodes().length;
     var total = 0;
     if (cantidadFilas > 0) {
@@ -448,42 +455,58 @@ function crearGrupoSubtotal(api, rows, last, groupadmin, idColumna, textoLugar, 
         var posAnterior = 0;
         do {
             posInicial = obtenerPosArrMismoTextoDatatable(posInicial, api, idColumna);
-            posInicial--;
-
             var subtotal = 0;
+            var nombreGrupo = "";
             for (var i = posAnterior; i <= posInicial; i++) {
-                var idFila = api.rows().nodes().to$().eq(i).prop("id").replace(nombreTabla, "");
+                var idFila = arrIdsFilasSeleccionados[i];
                 subtotal += Number($("#hhValorCompra_" + idFila).val());
+
+                if (nombreGrupo == "")
+                    nombreGrupo = $("#hhIdClaseActivoFijo_" + idFila).val();
             }
             total += subtotal;
-
-            $(rows).eq(posInicial).after(
-                '<tr><td colspan="' + (colspan - 2) + '" style="background:white !important;">' + '</td>' +
-                '<td colspan="2" style="font-weight:bold;background:#ddd !important;">' + "Subtotal" + ": $" + subtotal.toFixed(2) + '</td></tr>' +
-                '<tr><td colspan="' + colspan + '" style="padding-top:20px !important;">' + '</td></tr>'
-            );
+            if (isEditar == false) {
+                $(rows).eq(posInicial).after(
+                    '<tr class="trSpanSubtotal"><td colspan="' + (colspan - 2) + '" style="background:white !important;">' + '</td>' +
+                    '<td colspan="2" style="font-weight:bold;background:#ddd !important;">' + "Subtotal" + ": $" + '<span id="spanSubtotal_' + nombreGrupo + '">' + subtotal.toFixed(2) + '</span>' + '</td></tr>' +
+                    '<tr class="trEmtpySpace"><td colspan="' + colspan + '" style="padding-top:20px !important;">' + '</td></tr>'
+                );
+            }
+            else {
+                $("#spanSubtotal_" + nombreGrupo).html(subtotal.toFixed(2));
+            }
             posInicial++;
             posAnterior = posInicial;
-        } while ((posInicial < (cantidadFilas - 1)) || posInicial < 0);
+        } while (posInicial < cantidadFilas);
     }
     $("#spanTotal").html(total.toFixed(2));
 }
 
+function inicializarArrIdsFilasSeleccionados(nombreTabla) {
+    $.each($(".trDetallesRecepcion"), function (index, value) {
+        var idFila = $(value).prop("id").replace(nombreTabla, "");
+        arrIdsFilasSeleccionados.push(idFila);
+    });
+}
+
 function obtenerPosArrMismoTextoDatatable(posInicial, api, columnaTexto)
 {
-    try {
-        var cantidadFilas = api.rows().nodes().length;
-        var texto = api.rows(posInicial).data()[0][columnaTexto];
-        for (var i = posInicial + 1; i < cantidadFilas; i++) {
+    var cantidadFilas = api.rows().nodes().length;
+    var texto = "";
+    for (var i = posInicial; i < cantidadFilas; i++) {
+        if (texto == "") {
+            texto = api.rows(i).data()[0][columnaTexto];
+        }
+        else {
             var grupo = api.rows(i).data()[0][columnaTexto];
             if (grupo != texto) {
-                return i;
+                return i - 1;
             }
         }
-        return cantidadFilas;
-    } catch (e) {
-        return -1;
+        if (i == (cantidadFilas - 1))
+            return i;
     }
+    return cantidadFilas;
 }
 
 function initTreeView()

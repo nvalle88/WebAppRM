@@ -45,12 +45,11 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 ViewData["MotivoAlta"] = new SelectList(await apiServicio.Listar<MotivoAlta>(new Uri(WebApp.BaseAddressRM), "api/MotivoAlta/ListarMotivoAlta"), "IdMotivoAlta", "Descripcion");
                 ViewData["FondoFinanciamiento"] = new SelectList(await apiServicio.Listar<FondoFinanciamiento>(new Uri(WebApp.BaseAddressRM), "api/FondoFinanciamiento/ListarFondoFinanciamiento"), "IdFondoFinanciamiento", "Nombre");
-                ViewData["Proveedor"] = new SelectList((await apiServicio.ObtenerElementoAsync<List<Proveedor>>(new ProveedorTransfer { LineaServicio = LineasServicio.ActivosFijos, Activo = true }, new Uri(WebApp.BaseAddressRM), "api/Proveedor/ListarProveedoresPorLineaServicioEstado")).Select(c => new { c.IdProveedor, NombreApellidos = $"{c.Nombre} {c.Apellidos}" }), "IdProveedor", "NombreApellidos");
+                ViewData["Proveedor"] = new SelectList(await apiServicio.ObtenerElementoAsync<List<Proveedor>>(new ProveedorTransfer { LineaServicio = LineasServicio.ActivosFijos, Activo = true }, new Uri(WebApp.BaseAddressRM), "api/Proveedor/ListarProveedoresPorLineaServicioEstado"), "IdProveedor", "RazonSocial");
 
                 var claimTransfer = claimsTransfer.ObtenerClaimsTransferHttpContext();
                 ViewData["Sucursal"] = new SelectList(new List<Sucursal> { new Sucursal { IdSucursal = claimTransfer.IdSucursal, Nombre = claimTransfer.NombreSucursal } }, "IdSucursal", "Nombre");
-
-                ViewData["Ramo"] = new SelectList(await apiServicio.Listar<Ramo>(new Uri(WebApp.BaseAddressRM), "api/Ramo/ListarRamo"), "IdRamo", "Nombre");
+                
                 ViewData["CompaniaSeguro"] = new SelectList(await apiServicio.Listar<CompaniaSeguro>(new Uri(WebApp.BaseAddressRM), "api/CompaniaSeguro/ListarCompaniaSeguro"), "IdCompaniaSeguro", "Nombre");
 
                 if (id != null)
@@ -62,10 +61,8 @@ namespace bd.webapprm.web.Controllers.MVC
                     var recepcionActivoFijo = JsonConvert.DeserializeObject<RecepcionActivoFijo>(response.Resultado.ToString());
                     var listadoRecepcionActivoFijoDetalle = recepcionActivoFijo.RecepcionActivoFijoDetalle.ToList();
                     ViewData["ListadoRecepcionActivoFijoDetalle"] = listadoRecepcionActivoFijoDetalle.Select(c=> new RecepcionActivoFijoDetalleSeleccionado { RecepcionActivoFijoDetalle = c, Seleccionado = false }).ToList();
-                    ViewData["Subramo"] = await ObtenerSelectListSubramo(recepcionActivoFijo?.PolizaSeguroActivoFijo?.Subramo?.IdRamo ?? -1);
                     return View("Recepcion", listadoRecepcionActivoFijoDetalle[0]);
                 }
-                ViewData["Subramo"] = await ObtenerSelectListSubramo((ViewData["Ramo"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Ramo"] as SelectList).FirstOrDefault().Value) : -1);
                 return View("Recepcion");
             }
             catch (Exception)
@@ -250,13 +247,11 @@ namespace bd.webapprm.web.Controllers.MVC
 
                 ViewData["MotivoAlta"] = new SelectList(await apiServicio.Listar<MotivoAlta>(new Uri(WebApp.BaseAddressRM), "api/MotivoAlta/ListarMotivoAlta"), "IdMotivoAlta", "Descripcion");
                 ViewData["FondoFinanciamiento"] = new SelectList(await apiServicio.Listar<FondoFinanciamiento>(new Uri(WebApp.BaseAddressRM), "api/FondoFinanciamiento/ListarFondoFinanciamiento"), "IdFondoFinanciamiento", "Nombre");
-                ViewData["Proveedor"] = new SelectList((await apiServicio.ObtenerElementoAsync<List<Proveedor>>(new ProveedorTransfer { LineaServicio = LineasServicio.ActivosFijos, Activo = true }, new Uri(WebApp.BaseAddressRM), "api/Proveedor/ListarProveedoresPorLineaServicioEstado")).Select(c => new { c.IdProveedor, NombreApellidos = $"{c.Nombre} {c.Apellidos}" }), "IdProveedor", "NombreApellidos");
+                ViewData["Proveedor"] = new SelectList(await apiServicio.ObtenerElementoAsync<List<Proveedor>>(new ProveedorTransfer { LineaServicio = LineasServicio.ActivosFijos, Activo = true }, new Uri(WebApp.BaseAddressRM), "api/Proveedor/ListarProveedoresPorLineaServicioEstado"), "IdProveedor", "RazonSocial");
 
                 var claimTransfer = claimsTransfer.ObtenerClaimsTransferHttpContext();
                 ViewData["Sucursal"] = new SelectList(new List<Sucursal> { new Sucursal { IdSucursal = claimTransfer.IdSucursal, Nombre = claimTransfer.NombreSucursal } }, "IdSucursal", "Nombre");
-
-                ViewData["Ramo"] = new SelectList(await apiServicio.Listar<Ramo>(new Uri(WebApp.BaseAddressRM), "api/Ramo/ListarRamo"), "IdRamo", "Nombre");
-                ViewData["Subramo"] = await ObtenerSelectListSubramo(recepcionActivoFijoDetalle?.RecepcionActivoFijo?.PolizaSeguroActivoFijo?.Subramo?.IdRamo ?? -1);
+                
                 ViewData["CompaniaSeguro"] = new SelectList(await apiServicio.Listar<CompaniaSeguro>(new Uri(WebApp.BaseAddressRM), "api/CompaniaSeguro/ListarCompaniaSeguro"), "IdCompaniaSeguro", "Nombre");
 
                 ViewData["Error"] = response.Message;
@@ -554,10 +549,10 @@ namespace bd.webapprm.web.Controllers.MVC
                 ViewData["TipoActivoFijo"] = new SelectList(await apiServicio.Listar<TipoActivoFijo>(new Uri(WebApp.BaseAddressRM), "api/TipoActivoFijo/ListarTipoActivoFijos"), "IdTipoActivoFijo", "Nombre");
                 ViewData["ClaseActivoFijo"] = await ObtenerSelectListClaseActivoFijo(recepcionActivoFijoDetalle.ActivoFijo == null ? (ViewData["TipoActivoFijo"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["TipoActivoFijo"] as SelectList).FirstOrDefault().Value) : -1 : recepcionActivoFijoDetalle?.ActivoFijo?.SubClaseActivoFijo?.ClaseActivoFijo?.IdTipoActivoFijo ?? -1);
                 ViewData["SubClaseActivoFijo"] = await ObtenerSelectListSubClaseActivoFijo(recepcionActivoFijoDetalle.ActivoFijo == null ? (ViewData["ClaseActivoFijo"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["ClaseActivoFijo"] as SelectList).FirstOrDefault().Value) : -1 : recepcionActivoFijoDetalle?.ActivoFijo?.SubClaseActivoFijo?.IdClaseActivoFijo ?? -1);
-
+                
                 ViewData["Marca"] = new SelectList(await apiServicio.Listar<Marca>(new Uri(WebApp.BaseAddressRM), "api/Marca/ListarMarca"), "IdMarca", "Nombre");
                 ViewData["Modelo"] = await ObtenerSelectListModelo(recepcionActivoFijoDetalle.ActivoFijo == null ? (ViewData["Marca"] as SelectList).FirstOrDefault() != null ? int.Parse((ViewData["Marca"] as SelectList).FirstOrDefault().Value) : -1 : recepcionActivoFijoDetalle?.ActivoFijo?.Modelo?.IdMarca ?? -1);
-
+                
                 foreach (var item in listadoRecepcionActivoFijoDetalle)
                 {
                     if (item.UbicacionActivoFijoActual.IdBodega != null)
@@ -585,6 +580,22 @@ namespace bd.webapprm.web.Controllers.MVC
             catch (Exception)
             { }
             return PartialView("_DatosActivoFijo", recepcionActivoFijoDetalle);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PolizaSeguroResult(int? idSubclaseActivoFijo)
+        {
+            try
+            {
+                var subclaseActivoFijo = JsonConvert.DeserializeObject<SubClaseActivoFijo>((await apiServicio.SeleccionarAsync<Response>(idSubclaseActivoFijo.ToString(), new Uri(WebApp.BaseAddressRM), "api/SubClaseActivoFijo")).Resultado.ToString());
+                ViewData["Ramo"] = new SelectList(new List<Ramo>() { subclaseActivoFijo?.Subramo?.Ramo }, "IdRamo", "Nombre");
+                ViewData["Subramo"] = new SelectList(new List<Subramo>() { subclaseActivoFijo?.Subramo }, "IdSubramo", "Nombre");
+                return PartialView("_PolizaSeguroDisabled", new RecepcionActivoFijoDetalle());
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
         }
         #endregion
 
@@ -2216,7 +2227,7 @@ namespace bd.webapprm.web.Controllers.MVC
             }
             catch (Exception)
             {
-                return new SelectList(new List<ClaseActivoFijo>());
+                return new SelectList(new List<Subramo>());
             }
         }
 
