@@ -38,15 +38,12 @@
                             }
                         </th>
                     }
-                    <th class="thCodigosecuencial">@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.IdCodigoActivoFijo)</th>
-                    if (listadoDetallesActivosFijosViewModel.IsConfiguracionDatosActivo)
-                    {
-                        <th class="thTipoActivoFijo">@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.IdTipoActivoFijo)</th>
-                        <th class="thClaseActivoFijo">@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.IdClaseActivoFijo)</th>
-                        <th class="thSubclaseActivoFijo">@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.IdSubClaseActivoFijo)</th>
-                        <th class="thNombreActivoFijo">@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.Nombre)</th>
-                    }
                 }
+                <th class="thCodigosecuencial">@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.IdCodigoActivoFijo)</th>
+                <th class="thTipoActivoFijo">@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.IdTipoActivoFijo)</th>
+                <th class="thClaseActivoFijo">@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.IdClaseActivoFijo)</th>
+                <th class="thSubclaseActivoFijo">@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.IdSubClaseActivoFijo)</th>
+                <th class="thNombreActivoFijo">@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.Nombre)</th>
                 <th class="thMarca">@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.Modelo.IdMarca)</th>
                 <th class="thModelo">@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.IdModelo)</th>
                 <th class="thSerie">@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.Serie)</th>
@@ -109,15 +106,13 @@
                                     }
                                 </td>
                             }
-                            <td id="@String.Format("{0}{1}Codigosecuencial", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.CodigoActivoFijo?.Codigosecuencial ?? "-");}</td>
-                            if (listadoDetallesActivosFijosViewModel.IsConfiguracionDatosActivo)
-                            {
-                                <td id="@String.Format("{0}{1}TipoActivoFijo", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@Html.DisplayFor(c=> item.RecepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.Nombre)</td>
-                                <td id="@String.Format("{0}{1}ClaseActivoFijo", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@Html.DisplayFor(c=> item.RecepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.Nombre)</td>
-                                <td id="@String.Format("{0}{1}SubclaseActivoFijo", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@Html.DisplayFor(c=> item.RecepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.Nombre)</td>
-                                <td id="@String.Format("{0}{1}NombreActivoFijo", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@Html.DisplayFor(c=> item.RecepcionActivoFijoDetalle.ActivoFijo.Nombre)</td>
-                            }
+                            
                         }
+                        <td id="@String.Format("{0}{1}Codigosecuencial", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.CodigoActivoFijo?.Codigosecuencial ?? "-");}</td>
+                        <td id="@String.Format("{0}{1}TipoActivoFijo", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@Html.DisplayFor(c=> item.RecepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.Nombre)</td>
+                        <td id="@String.Format("{0}{1}ClaseActivoFijo", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@Html.DisplayFor(c=> item.RecepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.Nombre)</td>
+                        <td id="@String.Format("{0}{1}SubclaseActivoFijo", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@Html.DisplayFor(c=> item.RecepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.Nombre)</td>
+                        <td id="@String.Format("{0}{1}NombreActivoFijo", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@Html.DisplayFor(c=> item.RecepcionActivoFijoDetalle.ActivoFijo.Nombre)</td>
                         <td id="@String.Format("{0}{1}Marca", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.ActivoFijo?.Modelo?.Marca?.Nombre ?? "-");}</td>
                         <td id="@String.Format("{0}{1}Modelo", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.ActivoFijo?.Modelo?.Nombre ?? "-");}</td>
                         <td id="@String.Format("{0}{1}Serie", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.Serie ?? "-");}</td>

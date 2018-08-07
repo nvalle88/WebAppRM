@@ -9,7 +9,6 @@ namespace bd.webapprm.entidades.Utils
     {
         public bool IsConfiguracionSeleccion { get; set; }
         public bool IsConfiguracionSeleccionDisabled { get; set; }
-        public bool IsConfiguracionDatosActivo { get; set; }
         public bool IsConfiguracionSmartForm { get; set; }
         public bool IsConfiguracionDatosAlta { get; set; }
         public bool IsConfiguracionDatosBaja { get; set; }
@@ -38,11 +37,10 @@ namespace bd.webapprm.entidades.Utils
         public string CallbackFunctionCheckBox { get; set; }
         public string CallbackFunctionRemoveTodos { get; set; } = "callBackFunctionEliminarDatoEspecifico";
         public string NombreTabla { get; set; } = "tableDetallesActivoFijo";
-        public int Cantidad { get; set; } = 17;
+        public int Cantidad { get; set; } = 21;
 
         public ListadoDetallesActivosFijosViewModel(bool? IsConfiguracionSeleccion = null,
             bool? IsConfiguracionSeleccionDisabled = null,
-            bool? IsConfiguracionDatosActivo = null,
             bool? IsConfiguracionSmartForm = null,
             bool? IsConfiguracionDatosAlta = null,
             bool? IsConfiguracionDatosBaja = null,
@@ -69,7 +67,6 @@ namespace bd.webapprm.entidades.Utils
         {
             this.IsConfiguracionSeleccion = IsConfiguracionSeleccion ?? false;
             this.IsConfiguracionSeleccionDisabled = IsConfiguracionSeleccionDisabled ?? false;
-            this.IsConfiguracionDatosActivo = IsConfiguracionDatosActivo ?? false;
             this.IsConfiguracionSmartForm = IsConfiguracionSmartForm ?? false;
             this.IsConfiguracionDatosAlta = IsConfiguracionDatosAlta ?? false;
             this.IsConfiguracionDatosBaja = IsConfiguracionDatosBaja ?? false;
@@ -149,9 +146,6 @@ namespace bd.webapprm.entidades.Utils
 
             if (this.IsConfiguracionSeleccion)
                 Cantidad++;
-
-            if (this.IsConfiguracionDatosActivo)
-                Cantidad += 4;
 
             if (IsConfiguracionDatosMovilizaciones)
             {
