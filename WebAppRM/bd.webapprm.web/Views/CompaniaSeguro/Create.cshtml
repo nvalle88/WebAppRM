@@ -2,6 +2,8 @@
 
 @section css{
     <link rel="stylesheet" href="~/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/lib/bootstrap-fileinput/css/fileinput.min.css">
+    <link rel="stylesheet" type="text/css" href="~/css/activoFijo/recepcion.min.css" />
 }
 <div id="content">
     <section id="widget-grid" class="">
@@ -15,9 +17,10 @@
                     <div>
                         <div class="jarviswidget-editbox"></div>
                         <div class="widget-body no-padding">
-                            <form asp-action="Create" id="checkout-form" class="smart-form" novalidate="novalidate">
+                            <form asp-action="Create" id="checkout-form" class="smart-form" novalidate="novalidate" enctype="multipart/form-data">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <fieldset>
+                                    <legend>Datos generales</legend>
                                     <div class="row">
                                         <section class="col col-4">
                                             <label asp-for="Nombre"></label>
@@ -56,6 +59,13 @@
                                             </label>
                                         </section>
                                     </div>
+
+                                    <legend>Documentaci&oacute;n adicional</legend>
+                                    <div class="row margin-top-25">
+                                        <section class="col col-12 width100">
+                                            <input type="file" id="file" name="file" multiple="multiple" />
+                                        </section>
+                                    </div>
                                 </fieldset>
                                 <footer>
                                     <button type="submit" class="btn btn-primary" id="btn-guardar">Guardar</button>
@@ -72,5 +82,6 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     @{await Html.RenderPartialAsync("_DatetimePickerScriptsPartial");}
+    @{await Html.RenderPartialAsync("_FileInputScriptsPartial");}
     <script src="~/js/companiaSeguro/companiaSeguro.min.js"></script>
 }

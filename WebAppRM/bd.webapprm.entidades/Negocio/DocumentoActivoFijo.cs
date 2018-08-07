@@ -55,5 +55,10 @@ namespace bd.webapprm.entidades
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar la {0}")]
         public int? IdRecepcionActivoFijo { get; set; }
         public virtual RecepcionActivoFijo RecepcionActivoFijo { get; set; }
+
+        [Display(Name = "Compañía de seguro:")]
+        [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar la {0}")]
+        public int? IdCompaniaSeguro { get; set; }
+        public virtual CompaniaSeguro CompaniaSeguro { get; set; }
     }
 }
