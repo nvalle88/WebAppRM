@@ -32,8 +32,10 @@ function cargarFormularioComponentesDatosEspecificos(idFila) {
         method: "POST",
         data: { componentesActivo: obtenerRecepcionActivoFijoDetalleComponente(), idsComponentesExcluir: obtenerIdsComponentesExcluir(idFila) },
         success: function (data) {
-            var dataComponentes = '<div id="divContenedorComponentes"><p><button type="button" class="btn btn-primary" style="padding:7px !important;margin-top:7px !important;margin-left:7px !important;" onclick="cargarListadoActivosFijosParaComponentes()" id="btnAdicionarComponentes">Adicionar / Eliminar Componentes</button></p>';
-            Init_BootBox("Componentes", dataComponentes + data + "</div>", "large", null, null, function () {
+            var divComponentes = '<div id="divContenedorComponentes">';
+            var btnAdicionarEliminarComponentes = '<p><button type="button" class="btn btn-primary" style="padding:7px !important;margin-top:7px !important;margin-left:7px !important;" onclick="cargarListadoActivosFijosParaComponentes()" id="btnAdicionarComponentes">Adicionar / Eliminar Componentes</button></p>';
+            var infoComponentes = '<div class="row"><div class="alert alert-info alert-block" style="border-left-width:5px !important;padding-left:20px !important;"><h4 class="alert-heading">Informaci&oacute;n</h4>Un componente de Activo fijo, es un Activo fijo en sí, que se recepcionó con Motivo de alta: "Adici&oacute;n".</br>Haga clic en Adicionar / Eliminar Componentes para visualizar y asignar a este Activo fijo los componentes disponibles que existen en el sistema.</div></div>';
+            Init_BootBox("Componentes de Activo fijo", divComponentes + infoComponentes + btnAdicionarEliminarComponentes + data + "</div>", "large", null, null, function () {
                 isComponentes = false;
                 cantComponentesSeleccionados = 0;
             });
@@ -42,7 +44,14 @@ function cargarFormularioComponentesDatosEspecificos(idFila) {
             mostrarNotificacion("Error", "Ocurrió un error al cargar el formulario.");
         },
         complete: function (data) {
-            initDataTableFiltrado("tableDetallesActivoFijo", [thClassName.bodega, thClassName.proveedor, thClassName.motivoAlta, thClassName.fechaRecepcion, thClassName.ordenCompra, thClassName.fondoFinanciamiento, thClassName.fechaAlta, thClassName.numeroFactura]);
+            initDataTableFiltrado("tableDetallesActivoFijo", [thClassName.bodega, thClassName.proveedor, thClassName.motivoAlta, thClassName.fechaRecepcion, thClassName.ordenCompra, thClassName.fondoFinanciamiento, thClassName.fechaAlta, thClassName.numeroFactura], function () {
+                var table = $("#tableDetallesActivoFijo").dataTable();
+                var api = table.api();
+                var rows = api.rows({ page: 'current' }).nodes();
+                var last = null;
+                var groupadmin = [];
+                crearGrupo(api, rows, last, groupadmin, 2, "Clase de activo fijo", 0, 24);
+            });
             $("#tableDetallesActivoFijo_filter > label > span").prop("style", "height:32px !important;");
             ajustarBootboxPorCiento(80);
             isComponentes = true;
@@ -66,7 +75,7 @@ function cargarListadoActivosFijosParaComponentes()
         method: "POST",
         data: { componentesActivo: componentesActivo, idsComponentesExcluir: idsComponentesExcluir },
         success: function (data) {
-            Init_BootBox("Listado de Activos Fijos", data, "large", null, null, function () {
+            Init_BootBox("Componentes disponibles", data, "large", null, null, function () {
                 isComponentes = false;
                 cantComponentesSeleccionados = 0;
             });
@@ -75,7 +84,14 @@ function cargarListadoActivosFijosParaComponentes()
             mostrarNotificacion("Error", "Ocurrió un error al cargar el formulario.");
         },
         complete: function (data) {
-            initDataTableFiltrado("tableDetallesActivoFijoComponentes", [thClassName.bodega, thClassName.proveedor, thClassName.motivoAlta, thClassName.fechaRecepcion, thClassName.ordenCompra, thClassName.fondoFinanciamiento, thClassName.fechaAlta, thClassName.numeroFactura]);
+            initDataTableFiltrado("tableDetallesActivoFijoComponentes", [thClassName.bodega, thClassName.proveedor, thClassName.motivoAlta, thClassName.fechaRecepcion, thClassName.ordenCompra, thClassName.fondoFinanciamiento, thClassName.fechaAlta, thClassName.numeroFactura], function () {
+                var table = $("#tableDetallesActivoFijoComponentes").dataTable();
+                var api = table.api();
+                var rows = api.rows({ page: 'current' }).nodes();
+                var last = null;
+                var groupadmin = [];
+                crearGrupo(api, rows, last, groupadmin, 3, "Clase de activo fijo", 0, 24);
+            });
             eventoCheckboxDetallesActivoFijo();
             $("#tableDetallesActivoFijoComponentes_filter > label > span").prop("style", "height:32px !important;");
             ajustarBootboxPorCiento(80);

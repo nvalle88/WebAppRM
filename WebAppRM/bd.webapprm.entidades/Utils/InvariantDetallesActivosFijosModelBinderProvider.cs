@@ -36,7 +36,6 @@ namespace bd.webapprm.entidades.Utils
                 throw new ArgumentNullException(nameof(bindingContext));
 
             var result = new ListadoDetallesActivosFijosViewModel(IsConfiguracionSeleccion: ObtenerIsConfiguracion(bindingContext, "IsConfiguracionSeleccion"),
-                IsConfiguracionDatosActivo: ObtenerIsConfiguracion(bindingContext, "IsConfiguracionDatosActivo"),
                 IsConfiguracionSmartForm: ObtenerIsConfiguracion(bindingContext, "IsConfiguracionSmartForm"),
                 IsConfiguracionDetallesRecepcion: ObtenerIsConfiguracion(bindingContext, "IsConfiguracionDetallesRecepcion"),
                 IsConfiguracionSeleccionComponentes: ObtenerIsConfiguracion(bindingContext, "IsConfiguracionSeleccionComponentes"),

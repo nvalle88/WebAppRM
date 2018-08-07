@@ -12,6 +12,9 @@ using bbd.webapprm.servicios.Enumeradores;
 using bd.log.guardar.Enumeradores;
 using Newtonsoft.Json;
 using bd.webapprm.servicios.Extensores;
+using Microsoft.AspNetCore.Http;
+using bd.webapprm.entidades.ObjectTransfer;
+using System.IO;
 
 namespace bd.webapprm.web.Controllers.MVC
 {
@@ -31,7 +34,7 @@ namespace bd.webapprm.web.Controllers.MVC
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CompaniaSeguro companiaSeguro)
+        public async Task<IActionResult> Create(CompaniaSeguro companiaSeguro, List<IFormFile> file)
         {
             try
             {
@@ -41,7 +44,7 @@ namespace bd.webapprm.web.Controllers.MVC
                     if (response.IsSuccess)
                     {
                         await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), ExceptionTrace = null, Message = "Se ha creado una Compañía de Seguro", UserName = "Usuario 1", LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ADV), EntityID = string.Format("{0} {1}", "Compañía de Seguro:", companiaSeguro.IdCompaniaSeguro) });
-                        return this.Redireccionar($"{Mensaje.Informacion}|{Mensaje.Satisfactorio}");
+                        return await GestionarInformacionAdicional(response, file);
                     }
                     ViewData["Error"] = response.Message;
                 }
@@ -54,6 +57,30 @@ namespace bd.webapprm.web.Controllers.MVC
                 await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Creando Compañía de Seguro", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP WebAppRM" });
                 return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorCrear}");
             }
+        }
+
+        private async Task<IActionResult> GestionarInformacionAdicional(Response response, List<IFormFile> file)
+        {
+            var companiaSeguro = JsonConvert.DeserializeObject<CompaniaSeguro>(response.Resultado.ToString());
+            var responseFile = new Response { IsSuccess = true };
+            if (file.Count > 0)
+            {
+                foreach (var item in file)
+                {
+                    byte[] data;
+                    using (var br = new BinaryReader(item.OpenReadStream()))
+                        data = br.ReadBytes((int)item.OpenReadStream().Length);
+
+                    if (data.Length > 0)
+                    {
+                        var activoFijoDocumentoTransfer = new DocumentoActivoFijoTransfer { Nombre = item.FileName, Fichero = data, IdCompaniaSeguro = companiaSeguro.IdCompaniaSeguro };
+                        responseFile = await apiServicio.InsertarAsync(activoFijoDocumentoTransfer, new Uri(WebApp.BaseAddressRM), "api/DocumentoActivoFijo/UploadFiles");
+                        if (responseFile != null && responseFile.IsSuccess)
+                            await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), ExceptionTrace = null, Message = "Se ha subido un archivo", UserName = "Usuario 1", LogCategoryParametre = Convert.ToString(LogCategoryParameter.Create), LogLevelShortName = Convert.ToString(LogLevelParameter.ADV), EntityID = string.Format("{0} {1}", "Documento de Activo Fijo:", activoFijoDocumentoTransfer.Nombre) });
+                    }
+                }
+            }
+            return this.Redireccionar(responseFile.IsSuccess ? $"{Mensaje.Informacion}|{Mensaje.Satisfactorio}" : $"{Mensaje.Aviso}|{Mensaje.ErrorUploadFiles}");
         }
 
         public async Task<IActionResult> Edit(string id)
@@ -79,7 +106,7 @@ namespace bd.webapprm.web.Controllers.MVC
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, CompaniaSeguro companiaSeguro)
+        public async Task<IActionResult> Edit(string id, CompaniaSeguro companiaSeguro, List<IFormFile> file)
         {
             try
             {
@@ -91,7 +118,7 @@ namespace bd.webapprm.web.Controllers.MVC
                         if (response.IsSuccess)
                         {
                             await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), EntityID = string.Format("{0} : {1}", "Sistema", id), LogCategoryParametre = Convert.ToString(LogCategoryParameter.Edit), LogLevelShortName = Convert.ToString(LogLevelParameter.ADV), Message = "Se ha actualizado un registro sistema", UserName = "Usuario 1" });
-                            return this.Redireccionar($"{Mensaje.Informacion}|{Mensaje.Satisfactorio}");
+                            return await GestionarInformacionAdicional(response, file);
                         }
                         ViewData["Error"] = response.Message;
                     }
