@@ -107,43 +107,17 @@ function generarCodigosecuencial()
 function actualizarCodigosSecuenciales()
 {
     var validar = true;
+    mostrarLoadingPanel("checkout-form", "Actualizando códigos secuenciales...");
     for (var i = 0; i < arrIdsfilas.length; i++) {
         var idFila = arrIdsfilas[i];
         var codigoSecuencialOld = $("#hCodigoSecuencial_" + idFila).val();
         if (codigoSecuencialOld != "" && codigoSecuencialOld != "-" && codigoSecuencialOld != null) {
             var nuevoCodigoSecuencial = generarCodigosecuencial();
             nuevoCodigoSecuencial += codigoSecuencialOld.split(".")[3];
-            if (validarCodificacionTablaActivosFijos(nuevoCodigoSecuencial)) {
-                mostrarLoadingPanel("checkout-form", "Actualizando códigos secuenciales...");
-                $.ajax({
-                    url: urlValidarCodigoUnico,
-                    method: "POST",
-                    data: { idCodigoActivoFijo: $("#hIdCodigoActivoFijo_" + idFila).val(), codigoSecuencial: nuevoCodigoSecuencial },
-                    success: function (data) {
-                        if (data.toString().toLowerCase() == "false")
-                            putDatoCodificacion(idFila, nuevoCodigoSecuencial);
-                        else {
-                            putDatoCodificacion(idFila, "");
-                            validar = false;
-                        }
-                    },
-                    error: function (errorMessage) {
-                        putDatoCodificacion(idFila, "");
-                        validar = false;
-                    },
-                    complete: function (data) {
-                        $("#checkout-form").waitMe("hide");
-                    }
-                });
-            }
-            else {
-                putDatoCodificacion(idFila, "");
-                validar = false;
-            }
+            putDatoCodificacion(idFila, nuevoCodigoSecuencial);
         }
     }
-    if (!validar)
-        mostrarNotificacion("Aviso", "Se eliminaron algunos Códigos secuenciales pues se encuentran asignados a un Activo Fijo adicionado ó ya existen en el sistema.");
+    $("#checkout-form").waitMe("hide");
 }
 
 function validarWizard()
@@ -257,7 +231,6 @@ function partialViewClaseActivoFijo(idClaseActivoFijo) {
 
 function partialViewPolizaSeguro()
 {
-    mostrarLoadingPanel("checkout-form", "Cargando datos de póliza de seguro...");
     $.ajax({
         url: urlPolizaSeguroResult,
         method: "POST",
@@ -271,7 +244,6 @@ function partialViewPolizaSeguro()
         },
         complete: function (data) {
             $("#ActivoFijo_SubClaseActivoFijo_IdSubramo").prop("disabled", "disabled");
-            $("#checkout-form").waitMe("hide");
         }
     });
 }
@@ -821,64 +793,17 @@ function guardarCodificacion()
         Codigosecuencial: $("#spanCodigoSecuencial").html() + $("#spanNumeroConsecutivo").html(),
         IdCodigoActivoFijo: $("#hIdCodigoActivoFijo_" + idFila).val()
     };
-    if (validarCodificacionNoExiste(objData))
-    {
-        $.ajax({
-            url: urlValidarCodigoUnico,
-            method: "POST",
-            data: { idCodigoActivoFijo: objData.IdCodigoActivoFijo, codigoSecuencial: objData.Codigosecuencial },
-            success: function (data)
-            {
-                if (data.toString().toLowerCase() == "false")
-                {
-                    putDatoCodificacion(objData.IdFila, objData.Codigosecuencial);
-                    closeBootBox();
-                }
-                else
-                    $("#valConsecutivo").html("El Código secuencial: ya existe.");
-            },
-            error: function (errorMessage) {
-                mostrarNotificacion("Error", "Ocurrió un error al validar el formulario.");
-            },
-            complete: function (data) {
-                $("#checkout-form").waitMe("hide");
-            }
-        });
+    var isTodosCodigosDatosEspecificos = $("#chkTodosCodigosDatosEspecificos").prop("checked");
+    if (isTodosCodigosDatosEspecificos) {
+        for (var i = 0; i < arrIdsfilas.length; i++) {
+            putDatoCodificacion(arrIdsfilas[i], objData.Codigosecuencial);
+        }
     }
     else
-        $("#checkout-form").waitMe("hide");
-}
-
-function validarCodificacionNoExiste(objData)
-{
-    for (var i = 0; i < arrIdsfilas.length; i++) {
-        var idFila = arrIdsfilas[i];
-        if (objData.IdFila != idFila)
-        {
-            if (objData.Codigosecuencial == $("#hCodigoSecuencial_" + idFila).val()) {
-                $("#valConsecutivo").html("El Código secuencial: ya existe.");
-                return false;
-            }
-        }
-    }
-    return validarCodificacionTablaActivosFijos(objData.Codigosecuencial); 
-}
-
-function validarCodificacionTablaActivosFijos(codigoSecuencial)
-{
-    var idFilaGestion = parseInt($("#IdFilaGestion").val());
-    var arrCodigosSecuenciales = $(".hiddenCodigoSecuencial").toArray();
-    for (var j = 0; j < arrCodigosSecuenciales.length; j++) {
-        var codSecuencial = $(arrCodigosSecuenciales[j]);
-        var idFila = codSecuencial.prop("id").split("_")[1];
-        if (idFilaGestion != idFila) {
-            if (codSecuencial.val() == codigoSecuencial) {
-                $("#valConsecutivo").html("El Código secuencial: está asignado a un Activo Fijo adicionado.");
-                return false;
-            }
-        }
-    }
-    return true;
+        putDatoCodificacion(objData.IdFila, objData.Codigosecuencial);
+    
+    $("#checkout-form").waitMe("hide");
+    closeBootBox();
 }
 
 function obtenerObjVacioRafd()

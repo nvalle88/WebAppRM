@@ -20,7 +20,7 @@
     inicializarIdsArrRecepcionActivoFijoDetalleTodos();
 
     //Simula la detección de un código (El parámetro debe ser un código de un activo fijo en alta)
-    //$("#CodigoActivoFijo_Codigosecuencial").scannerDetection('1.002.001.1');
+    //$("#CodigoActivoFijo_Codigosecuencial").scannerDetection('1.004.005.33');
 
     if (isVistaDetalles) {
         $("#NumeroInforme").prop("disabled", "disabled");
@@ -40,23 +40,20 @@ function eventoLectorCodigoBarras()
 function eventoScannerCodigosecuencial(barcode, qty)
 {
     mostrarLoadingPanel("checkout-form", "Cargando datos de activo fijo...");
-    limpiarCampos();
     $("#CodigoActivoFijo_Codigosecuencial").val(barcode);
+
+    var arrIdsRecepcionActivoFijoDetalle = [];
+    for (var i = 0; i < arrRecepcionActivoFijoDetalleSeleccionado.length; i++)
+        arrIdsRecepcionActivoFijoDetalle.push(arrRecepcionActivoFijoDetalleSeleccionado[i].idRecepcionActivoFijoDetalle);
+
     $.ajax({
         url: urlDatosInventarioActivoFijo,
         method: "POST",
-        data: { codigoSecuencial: barcode },
+        data: { codigoSecuencial: barcode, listadoRafdSeleccionados: arrIdsRecepcionActivoFijoDetalle },
         success: function (data) {
-            $("#divDatosInventarioActivoFijo").html(data);
-            if (existeActivoFijoEnTabla())
-            {
-                mostrarNotificacion("Error", "El activo fijo con el código secuencial " + barcode + " ya se encuentra en el listado.");
+            Init_BootBox("Activos fijos a constatar", data, "large", null, null, function () {
                 limpiarCampos();
-            }
-            else {
-                HabilitarCheckConstatadoBtnRegistrar(true);
-                eventoRegistrar();
-            }
+            });
         },
         error: function (errorObj) {
             mostrarNotificacion("Error", errorObj.responseText);
@@ -64,28 +61,11 @@ function eventoScannerCodigosecuencial(barcode, qty)
         },
         complete: function (data) {
             eventoLectorCodigoBarras();
+            initDataTableFiltrado("tableDetallesDatosInventario", []);
+            ajustarBootboxPorCiento(80);
             $("#checkout-form").waitMe("hide");
         }
     });
-}
-
-function existeActivoFijoEnTabla()
-{
-    var idRecepcionActivoFijoDetalle = $("#IdRecepcionActivoFijoDetalle").val();
-    var rafd = obtenerRecepcionActivoFijoDetalleSeleccionado(idRecepcionActivoFijoDetalle);
-    return rafd != null;
-}
-
-function HabilitarCheckConstatadoBtnRegistrar(habilitar)
-{
-    if (habilitar) {
-        $("#chkConstatado").prop("disabled", "");
-        $("#btn-registrar").prop("disabled", "");
-    }
-    else {
-        $("#chkConstatado").prop("disabled", "disabled");
-        $("#btn-registrar").prop("disabled", "disabled");
-    }
 }
 
 function adicionarArrRecepcionActivoFijoDetalle() {
@@ -107,7 +87,7 @@ function callBackFunctionSeleccionBaja(idRecepcionActivoFijoDetalle, seleccionad
         rafd.seleccionado = false;
 }
 
-function callBackFunctionSeleccionConstatado(idRecepcionActivoFijoDetalle, seleccionado) {
+function callBackFunctionSeleccionConstatado(idRecepcionActivoFijoDetalle, idFila, seleccionado) {
     adicionarRecepcionActivoFijoDetalleSeleccionado(idRecepcionActivoFijoDetalle, seleccionado);
     var hIdRecepcionActivoFijoDetalle = '<input type="hidden" class="hiddenIdRecepcionActivoFijoDetalle" id="hIdRecepcionActivoFijoDetalle_' + idRecepcionActivoFijoDetalle + '" name="hIdRecepcionActivoFijoDetalle_' + idRecepcionActivoFijoDetalle + '" value="' + idRecepcionActivoFijoDetalle + '" />';
     var btnEliminarActivoFijo = "<div id='divEliminarDatosEspecificos_" + idRecepcionActivoFijoDetalle + "' class='btnEliminarDatosEspecificos' style='display:inline;'><a href='javascript: void(0);' id='btnEliminarDatosEspecifico_" + idRecepcionActivoFijoDetalle + "' onclick=abrirVentanaConfirmacion('btnEliminarDatosEspecifico_" + idRecepcionActivoFijoDetalle + "') data-funcioncallback=callBackFunctionEliminarDatoEspecifico('" + idRecepcionActivoFijoDetalle + "') data-titulo='Eliminar' data-descripcion='&#191; Desea eliminar el Activo Fijo seleccionado... ?'>Eliminar</a></div>";
@@ -115,29 +95,29 @@ function callBackFunctionSeleccionConstatado(idRecepcionActivoFijoDetalle, selec
     addRowDetallesActivosFijosPorArray("tableDetallesActivoFijoBajas", idRecepcionActivoFijoDetalle, ['', thClassName.codigoSecuencial, thClassName.tipoActivoFijo, thClassName.claseActivoFijo, thClassName.subClaseActivoFijo, thClassName.nombreActivoFijo, thClassName.marca, thClassName.modelo, thClassName.serie, thClassName.numeroChasis, thClassName.numeroMotor, thClassName.placa, thClassName.numeroClaveCatastral, thClassName.sucursal, thClassName.dependencia, thClassName.bodega, thClassName.empleado, thClassName.proveedor, thClassName.motivoAlta, thClassName.fechaRecepcion, thClassName.ordenCompra, thClassName.fondoFinanciamiento, thClassName.fechaAlta, thClassName.motivoAlta, thClassName.numeroFactura, ''],
         [
         addRowCheckBox(idRecepcionActivoFijoDetalle, seleccionado, "callBackFunctionSeleccionBaja", false, "", "", false),
-        $("#CodigoActivoFijo_Codigosecuencial").val(),
-        $("#ActivoFijo_SubClaseActivoFijo_ClaseActivoFijo_TipoActivoFijo_Nombre").val(),
-        $("#ActivoFijo_SubClaseActivoFijo_ClaseActivoFijo_Nombre").val(),
-        $("#ActivoFijo_SubClaseActivoFijo_Nombre").val(),
-        $("#ActivoFijo_Nombre").val(),
-        $("#ActivoFijo_Modelo_Marca_Nombre").val(),
-        $("#ActivoFijo_Modelo_Nombre").val(),
-        agregarDashValorEmpty($("#Serie").val()),
-        agregarDashValorEmpty($("#RecepcionActivoFijoDetalleVehiculo_NumeroChasis").val()),
-        agregarDashValorEmpty($("#RecepcionActivoFijoDetalleVehiculo_NumeroMotor").val()),
-        agregarDashValorEmpty($("#RecepcionActivoFijoDetalleVehiculo_Placa").val()),
-        agregarDashValorEmpty($("#RecepcionActivoFijoDetalleEdificio_NumeroClaveCatastral").val()),
-        $("#SucursalActual_Nombre").val(),
-        agregarDashValorEmpty($("#UbicacionActivoFijoActual_Empleado_Dependencia_Nombre").val()),
-        agregarDashValorEmpty($("#UbicacionActivoFijoActual_Bodega_Nombre").val()),
-        $("#UbicacionActivoFijoActual_IdEmpleado").val(),
-        $("#RecepcionActivoFijo_IdProveedor").val(),
-        $("#RecepcionActivoFijo_MotivoAlta_Descripcion").val(),
-        $("#RecepcionActivoFijo_FechaRecepcion").val(),
-        $("#RecepcionActivoFijo_OrdenCompra").val(),
-        $("#RecepcionActivoFijo_FondoFinanciamiento_Nombre").val(),
-        agregarDashValorEmpty($("#AltaActivoFijoActual_FechaAlta").val()),
-        agregarDashValorEmpty($("#AltaActivoFijoActual_FacturaActivoFijo_NumeroFactura").val()),
+        $("#hhCodigoActivoFijo_" + idFila).val(),
+        $("#hhIdTipoActivoFijo_" + idFila).val(),
+        $("#hhIdClaseActivoFijo_" + idFila).val(),
+        $("#hhIdSubclaseActivoFijo_" + idFila).val(),
+        $("#hhNombreActivoFijo_" + idFila).val(),
+        $("#hhMarca_" + idFila).val(),
+        $("#hhModelo_" + idFila).val(),
+        agregarDashValorEmpty($("#hhSerie_" + idFila).val()),
+        agregarDashValorEmpty($("#hhNumeroChasis_" + idFila).val()),
+        agregarDashValorEmpty($("#hhNumeroMotor_" + idFila).val()),
+        agregarDashValorEmpty($("#hhPlaca_" + idFila).val()),
+        agregarDashValorEmpty($("#hhNumeroClaveCatastral_" + idFila).val()),
+        $("#hhSucursal_" + idFila).val(),
+        agregarDashValorEmpty($("#hhDependencia_" + idFila).val()),
+        agregarDashValorEmpty($("#hhBodega_" + idFila).val()),
+        $("#hhEmpleado_" + idFila).val(),
+        $("#hhProveedor_" + idFila).val(),
+        $("#hhMotivoAlta_" + idFila).val(),
+        $("#hhFechaRecepcion_" + idFila).val(),
+        $("#hhOrdenCompra_" + idFila).val(),
+        $("#hhFondoFinanciamiento_" + idFila).val(),
+        agregarDashValorEmpty($("#hhFechaAlta_" + idFila).val()),
+        agregarDashValorEmpty($("#hhNumeroFactura_" + idFila).val()),
         hIdRecepcionActivoFijoDetalle + btnEliminarActivoFijo
     ], true);
 }
@@ -148,26 +128,20 @@ function callBackFunctionEliminarDatoEspecifico(idRecepcionActivoFijoDetalle) {
     $("#CodigoActivoFijo_Codigosecuencial").focus();
 }
 
-function eventoRegistrar()
+function eventoRegistrar(btnRegistrar)
 {
-    $("#btn-registrar").on("click", function (e) {
-        var idRecepcionActivoFijoDetalle = $("#IdRecepcionActivoFijoDetalle").val();
-        arrRecepcionActivoFijoDetalleTodos.push(idRecepcionActivoFijoDetalle);
-        var seleccionado = $("#chkConstatado").prop("checked");
-        callBackFunctionSeleccionConstatado(idRecepcionActivoFijoDetalle, seleccionado);
-        limpiarCampos();
-        tryMarcarCheckBoxTodos();
-    });
+    var idFila = $(btnRegistrar).data("idfila");
+    var idRecepcionActivoFijoDetalle = $("#hhIdRecepcionActivoFijoDetalle_" + idFila).val();
+    arrRecepcionActivoFijoDetalleTodos.push(idRecepcionActivoFijoDetalle);
+    var seleccionado = $("#chkConstatado_" + idFila).prop("checked");
+    callBackFunctionSeleccionConstatado(idRecepcionActivoFijoDetalle, idFila, seleccionado);
+    deleteRowDetallesActivosFijos("tableDetallesDatosInventario", idRecepcionActivoFijoDetalle);
+    tryMarcarCheckBoxTodos();
 }
 
 function limpiarCampos()
 {
     $("#CodigoActivoFijo_Codigosecuencial").val("");
-    $("#ActivoFijo_Nombre").val("");
-    $("#SucursalActual_Nombre").val("");
-    $("#UbicacionActivoFijoActual_IdEmpleado").val("");
-    $("#chkConstatado").prop("checked", "");
-    HabilitarCheckConstatadoBtnRegistrar(false);
     $("#CodigoActivoFijo_Codigosecuencial").focus();
 }
 

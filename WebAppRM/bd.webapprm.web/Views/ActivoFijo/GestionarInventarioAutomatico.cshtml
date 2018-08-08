@@ -35,7 +35,7 @@
                                     <legend>Datos Generales</legend>
                                     @{await Html.RenderPartialAsync("_DatosGeneralesInventario", Model);}
 
-                                    @{ 
+                                    @{
                                         if (!isVistaDetalles)
                                         {
                                             <div class="row" style="padding-left:15px !important;padding-right:15px !important;">
@@ -47,13 +47,18 @@
                                             </div>
 
                                             <legend>Datos de Activo Fijo</legend>
-                                            <div id="divDatosInventarioActivoFijo">
-                                                @{await Html.RenderPartialAsync("_DatosInventarioActivoFijo", new RecepcionActivoFijoDetalle());}
+                                            <div class="row margin-top-25" id="divDatosInventarioActivoFijo">
+                                                <section class="col col-2">
+                                                    <label class="label" style="text-transform:uppercase;">C&oacute;digo secuencial</label>
+                                                    <label class="input">
+                                                        <input id="CodigoActivoFijo_Codigosecuencial" type="text" class="form-control" autofocus="autofocus" readonly="readonly">
+                                                    </label>
+                                                </section>
                                             </div>
                                         }
                                     }
 
-                                    <legend>Activos Fijos en Alta</legend>
+                                    <legend>Activos Fijos seleccionados</legend>
                                     <div class="margin-top-10" id="divActivosFijosATransferir">
                                         @{
                                             await Html.RenderPartialAsync("_ListadoDetallesActivosFijos", listadoRecepcionActivoFijoDetalleSeleccionado);
@@ -61,7 +66,7 @@
                                     </div>
                                 </fieldset>
                                 <footer>
-                                    @{ 
+                                    @{
                                         if (!isVistaDetalles)
                                         {
                                             <button type="submit" class="btn btn-primary" id="btn-guardar">Guardar</button>
@@ -81,6 +86,7 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     @{await Html.RenderPartialAsync("_DatetimePickerScriptsPartial");}
     @{await Html.RenderPartialAsync("_Select2ScriptsPartial");}
+    <script src="~/lib/bootbox/bootbox.min.js"></script>
     <script src="~/lib/jQuery-Scanner-Detection-master/jquery.scannerdetection.compatibility.js"></script>
     <script src="~/lib/jQuery-Scanner-Detection-master/jquery.scannerdetection.min.js"></script>
     <script src='~/js/activoFijo/listadoSeleccion.min.js'></script>

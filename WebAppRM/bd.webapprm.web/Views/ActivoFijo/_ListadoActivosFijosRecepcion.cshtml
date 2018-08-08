@@ -10,19 +10,19 @@
         @{await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", isSeleccion ? 14 : 13);}
         <tr>
             @{
-        if (isSeleccion)
-        {
-            <th>
-                @{
-            await Html.RenderPartialAsync("_CheckBoxSeleccion", new ViewDataDictionary(ViewData){
-                            { "Seleccionado", false },
-                            { "IdRecepcionActivoFijoDetalle", 0 },
-                            { "CallbackFunctionAddRowDetalleTodos", "callBackFunctionSeleccionActivoFijo" },
-                            { "CallbackFunctionRemoveRowDetalleTodos", "callBackFunctionSeleccionActivoFijo" }
-                        });
+                if (isSeleccion)
+                {
+                    <th>
+                        @{
+                            await Html.RenderPartialAsync("_CheckBoxSeleccion", new ViewDataDictionary(ViewData){
+                                { "Seleccionado", false },
+                                { "IdRecepcionActivoFijoDetalle", 0 },
+                                { "CallbackFunctionAddRowDetalleTodos", "callBackFunctionSeleccionActivoFijo" },
+                                { "CallbackFunctionRemoveRowDetalleTodos", "callBackFunctionSeleccionActivoFijo" }
+                            });
+                        }
+                    </th>
                 }
-            </th>
-}
             }
             <th>
                 @Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.IdTipoActivoFijo)
