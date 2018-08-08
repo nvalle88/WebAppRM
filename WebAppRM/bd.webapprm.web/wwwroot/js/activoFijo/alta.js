@@ -6,7 +6,7 @@
     eventoMotivoAlta();
     inicializarDetallesActivoSeleccion();
     inicializarObjetoAdicional();
-    initDataTableFiltrado("tableDetallesActivoFijoSeleccionados", [thClassName.bodega, thClassName.proveedor, thClassName.motivoAlta, thClassName.fechaRecepcion, thClassName.ordenCompra, thClassName.fondoFinanciamiento]);
+    initDataTableFiltrado("tableDetallesActivoFijoSeleccionados", [thClassName.bodega, thClassName.dependencia, thClassName.proveedor, thClassName.motivoAlta, thClassName.fechaRecepcion, thClassName.ordenCompra, thClassName.fondoFinanciamiento]);
     Init_FileInput("file");
     Init_FileInput("fileFactura");
     eventoGuardar();

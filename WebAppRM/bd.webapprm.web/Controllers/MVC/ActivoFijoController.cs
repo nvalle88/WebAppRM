@@ -299,21 +299,7 @@ namespace bd.webapprm.web.Controllers.MVC
             }
             return valor;
         }
-
-        [HttpPost]
-        public async Task<JsonResult> ValidarCodigoUnico(int idCodigoActivoFijo, string codigoSecuencial)
-        {
-            try
-            {
-                var listaCodigoActivoFijo = await apiServicio.Listar<CodigoActivoFijo>(new Uri(WebApp.BaseAddressRM), "api/CodigoActivoFijo/ListarCodigosActivoFijo");
-                return Json((idCodigoActivoFijo == 0 ? listaCodigoActivoFijo.Any(c => c.Codigosecuencial == codigoSecuencial.Trim()) : listaCodigoActivoFijo.Where(c => c.Codigosecuencial == codigoSecuencial.Trim()).Any(c => c.IdCodigoActivoFijo != idCodigoActivoFijo)));
-            }
-            catch (Exception)
-            {
-                return Json(false);
-            }
-        }
-
+        
         public async Task<IActionResult> ObtenerRecepcionActivoFijo(string id, List<string> estados, string nombreVistaError)
         {
             try
@@ -1804,7 +1790,7 @@ namespace bd.webapprm.web.Controllers.MVC
 
                 if (response.IsSuccess)
                     return this.Redireccionar($"{Mensaje.Informacion}|{Mensaje.Satisfactorio}", nameof(ListadoInventarioActivosFijos));
-                
+
                 ViewData["Configuraciones"] = new ListadoDetallesActivosFijosViewModel(IsConfiguracionSeleccion: true, IsConfiguracionSeleccionBajas: true, IsConfiguracionGestionarInventarioAutomatico: true);
                 ViewData["Estado"] = new SelectList((await apiServicio.Listar<Estado>(new Uri(WebApp.BaseAddressTH), "api/Estados/ListarEstados")).Where(c => c.Nombre == Estados.EnEjecucion || c.Nombre == Estados.Concluido).OrderByDescending(c => c.Nombre), "IdEstado", "Nombre");
                 ViewData["ListadoRecepcionActivoFijoDetalleSeleccionado"] = await apiServicio.ObtenerElementoAsync<List<RecepcionActivoFijoDetalleSeleccionado>>(inventarioActivoFijo.InventarioActivoFijoDetalle.Select(c => new IdRecepcionActivoFijoDetalleSeleccionado { idRecepcionActivoFijoDetalle = c.IdRecepcionActivoFijoDetalle, seleccionado = c.Constatado }), new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/DetallesActivoFijo");
@@ -1824,20 +1810,14 @@ namespace bd.webapprm.web.Controllers.MVC
         }
 
         [HttpPost]
-        public async Task<IActionResult> DatosInventarioActivoFijoResult(string codigoSecuencial)
+        public async Task<IActionResult> DatosInventarioActivoFijoResult(string codigoSecuencial, List<int> listadoRafdSeleccionados)
         {
             try
             {
-                var response = await apiServicio.ObtenerElementoAsync<Response>(codigoSecuencial, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ObtenerDetalleActivoFijoParaInventario");
-                if (response.IsSuccess)
-                {
-                    var recepcionActivoFijoDetalle = JsonConvert.DeserializeObject<RecepcionActivoFijoDetalle>(response.Resultado.ToString());
-                    if (recepcionActivoFijoDetalle.Estado.Nombre != Estados.Alta)
-                        return StatusCode(500, $"El activo fijo con el código secuencial {codigoSecuencial} no se encuentra en estado {Estados.Alta}.");
-
-                    return PartialView("_DatosInventarioActivoFijo", recepcionActivoFijoDetalle);
-                }
-
+                ViewData["Configuraciones"] = new ListadoDetallesActivosFijosViewModel(IsConfiguracionSeleccion: true);
+                var lista = await apiServicio.ObtenerElementoAsync<List<RecepcionActivoFijoDetalle>>(new InventarioTransfer { Codigosecuencial = codigoSecuencial, ListadoRafdSeleccionados = listadoRafdSeleccionados }, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ObtenerDetalleActivoFijoParaInventario");
+                if (lista.Count > 0)
+                    return PartialView("_DatosInventarioActivoFijo", lista);
                 return StatusCode(500, $"No se encontró ningún activo fijo con el código secuencial {codigoSecuencial}.");
             }
             catch (Exception)

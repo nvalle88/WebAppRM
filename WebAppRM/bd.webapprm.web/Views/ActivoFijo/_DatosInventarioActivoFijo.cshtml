@@ -1,65 +1,97 @@
-@model RecepcionActivoFijoDetalle
-<div class="margin-top-10">
-    <input type="hidden" asp-for="IdRecepcionActivoFijoDetalle" />
-    <input type="hidden" asp-for="ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.Nombre" />
-    <input type="hidden" asp-for="ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.Nombre" />
-    <input type="hidden" asp-for="ActivoFijo.SubClaseActivoFijo.Nombre" />
-    <input type="hidden" asp-for="ActivoFijo.Modelo.Marca.Nombre" />
-    <input type="hidden" asp-for="ActivoFijo.Modelo.Nombre" />
-    <input type="hidden" asp-for="Serie" />
-    <input type="hidden" asp-for="RecepcionActivoFijoDetalleVehiculo.NumeroChasis" />
-    <input type="hidden" asp-for="RecepcionActivoFijoDetalleVehiculo.NumeroMotor" />
-    <input type="hidden" asp-for="RecepcionActivoFijoDetalleVehiculo.Placa" />
-    <input type="hidden" asp-for="RecepcionActivoFijoDetalleEdificio.NumeroClaveCatastral" />
-    <input type="hidden" asp-for="UbicacionActivoFijoActual.Bodega.Nombre" />
-    <input type="hidden" asp-for="UbicacionActivoFijoActual.Empleado.Dependencia.Nombre" />
-    <input type="hidden" asp-for="RecepcionActivoFijo.IdProveedor" value="@Model?.RecepcionActivoFijo?.Proveedor?.RazonSocial" />
-    <input type="hidden" asp-for="RecepcionActivoFijo.MotivoAlta.Descripcion" />
-    <input type="hidden" asp-for="RecepcionActivoFijo.FechaRecepcion" />
-    <input type="hidden" asp-for="RecepcionActivoFijo.OrdenCompra" />
-    <input type="hidden" asp-for="RecepcionActivoFijo.FondoFinanciamiento.Nombre" />
-    <input type="hidden" asp-for="AltaActivoFijoActual.FechaAlta" />
-    <input type="hidden" asp-for="AltaActivoFijoActual.MotivoAlta.Descripcion" />
-    <input type="hidden" asp-for="AltaActivoFijoActual.FacturaActivoFijo.NumeroFactura" />
-
-    <section class="col col-2">
-        <label asp-for="CodigoActivoFijo.Codigosecuencial" class="label" style="text-transform:uppercase;"></label>
-        <label class="input">
-            <input id="CodigoActivoFijo_Codigosecuencial" value="@Html.DisplayFor(c=> c.CodigoActivoFijo.Codigosecuencial)" type="text" class="form-control" autofocus="autofocus" readonly="readonly">
-        </label>
-    </section>
-
-    <section class="col col-3">
-        <label asp-for="ActivoFijo.Nombre" class="label" style="text-transform:uppercase;"></label>
-        <label class="input">
-            <input id="ActivoFijo_Nombre" value="@Html.DisplayFor(c=> c.ActivoFijo.Nombre)" type="text" class="form-control" readonly="readonly">
-        </label>
-    </section>
-
-    <section class="col col-2">
-        <label asp-for="SucursalActual.Nombre" class="label" style="text-transform:uppercase;"></label>
-        <label class="input">
-            <input id="SucursalActual_Nombre" value="@Html.DisplayFor(c=> c.SucursalActual.Nombre)" type="text" class="form-control" readonly="readonly">
-        </label>
-    </section>
-
-    <section class="col col-2">
-        <label asp-for="UbicacionActivoFijoActual.IdEmpleado" class="label" style="text-transform:uppercase;"></label>
-        <label class="input">
-            <input id="UbicacionActivoFijoActual_IdEmpleado" type="text" class="form-control" value="@String.Format("{0} {1}", Model?.UbicacionActivoFijoActual?.Empleado?.Persona?.Nombres, Model?.UbicacionActivoFijoActual?.Empleado?.Persona?.Apellidos)" readonly="readonly">
-        </label>
-    </section>
-
-    <section class="col col-3" style="margin-bottom:30px !important;">
-        <label class="label">&nbsp;</label>
-        <div class="inline-group">
-            <label class="checkbox">
-                <input name="checkbox-inline" type="checkbox" id="chkConstatado" disabled="disabled" @{await ViewContext.Writer.WriteAsync(Model != null ? "checked='checked'" : "");}>
-                <i></i>Constatado
-            </label>
-            <button type="button" class="btn btn-labeled btn-success" id="btn-registrar" style="padding:0px 11px !important;" disabled="disabled">
-                <span class="btn-label"><i class="glyphicon glyphicon-thumbs-up"></i></span>Registrar
-            </button>
+@model List<RecepcionActivoFijoDetalle>
+<div class="smart-form">
+    <div class="row" style="padding-left:15px !important;padding-right:15px !important;">
+        <div class="alert alert-info alert-block" style="border-left-width:5px !important;">
+            <h4 class="alert-heading">Informaci&oacute;n</h4>
+            Para agregar un Activo fijo al Mantenimiento autom&aacute;tico, marque o desmarque su casilla de selecci&oacute;n correspondiente y a continuaci&oacute;n haga clic en el bot&oacute;n Registrar.
         </div>
-    </section>
+    </div>
+
+    <table id="tableDetallesDatosInventario" class="table table-striped table-bordered table-hover" style="width:100%;">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().IdCodigoActivoFijo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().IdActivoFijo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().SucursalActual.Nombre)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().UbicacionActivoFijoActual.IdEmpleado)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().Serie)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalleVehiculo.NumeroChasis)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalleVehiculo.NumeroMotor)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalleVehiculo.Placa)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalleEdificio.NumeroClaveCatastral)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                for (int i = 0; i < Model.Count; i++)
+                {
+                    <tr id="@String.Format("tableDetallesDatosInventario{0}", Model[i]?.IdRecepcionActivoFijoDetalle)">
+                        <td>@Html.DisplayFor(modelItem => Model[i].CodigoActivoFijo.Codigosecuencial)</td>
+                        <td>@Html.DisplayFor(modelItem => Model[i].ActivoFijo.Nombre)</td>
+                        <td>@Html.DisplayFor(modelItem => Model[i].SucursalActual.Nombre)</td>
+                        <td>@{await ViewContext.Writer.WriteAsync(Model[i]?.Serie ?? "-");}</td>
+                        <td>@{await ViewContext.Writer.WriteAsync(Model[i]?.RecepcionActivoFijoDetalleVehiculo?.NumeroChasis ?? "-");}</td>
+                        <td>@{await ViewContext.Writer.WriteAsync(Model[i]?.RecepcionActivoFijoDetalleVehiculo?.NumeroMotor ?? "-");}</td>
+                        <td>@{await ViewContext.Writer.WriteAsync(Model[i]?.RecepcionActivoFijoDetalleVehiculo?.Placa ?? "-");}</td>
+                        <td>@{await ViewContext.Writer.WriteAsync(Model[i]?.RecepcionActivoFijoDetalleEdificio?.NumeroClaveCatastral ?? "-");}</td>
+                        <td>@String.Format("{0} {1}", Model[i]?.UbicacionActivoFijoActual?.Empleado?.Persona?.Nombres, Model[i]?.UbicacionActivoFijoActual?.Empleado?.Persona?.Apellidos)</td>
+                        <td>
+                            <div class="inline-group">
+                                <label class="checkbox" style="display:inline !important;">
+                                    <input name="checkbox-inline" type="checkbox" id="chkConstatado_@i" checked="checked" data-idfila="@i">
+                                    <i></i>&nbsp;&nbsp;Constatado
+                                </label>
+                                <button type="button" class="btn btn-labeled btn-success" id="btn-registrar" style="padding:0 11px !important;" data-idfila="@i" onclick="eventoRegistrar(this)">
+                                    <span class="btn-label"><i class="glyphicon glyphicon-thumbs-up"></i></span>Registrar
+                                </button>
+                            </div>
+                            <input type="hidden" id="hhIdRecepcionActivoFijoDetalle_@i" value="@Model[i]?.IdRecepcionActivoFijoDetalle" />
+                            <input type="hidden" id="hhIdTipoActivoFijo_@i" value="@Model[i]?.ActivoFijo?.SubClaseActivoFijo?.ClaseActivoFijo?.TipoActivoFijo?.Nombre" />
+                            <input type="hidden" id="hhIdClaseActivoFijo_@i" value="@Model[i]?.ActivoFijo?.SubClaseActivoFijo?.ClaseActivoFijo?.Nombre" />
+                            <input type="hidden" id="hhIdSubclaseActivoFijo_@i" value="@Model[i]?.ActivoFijo?.SubClaseActivoFijo?.Nombre" />
+                            <input type="hidden" id="hhNombreActivoFijo_@i" value="@Model[i]?.ActivoFijo?.Nombre" />
+                            <input type="hidden" id="hhCodigoActivoFijo_@i" value="@Model[i]?.CodigoActivoFijo?.Codigosecuencial" />
+                            <input type="hidden" id="hhMarca_@i" value="@Model[i]?.ActivoFijo?.Modelo?.Marca?.Nombre" />
+                            <input type="hidden" id="hhModelo_@i" value="@Model[i]?.ActivoFijo?.Modelo?.Nombre" />
+                            <input type="hidden" id="hhSerie_@i" value="@Model[i]?.Serie" />
+                            <input type="hidden" id="hhNumeroChasis_@i" value="@Model[i]?.RecepcionActivoFijoDetalleVehiculo?.NumeroChasis" />
+                            <input type="hidden" id="hhNumeroMotor_@i" value="@Model[i]?.RecepcionActivoFijoDetalleVehiculo?.NumeroMotor" />
+                            <input type="hidden" id="hhPlaca_@i" value="@Model[i]?.RecepcionActivoFijoDetalleVehiculo?.Placa" />
+                            <input type="hidden" id="hhNumeroClaveCatastral_@i" value="@Model[i]?.RecepcionActivoFijoDetalleEdificio?.NumeroClaveCatastral" />
+                            <input type="hidden" id="hhSucursal_@i" value="@Model[i]?.SucursalActual?.Nombre" />
+                            <input type="hidden" id="hhBodega_@i" value="@Model[i]?.UbicacionActivoFijoActual?.Bodega?.Nombre" />
+                            <input type="hidden" id="hhDependencia_@i" value="@Model[i]?.UbicacionActivoFijoActual?.Empleado?.Dependencia?.Nombre" />
+                            <input type="hidden" id="hhEmpleado_@i" value="@String.Format("{0} {1}", Model[i]?.UbicacionActivoFijoActual?.Empleado?.Persona?.Nombres, Model[i]?.UbicacionActivoFijoActual?.Empleado?.Persona?.Apellidos)" />
+                            <input type="hidden" id="hhProveedor_@i" value="@Model[i]?.RecepcionActivoFijo?.Proveedor?.RazonSocial" />
+                            <input type="hidden" id="hhMotivoAlta_@i" value="@Model[i]?.RecepcionActivoFijo?.MotivoAlta?.Descripcion" />
+                            <input type="hidden" id="hhFechaRecepcion_@i" value="@Model[i]?.RecepcionActivoFijo?.FechaRecepcion" />
+                            <input type="hidden" id="hhOrdenCompra_@i" value="@Model[i]?.RecepcionActivoFijo?.OrdenCompra" />
+                            <input type="hidden" id="hhFondoFinanciamiento_@i" value="@Model[i]?.RecepcionActivoFijo?.FondoFinanciamiento?.Nombre" />
+                            <input type="hidden" id="hhFechaAlta_@i" value="@Model[i]?.AltaActivoFijoActual?.FechaAlta" />
+                            <input type="hidden" id="hhNumeroFactura_@i" value="@Model[i]?.AltaActivoFijoActual?.FacturaActivoFijo?.NumeroFactura" />
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
 </div>
