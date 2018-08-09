@@ -109,8 +109,8 @@
 
                                                 <section class="col col-8">
                                                     <label class="input">
-                                                        <input asp-for="FechaAlta" class="form-control" />
-                                                        <span asp-validation-for="FechaAlta" class="text-danger"></span>
+                                                        <input class="form-control" value="@String.Format("{0}", Model?.FechaAlta.ToString("dd/MM/yyyy hh:mm tt") ?? DateTime.Now.ToString("dd/MM/yyyy hh:mm tt"))" disabled="disabled" />
+                                                        <input type="hidden" asp-for="FechaAlta" />
                                                     </label>
                                                 </section>
                                             </div>
@@ -142,9 +142,7 @@
                                             </div>
                                         }
                                     }
-
                                     <div id="divOpcionCompra"></div>
-
                                     @{ 
                                         if (!isVistaDetalles)
                                         {
@@ -156,13 +154,12 @@
                                             </div>
                                         }
                                     }
-
                                     <legend>Activos Fijos seleccionados</legend>
                                     @{
                                         if (Model == null && !isVistaDetalles)
                                         {
                                             <p class="margin-top-10">
-                                                <button type="button" class="btn btn-primary" style="padding:7px !important;margin-left:7px !important;" onclick="cargarListadoActivosFijosParaSeleccion(this)" data-funcioncallback="callBackInicializarTableListadoSeleccion" id="btnAdicionarActivosFijos">Adicionar / Eliminar Activos Fijos</button>
+                                                <button type="button" class="btn btn-primary" style="padding:7px !important;margin-left:7px !important;" onclick="cargarFormularioSeleccionNumeroRecepcion()">Adicionar / Eliminar Activos Fijos</button>
                                             </p>
                                         }
                                     }
@@ -172,7 +169,7 @@
                                     @{ 
                                         if (!isVistaDetalles)
                                         {
-                                            <button type="button" class="btn btn-primary" id="btn-guardar">Guardar</button>
+                                            <a href="javascript:void(0);" id="btn-guardar" class="btn btn-primary" onclick="abrirVentanaConfirmacion('btn-guardar')" data-funcioncallback="eventoGuardar()" data-titulo="Emitir aprobaci&oacute;n" data-descripcion="&#191;Desea guardar el alta de activos fijos? Una vez almacenada, no se podr&aacute; editar.">Guardar</a>
                                         }
                                     }
                                     <a asp-action="ListadoActivosFijosAlta" class="btn btn-default">Cancelar</a>
@@ -191,11 +188,12 @@
     @{await Html.RenderPartialAsync("_DatetimePickerScriptsPartial");}
     @{await Html.RenderPartialAsync("_FileInputScriptsPartial");}
     <script src="~/lib/bootbox/bootbox.min.js"></script>
-    <script src='~/js/activoFijo/listadoSeleccion.min.js'></script>
+    <script src='~/js/activoFijo/listadoSeleccion.js'></script>
     <script src='~/js/activoFijo/componentes.min.js'></script>
     <script src="~/js/activoFijo/alta.min.js"></script>
     <script>
         var urlDetalleFacturaAltaActivos = "@Url.Action("DetalleFacturaAltaActivosResult")";
+        var urlNumeroRecepcionResult = "@Url.Action("NumeroRecepcionResult")";
         var urlListadoActivosFijosSeleccionResult = "@Url.Action("ListadoActivosFijosSeleccionAltaResult")";
         var urlModalComponentesResult = "@Url.Action("ModalComponentesResult")";
         var urlComponentesActivosFijos = "@Url.Action("ComponentesActivosFijosResult")";

@@ -687,7 +687,7 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 ViewData["MotivoAlta"] = new SelectList((await apiServicio.Listar<MotivoAlta>(new Uri(WebApp.BaseAddressRM), "api/MotivoAlta/ListarMotivoAlta")).Where(c => c.Descripcion.ToLower().Trim() != "adición"), "IdMotivoAlta", "Descripcion");
                 ViewData["TipoUtilizacionAlta"] = new SelectList(await apiServicio.Listar<TipoUtilizacionAlta>(new Uri(WebApp.BaseAddressRM), "api/TipoUtilizacionAlta/ListarTipoUtilizacionAlta"), "IdTipoUtilizacionAlta", "Nombre");
-                ViewData["Configuraciones"] = new ListadoDetallesActivosFijosViewModel(IsConfiguracionListadoAltasGestionar: true, IsConfiguracionAltasGestionarEditar: id != null);
+                ViewData["Configuraciones"] = new ListadoDetallesActivosFijosViewModel(IsConfiguracionListadoAltasGestionar: true, IsConfiguracionAltasGestionarEditar: id != null, IsVisualizarNumeroRecepcion: true);
                 
                 if (id != null)
                 {
@@ -811,7 +811,7 @@ namespace bd.webapprm.web.Controllers.MVC
 
                 ViewData["MotivoAlta"] = new SelectList((await apiServicio.Listar<MotivoAlta>(new Uri(WebApp.BaseAddressRM), "api/MotivoAlta/ListarMotivoAlta")).Where(c => c.Descripcion.ToLower().Trim() != "adición"), "IdMotivoAlta", "Descripcion");
                 ViewData["TipoUtilizacionAlta"] = new SelectList(await apiServicio.Listar<TipoUtilizacionAlta>(new Uri(WebApp.BaseAddressRM), "api/TipoUtilizacionAlta/ListarTipoUtilizacionAlta"), "IdTipoUtilizacionAlta", "Nombre");
-                ViewData["Configuraciones"] = new ListadoDetallesActivosFijosViewModel(IsConfiguracionListadoAltasGestionar: true, IsConfiguracionAltasGestionarEditar: altaActivoFijo.IdAltaActivoFijo > 0);
+                ViewData["Configuraciones"] = new ListadoDetallesActivosFijosViewModel(IsConfiguracionListadoAltasGestionar: true, IsConfiguracionAltasGestionarEditar: altaActivoFijo.IdAltaActivoFijo > 0, IsVisualizarNumeroRecepcion: true);
                 
                 var listaRecepcionActivoFijoDetalleSeleccionado = await apiServicio.ObtenerElementoAsync<List<RecepcionActivoFijoDetalleSeleccionado>>(altaActivoFijo.AltaActivoFijoDetalle.Select(c=> new IdRecepcionActivoFijoDetalleSeleccionado { idRecepcionActivoFijoDetalle = c.IdRecepcionActivoFijoDetalle, seleccionado = true }), new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/DetallesActivoFijo");
                 foreach (var item in listaRecepcionActivoFijoDetalleSeleccionado)
@@ -839,16 +839,29 @@ namespace bd.webapprm.web.Controllers.MVC
         }
 
         [HttpPost]
-        public async Task<IActionResult> ListadoActivosFijosSeleccionAltaResult(List<IdRecepcionActivoFijoDetalleSeleccionado> listadoRecepcionActivoFijoDetalleSeleccionado, List<IdRecepcionActivoFijoDetalleSeleccionado> objAdicional)
+        public async Task<IActionResult> NumeroRecepcionResult()
+        {
+            try
+            {
+                ViewData["IdRecepcionActivoFijo"] = new SelectList(await apiServicio.Listar<int>(new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ListarIdsRecepcionesActivosFijos"));
+            }
+            catch (Exception)
+            { }
+            return PartialView("_RecepcionSelect", new RecepcionActivoFijo());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ListadoActivosFijosSeleccionAltaResult(List<IdRecepcionActivoFijoDetalleSeleccionado> listadoRecepcionActivoFijoDetalleSeleccionado, List<IdRecepcionActivoFijoDetalleSeleccionado> objAdicional, int idRecepcionActivoFijo)
         {
             var lista = new List<RecepcionActivoFijoDetalleSeleccionado>();
-            ViewData["Configuraciones"] = new ListadoDetallesActivosFijosViewModel(IsConfiguracionSeleccion: true, IsConfiguracionSeleccionAltas: true);
+            ViewData["Configuraciones"] = new ListadoDetallesActivosFijosViewModel(IsConfiguracionSeleccion: true, IsConfiguracionSeleccionAltas: true, IsVisualizarNumeroRecepcion: true);
             try
             {
                 lista = await apiServicio.ObtenerElementoAsync<List<RecepcionActivoFijoDetalleSeleccionado>>(new IdRecepcionActivoFijoDetalleSeleccionadoIdsInicialesAltaBaja
                 {
                     ListaIdRecepcionActivoFijoDetalleSeleccionado = listadoRecepcionActivoFijoDetalleSeleccionado,
-                    ListaIdRecepcionActivoFijoDetalleSeleccionadoInicialesAltaBaja = objAdicional
+                    ListaIdRecepcionActivoFijoDetalleSeleccionadoInicialesAltaBaja = objAdicional,
+                    IdRecepcionActivoFijo = idRecepcionActivoFijo
                 }, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/DetallesActivoFijoSeleccionadoPorEstadoAlta");
             }
             catch (Exception)
@@ -2055,6 +2068,24 @@ namespace bd.webapprm.web.Controllers.MVC
                 await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Editando una revalorización de Activo Fijo", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.Edit), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webapprm" });
                 return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorEditar}", nameof(ListadoRevalorizaciones), routeValues: new { id = revalorizacionActivoFijo.IdRecepcionActivoFijoDetalle });
             }
+        }
+        #endregion
+
+        #region Tabla de amortización
+        public async Task<IActionResult> TablaAmortizacionActivoFijo(int? id)
+        {
+            var lista = new List<DepreciacionActivoFijo>();
+            ViewData["IdRecepcionActivoFijoDetalle"] = id;
+            try
+            {
+                lista = await apiServicio.ObtenerElementoAsync<List<DepreciacionActivoFijo>>(id, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ListarDepreciacionActivoFijo");
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Listando tabla de amortización de Activos Fijos", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webapprm" });
+                TempData["Mensaje"] = $"{Mensaje.Error}|{Mensaje.ErrorListado}";
+            }
+            return View(lista);
         }
         #endregion
 

@@ -21,7 +21,7 @@ namespace bd.webapprm.servicios.Servicios
             { "/ActivoFijo/Recepcion", new List<string> { "DetallesRecepcion" } },
             { "/ActivoFijo/ActivosFijosValidacionTecnica", new List<string> { "RevisionActivoFijo" } },
             { "/ActivoFijo/GestionarAlta", new List<string> { "DetallesAlta" } },
-            { "/ActivoFijo/ListadoActivosFijosAlta", new List<string> { "ListadoMantenimientos", "ListadoMantenimientos", "CrearMantenimiento", "EditarMantenimiento", "ListadoProcesosJudiciales", "GestionarProcesoJudicial", "ListadoRevalorizaciones", "GestionarRevalorizacion" } },
+            { "/ActivoFijo/ListadoActivosFijosAlta", new List<string> { "ListadoMantenimientos", "ListadoMantenimientos", "CrearMantenimiento", "EditarMantenimiento", "ListadoProcesosJudiciales", "GestionarProcesoJudicial", "ListadoRevalorizaciones", "GestionarRevalorizacion", "TablaAmortizacionActivoFijo" } },
             { "/ActivoFijo/ActivosFijosRecepcionadosSinPoliza", new List<string> { "AsignarPolizaSeguro", "DetallesRecepcion" } },
             { "/ActivoFijo/GestionarBaja", new List<string> { "DetallesBaja" } },
             { "/ActivoFijo/ListadoCambioCustodio", new List<string> { "GestionarCambioCustodio", "DetallesCambioCustodio" } },

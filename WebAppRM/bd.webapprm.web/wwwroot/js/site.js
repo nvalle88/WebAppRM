@@ -41,7 +41,8 @@
     claseArticulo: "ClaseArticulo",
     subclaseArticulo: "SubclaseArticulo",
     ramo: "Ramo",
-    subramo: "Subramo"
+    subramo: "Subramo",
+    numeroRecepcion: "NumeroRecepcion"
 };
 
 $(document).ready(function () {
@@ -403,6 +404,7 @@ function initDataTableFiltrado(idTabla, arrColumnHidden, fnDrawCallBack)
         "t" +
         "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-sm-6 col-xs-12'p>>",
         "autoWidth": true,
+        "order": [],
         "preDrawCallback": function () {
             if (!responsiveHelper_datatable_fixed_column)
                 responsiveHelper_datatable_fixed_column = new ResponsiveDatatablesHelper($('#' + idTabla), breakpointDefinition);

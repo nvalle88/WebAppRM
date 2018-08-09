@@ -33,6 +33,7 @@ namespace bd.webapprm.entidades.Utils
         public bool IsConfiguracionListadoMovilizacionesGestionar { get; set; }
         public bool IsConfiguracionListadoMovilizaciones { get; set; }
         public bool IsConfiguracionListadoGenerales { get; set; }
+        public bool IsVisualizarNumeroRecepcion { get; set; }
         public bool MostrarFiltradoUltimaColumna { get; set; }
         public string CallbackFunctionCheckBox { get; set; }
         public string CallbackFunctionRemoveTodos { get; set; } = "callBackFunctionEliminarDatoEspecifico";
@@ -63,7 +64,8 @@ namespace bd.webapprm.entidades.Utils
             bool? IsConfiguracionSeleccionMovilizaciones = null, 
             bool? IsConfiguracionListadoMovilizacionesGestionar = null,
             bool? IsConfiguracionListadoMovilizaciones = null,
-            bool? IsConfiguracionListadoGenerales = null)
+            bool? IsConfiguracionListadoGenerales = null,
+            bool? IsVisualizarNumeroRecepcion = null)
         {
             this.IsConfiguracionSeleccion = IsConfiguracionSeleccion ?? false;
             this.IsConfiguracionSeleccionDisabled = IsConfiguracionSeleccionDisabled ?? false;
@@ -90,6 +92,7 @@ namespace bd.webapprm.entidades.Utils
             this.IsConfiguracionListadoMovilizacionesGestionar = IsConfiguracionListadoMovilizacionesGestionar ?? false;
             this.IsConfiguracionListadoMovilizaciones = IsConfiguracionListadoMovilizaciones ?? false;
             this.IsConfiguracionListadoGenerales = IsConfiguracionListadoGenerales ?? false;
+            this.IsVisualizarNumeroRecepcion = IsVisualizarNumeroRecepcion ?? false;
 
             if (this.IsConfiguracionSeleccionComponentes || this.IsConfiguracionDetallesRecepcion || this.IsConfiguracionSeleccionAltas || this.IsConfiguracionListadoAltas || this.IsConfiguracionListadoBajas || (this.IsConfiguracionSeleccionBajas && !this.IsConfiguracionGestionarInventarioAutomatico) || (this.IsConfiguracionListadoBajasGestionar && this.IsConfiguracionBajasGestionarEditar) || this.IsConfiguracionListadoMovilizacionesGestionar || this.IsConfiguracionListadoMovilizaciones)
                 MostrarFiltradoUltimaColumna = true;
@@ -145,6 +148,9 @@ namespace bd.webapprm.entidades.Utils
                 Cantidad += 2;
 
             if (this.IsConfiguracionSeleccion)
+                Cantidad++;
+
+            if (this.IsVisualizarNumeroRecepcion)
                 Cantidad++;
 
             if (IsConfiguracionDatosMovilizaciones)
