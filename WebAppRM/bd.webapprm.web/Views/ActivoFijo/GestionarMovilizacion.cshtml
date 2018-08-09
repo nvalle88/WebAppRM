@@ -17,7 +17,16 @@
                 <div class="jarviswidget jarviswidget-color-red" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
                     <header>
                         <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
-                        <h2>Movilizaci&oacute;n de activos fijos</h2>
+                        @{ 
+                            if (isVistaDetalles)
+                            {
+                                <h2>Detalles de movilizaci&oacute;n de activos fijos</h2>
+                            }
+                            else
+                            {
+                                <h2>Movilizaci&oacute;n de activos fijos</h2>
+                            }
+                        }
                     </header>
                     <div>
                         <div class="jarviswidget-editbox"></div>
@@ -31,85 +40,139 @@
                                     }
                                 }
                                 <fieldset>
-                                    <legend>Datos Generales</legend>
-                                    <div class="row">
-                                        <section class="col col-4">
-                                            <label asp-for="FechaSalida"></label>
-                                        </section>
+                                    <legend>Datos generales</legend>
+                                    @{ 
+                                        if (isVistaDetalles)
+                                        {
+                                            <table class="table table-hover">
+												<thead>
+													<tr>
+														<th width="50%">CAMPO</th>
+														<th width="50%">VALOR</th>
+													</tr>
+												</thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td><label asp-for="FechaSalida" class="negrita"></label></td>
+                                                        <td>@Html.DisplayFor(m => m.FechaSalida)</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label asp-for="FechaRetorno" class="negrita"></label></td>
+                                                        <td>@Html.DisplayFor(m => m.FechaRetorno)</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label asp-for="IdMotivoTraslado" class="negrita"></label></td>
+                                                        <td>@Html.DisplayFor(m => m.MotivoTraslado.Descripcion)</td>
+                                                    </tr>
+                                                </tbody>
+											</table>
 
-                                        <section class="col col-8">
-                                            <label class="input">
-                                                <input asp-for="FechaSalida" class="form-control" />
-                                                <span asp-validation-for="FechaSalida" class="text-danger"></span>
-                                            </label>
-                                        </section>
-                                    </div>
+                                            <legend>Datos de empleados</legend>
+                                            <table class="table table-hover margin-top-25">
+												<thead>
+													<tr>
+														<th width="50%">CAMPO</th>
+														<th width="50%">VALOR</th>
+													</tr>
+												</thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td><label asp-for="IdEmpleadoResponsable" class="negrita"></label></td>
+                                                        <td>@{await ViewContext.Writer.WriteAsync($"{Model.EmpleadoResponsable.Persona.Nombres} {Model.EmpleadoResponsable.Persona.Apellidos}");}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label asp-for="IdEmpleadoSolicita" class="negrita"></label></td>
+                                                        <td>@{await ViewContext.Writer.WriteAsync($"{Model.EmpleadoSolicita.Persona.Nombres} {Model.EmpleadoSolicita.Persona.Apellidos}");}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label asp-for="IdEmpleadoAutorizado" class="negrita"></label></td>
+                                                        <td>@{await ViewContext.Writer.WriteAsync($"{Model.EmpleadoAutorizado.Persona.Nombres} {Model.EmpleadoAutorizado.Persona.Apellidos}");}</td>
+                                                    </tr>
+                                                </tbody>
+											</table>
+                                        }
+                                        else
+                                        {
+                                            <div class="row">
+                                                <section class="col col-4">
+                                                    <label asp-for="FechaSalida"></label>
+                                                </section>
 
-                                    <div class="row">
-                                        <section class="col col-4">
-                                            <label asp-for="FechaRetorno"></label>
-                                        </section>
+                                                <section class="col col-8">
+                                                    <label class="input">
+                                                        <input asp-for="FechaSalida" class="form-control" />
+                                                        <span asp-validation-for="FechaSalida" class="text-danger"></span>
+                                                    </label>
+                                                </section>
+                                            </div>
 
-                                        <section class="col col-8">
-                                            <label class="input">
-                                                <input asp-for="FechaRetorno" class="form-control" />
-                                                <span asp-validation-for="FechaRetorno" class="text-danger"></span>
-                                            </label>
-                                        </section>
-                                    </div>
+                                            <div class="row">
+                                                <section class="col col-4">
+                                                    <label asp-for="FechaRetorno"></label>
+                                                </section>
 
-                                    <div class="row">
-                                        <section class="col col-4">
-                                            <label asp-for="IdMotivoTraslado"></label>
-                                        </section>
+                                                <section class="col col-8">
+                                                    <label class="input">
+                                                        <input asp-for="FechaRetorno" class="form-control" />
+                                                        <span asp-validation-for="FechaRetorno" class="text-danger"></span>
+                                                    </label>
+                                                </section>
+                                            </div>
 
-                                        <section class="col col-8">
-                                            <label class="input">
-                                                <select asp-for="IdMotivoTraslado" class="form-control" asp-items="ViewBag.MotivoTraslado"></select>
-                                                <span asp-validation-for="IdMotivoTraslado" class="text-danger"></span>
-                                            </label>
-                                        </section>
-                                    </div>
+                                            <div class="row">
+                                                <section class="col col-4">
+                                                    <label asp-for="IdMotivoTraslado"></label>
+                                                </section>
 
-                                    <legend>Datos de Empleados</legend>
-                                    <div class="row margin-top-25">
-                                        <section class="col col-4">
-                                            <label asp-for="IdEmpleadoResponsable"></label>
-                                        </section>
+                                                <section class="col col-8">
+                                                    <label class="input">
+                                                        <select asp-for="IdMotivoTraslado" class="form-control" asp-items="ViewBag.MotivoTraslado"></select>
+                                                        <span asp-validation-for="IdMotivoTraslado" class="text-danger"></span>
+                                                    </label>
+                                                </section>
+                                            </div>
 
-                                        <section class="col col-8">
-                                            <label class="input">
-                                                <select asp-for="IdEmpleadoResponsable" class="form-control" asp-items="ViewBag.Empleado"></select>
-                                                <span asp-validation-for="IdEmpleadoResponsable" class="text-danger"></span>
-                                            </label>
-                                        </section>
-                                    </div>
+                                            <legend>Datos de empleados</legend>
+                                            <div class="row margin-top-25">
+                                                <section class="col col-4">
+                                                    <label asp-for="IdEmpleadoResponsable"></label>
+                                                </section>
 
-                                    <div class="row">
-                                        <section class="col col-4">
-                                            <label asp-for="IdEmpleadoSolicita"></label>
-                                        </section>
+                                                <section class="col col-8">
+                                                    <label class="input">
+                                                        <select asp-for="IdEmpleadoResponsable" class="form-control" asp-items="ViewBag.Empleado"></select>
+                                                        <span asp-validation-for="IdEmpleadoResponsable" class="text-danger"></span>
+                                                    </label>
+                                                </section>
+                                            </div>
 
-                                        <section class="col col-8">
-                                            <label class="input">
-                                                <select asp-for="IdEmpleadoSolicita" class="form-control" asp-items="ViewBag.Empleado"></select>
-                                                <span asp-validation-for="IdEmpleadoSolicita" class="text-danger"></span>
-                                            </label>
-                                        </section>
-                                    </div>
+                                            <div class="row">
+                                                <section class="col col-4">
+                                                    <label asp-for="IdEmpleadoSolicita"></label>
+                                                </section>
 
-                                    <div class="row">
-                                        <section class="col col-4">
-                                            <label asp-for="IdEmpleadoAutorizado"></label>
-                                        </section>
+                                                <section class="col col-8">
+                                                    <label class="input">
+                                                        <select asp-for="IdEmpleadoSolicita" class="form-control" asp-items="ViewBag.Empleado"></select>
+                                                        <span asp-validation-for="IdEmpleadoSolicita" class="text-danger"></span>
+                                                    </label>
+                                                </section>
+                                            </div>
 
-                                        <section class="col col-8">
-                                            <label class="input">
-                                                <select asp-for="IdEmpleadoAutorizado" class="form-control" asp-items="ViewBag.Empleado"></select>
-                                                <span asp-validation-for="IdEmpleadoAutorizado" class="text-danger"></span>
-                                            </label>
-                                        </section>
-                                    </div>
+                                            <div class="row">
+                                                <section class="col col-4">
+                                                    <label asp-for="IdEmpleadoAutorizado"></label>
+                                                </section>
+
+                                                <section class="col col-8">
+                                                    <label class="input">
+                                                        <select asp-for="IdEmpleadoAutorizado" class="form-control" asp-items="ViewBag.Empleado"></select>
+                                                        <span asp-validation-for="IdEmpleadoAutorizado" class="text-danger"></span>
+                                                    </label>
+                                                </section>
+                                            </div>
+                                        }
+                                    }
 
                                     <legend>Activos Fijos autorizados</legend>
                                     @{ 

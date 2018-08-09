@@ -16,7 +16,16 @@
                 <div class="jarviswidget jarviswidget-color-red" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
                     <header>
                         <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
-                        <h2>Cambio de ubicaci&oacute;n entre sucursales</h2>
+                        @{ 
+                            if (isVistaDetalles)
+                            {
+                                <h2>Detalles de cambio de ubicaci&oacute;n entre sucursales</h2>
+                            }
+                            else
+                            {
+                                <h2>Cambio de ubicaci&oacute;n entre sucursales</h2>
+                            }
+                        }
                     </header>
                     <div>
                         <div class="jarviswidget-editbox"></div>
@@ -32,66 +41,140 @@
                                 <input type="hidden" id="idsRecepcionActivoFijoDetalle" name="idsRecepcionActivoFijoDetalle" />
                                 <fieldset>
                                     <legend>Datos generales</legend>
-                                    <div class="row">
-                                        <section class="col col-4">
-                                            <label asp-for="FechaTransferencia"></label>
-                                        </section>
+                                    @{ 
+                                        if (isVistaDetalles)
+                                        {
+                                            <table class="table table-hover">
+												<thead>
+													<tr>
+														<th width="50%">CAMPO</th>
+														<th width="50%">VALOR</th>
+													</tr>
+												</thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td><label asp-for="FechaTransferencia" class="negrita"></label></td>
+                                                        <td>@Html.DisplayFor(m => m.FechaTransferencia)</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label asp-for="Observaciones" class="negrita"></label></td>
+                                                        <td>@Html.DisplayFor(m => m.Observaciones)</td>
+                                                    </tr>
+                                                </tbody>
+											</table>
 
-                                        <section class="col col-8">
-                                            <label class="input">
-                                                <input asp-for="FechaTransferencia" class="form-control" />
-                                                <span asp-validation-for="FechaTransferencia" class="text-danger"></span>
-                                            </label>
-                                        </section>
-                                    </div>
+                                            <legend>Sucursal de origen</legend>
+                                            <table class="table table-hover margin-top-25">
+												<thead>
+													<tr>
+														<th width="50%">CAMPO</th>
+														<th width="50%">VALOR</th>
+													</tr>
+												</thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td><label asp-for="IdSucursalOrigen" class="negrita"></label></td>
+                                                        <td>@Html.DisplayFor(m => m.SucursalOrigen.Nombre)</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label asp-for="IdEmpleadoEntrega" class="negrita"></label></td>
+                                                        <td>@{await ViewContext.Writer.WriteAsync($"{Model.EmpleadoEntrega.Persona.Nombres} {Model.EmpleadoEntrega.Persona.Apellidos}");}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label asp-for="IdEmpleadoResponsableEnvio" class="negrita"></label></td>
+                                                        <td>@{await ViewContext.Writer.WriteAsync($"{Model.EmpleadoResponsableEnvio.Persona.Nombres} {Model.EmpleadoResponsableEnvio.Persona.Apellidos}");}</td>
+                                                    </tr>
+                                                </tbody>
+											</table>
 
-                                    <div class="row">
-                                        <section class="col col-4">
-                                            <label asp-for="Observaciones"></label>
-                                        </section>
+                                            <legend>Sucursal de destino</legend>
+                                            <table class="table table-hover margin-top-25">
+												<thead>
+													<tr>
+														<th width="50%">CAMPO</th>
+														<th width="50%">VALOR</th>
+													</tr>
+												</thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td><label asp-for="IdSucursalDestino" class="negrita"></label></td>
+                                                        <td>@Html.DisplayFor(m => m.SucursalDestino.Nombre)</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label asp-for="IdEmpleadoRecibe" class="negrita"></label></td>
+                                                        <td>@{await ViewContext.Writer.WriteAsync($"{Model.EmpleadoRecibe.Persona.Nombres} {Model.EmpleadoRecibe.Persona.Apellidos}");}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label asp-for="IdEmpleadoResponsableRecibo" class="negrita"></label></td>
+                                                        <td>@{await ViewContext.Writer.WriteAsync($"{Model.EmpleadoResponsableRecibo.Persona.Nombres} {Model.EmpleadoResponsableRecibo.Persona.Apellidos}");}</td>
+                                                    </tr>
+                                                </tbody>
+											</table>
+                                        }
+                                        else
+                                        {
+                                            <div class="row">
+                                                <section class="col col-4">
+                                                    <label asp-for="FechaTransferencia"></label>
+                                                </section>
 
-                                        <section class="col col-8">
-                                            <label class="input">
-                                                <textarea asp-for="Observaciones" class="form-control paddingTextArea98" rows="4"></textarea>
-                                                <span asp-validation-for="Observaciones" class="text-danger"></span>
-                                            </label>
-                                        </section>
-                                    </div>
+                                                <section class="col col-8">
+                                                    <label class="input">
+                                                        <input asp-for="FechaTransferencia" class="form-control" />
+                                                        <span asp-validation-for="FechaTransferencia" class="text-danger"></span>
+                                                    </label>
+                                                </section>
+                                            </div>
 
-                                    <legend>Sucursal de origen</legend>
-                                    <div class="row margin-top-25">
-                                        <section class="col col-4">
-                                            <label asp-for="IdSucursalOrigen"></label>
-                                        </section>
+                                            <div class="row">
+                                                <section class="col col-4">
+                                                    <label asp-for="Observaciones"></label>
+                                                </section>
 
-                                        <section class="col col-8">
-                                            <label class="input">
-                                                <select asp-for="IdSucursalOrigen" class="form-control" asp-items="ViewBag.SucursalOrigen"></select>
-                                            </label>
-                                        </section>
-                                    </div>
+                                                <section class="col col-8">
+                                                    <label class="input">
+                                                        <textarea asp-for="Observaciones" class="form-control paddingTextArea98" rows="4"></textarea>
+                                                        <span asp-validation-for="Observaciones" class="text-danger"></span>
+                                                    </label>
+                                                </section>
+                                            </div>
 
-                                    <div id="divEmpleadosSucursalOrigen">
-                                        @{await Html.RenderPartialAsync("_EmpleadosTransferenciaSucursalOrigen");}
-                                    </div>
+                                            <legend>Sucursal de origen</legend>
+                                            <div class="row margin-top-25">
+                                                <section class="col col-4">
+                                                    <label asp-for="IdSucursalOrigen"></label>
+                                                </section>
 
-                                    <legend>Sucursal de destino</legend>
-                                    <div class="row margin-top-25">
-                                        <section class="col col-4">
-                                            <label asp-for="IdSucursalDestino"></label>
-                                        </section>
+                                                <section class="col col-8">
+                                                    <label class="input">
+                                                        <select asp-for="IdSucursalOrigen" class="form-control" asp-items="ViewBag.SucursalOrigen"></select>
+                                                    </label>
+                                                </section>
+                                            </div>
 
-                                        <section class="col col-8">
-                                            <label class="input">
-                                                <select asp-for="IdSucursalDestino" class="form-control" asp-items="ViewBag.SucursalDestino"></select>
-                                                <span asp-validation-for="IdSucursalDestino" class="text-danger"></span>
-                                            </label>
-                                        </section>
-                                    </div>
+                                            <div id="divEmpleadosSucursalOrigen">
+                                                @{await Html.RenderPartialAsync("_EmpleadosTransferenciaSucursalOrigen");}
+                                            </div>
 
-                                    <div id="divEmpleadosSucursalDestino">
-                                        @{await Html.RenderPartialAsync("_EmpleadosTransferenciaSucursalDestino");}
-                                    </div>
+                                            <legend>Sucursal de destino</legend>
+                                            <div class="row margin-top-25">
+                                                <section class="col col-4">
+                                                    <label asp-for="IdSucursalDestino"></label>
+                                                </section>
+
+                                                <section class="col col-8">
+                                                    <label class="input">
+                                                        <select asp-for="IdSucursalDestino" class="form-control" asp-items="ViewBag.SucursalDestino"></select>
+                                                        <span asp-validation-for="IdSucursalDestino" class="text-danger"></span>
+                                                    </label>
+                                                </section>
+                                            </div>
+
+                                            <div id="divEmpleadosSucursalDestino">
+                                                @{await Html.RenderPartialAsync("_EmpleadosTransferenciaSucursalDestino");}
+                                            </div>
+                                        }
+                                    }
 
                                     @{ 
                                         if (!isVistaDetalles)

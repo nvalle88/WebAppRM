@@ -9,15 +9,6 @@
     Init_XEditable(function (idRecepcionActivoFijoDetalle, newValue) {
         callbackXEditableSuccess(idRecepcionActivoFijoDetalle, newValue.toUpperCase());
     });
-
-    if (isVistaDetalles) {
-        $("#FechaSalida").prop("disabled", "disabled");
-        $("#FechaRetorno").prop("disabled", "disabled");
-        $("#IdMotivoTraslado").prop("disabled", "disabled");
-        $("#IdEmpleadoResponsable").prop("disabled", "disabled");
-        $("#IdEmpleadoSolicita").prop("disabled", "disabled");
-        $("#IdEmpleadoAutorizado").prop("disabled", "disabled");
-    }
 });
 
 function callbackXEditableSuccess(idRecepcionActivoFijoDetalle, newValue)

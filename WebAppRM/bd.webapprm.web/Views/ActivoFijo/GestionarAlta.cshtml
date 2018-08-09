@@ -18,7 +18,17 @@
                 <div class="jarviswidget jarviswidget-color-red" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
                     <header>
                         <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
-                        <h2>Alta de activos fijos</h2>
+                        @{ 
+                            if (isVistaDetalles)
+                            {
+                                <h2>Detalles de alta de activos fijos</h2>
+                            }
+                            else
+                            {
+                                <h2>Alta de activos fijos</h2>
+                            }
+                        }
+                        
                     </header>
                     <div>
                         <div class="jarviswidget-editbox"></div>
@@ -34,57 +44,104 @@
                                 }
                                 <fieldset>
                                     <legend>Informaci&oacute;n General</legend>
-                                    <div class="row">
-                                        <section class="col col-4">
-                                            <label asp-for="IdMotivoAlta"></label>
-                                        </section>
+                                    @{ 
+                                        if (isVistaDetalles)
+                                        {
+                                            <table class="table table-hover">
+												<thead>
+													<tr>
+														<th width="50%">CAMPO</th>
+														<th width="50%">VALOR</th>
+													</tr>
+												</thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td><label asp-for="IdMotivoAlta" class="negrita"></label></td>
+                                                        <td>@Html.DisplayFor(m => m.MotivoAlta.Descripcion)</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label asp-for="FechaAlta" class="negrita"></label></td>
+                                                        <td>@Html.DisplayFor(m => m.FechaAlta)</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label asp-for="FechaPago" class="negrita"></label></td>
+                                                        <td>@Html.DisplayFor(m => m.FechaPago)</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label asp-for="AltaActivoFijoDetalle.FirstOrDefault().IdTipoUtilizacionAlta" class="negrita"></label></td>
+                                                        <td>@Html.DisplayFor(m => m.AltaActivoFijoDetalle.FirstOrDefault().TipoUtilizacionAlta.Nombre)</td>
+                                                    </tr>
+                                                    @{ 
+                                                        if (Model?.FacturaActivoFijo != null)
+                                                        {
+                                                            <tr>
+                                                                <td><label asp-for="FacturaActivoFijo.NumeroFactura" class="negrita"></label></td>
+                                                                <td>@Html.DisplayFor(m => m.FacturaActivoFijo.NumeroFactura)</td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><label asp-for="FacturaActivoFijo.FechaFactura" class="negrita"></label></td>
+                                                                <td>@Html.DisplayFor(m => m.FacturaActivoFijo.FechaFactura)</td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                </tbody>
+											</table>
+                                        }
+                                        else
+                                        {
+                                            <div class="row">
+                                                <section class="col col-4">
+                                                    <label asp-for="IdMotivoAlta"></label>
+                                                </section>
 
-                                        <section class="col col-8">
-                                            <label class="input">
-                                                <select asp-for="IdMotivoAlta" class="form-control" asp-items="ViewBag.MotivoAlta"></select>
-                                                <span asp-validation-for="IdMotivoAlta" class="text-danger"></span>
-                                            </label>
-                                        </section>
-                                    </div>
+                                                <section class="col col-8">
+                                                    <label class="input">
+                                                        <select asp-for="IdMotivoAlta" class="form-control" asp-items="ViewBag.MotivoAlta"></select>
+                                                        <span asp-validation-for="IdMotivoAlta" class="text-danger"></span>
+                                                    </label>
+                                                </section>
+                                            </div>
 
-                                    <div class="row">
-                                        <section class="col col-4">
-                                            <label asp-for="FechaAlta"></label>
-                                        </section>
+                                            <div class="row">
+                                                <section class="col col-4">
+                                                    <label asp-for="FechaAlta"></label>
+                                                </section>
 
-                                        <section class="col col-8">
-                                            <label class="input">
-                                                <input asp-for="FechaAlta" class="form-control" />
-                                                <span asp-validation-for="FechaAlta" class="text-danger"></span>
-                                            </label>
-                                        </section>
-                                    </div>
+                                                <section class="col col-8">
+                                                    <label class="input">
+                                                        <input asp-for="FechaAlta" class="form-control" />
+                                                        <span asp-validation-for="FechaAlta" class="text-danger"></span>
+                                                    </label>
+                                                </section>
+                                            </div>
 
-                                    <div class="row">
-                                        <section class="col col-4">
-                                            <label asp-for="FechaPago"></label>
-                                        </section>
+                                            <div class="row">
+                                                <section class="col col-4">
+                                                    <label asp-for="FechaPago"></label>
+                                                </section>
 
-                                        <section class="col col-8">
-                                            <label class="input">
-                                                <input asp-for="FechaPago" class="form-control" />
-                                                <span asp-validation-for="FechaPago" class="text-danger"></span>
-                                            </label>
-                                        </section>
-                                    </div>
+                                                <section class="col col-8">
+                                                    <label class="input">
+                                                        <input asp-for="FechaPago" class="form-control" />
+                                                        <span asp-validation-for="FechaPago" class="text-danger"></span>
+                                                    </label>
+                                                </section>
+                                            </div>
 
-                                    <div class="row">
-                                        <section class="col col-4">
-                                            <label asp-for="AltaActivoFijoDetalle.FirstOrDefault().IdTipoUtilizacionAlta"></label>
-                                        </section>
+                                            <div class="row">
+                                                <section class="col col-4">
+                                                    <label asp-for="AltaActivoFijoDetalle.FirstOrDefault().IdTipoUtilizacionAlta"></label>
+                                                </section>
 
-                                        <section class="col col-8">
-                                            <label class="input">
-                                                <select asp-for="AltaActivoFijoDetalle.FirstOrDefault().IdTipoUtilizacionAlta" class="form-control" asp-items="ViewBag.TipoUtilizacionAlta"></select>
-                                                <span asp-validation-for="AltaActivoFijoDetalle.FirstOrDefault().IdTipoUtilizacionAlta" class="text-danger"></span>
-                                            </label>
-                                        </section>
-                                    </div>
+                                                <section class="col col-8">
+                                                    <label class="input">
+                                                        <select asp-for="AltaActivoFijoDetalle.FirstOrDefault().IdTipoUtilizacionAlta" class="form-control" asp-items="ViewBag.TipoUtilizacionAlta"></select>
+                                                        <span asp-validation-for="AltaActivoFijoDetalle.FirstOrDefault().IdTipoUtilizacionAlta" class="text-danger"></span>
+                                                    </label>
+                                                </section>
+                                            </div>
+                                        }
+                                    }
 
                                     <div id="divOpcionCompra"></div>
 

@@ -16,7 +16,16 @@
                 <div class="jarviswidget jarviswidget-color-red" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
                     <header>
                         <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
-                        <h2>Baja de activos fijos</h2>
+                        @{ 
+                            if (isVistaDetalles)
+                            {
+                                <h2>Detalles de baja de activos fijos</h2>
+                            }
+                            else
+                            {
+                                <h2>Baja de activos fijos</h2>
+                            }
+                        }
                     </header>
                     <div>
                         <div class="jarviswidget-editbox"></div>
@@ -31,44 +40,74 @@
                                 }
                                 <fieldset>
                                     <legend>Informaci&oacute;n General</legend>
-                                    <div class="row">
-                                        <section class="col col-4">
-                                            <label asp-for="IdMotivoBaja"></label>
-                                        </section>
+                                    @{ 
+                                        if (isVistaDetalles)
+                                        {
+                                            <table class="table table-hover">
+												<thead>
+													<tr>
+														<th width="50%">CAMPO</th>
+														<th width="50%">VALOR</th>
+													</tr>
+												</thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td><label asp-for="IdMotivoBaja" class="negrita"></label></td>
+                                                        <td>@Html.DisplayFor(m => m.MotivoBaja.Nombre)</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label asp-for="FechaBaja" class="negrita"></label></td>
+                                                        <td>@Html.DisplayFor(m => m.FechaBaja)</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label asp-for="MemoOficioResolucion" class="negrita"></label></td>
+                                                        <td>@Html.DisplayFor(m => m.MemoOficioResolucion)</td>
+                                                    </tr>
+                                                </tbody>
+											</table>
+                                        }
+                                        else
+                                        {
+                                            <div class="row">
+                                                <section class="col col-4">
+                                                    <label asp-for="IdMotivoBaja"></label>
+                                                </section>
 
-                                        <section class="col col-8">
-                                            <label class="input">
-                                                <select asp-for="IdMotivoBaja" class="form-control" asp-items="ViewBag.MotivoBaja"></select>
-                                                <span asp-validation-for="IdMotivoBaja" class="text-danger"></span>
-                                            </label>
-                                        </section>
-                                    </div>
+                                                <section class="col col-8">
+                                                    <label class="input">
+                                                        <select asp-for="IdMotivoBaja" class="form-control" asp-items="ViewBag.MotivoBaja"></select>
+                                                        <span asp-validation-for="IdMotivoBaja" class="text-danger"></span>
+                                                    </label>
+                                                </section>
+                                            </div>
 
-                                    <div class="row">
-                                        <section class="col col-4">
-                                            <label asp-for="FechaBaja"></label>
-                                        </section>
+                                            <div class="row">
+                                                <section class="col col-4">
+                                                    <label asp-for="FechaBaja"></label>
+                                                </section>
 
-                                        <section class="col col-8">
-                                            <label class="input">
-                                                <input asp-for="FechaBaja" class="form-control" />
-                                                <span asp-validation-for="FechaBaja" class="text-danger"></span>
-                                            </label>
-                                        </section>
-                                    </div>
+                                                <section class="col col-8">
+                                                    <label class="input">
+                                                        <input asp-for="FechaBaja" class="form-control" />
+                                                        <span asp-validation-for="FechaBaja" class="text-danger"></span>
+                                                    </label>
+                                                </section>
+                                            </div>
 
-                                    <div class="row">
-                                        <section class="col col-4">
-                                            <label asp-for="MemoOficioResolucion"></label>
-                                        </section>
+                                            <div class="row">
+                                                <section class="col col-4">
+                                                    <label asp-for="MemoOficioResolucion"></label>
+                                                </section>
 
-                                        <section class="col col-8">
-                                            <label class="input">
-                                                <input asp-for="MemoOficioResolucion" class="form-control" />
-                                                <span asp-validation-for="MemoOficioResolucion" class="text-danger"></span>
-                                            </label>
-                                        </section>
-                                    </div>
+                                                <section class="col col-8">
+                                                    <label class="input">
+                                                        <input asp-for="MemoOficioResolucion" class="form-control" />
+                                                        <span asp-validation-for="MemoOficioResolucion" class="text-danger"></span>
+                                                    </label>
+                                                </section>
+                                            </div>
+                                        }
+                                    }
 
                                     <legend>Activos Fijos seleccionados</legend>
                                     @{

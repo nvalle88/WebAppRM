@@ -28,18 +28,6 @@ $(document).ready(function () {
         actualizarSubtotales();
     });
     $('#tableDetallesRecepcion').DataTable().page.len(-1).draw();
-    if (isVistaDetalles)
-    {
-        $("#RecepcionActivoFijo_IdMotivoAlta").prop("disabled", "disabled");
-        $("#RecepcionActivoFijo_IdProveedor").prop("disabled", "disabled");
-        $("#RecepcionActivoFijo_IdFondoFinanciamiento").prop("disabled", "disabled");
-        $("#RecepcionActivoFijo_FechaRecepcion").prop("disabled", "disabled");
-        $("#RecepcionActivoFijo_OrdenCompra").prop("disabled", "disabled");
-        $("#RecepcionActivoFijo_PolizaSeguroActivoFijo_IdCompaniaSeguro").prop("disabled", "disabled");
-
-        if (!isPolizaSeguro)
-            $("#RecepcionActivoFijo_PolizaSeguroActivoFijo_NumeroPoliza").prop("disabled", "disabled");
-    }
     if (isRevisionActivoFijo)
         inicializarIdsArrRecepcionActivoFijoDetalleTodos();
 });

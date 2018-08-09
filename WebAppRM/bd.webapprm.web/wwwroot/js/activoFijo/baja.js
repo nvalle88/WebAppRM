@@ -6,12 +6,6 @@
     initDataTableFiltrado("tableDetallesActivoFijoSeleccionados", [thClassName.bodega, thClassName.proveedor, thClassName.motivoAlta, thClassName.fechaRecepcion, thClassName.ordenCompra, thClassName.fondoFinanciamiento, thClassName.fechaAlta, thClassName.numeroFactura]);
     $('#tableDetallesActivoFijoSeleccionados').DataTable().page.len(-1).draw();
     eventoGuardar();
-
-    if (isVistaDetalles) {
-        $("#IdMotivoBaja").prop("disabled", "disabled");
-        $("#FechaBaja").prop("disabled", "disabled");
-        $("#MemoOficioResolucion").prop("disabled", "disabled");
-    }
 });
 
 function callBackFunctionEliminarDatoEspecifico(idRecepcionActivoFijoDetalle) {

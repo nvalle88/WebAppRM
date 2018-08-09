@@ -15,7 +15,16 @@
                 <div class="jarviswidget jarviswidget-color-red" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
                     <header>
                         <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
-                        <h2>Cambio de custodio de activos fijos</h2>
+                        @{ 
+                            if (isVistaDetalles)
+                            {
+                                <h2>Detalles de cambio de custodio de activos fijos</h2>
+                            }
+                            else
+                            {
+                                <h2>Cambio de custodio de activos fijos</h2>
+                            }
+                        }
                     </header>
                     <div>
                         <div class="jarviswidget-editbox"></div>
@@ -25,44 +34,74 @@
                                 <input type="hidden" id="idsRecepcionActivoFijoDetalle" name="idsRecepcionActivoFijoDetalle" />
                                 <fieldset>
                                     <legend>Custodio que entrega</legend>
-                                    <div class="row">
-                                        <section class="col col-4">
-                                            <label asp-for="IdEmpleadoEntrega"></label>
-                                        </section>
+                                    @{ 
+                                        if (isVistaDetalles)
+                                        {
+                                            <table class="table table-hover">
+												<thead>
+													<tr>
+														<th width="50%">CAMPO</th>
+														<th width="50%">VALOR</th>
+													</tr>
+												</thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td><label asp-for="IdEmpleadoEntrega" class="negrita"></label></td>
+                                                        <td>@{await ViewContext.Writer.WriteAsync($"{Model.EmpleadoEntrega.Persona.Nombres} {Model.EmpleadoEntrega.Persona.Apellidos}");}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label asp-for="IdEmpleadoEntrega" class="negrita"></label></td>
+                                                        <td>@{await ViewContext.Writer.WriteAsync($"{Model.EmpleadoRecibe.Persona.Nombres} {Model.EmpleadoRecibe.Persona.Apellidos}");}</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label asp-for="Observaciones" class="negrita"></label></td>
+                                                        <td>@Html.DisplayFor(m => m.Observaciones)</td>
+                                                    </tr>
+                                                </tbody>
+											</table>
+                                        }
+                                        else
+                                        {
+                                            <div class="row">
+                                                <section class="col col-4">
+                                                    <label asp-for="IdEmpleadoEntrega"></label>
+                                                </section>
 
-                                        <section class="col col-8">
-                                            <label class="input">
-                                                <select asp-for="IdEmpleadoEntrega" class="form-control" asp-items="ViewBag.Empleado"></select>
-                                                <span asp-validation-for="IdEmpleadoEntrega" class="text-danger"></span>
-                                            </label>
-                                        </section>
-                                    </div>
+                                                <section class="col col-8">
+                                                    <label class="input">
+                                                        <select asp-for="IdEmpleadoEntrega" class="form-control" asp-items="ViewBag.Empleado"></select>
+                                                        <span asp-validation-for="IdEmpleadoEntrega" class="text-danger"></span>
+                                                    </label>
+                                                </section>
+                                            </div>
 
-                                    <div class="row">
-                                        <section class="col col-4">
-                                            <label asp-for="IdEmpleadoRecibe"></label>
-                                        </section>
+                                            <div class="row">
+                                                <section class="col col-4">
+                                                    <label asp-for="IdEmpleadoRecibe"></label>
+                                                </section>
 
-                                        <section class="col col-8">
-                                            <label class="input">
-                                                <select asp-for="IdEmpleadoRecibe" class="form-control" asp-items="ViewBag.Empleado"></select>
-                                                <span asp-validation-for="IdEmpleadoRecibe" class="text-danger"></span>
-                                            </label>
-                                        </section>
-                                    </div>
+                                                <section class="col col-8">
+                                                    <label class="input">
+                                                        <select asp-for="IdEmpleadoRecibe" class="form-control" asp-items="ViewBag.Empleado"></select>
+                                                        <span asp-validation-for="IdEmpleadoRecibe" class="text-danger"></span>
+                                                    </label>
+                                                </section>
+                                            </div>
 
-                                    <div class="row">
-                                        <section class="col col-4">
-                                            <label asp-for="Observaciones"></label>
-                                        </section>
+                                            <div class="row">
+                                                <section class="col col-4">
+                                                    <label asp-for="Observaciones"></label>
+                                                </section>
 
-                                        <section class="col col-8">
-                                            <label class="input">
-                                                <textarea asp-for="Observaciones" class="form-control paddingTextArea98"></textarea>
-                                                <span asp-validation-for="Observaciones" class="text-danger"></span>
-                                            </label>
-                                        </section>
-                                    </div>
+                                                <section class="col col-8">
+                                                    <label class="input">
+                                                        <textarea asp-for="Observaciones" class="form-control paddingTextArea98"></textarea>
+                                                        <span asp-validation-for="Observaciones" class="text-danger"></span>
+                                                    </label>
+                                                </section>
+                                            </div>
+                                        }
+                                    }
 
                                     @{ 
                                         if (!isVistaDetalles)

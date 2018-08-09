@@ -152,3 +152,7 @@ input, textarea{
 .form-control[disabled], fieldset[disabled] .form-control, .checkbox-inline.disabled, .checkbox.disabled label, .radio-inline.disabled, .radio.disabled label, fieldset[disabled] .checkbox label, fieldset[disabled] .checkbox-inline, fieldset[disabled] .radio label, fieldset[disabled] .radio-inline, fieldset[disabled] input[type=checkbox], fieldset[disabled] input[type=radio], input[type=checkbox].disabled, input[type=checkbox][disabled], input[type=radio].disabled, input[type=radio][disabled] {
     background: #f4f4f4 !important;
 }
+
+.negrita {
+    font-weight:bold !important;
+}

@@ -5,14 +5,10 @@
     inicializarDetallesActivoSeleccion();
     initDataTableFiltrado("tableDetallesActivoFijoBajas", [thClassName.bodega, thClassName.proveedor, thClassName.motivoAlta, thClassName.fechaRecepcion, thClassName.ordenCompra, thClassName.fondoFinanciamiento, thClassName.fechaAlta, thClassName.numeroFactura]);
     $('#tableDetallesActivoFijoBajas').DataTable().page.len(-1).draw();
-    copiarEmpleados();
-    adicionarArrRecepcionActivoFijoDetalle();
-
-    if (isVistaDetalles) {
-        $("#IdEmpleadoRecibe").prop("disabled", "disabled");
-        $("#IdEmpleadoEntrega").prop("disabled", "disabled");
-        $("#Observaciones").prop("disabled", "disabled");
+    if (isVistaDetalles == false) {
+        copiarEmpleados();
     }
+    adicionarArrRecepcionActivoFijoDetalle();
 });
 
 function adicionarArrRecepcionActivoFijoDetalle()
