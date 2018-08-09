@@ -1,0 +1,64 @@
+@model List<DepreciacionActivoFijo>
+
+<div id="content">
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                        <h2>Tabla de amortizaci&oacute;n de activo fijo</h2>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox">
+                        </div>
+                        <div class="widget-body no-padding">
+                            <table id="dt_basic" class="table table-striped table-bordered table-hover">
+                                <thead>
+                                    @{await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", 4, new ViewDataDictionary(ViewData) { { "MostrarFiltradoUltimaColumna", true } });}
+                                    <tr>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().FechaDepreciacion)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().ValorCompra)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().ValorResidual)
+                                        </th>
+                                        <th>
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().DepreciacionAcumulada)
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.FechaDepreciacion)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.ValorCompra)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.ValorResidual)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.DepreciacionAcumulada)
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+
+@section Scripts {
+    <script src='~/js/datatables/initDatatableFiltrado.min.js'></script>
+}

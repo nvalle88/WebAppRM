@@ -5,6 +5,7 @@ var mostrarNoSeleccionados = false;
 var isPrimeraSeleccion = true;
 var cantCheckSeleccionados = 0;
 var isComponentes = false;
+var funcionEvaluacionSeleccionarTodos = null;
 
 jQuery(document).ready(function (e) {
     initDataTableFiltrado("tableActivosFijos", []);
@@ -222,8 +223,15 @@ function callBackFunctionSeleccionTodos(chk)
 
 function tryMarcarCheckBoxTodos()
 {
-    var listadoRecepcionActivoFijoDetalleSeleccionado = obtenerListadoRecepcionActivoFijoDetalleSeleccionado();
-    if (listadoRecepcionActivoFijoDetalleSeleccionado.length == arrRecepcionActivoFijoDetalleTodos.length)
+    var validar = true;
+    if (funcionEvaluacionSeleccionarTodos == null) {
+        var listadoRecepcionActivoFijoDetalleSeleccionado = obtenerListadoRecepcionActivoFijoDetalleSeleccionado();
+        validar = listadoRecepcionActivoFijoDetalleSeleccionado.length == arrRecepcionActivoFijoDetalleTodos.length;
+    }
+    else
+        validar = funcionEvaluacionSeleccionarTodos();
+    
+    if (validar)
         $("#chkDetalleActivoFijo_0").prop("checked", "checked");
     else
         $("#chkDetalleActivoFijo_0").prop("checked", "");

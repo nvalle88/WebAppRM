@@ -38,6 +38,10 @@
                             }
                         </th>
                     }
+                    if (listadoDetallesActivosFijosViewModel.IsVisualizarNumeroRecepcion)
+                    {
+                        <th class="thNumeroRecepcion">@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.RecepcionActivoFijo.IdRecepcionActivoFijo)</th>
+                    }
                 }
                 <th class="thCodigosecuencial">@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.IdCodigoActivoFijo)</th>
                 <th class="thTipoActivoFijo">@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.IdTipoActivoFijo)</th>
@@ -106,7 +110,10 @@
                                     }
                                 </td>
                             }
-                            
+                            if (listadoDetallesActivosFijosViewModel.IsVisualizarNumeroRecepcion)
+                            {
+                                <td id="@String.Format("{0}{1}NumeroRecepcion", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.IdRecepcionActivoFijo.ToString() ?? "-");}</td>
+                            }
                         }
                         <td id="@String.Format("{0}{1}Codigosecuencial", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.CodigoActivoFijo?.Codigosecuencial ?? "-");}</td>
                         <td id="@String.Format("{0}{1}TipoActivoFijo", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@Html.DisplayFor(c=> item.RecepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.Nombre)</td>
@@ -181,7 +188,8 @@
                                         {
                                             <a asp-action="ListadoMantenimientos" asp-route-id="@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle">Mantenimientos</a><span> | </span>
                                             <a asp-action="ListadoProcesosJudiciales" asp-route-id="@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle">Procesos Judiciales</a><span> | </span>
-                                            <a asp-action="ListadoRevalorizaciones" asp-route-id="@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle">Revalorizaciones</a>
+                                            <a asp-action="ListadoRevalorizaciones" asp-route-id="@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle">Revalorizaciones</a><span> | </span>
+                                            <a asp-action="TablaAmortizacionActivoFijo" asp-route-id="@item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle">Tabla de amortizaci&oacute;n</a>
                                         }
                                         if (listadoDetallesActivosFijosViewModel.IsConfiguracionListadoComponentes)
                                         {

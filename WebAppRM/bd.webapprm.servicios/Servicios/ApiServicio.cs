@@ -140,7 +140,7 @@ namespace bd.webapprm.servicios.Servicios
                 return new Response { IsSuccess = true, Message = ex.Message };
             }
         }
-        public async Task<List<T>> Listar<T>(Uri baseAddress, string url) where T : class
+        public async Task<List<T>> Listar<T>(Uri baseAddress, string url)
         {
             try
             {

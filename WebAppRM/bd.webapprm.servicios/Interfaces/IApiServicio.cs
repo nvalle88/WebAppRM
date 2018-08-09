@@ -16,6 +16,6 @@ namespace bd.webapprm.servicios.Interfaces
         Task<Response> EditarAsync<T>(object model, Uri baseAddress, string url);
         Task<T> ObtenerElementoAsync<T>(object model, Uri baseAddress, string url);
         Task<T> SeleccionarAsync<T>(string id, Uri baseAddress, string url) where T : class;
-        Task<List<T>> Listar<T>(Uri baseAddress, string url) where T :class;
+        Task<List<T>> Listar<T>(Uri baseAddress, string url);
     }
 }
