@@ -13,14 +13,6 @@
 
     if (idEditar)
         deshabilitarCamposFormulario();
-
-    if (isVistaDetalles) {
-        deshabilitarCamposFormulario();
-        $("#FechaTransferencia").prop("disabled", "disabled");
-        $("#Observaciones").prop("disabled", "disabled");
-        $("#IdEmpleadoResponsableEnvio").prop("disabled", "disabled");
-        $("#IdEmpleadoResponsableRecibo").prop("disabled", "disabled");
-    }
 });
 
 function deshabilitarCamposFormulario()

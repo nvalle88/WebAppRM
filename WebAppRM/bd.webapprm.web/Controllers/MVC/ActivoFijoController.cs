@@ -372,7 +372,6 @@ namespace bd.webapprm.web.Controllers.MVC
 
         public async Task<IActionResult> RevisionActivoFijo(int? id)
         {
-            ViewData["IsVistaDetalles"] = true;
             ViewData["IsSeleccion"] = true;
             ViewData["IsRevisionActivoFijo"] = true;
             return await Recepcion(id);
@@ -918,6 +917,8 @@ namespace bd.webapprm.web.Controllers.MVC
                     {
                         IdEmpleadoEntrega = (int)cambioCustodio.TransferenciaActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijoOrigen.IdEmpleado,
                         IdEmpleadoRecibe = (int)cambioCustodio.TransferenciaActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijoDestino.IdEmpleado,
+                        EmpleadoEntrega = cambioCustodio.TransferenciaActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijoOrigen.Empleado,
+                        EmpleadoRecibe = cambioCustodio.TransferenciaActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijoDestino.Empleado,
                         Observaciones = cambioCustodio.Observaciones
                     };
                     return View("GestionarCambioCustodio", cambioCustodioViewModel);
@@ -1035,11 +1036,17 @@ namespace bd.webapprm.web.Controllers.MVC
                     {
                         IdTransferenciaActivoFijo = (int)id,
                         IdSucursalOrigen = transferenciaActivoFijoDetalle?.UbicacionActivoFijoOrigen?.Empleado?.Dependencia?.IdSucursal ?? transferenciaActivoFijoDetalle.UbicacionActivoFijoOrigen.Bodega.IdSucursal,
+                        SucursalOrigen = transferenciaActivoFijoDetalle?.UbicacionActivoFijoOrigen?.Empleado?.Dependencia?.Sucursal ?? transferenciaActivoFijoDetalle.UbicacionActivoFijoOrigen.Bodega.Sucursal,
                         IdEmpleadoEntrega = (int)transferenciaActivoFijo.TransferenciaActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijoOrigen.IdEmpleado,
+                        EmpleadoEntrega = transferenciaActivoFijo.TransferenciaActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijoOrigen.Empleado,
                         IdEmpleadoResponsableEnvio = (int)transferenciaActivoFijo.IdEmpleadoResponsableEnvio,
+                        EmpleadoResponsableEnvio = transferenciaActivoFijo.EmpleadoResponsableEnvio,
                         IdSucursalDestino = transferenciaActivoFijoDetalle?.UbicacionActivoFijoDestino?.Empleado?.Dependencia?.IdSucursal ?? transferenciaActivoFijoDetalle.UbicacionActivoFijoDestino.Bodega.IdSucursal,
+                        SucursalDestino = transferenciaActivoFijoDetalle?.UbicacionActivoFijoDestino?.Empleado?.Dependencia?.Sucursal ?? transferenciaActivoFijoDetalle.UbicacionActivoFijoDestino.Bodega.Sucursal,
                         IdEmpleadoRecibe = (int)transferenciaActivoFijo.TransferenciaActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijoDestino.IdEmpleado,
+                        EmpleadoRecibe = transferenciaActivoFijo.TransferenciaActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijoDestino.Empleado,
                         IdEmpleadoResponsableRecibo = (int)transferenciaActivoFijo.IdEmpleadoResponsableRecibo,
+                        EmpleadoResponsableRecibo = transferenciaActivoFijo.EmpleadoResponsableRecibo,
                         FechaTransferencia = transferenciaActivoFijo.FechaTransferencia,
                         Observaciones = transferenciaActivoFijo.Observaciones
                     };

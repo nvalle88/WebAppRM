@@ -21,13 +21,6 @@
 
     //Simula la detección de un código (El parámetro debe ser un código de un activo fijo en alta)
     //$("#CodigoActivoFijo_Codigosecuencial").scannerDetection('1.004.005.33');
-
-    if (isVistaDetalles) {
-        $("#NumeroInforme").prop("disabled", "disabled");
-        $("#FechaCorteInventario").prop("disabled", "disabled");
-        $("#FechaInforme").prop("disabled", "disabled");
-        $("#IdEstado").prop("disabled", "disabled");
-    }
 });
 
 function eventoLectorCodigoBarras()

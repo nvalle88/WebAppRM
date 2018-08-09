@@ -12,15 +12,6 @@
     eventoGuardar();
     partialViewFacturaActivoFijoIsCompra();
     $('#tableDetallesActivoFijoSeleccionados').DataTable().page.len(-1).draw();
-
-    if (isVistaDetalles) {
-        $("#IdMotivoAlta").prop("disabled", "disabled");
-        $("#FechaAlta").prop("disabled", "disabled");
-        $("#FechaPago").prop("disabled", "disabled");
-        $("#IdTipoUtilizacionAlta").prop("disabled", "disabled");
-        $("#FacturaActivoFijo_NumeroFactura").prop("disabled", "disabled");
-        $("#FacturaActivoFijo_FechaFactura").prop("disabled", "disabled");
-    }
 });
 
 function eventoMotivoAlta() {

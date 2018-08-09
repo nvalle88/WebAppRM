@@ -1,0 +1,27 @@
+@model InventarioActivoFijo
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th width="50%">CAMPO</th>
+            <th width="50%">VALOR</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><label asp-for="NumeroInforme" class="negrita"></label></td>
+            <td>@Html.DisplayFor(m => m.NumeroInforme)</td>
+        </tr>
+        <tr>
+            <td><label asp-for="FechaCorteInventario" class="negrita"></label></td>
+            <td>@Html.DisplayFor(m => m.FechaCorteInventario)</td>
+        </tr>
+        <tr>
+            <td><label asp-for="FechaInforme" class="negrita"></label></td>
+            <td>@Html.DisplayFor(m => m.FechaInforme)</td>
+        </tr>
+        <tr>
+            <td><label asp-for="IdEstado" class="negrita"></label></td>
+            <td>@Html.DisplayFor(m => m.Estado.Nombre)</td>
+        </tr>
+    </tbody>
+</table>

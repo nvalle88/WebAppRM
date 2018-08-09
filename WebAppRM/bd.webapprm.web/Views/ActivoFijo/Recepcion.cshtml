@@ -30,6 +30,10 @@
                             {
                                 <h2>Revisi&oacute;n de activo fijo</h2>
                             }
+                            else if (isVistaDetalles)
+                            {
+                                <h2>Detalles de recepci&oacute;n de activo fijo</h2>
+                            }
                             else
                             {
                                 <h2>Recepci&oacute;n de activo fijo</h2>
@@ -50,11 +54,119 @@
                                     }
                                 }
                                 <fieldset>
-                                    <legend>Datos generales</legend>
-                                    @{await Html.RenderPartialAsync("_DetalleDatosGeneralesRecepcion", Model);}
                                     @{ 
+                                        if (isPolizaSeguro)
+                                        {
+                                            <div class="row" style="padding-left:15px !important;padding-right:15px !important;">
+                                                <div class="alert alert-info alert-block" style="border-left-width:5px !important;">
+                                                    <h4 class="alert-heading">Informaci&oacute;n</h4>
+                                                    Establezca el N&uacute;mero de P&oacute;liza de seguro para la recepci&oacute;n de Activos Fijos.
+                                                </div>
+                                            </div>
+
+                                            <div class="row margin-top-10">
+                                                <section class="col col-4">
+                                                    <label asp-for="RecepcionActivoFijo.PolizaSeguroActivoFijo.NumeroPoliza"></label>
+                                                </section>
+
+                                                <section class="col col-8">
+                                                    <label class="input">
+                                                        <input asp-for="RecepcionActivoFijo.PolizaSeguroActivoFijo.NumeroPoliza" class="form-control" />
+                                                        <span asp-validation-for="RecepcionActivoFijo.PolizaSeguroActivoFijo.NumeroPoliza" class="text-danger"></span>
+                                                        <span id="errorNumeroPoliza" class="text-danger"></span>
+                                                    </label>
+                                                </section>
+                                            </div>
+                                        }
+
+                                        if (!isVistaDetalles && !isRevisionActivoFijo && !isPolizaSeguro)
+                                        {
+                                            <legend>Datos generales</legend>
+                                            await Html.RenderPartialAsync("_DetalleDatosGeneralesRecepcion", Model);
+                                        }
+                                        if (isVistaDetalles)
+                                        {
+                                            <legend>Datos generales</legend>
+                                            <table class="table table-hover">
+												<thead>
+													<tr>
+														<th width="50%">CAMPO</th>
+														<th width="50%">VALOR</th>
+													</tr>
+												</thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td><label asp-for="IdRecepcionActivoFijo" class="negrita"></label></td>
+                                                        <td>@Html.DisplayFor(m => m.IdRecepcionActivoFijo)</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label asp-for="RecepcionActivoFijo.IdMotivoAlta" class="negrita"></label></td>
+                                                        <td>@Html.DisplayFor(m => m.RecepcionActivoFijo.MotivoAlta.Descripcion)</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label asp-for="RecepcionActivoFijo.IdProveedor" class="negrita"></label></td>
+                                                        <td>@Html.DisplayFor(m => m.RecepcionActivoFijo.Proveedor.RazonSocial)</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label asp-for="RecepcionActivoFijo.IdFondoFinanciamiento" class="negrita"></label></td>
+                                                        <td>@Html.DisplayFor(m => m.RecepcionActivoFijo.FondoFinanciamiento.Nombre)</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label asp-for="RecepcionActivoFijo.FechaRecepcion" class="negrita"></label></td>
+                                                        <td>@Html.DisplayFor(m => m.RecepcionActivoFijo.FechaRecepcion)</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label asp-for="RecepcionActivoFijo.OrdenCompra" class="negrita"></label></td>
+                                                        <td>@Html.DisplayFor(m => m.RecepcionActivoFijo.OrdenCompra)</td>
+                                                    </tr>
+                                                </tbody>
+											</table>
+
+                                            <legend>Distribuci&oacute;n</legend>
+                                            <table class="table table-hover margin-top-25">
+												<thead>
+													<tr>
+														<th width="50%">CAMPO</th>
+														<th width="50%">VALOR</th>
+													</tr>
+												</thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td><label asp-for="SucursalActual.Nombre" class="negrita"></label></td>
+                                                        <td>@Html.DisplayFor(m => m.SucursalActual.Nombre)</td>
+                                                    </tr>
+                                                </tbody>
+											</table>
+
+                                            <legend>P&oacute;liza de seguro</legend>
+                                            <table class="table table-hover margin-top-25">
+												<thead>
+													<tr>
+														<th width="50%">CAMPO</th>
+														<th width="50%">VALOR</th>
+													</tr>
+												</thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td><label asp-for="RecepcionActivoFijo.PolizaSeguroActivoFijo.CompaniaSeguro.Nombre" class="negrita"></label></td>
+                                                        <td>@Html.DisplayFor(m => m.RecepcionActivoFijo.PolizaSeguroActivoFijo.CompaniaSeguro.Nombre)</td>
+                                                    </tr>
+                                                    @{ 
+                                                        if (Model?.RecepcionActivoFijo?.PolizaSeguroActivoFijo?.NumeroPoliza != null)
+                                                        {
+                                                            <tr>
+                                                                <td><label asp-for="RecepcionActivoFijo.PolizaSeguroActivoFijo.NumeroPoliza" class="negrita"></label></td>
+                                                                <td>@Html.DisplayFor(m => m.RecepcionActivoFijo.PolizaSeguroActivoFijo.NumeroPoliza)</td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                </tbody>
+											</table>
+                                            <legend>Activos Fijos adicionados</legend>
+                                        }
                                         if (isRevisionActivoFijo)
                                         {
+                                            <legend>Activos Fijos adicionados</legend>
                                             <div class="row" style="padding-left:15px !important;padding-right:15px !important;">
                                                 <div class="alert alert-info alert-block" style="border-left-width:5px !important;">
                                                     <h4 class="alert-heading">Informaci&oacute;n</h4>
@@ -68,7 +180,7 @@
                                 </fieldset>
                                 <footer>
                                     @{ 
-                                        if (!isVistaDetalles && !isPolizaSeguro)
+                                        if (!isVistaDetalles && !isPolizaSeguro && !isRevisionActivoFijo)
                                         {
                                             <button type="button" class="btn btn-primary" id="btn-guardar" onclick="validarRecepcion()">Guardar</button>
                                             <a asp-action="ActivosFijosRecepcionados" class="btn btn-default">Cancelar</a>

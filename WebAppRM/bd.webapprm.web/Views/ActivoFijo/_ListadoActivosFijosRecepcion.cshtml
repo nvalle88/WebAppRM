@@ -3,6 +3,8 @@
     var igrouping = Model.GroupBy(c => new { c.RecepcionActivoFijoDetalle.ActivoFijo.IdSubClaseActivoFijo, c.RecepcionActivoFijoDetalle.ActivoFijo.IdModelo, c.RecepcionActivoFijoDetalle.ActivoFijo.Nombre });
     bool isSeleccion = ViewBag.IsSeleccion ?? false;
     bool isVistaDetalles = ViewBag.IsVistaDetalles ?? false;
+    bool isRevisionActivoFijo = ViewBag.IsRevisionActivoFijo ?? false;
+    bool isPolizaSeguro = ViewBag.IsPolizaSeguro ?? false;
 }
 
 <table id="tableDetallesRecepcion" class="table table-striped table-bordered table-hover" style="width:100%;">
@@ -175,7 +177,7 @@
                             <input type="hidden" class="hiddenValidacionTecnica" id="hhValidacionTecnica_@i" name="hhValidacionTecnica_@i" value="@listadoRafd[0].RecepcionActivoFijoDetalle.ActivoFijo.ValidacionTecnica.ToString().ToLower()" />
                             <a href="javascript: void(0);" onclick="cargarModalDatosActivoFijo(@i,true)">Detalles</a>
                             @{
-                                if (!isVistaDetalles)
+                                if (!isVistaDetalles && !isPolizaSeguro && !isRevisionActivoFijo)
                                 {
                                     <span> | </span>
                                     <a href="javascript: void(0);" onclick="cargarModalDatosActivoFijo(@i,false)">Editar</a><span> | </span>
