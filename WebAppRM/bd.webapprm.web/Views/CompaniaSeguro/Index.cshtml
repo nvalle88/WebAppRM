@@ -45,6 +45,7 @@
                                                 @Html.DisplayFor(modelItem => item.FechaFinVigencia)
                                             </td>
                                             <td>
+                                                <a asp-action="Detalles" asp-route-id="@item.IdCompaniaSeguro">Detalles</a><span> | </span>
                                                 @Html.ActionLink("Editar", "Edit", new { id = item.IdCompaniaSeguro }) |
                                                 <a href="javascript:void(0);" id="@item.IdCompaniaSeguro" onclick="abrirVentanaConfirmacion('@item.IdCompaniaSeguro')" data-url="@Url.Action("Delete", values: new { id = item.IdCompaniaSeguro })" data-titulo="Eliminar" data-descripcion="&#191;Desea eliminar la Compa&ntilde;&iacute;a de Seguro... ?">Eliminar</a>
                                             </td>

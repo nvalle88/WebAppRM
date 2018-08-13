@@ -38,6 +38,9 @@ namespace bd.webapprm.entidades
         public int? IdFacturaActivoFijo { get; set; }
         public virtual FacturaActivoFijo FacturaActivoFijo { get; set; }
 
+        [NotMapped]
+        public bool IsReversarAlta { get; set; }
+
         public virtual ICollection<AltaActivoFijoDetalle> AltaActivoFijoDetalle { get; set; }
         public virtual ICollection<DocumentoActivoFijo> DocumentoActivoFijo { get; set; }
     }

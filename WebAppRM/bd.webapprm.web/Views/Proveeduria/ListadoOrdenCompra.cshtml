@@ -92,7 +92,7 @@
                                                     {
                                                         <span> | </span>
                                                         <a asp-action="GestionarOrdenCompraEnTramite" asp-route-id="@item.IdOrdenCompra">Editar</a><span> | </span>
-                                                        <a asp-action="DetallesOrdenCompraEnTramite" asp-route-id="@item.IdOrdenCompra">Procesar</a><span> | </span>
+                                                        <a href="javascript:void(0);" id="@item.IdOrdenCompra" onclick="abrirVentanaConfirmacion('@item.IdOrdenCompra')" data-url="@Url.Action("ProcesarOrdenCompra", values: new { id = item.IdOrdenCompra })" data-titulo="Procesar" data-descripcion="&#191;Desea procesar la Orden de compra... ?">Procesar</a>
                                                         <a href="javascript:void(0);" id="@item.IdOrdenCompra" onclick="abrirVentanaConfirmacion('@item.IdOrdenCompra')" data-url="@Url.Action("DeleteOrdenCompraEnTramite", values: new { id = item.IdOrdenCompra })" data-titulo="Eliminar" data-descripcion="&#191;Desea eliminar la Orden de compra... ?">Eliminar</a>
                                                     }
                                                 }

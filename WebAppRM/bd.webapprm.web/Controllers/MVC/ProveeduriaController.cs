@@ -783,6 +783,13 @@ namespace bd.webapprm.web.Controllers.MVC
         }
         #endregion
 
+        #region Descargar Archivos
+        public async Task<IActionResult> DescargarArchivo(int id)
+        {
+            return await new ActivoFijoController(apiServicio, null, null).DescargarArchivo(id);
+        }
+        #endregion
+
         #region AJAX_Bodega
         public async Task<SelectList> ObtenerSelectListBodega(int idSucursal, int? idBodega = null)
         {

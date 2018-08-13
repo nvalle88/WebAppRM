@@ -177,7 +177,7 @@ function eventoGuardar()
         validar = false;
 
     if (validar)
-        $("#btn-guardar").prop("type", "submit");
+        $("#checkout-form").submit();
 }
 
 function cargarFormularioSeleccionNumeroRecepcion()

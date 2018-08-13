@@ -13,8 +13,13 @@
                         <div class="jarviswidget-editbox"></div>
                         <div class="widget-body no-padding">
                             <div class="smart-form">
-                                @{await Html.RenderPartialAsync("_DetallesOrdenCompra", Model);}
+                                <fieldset class="padding-top-0">
+                                    <legend>Datos generales</legend>
+                                    @{await Html.RenderPartialAsync("_DetallesOrdenCompra", Model);}
 
+                                    <legend>Documentaci&oacute;n adicional de factura</legend>
+                                    @{await Html.RenderPartialAsync("_FileDownload", Model?.Factura?.DocumentoActivoFijo);}
+                                </fieldset>
                                 <footer>
                                     @{
                                         if (Model.Estado.Nombre == Estados.EnTramite)

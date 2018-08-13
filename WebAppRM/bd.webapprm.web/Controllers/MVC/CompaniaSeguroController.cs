@@ -94,7 +94,7 @@ namespace bd.webapprm.web.Controllers.MVC
                         return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}");
 
                     respuesta.Resultado = JsonConvert.DeserializeObject<CompaniaSeguro>(respuesta.Resultado.ToString());
-                    return View(respuesta.Resultado);
+                    return View(nameof(Edit), respuesta.Resultado);
                 }
                 return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}");
             }
@@ -124,7 +124,7 @@ namespace bd.webapprm.web.Controllers.MVC
                     }
                     else
                         ViewData["Error"] = Mensaje.ModeloInvalido;
-                    return View(companiaSeguro);
+                    return View(nameof(Edit), companiaSeguro);
                 }
                 return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}");
             }
@@ -168,5 +168,18 @@ namespace bd.webapprm.web.Controllers.MVC
                 return this.Redireccionar($"{Mensaje.Error}|{Mensaje.Excepcion}");
             }
         }
+
+        public async Task<IActionResult> Detalles(string id)
+        {
+            ViewData["IsVistaDetalles"] = true;
+            return await Edit(id);
+        }
+
+        #region Descargar Archivos
+        public async Task<IActionResult> DescargarArchivo(int id)
+        {
+            return await new ActivoFijoController(apiServicio, null, null).DescargarArchivo(id);
+        }
+        #endregion
     }
 }

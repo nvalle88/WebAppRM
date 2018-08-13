@@ -28,7 +28,6 @@
                                 <h2>Alta de activos fijos</h2>
                             }
                         }
-                        
                     </header>
                     <div>
                         <div class="jarviswidget-editbox"></div>
@@ -42,9 +41,9 @@
                                         <input type="hidden" asp-for="IdFacturaActivoFijo" />
                                     }
                                 }
-                                <fieldset>
-                                    <legend>Informaci&oacute;n General</legend>
+                                <fieldset @String.Format("{0}", isVistaDetalles ? "class=padding-top-0" : "")>
                                     @{ 
+                                        <legend>Informaci&oacute;n general</legend>
                                         if (isVistaDetalles)
                                         {
                                             <table class="table table-hover">
@@ -56,12 +55,12 @@
 												</thead>
                                                 <tbody>
                                                     <tr>
-                                                        <td><label asp-for="IdMotivoAlta" class="negrita"></label></td>
-                                                        <td>@Html.DisplayFor(m => m.MotivoAlta.Descripcion)</td>
-                                                    </tr>
-                                                    <tr>
                                                         <td><label asp-for="FechaAlta" class="negrita"></label></td>
                                                         <td>@Html.DisplayFor(m => m.FechaAlta)</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label asp-for="IdMotivoAlta" class="negrita"></label></td>
+                                                        <td>@Html.DisplayFor(m => m.MotivoAlta.Descripcion)</td>
                                                     </tr>
                                                     <tr>
                                                         <td><label asp-for="FechaPago" class="negrita"></label></td>
@@ -91,19 +90,6 @@
                                         {
                                             <div class="row">
                                                 <section class="col col-4">
-                                                    <label asp-for="IdMotivoAlta"></label>
-                                                </section>
-
-                                                <section class="col col-8">
-                                                    <label class="input">
-                                                        <select asp-for="IdMotivoAlta" class="form-control" asp-items="ViewBag.MotivoAlta"></select>
-                                                        <span asp-validation-for="IdMotivoAlta" class="text-danger"></span>
-                                                    </label>
-                                                </section>
-                                            </div>
-
-                                            <div class="row">
-                                                <section class="col col-4">
                                                     <label asp-for="FechaAlta"></label>
                                                 </section>
 
@@ -111,6 +97,19 @@
                                                     <label class="input">
                                                         <input class="form-control" value="@String.Format("{0}", Model?.FechaAlta.ToString("dd/MM/yyyy hh:mm tt") ?? DateTime.Now.ToString("dd/MM/yyyy hh:mm tt"))" disabled="disabled" />
                                                         <input type="hidden" asp-for="FechaAlta" />
+                                                    </label>
+                                                </section>
+                                            </div>
+
+                                            <div class="row">
+                                                <section class="col col-4">
+                                                    <label asp-for="IdMotivoAlta"></label>
+                                                </section>
+
+                                                <section class="col col-8">
+                                                    <label class="input">
+                                                        <select asp-for="IdMotivoAlta" class="form-control" asp-items="ViewBag.MotivoAlta"></select>
+                                                        <span asp-validation-for="IdMotivoAlta" class="text-danger"></span>
                                                     </label>
                                                 </section>
                                             </div>
@@ -144,9 +143,22 @@
                                     }
                                     <div id="divOpcionCompra"></div>
                                     @{ 
-                                        if (!isVistaDetalles)
+                                        if (isVistaDetalles)
                                         {
-                                            <legend>Documentaci&oacute;n adicional de los bienes</legend>
+                                            if (Model.IdFacturaActivoFijo != null)
+                                            {
+                                                <legend>Documento escaneado de la Factura</legend>
+                                                await Html.RenderPartialAsync("_FileDownload", Model?.FacturaActivoFijo?.DocumentoActivoFijo);
+                                            }
+                                        }
+
+                                        <legend>Documentaci&oacute;n adicional de los bienes</legend>
+                                        if (isVistaDetalles)
+                                        {
+                                            await Html.RenderPartialAsync("_FileDownload", Model?.DocumentoActivoFijo);
+                                        }
+                                        else
+                                        {
                                             <div class="row margin-top-25">
                                                 <section class="col col-12 width100">
                                                     <input type="file" id="file" name="file" multiple="multiple" />

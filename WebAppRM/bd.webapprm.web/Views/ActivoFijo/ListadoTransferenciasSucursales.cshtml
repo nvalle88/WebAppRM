@@ -141,7 +141,7 @@
                                                     }
                                                     if (isTransferenciasCreadas)
                                                     {
-                                                        if (item.Estado.Nombre == Estados.Creada)
+                                                        if (item.Estado.Nombre == Estados.Creada && item.IsEditar)
                                                         {
                                                             <span> | </span>
                                                             <a asp-action="GestionarTransferenciaSucursal" asp-route-id="@item.IdTransferenciaActivoFijo">Editar</a>
@@ -149,7 +149,7 @@
                                                     }
                                                     else if (isSolicitudesTransferencia)
                                                     {
-                                                        if (item.Estado.Nombre == Estados.Creada)
+                                                        if (item.Estado.Nombre == Estados.Creada && item.IsEditar)
                                                         {
                                                             <span> | </span>
                                                             <a href="javascript:void(0);" id="btn_aprobar" onclick="abrirVentanaConfirmacion('btn_aprobar')" data-url="@Url.Action("GestionarAprobacionTransferenciaSucursal", values: new { id = item.IdTransferenciaActivoFijo, id2 = true })" data-titulo="Emitir aprobaci&oacute;n" data-descripcion="&#191;Desea aprobar el Cambio de ubicaci&oacute;n entre Sucursales?">Aprobar</a><span> | </span>

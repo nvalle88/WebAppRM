@@ -1,4 +1,7 @@
 @model bd.webapprm.entidades.CompaniaSeguro
+@{ 
+    bool isVistaDetalles = ViewBag.IsVistaDetalles ?? false;
+}
 
 @section css{
     <link rel="stylesheet" href="~/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
@@ -12,7 +15,16 @@
                 <div class="jarviswidget jarviswidget-color-red" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
                     <header>
                         <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
-                        <h2>Compa&ntilde;&iacute;a de seguro</h2>
+                        @{ 
+                            if (isVistaDetalles)
+                            {
+                                <h2>Detalles de compa&ntilde;&iacute;a de seguro</h2>
+                            }
+                            else
+                            {
+                                <h2>Compa&ntilde;&iacute;a de seguro</h2>
+                            }
+                        }
                     </header>
                     <div>
                         <div class="jarviswidget-editbox"></div>
@@ -20,56 +32,94 @@
                             <form asp-action="Edit" id="checkout-form" class="smart-form" novalidate="novalidate" enctype="multipart/form-data">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <input type="hidden" asp-for="IdCompaniaSeguro" />
-                                <fieldset>
+                                <fieldset @String.Format("{0}", isVistaDetalles ? "class=padding-top-0" : "")>
                                     <legend>Datos generales</legend>
-                                    <div class="row">
-                                        <section class="col col-4">
-                                            <label asp-for="Nombre"></label>
-                                        </section>
+                                    @{ 
+                                        if (isVistaDetalles)
+                                        {
+                                            <table class="table table-hover">
+												<thead>
+													<tr>
+														<th width="50%">CAMPO</th>
+														<th width="50%">VALOR</th>
+													</tr>
+												</thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td><label asp-for="Nombre" class="negrita"></label></td>
+                                                        <td>@Html.DisplayFor(m => m.Nombre)</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label asp-for="FechaInicioVigencia" class="negrita"></label></td>
+                                                        <td>@Html.DisplayFor(m => m.FechaInicioVigencia)</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td><label asp-for="FechaFinVigencia" class="negrita"></label></td>
+                                                        <td>@Html.DisplayFor(m => m.FechaFinVigencia)</td>
+                                                    </tr>
+                                                </tbody>
+											</table>
 
-                                        <section class="col col-8">
-                                            <label class="input">
-                                                <input asp-for="Nombre" class="form-control" />
-                                                <span asp-validation-for="Nombre" class="text-danger"></span>
-                                            </label>
-                                        </section>
-                                    </div>
+                                            <legend>Documentaci&oacute;n adicional</legend>
+                                            await Html.RenderPartialAsync("_FileDownload", Model?.DocumentoActivoFijo);
+                                        }
+                                        else
+                                        {
+                                            <div class="row">
+                                                <section class="col col-4">
+                                                    <label asp-for="Nombre"></label>
+                                                </section>
 
-                                    <div class="row">
-                                        <section class="col col-4">
-                                            <label asp-for="FechaInicioVigencia"></label>
-                                        </section>
+                                                <section class="col col-8">
+                                                    <label class="input">
+                                                        <input asp-for="Nombre" class="form-control" />
+                                                        <span asp-validation-for="Nombre" class="text-danger"></span>
+                                                    </label>
+                                                </section>
+                                            </div>
 
-                                        <section class="col col-8">
-                                            <label class="input">
-                                                <input asp-for="FechaInicioVigencia" class="form-control" />
-                                                <span asp-validation-for="FechaInicioVigencia" class="text-danger"></span>
-                                            </label>
-                                        </section>
-                                    </div>
+                                            <div class="row">
+                                                <section class="col col-4">
+                                                    <label asp-for="FechaInicioVigencia"></label>
+                                                </section>
 
-                                    <div class="row">
-                                        <section class="col col-4">
-                                            <label asp-for="FechaFinVigencia"></label>
-                                        </section>
+                                                <section class="col col-8">
+                                                    <label class="input">
+                                                        <input asp-for="FechaInicioVigencia" class="form-control" />
+                                                        <span asp-validation-for="FechaInicioVigencia" class="text-danger"></span>
+                                                    </label>
+                                                </section>
+                                            </div>
 
-                                        <section class="col col-8">
-                                            <label class="input">
-                                                <input asp-for="FechaFinVigencia" class="form-control" />
-                                                <span asp-validation-for="FechaFinVigencia" class="text-danger"></span>
-                                            </label>
-                                        </section>
-                                    </div>
+                                            <div class="row">
+                                                <section class="col col-4">
+                                                    <label asp-for="FechaFinVigencia"></label>
+                                                </section>
 
-                                    <legend>Documentaci&oacute;n adicional</legend>
-                                    <div class="row margin-top-25">
-                                        <section class="col col-12 width100">
-                                            <input type="file" id="file" name="file" multiple="multiple" />
-                                        </section>
-                                    </div>
+                                                <section class="col col-8">
+                                                    <label class="input">
+                                                        <input asp-for="FechaFinVigencia" class="form-control" />
+                                                        <span asp-validation-for="FechaFinVigencia" class="text-danger"></span>
+                                                    </label>
+                                                </section>
+                                            </div>
+
+                                            <legend>Documentaci&oacute;n adicional</legend>
+                                            <div class="row margin-top-25">
+                                                <section class="col col-12 width100">
+                                                    <input type="file" id="file" name="file" multiple="multiple" />
+                                                </section>
+                                            </div>
+                                        }
+                                    }
                                 </fieldset>
                                 <footer>
-                                    <button type="submit" class="btn btn-primary" id="btn-guardar">Guardar</button>
+                                    @{ 
+                                        if (!isVistaDetalles)
+                                        {
+                                            <button type="submit" class="btn btn-primary" id="btn-guardar">Guardar</button>
+                                        }
+                                    }
                                     <a asp-action="Index" class="btn btn-default">Cancelar</a>
                                 </footer>
                             </form>

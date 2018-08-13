@@ -10,7 +10,7 @@
     eventoSucursalOrigen();
     eventoSucursalDestino();
     $("#IdSucursalOrigen").prop("disabled", "disabled");
-
+    inicializarIdsArrRecepcionActivoFijoDetalleTodos();
     if (idEditar)
         deshabilitarCamposFormulario();
 });
