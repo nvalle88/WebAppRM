@@ -13,8 +13,10 @@
                         <div class="jarviswidget-editbox"></div>
                         <div class="widget-body no-padding">
                             <div class="smart-form">
-                                @{await Html.RenderPartialAsync("_DetallesRequerimientoArticulos", Model);}
-
+                                <fieldset class="padding-top-0">
+                                    <legend>Datos generales</legend>
+                                    @{await Html.RenderPartialAsync("_DetallesRequerimientoArticulos", Model);}
+                                </fieldset>
                                 <footer>
                                     @{ 
                                         if (Model.Estado.Nombre == Estados.Solicitado)

@@ -16,7 +16,7 @@ namespace bd.webapprm.entidades
         public string Nombre { get; set; }
 
         [Required(ErrorMessage = "Debe introducir la {0}")]
-        [Display(Name = "Fecha:")]
+        [Display(Name = "Fecha de subida:")]
         [DataType(DataType.DateTime)]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy hh:mm tt}", ApplyFormatInEditMode = true)]
         public DateTime Fecha { get; set; }

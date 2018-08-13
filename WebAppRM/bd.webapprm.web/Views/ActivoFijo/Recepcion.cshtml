@@ -1,6 +1,7 @@
 @model bd.webapprm.entidades.RecepcionActivoFijoDetalle
 @{
     List<RecepcionActivoFijoDetalleSeleccionado> listadoRecepcionActivoFijoDetalle = ViewBag.ListadoRecepcionActivoFijoDetalle ?? new List<RecepcionActivoFijoDetalleSeleccionado>();
+    List<DocumentoActivoFijo> listadoDocumentosActivoFijo = ViewBag.ListadoDocumentoActivoFijo ?? new List<DocumentoActivoFijo>();
     bool isSeleccion = ViewBag.IsSeleccion ?? false;
     bool isVistaDetalles = ViewBag.IsVistaDetalles ?? false;
     bool isRevisionActivoFijo = ViewBag.IsRevisionActivoFijo ?? false;
@@ -53,7 +54,7 @@
                                         <input type="hidden" id="accion" name="accion" />
                                     }
                                 }
-                                <fieldset>
+                                <fieldset @String.Format("{0}", isVistaDetalles ? "class=padding-top-0" : "")>
                                     @{ 
                                         if (isPolizaSeguro)
                                         {
@@ -123,7 +124,7 @@
 											</table>
 
                                             <legend>Distribuci&oacute;n</legend>
-                                            <table class="table table-hover margin-top-25">
+                                            <table class="table table-hover">
 												<thead>
 													<tr>
 														<th width="50%">CAMPO</th>
@@ -139,7 +140,7 @@
 											</table>
 
                                             <legend>P&oacute;liza de seguro</legend>
-                                            <table class="table table-hover margin-top-25">
+                                            <table class="table table-hover">
 												<thead>
 													<tr>
 														<th width="50%">CAMPO</th>
@@ -162,6 +163,10 @@
                                                     }
                                                 </tbody>
 											</table>
+
+                                            <legend>Documentaci&oacute;n adicional de los bienes</legend>
+                                            await Html.RenderPartialAsync("_FileDownload", listadoDocumentosActivoFijo);
+
                                             <legend>Activos Fijos adicionados</legend>
                                         }
                                         if (isRevisionActivoFijo)

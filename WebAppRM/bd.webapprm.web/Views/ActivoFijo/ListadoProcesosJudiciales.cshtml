@@ -34,6 +34,7 @@
                                                 @Html.DisplayFor(modelItem => item.NumeroDenuncia)
                                             </td>
                                             <td>
+                                                <a asp-action="DetallesProcesoJudicial" asp-route-id="@item.IdRecepcionActivoFijoDetalle" asp-route-id2="@item.IdProcesoJudicialActivoFijo">Detalles</a><span> | </span>
                                                 @Html.ActionLink("Editar", "GestionarProcesoJudicial", new { id = item.IdRecepcionActivoFijoDetalle, id2 = item.IdProcesoJudicialActivoFijo }) |
                                                 <a href="javascript:void(0);" id="@item.IdProcesoJudicialActivoFijo" onclick="abrirVentanaConfirmacion('@item.IdProcesoJudicialActivoFijo')" data-url="@Url.Action("EliminarProcesoJudicial", values: new { id = item.IdRecepcionActivoFijoDetalle, id2 = item.IdProcesoJudicialActivoFijo })" data-titulo="Eliminar" data-descripcion="&#191;Desea eliminar el Proceso Judicial... ?">Eliminar</a>
                                             </td>

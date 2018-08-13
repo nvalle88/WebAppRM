@@ -1,4 +1,7 @@
 @model ProcesoJudicialActivoFijo
+@{ 
+    bool isVistaDetalles = ViewBag.IsVistaDetalles ?? false;
+}
 
 @section css{
     <link rel="stylesheet" type="text/css" href="~/lib/bootstrap-fileinput/css/fileinput.min.css">
@@ -11,7 +14,16 @@
                 <div class="jarviswidget jarviswidget-color-red" id="wid-id-1" data-widget-editbutton="false" data-widget-custombutton="false">
                     <header>
                         <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
-                        <h2>Proceso judicial de activo fijo</h2>
+                        @{ 
+                            if (isVistaDetalles)
+                            {
+                                <h2>Detalles de proceso judicial de activo fijo</h2>
+                            }
+                            else
+                            {
+                                <h2>Proceso judicial de activo fijo</h2>
+                            }
+                        }
                     </header>
                     <div>
                         <div class="jarviswidget-editbox"></div>
@@ -26,30 +38,60 @@
                                     }
                                 }
                                 <input type="hidden" id="idsRecepcionActivoFijoDetalle" name="idsRecepcionActivoFijoDetalle" />
-                                <fieldset>
+                                <fieldset @String.Format("{0}", isVistaDetalles ? "class=padding-top-0" : "")>
                                     <legend>Datos generales</legend>
-                                    <div class="row">
-                                        <section class="col col-4">
-                                            <label asp-for="NumeroDenuncia"></label>
-                                        </section>
+                                    @{ 
+                                        if (isVistaDetalles)
+                                        {
+                                            <table class="table table-hover">
+												<thead>
+													<tr>
+														<th width="50%">CAMPO</th>
+														<th width="50%">VALOR</th>
+													</tr>
+												</thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td><label asp-for="NumeroDenuncia" class="negrita"></label></td>
+                                                        <td>@Html.DisplayFor(m => m.NumeroDenuncia)</td>
+                                                    </tr>
+                                                </tbody>
+											</table>
 
-                                        <section class="col col-8">
-                                            <label class="input">
-                                                <input asp-for="NumeroDenuncia" class="form-control" />
-                                                <span asp-validation-for="NumeroDenuncia" class="text-danger"></span>
-                                            </label>
-                                        </section>
-                                    </div>
+                                            <legend>Documentaci&oacute;n del proceso</legend>
+                                            await Html.RenderPartialAsync("_FileDownload", Model?.DocumentoActivoFijo);
+                                        }
+                                        else
+                                        {
+                                            <div class="row">
+                                                <section class="col col-4">
+                                                    <label asp-for="NumeroDenuncia"></label>
+                                                </section>
 
-                                    <legend>Documentaci&oacute;n del Proceso</legend>
-                                    <div class="row margin-top-25">
-                                        <section class="col col-12 width100">
-                                            <input type="file" id="file" name="file" multiple="multiple" />
-                                        </section>
-                                    </div>
+                                                <section class="col col-8">
+                                                    <label class="input">
+                                                        <input asp-for="NumeroDenuncia" class="form-control" />
+                                                        <span asp-validation-for="NumeroDenuncia" class="text-danger"></span>
+                                                    </label>
+                                                </section>
+                                            </div>
+
+                                            <legend>Documentaci&oacute;n del proceso</legend>
+                                            <div class="row margin-top-25">
+                                                <section class="col col-12 width100">
+                                                    <input type="file" id="file" name="file" multiple="multiple" />
+                                                </section>
+                                            </div>
+                                        }
+                                    }
                                 </fieldset>
                                 <footer>
-                                    <button type="submit" class="btn btn-primary" id="btn-guardar">Guardar</button>
+                                    @{ 
+                                        if (!isVistaDetalles)
+                                        {
+                                            <button type="submit" class="btn btn-primary" id="btn-guardar">Guardar</button>
+                                        }
+                                    }
                                     <a asp-action="ListadoProcesosJudiciales" asp-route-id="@ViewBag.IdRecepcionActivoFijoDetalle" class="btn btn-default">Cancelar</a>
                                 </footer>
                             </form>

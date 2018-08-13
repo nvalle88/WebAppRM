@@ -9,6 +9,7 @@
         copiarEmpleados();
     }
     adicionarArrRecepcionActivoFijoDetalle();
+    inicializarIdsArrRecepcionActivoFijoDetalleTodos();
 });
 
 function adicionarArrRecepcionActivoFijoDetalle()

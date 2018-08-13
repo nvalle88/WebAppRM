@@ -64,8 +64,14 @@
                                                 @{await ViewContext.Writer.WriteAsync(item?.FacturaActivoFijo?.FechaFactura.ToString("dd/MM/yyyy hh:mm tt") ?? "-");}
                                             </td>
                                             <td>
-                                                @Html.ActionLink("Detalles", "DetallesAlta", new { id = item.IdAltaActivoFijo }) |
-                                                @Html.ActionLink("Reversar alta", "ReversarAlta", new { id = item.IdAltaActivoFijo })
+                                                @Html.ActionLink("Detalles", "DetallesAlta", new { id = item.IdAltaActivoFijo })
+                                                @{ 
+                                                    if (item.IsReversarAlta)
+                                                    {
+                                                        <span> | </span>
+                                                        <a href="javascript:void(0);" id="btn_aprobar" onclick="abrirVentanaConfirmacion('btn_aprobar')" data-url="@Url.Action("ReversarAlta", values: new { id = item.IdAltaActivoFijo })" data-titulo="Reversar alta" data-descripcion="&#191;Desea reversar el Alta de activos fijos seleccionada?">Reversar alta</a>
+                                                    }
+                                                }
                                             </td>
                                         </tr>
                                     }
