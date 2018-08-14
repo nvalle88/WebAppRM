@@ -7,6 +7,8 @@ namespace bd.webapprm.entidades.ObjectTransfer
 {
     public class CambioCustodioViewModel
     {
+        public int IdTransferencia { get; set; }
+
         [Display(Name = "Custodio que entrega:")]
         [Required(ErrorMessage = "Debe seleccionar el {0} ")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar el {0} ")]
