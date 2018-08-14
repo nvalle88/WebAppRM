@@ -937,16 +937,17 @@ namespace bd.webapprm.web.Controllers.MVC
                     if (!response.IsSuccess)
                         return this.Redireccionar($"{Mensaje.Error}|{Mensaje.RegistroNoExiste}", nameof(ListadoCambioCustodio));
 
-                    var cambioCustodio = JsonConvert.DeserializeObject<TransferenciaActivoFijo>(response.Resultado.ToString());
-                    ViewData["Empleado"] = await ObtenerSelectListEmpleado(cambioCustodio.TransferenciaActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijoOrigen.Empleado.Dependencia.IdSucursal);
-                    ViewData["ListadoRecepcionActivoFijoDetalleSeleccionado"] = await apiServicio.ObtenerElementoAsync<List<RecepcionActivoFijoDetalleSeleccionado>>(new CambioCustodioViewModel { IdEmpleadoEntrega = (int)cambioCustodio.TransferenciaActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijoOrigen.IdEmpleado, ListadoIdRecepcionActivoFijoDetalle = new List<int>() }, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/DetallesActivoFijoSeleccionadoPorEmpleado");
+                    var transferenciaActivoFijo = JsonConvert.DeserializeObject<TransferenciaActivoFijo>(response.Resultado.ToString());
+                    ViewData["Empleado"] = await ObtenerSelectListEmpleado(transferenciaActivoFijo.TransferenciaActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijoOrigen.Empleado.Dependencia.IdSucursal);
+                    ViewData["ListadoRecepcionActivoFijoDetalleSeleccionado"] = transferenciaActivoFijo.TransferenciaActivoFijoDetalle.Select(c => new RecepcionActivoFijoDetalleSeleccionado { RecepcionActivoFijoDetalle = c.RecepcionActivoFijoDetalle, Seleccionado = true }).ToList();
                     var cambioCustodioViewModel = new CambioCustodioViewModel
                     {
-                        IdEmpleadoEntrega = (int)cambioCustodio.TransferenciaActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijoOrigen.IdEmpleado,
-                        IdEmpleadoRecibe = (int)cambioCustodio.TransferenciaActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijoDestino.IdEmpleado,
-                        EmpleadoEntrega = cambioCustodio.TransferenciaActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijoOrigen.Empleado,
-                        EmpleadoRecibe = cambioCustodio.TransferenciaActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijoDestino.Empleado,
-                        Observaciones = cambioCustodio.Observaciones
+                        IdTransferencia = transferenciaActivoFijo.IdTransferenciaActivoFijo,
+                        IdEmpleadoEntrega = (int)transferenciaActivoFijo.TransferenciaActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijoOrigen.IdEmpleado,
+                        IdEmpleadoRecibe = (int)transferenciaActivoFijo.TransferenciaActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijoDestino.IdEmpleado,
+                        EmpleadoEntrega = transferenciaActivoFijo.TransferenciaActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijoOrigen.Empleado,
+                        EmpleadoRecibe = transferenciaActivoFijo.TransferenciaActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijoDestino.Empleado,
+                        Observaciones = transferenciaActivoFijo.Observaciones
                     };
                     return View(nameof(GestionarCambioCustodio), cambioCustodioViewModel);
                 }
@@ -995,6 +996,21 @@ namespace bd.webapprm.web.Controllers.MVC
         {
             ViewData["IsVistaDetalles"] = true;
             return await GestionarCambioCustodio(id);
+        }
+
+        public async Task<IActionResult> ExportarPDfCambioCustodio(int? id)
+        {
+            try
+            {
+                var fileContents = await apiServicio.ObtenerElementoAsync<byte[]>(id, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/PDFTransferenciaCambioCustodio");
+                if (fileContents.Length > 0)
+                {
+                    return File(fileContents, "application/pdf", "Acta de entrega al custodio.pdf");
+                }
+            }
+            catch (Exception)
+            { }
+            return StatusCode(500);
         }
 
         [HttpPost]
@@ -1209,6 +1225,21 @@ namespace bd.webapprm.web.Controllers.MVC
                 await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Aceptando transferencia creada de activos fijos", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webapprm" });
                 return this.Redireccionar($"{Mensaje.Error}|{Mensaje.Excepcion}", nameof(ListadoTransferenciasCreadas));
             }
+        }
+
+        public async Task<IActionResult> ExportarPDfCambioUbicacionSucursales(int? id)
+        {
+            try
+            {
+                var fileContents = await apiServicio.ObtenerElementoAsync<byte[]>(id, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/PDFTransferenciaCambioUbicacionSucursales");
+                if (fileContents.Length > 0)
+                {
+                    return File(fileContents, "application/pdf", "Acta de cambio de ubicación entre sucursales.pdf");
+                }
+            }
+            catch (Exception)
+            { }
+            return StatusCode(500);
         }
         #endregion
         #endregion
@@ -2112,13 +2143,18 @@ namespace bd.webapprm.web.Controllers.MVC
         #region Descargar Archivos
         public async Task<IActionResult> DescargarArchivo(int id)
         {
-            var response = await apiServicio.ObtenerElementoAsync<Response>(id, new Uri(WebApp.BaseAddressRM), "api/DocumentoActivoFijo/GetFile");
-            if (response.IsSuccess)
+            try
             {
-                var documentoActivoFijoTransfer = JsonConvert.DeserializeObject<DocumentoActivoFijoTransfer>(response.Resultado.ToString());
-                return File(documentoActivoFijoTransfer.Fichero, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", documentoActivoFijoTransfer.Nombre);
+                var response = await apiServicio.ObtenerElementoAsync<Response>(id, new Uri(WebApp.BaseAddressRM), "api/DocumentoActivoFijo/GetFile");
+                if (response.IsSuccess)
+                {
+                    var documentoActivoFijoTransfer = JsonConvert.DeserializeObject<DocumentoActivoFijoTransfer>(response.Resultado.ToString());
+                    return File(documentoActivoFijoTransfer.Fichero, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", documentoActivoFijoTransfer.Nombre);
+                }
             }
-            return BadRequest();
+            catch (Exception)
+            { }
+            return StatusCode(500);
         }
         #endregion
 

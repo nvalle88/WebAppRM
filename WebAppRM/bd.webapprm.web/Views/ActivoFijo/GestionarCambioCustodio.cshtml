@@ -29,28 +29,42 @@
                     <div>
                         <div class="jarviswidget-editbox"></div>
                         <div class="widget-body no-padding">
+                            @{ 
+                                if (isVistaDetalles)
+                                {
+                                    <div class="widget-body-toolbar">
+                                        <div class="row">
+                                            <div class="col-sm-4"></div>
+                                            <div class="col-sm-8 text-align-right">
+                                                <a class="btn btn-primary" asp-action="ExportarPDfCambioCustodio" asp-route-id="@Model.IdTransferencia"><i class="fa fa-print"></i> Imprimir Acta de entrega al custodio</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
                             <form asp-action="GestionarCambioCustodio" id="checkout-form" class="smart-form" novalidate="novalidate" enctype="multipart/form-data">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 <input type="hidden" id="idsRecepcionActivoFijoDetalle" name="idsRecepcionActivoFijoDetalle" />
-                                <fieldset>
-                                    <legend>Custodio que entrega</legend>
-                                    @{ 
+                                <input type="hidden" asp-for="IdTransferencia" />
+                                <fieldset @String.Format("{0}", isVistaDetalles ? "class=padding-top-0" : "")>
+                                    <legend>Datos generales</legend>
+                                    @{
                                         if (isVistaDetalles)
                                         {
                                             <table class="table table-hover">
-												<thead>
-													<tr>
-														<th width="50%">CAMPO</th>
-														<th width="50%">VALOR</th>
-													</tr>
-												</thead>
+                                                <thead>
+                                                    <tr>
+                                                        <th width="50%">CAMPO</th>
+                                                        <th width="50%">VALOR</th>
+                                                    </tr>
+                                                </thead>
                                                 <tbody>
                                                     <tr>
                                                         <td><label asp-for="IdEmpleadoEntrega" class="negrita"></label></td>
                                                         <td>@{await ViewContext.Writer.WriteAsync($"{Model.EmpleadoEntrega.Persona.Nombres} {Model.EmpleadoEntrega.Persona.Apellidos}");}</td>
                                                     </tr>
                                                     <tr>
-                                                        <td><label asp-for="IdEmpleadoEntrega" class="negrita"></label></td>
+                                                        <td><label asp-for="IdEmpleadoRecibe" class="negrita"></label></td>
                                                         <td>@{await ViewContext.Writer.WriteAsync($"{Model.EmpleadoRecibe.Persona.Nombres} {Model.EmpleadoRecibe.Persona.Apellidos}");}</td>
                                                     </tr>
                                                     <tr>
@@ -58,7 +72,7 @@
                                                         <td>@Html.DisplayFor(m => m.Observaciones)</td>
                                                     </tr>
                                                 </tbody>
-											</table>
+                                            </table>
                                         }
                                         else
                                         {
@@ -103,7 +117,7 @@
                                         }
                                     }
 
-                                    @{ 
+                                    @{
                                         if (!isVistaDetalles)
                                         {
                                             <div class="row" style="padding-left:15px !important;padding-right:15px !important;">
@@ -123,7 +137,7 @@
                                     </div>
                                 </fieldset>
                                 <footer>
-                                    @{ 
+                                    @{
                                         if (!isVistaDetalles)
                                         {
                                             <button type="button" class="btn btn-primary" id="btn-guardar">Guardar</button>

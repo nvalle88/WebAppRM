@@ -40,7 +40,7 @@
                                 }
                                 <input type="hidden" asp-for="InventarioManual" value="false" />
                                 <input type="hidden" id="idsRecepcionActivoFijoDetalleSeleccionado" name="idsRecepcionActivoFijoDetalleSeleccionado" />
-                                <fieldset>
+                                <fieldset @String.Format("{0}", isVistaDetalles ? "class=padding-top-0" : "")>
                                     <legend>Datos Generales</legend>
                                     @{ 
                                         if (isVistaDetalles)

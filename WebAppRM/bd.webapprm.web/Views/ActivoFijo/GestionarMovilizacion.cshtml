@@ -39,7 +39,7 @@
                                         <input type="hidden" asp-for="IdMovilizacionActivoFijo" />
                                     }
                                 }
-                                <fieldset>
+                                <fieldset @String.Format("{0}", isVistaDetalles ? "class=padding-top-0" : "")>
                                     <legend>Datos generales</legend>
                                     @{ 
                                         if (isVistaDetalles)
@@ -68,7 +68,7 @@
 											</table>
 
                                             <legend>Datos de empleados</legend>
-                                            <table class="table table-hover margin-top-25">
+                                            <table class="table table-hover">
 												<thead>
 													<tr>
 														<th width="50%">CAMPO</th>
