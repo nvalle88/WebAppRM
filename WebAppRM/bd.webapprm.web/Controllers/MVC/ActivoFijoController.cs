@@ -16,7 +16,6 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using bd.webapprm.entidades.ObjectTransfer;
 using bd.webapprm.servicios.Extensores;
-using MoreLinq;
 
 namespace bd.webapprm.web.Controllers.MVC
 {
@@ -2149,7 +2148,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 if (response.IsSuccess)
                 {
                     var documentoActivoFijoTransfer = JsonConvert.DeserializeObject<DocumentoActivoFijoTransfer>(response.Resultado.ToString());
-                    return File(documentoActivoFijoTransfer.Fichero, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", documentoActivoFijoTransfer.Nombre);
+                    return File(documentoActivoFijoTransfer.Fichero, MimeTypes.GetMimeType(documentoActivoFijoTransfer.Nombre), documentoActivoFijoTransfer.Nombre);
                 }
             }
             catch (Exception)
