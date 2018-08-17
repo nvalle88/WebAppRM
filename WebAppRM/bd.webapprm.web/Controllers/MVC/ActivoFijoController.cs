@@ -1004,7 +1004,8 @@ namespace bd.webapprm.web.Controllers.MVC
                 var fileContents = await apiServicio.ObtenerElementoAsync<byte[]>(id, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/PDFTransferenciaCambioCustodio");
                 if (fileContents.Length > 0)
                 {
-                    return File(fileContents, "application/pdf", "Acta de entrega al custodio.pdf");
+                    var filename = "Acta de entrega al custodio.pdf";
+                    return File(fileContents, MimeTypes.GetMimeType(filename), filename);
                 }
             }
             catch (Exception)
@@ -1233,7 +1234,8 @@ namespace bd.webapprm.web.Controllers.MVC
                 var fileContents = await apiServicio.ObtenerElementoAsync<byte[]>(id, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/PDFTransferenciaCambioUbicacionSucursales");
                 if (fileContents.Length > 0)
                 {
-                    return File(fileContents, "application/pdf", "Acta de cambio de ubicación entre sucursales.pdf");
+                    var filename = "Acta de cambio de ubicación entre sucursales.pdf";
+                    return File(fileContents, MimeTypes.GetMimeType(filename), filename);
                 }
             }
             catch (Exception)
@@ -2058,6 +2060,22 @@ namespace bd.webapprm.web.Controllers.MVC
             catch (Exception)
             { }
             return PartialView("_ListadoDetallesActivosFijos", lista);
+        }
+
+        public async Task<IActionResult> ExportarExcelMovilizacion(int? id)
+        {
+            try
+            {
+                var fileContents = await apiServicio.ObtenerElementoAsync<byte[]>(id, new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ExcelMovilizacion");
+                if (fileContents.Length > 0)
+                {
+                    var fileName = "Autorización de salida de bienes del BDE.xlsx";
+                    return File(fileContents, MimeTypes.GetMimeType(fileName), fileName);
+                }
+            }
+            catch (Exception)
+            { }
+            return StatusCode(500);
         }
         #endregion
 
