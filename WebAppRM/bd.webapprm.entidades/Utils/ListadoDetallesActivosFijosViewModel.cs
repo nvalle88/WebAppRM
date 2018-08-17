@@ -34,6 +34,7 @@ namespace bd.webapprm.entidades.Utils
         public bool IsConfiguracionListadoMovilizaciones { get; set; }
         public bool IsConfiguracionListadoGenerales { get; set; }
         public bool IsVisualizarNumeroRecepcion { get; set; }
+        public bool IsVisualizarComponentes { get; set; }
         public bool MostrarFiltradoUltimaColumna { get; set; }
         public string CallbackFunctionCheckBox { get; set; }
         public string CallbackFunctionRemoveTodos { get; set; } = "callBackFunctionEliminarDatoEspecifico";
@@ -65,7 +66,8 @@ namespace bd.webapprm.entidades.Utils
             bool? IsConfiguracionListadoMovilizacionesGestionar = null,
             bool? IsConfiguracionListadoMovilizaciones = null,
             bool? IsConfiguracionListadoGenerales = null,
-            bool? IsVisualizarNumeroRecepcion = null)
+            bool? IsVisualizarNumeroRecepcion = null,
+            bool? IsVisualizarComponentes = null)
         {
             this.IsConfiguracionSeleccion = IsConfiguracionSeleccion ?? false;
             this.IsConfiguracionSeleccionDisabled = IsConfiguracionSeleccionDisabled ?? false;
@@ -93,10 +95,8 @@ namespace bd.webapprm.entidades.Utils
             this.IsConfiguracionListadoMovilizaciones = IsConfiguracionListadoMovilizaciones ?? false;
             this.IsConfiguracionListadoGenerales = IsConfiguracionListadoGenerales ?? false;
             this.IsVisualizarNumeroRecepcion = IsVisualizarNumeroRecepcion ?? false;
-
-            if (this.IsConfiguracionSeleccionComponentes || this.IsConfiguracionDetallesRecepcion || this.IsConfiguracionSeleccionAltas || this.IsConfiguracionListadoAltas || this.IsConfiguracionListadoBajas || (this.IsConfiguracionSeleccionBajas && !this.IsConfiguracionGestionarInventarioAutomatico) || (this.IsConfiguracionListadoBajasGestionar && this.IsConfiguracionBajasGestionarEditar) || this.IsConfiguracionListadoMovilizacionesGestionar || this.IsConfiguracionListadoMovilizaciones)
-                MostrarFiltradoUltimaColumna = true;
-
+            this.IsVisualizarComponentes = IsVisualizarComponentes ?? false;
+            
             if (this.IsConfiguracionListadoComponentes || this.IsConfiguracionSeleccionComponentes || this.IsConfiguracionListadoAltas || this.IsConfiguracionListadoMantenimientos || this.IsConfiguracionListadoRevalorizaciones || this.IsConfiguracionListadoProcesosJudiciales || this.IsConfiguracionListadoBajas || this.IsConfiguracionListadoBajasGestionar || this.IsConfiguracionSeleccionBajas || this.IsConfiguracionSeleccionMovilizaciones || this.IsConfiguracionListadoMovilizacionesGestionar || this.IsConfiguracionListadoMovilizaciones || this.IsConfiguracionListadoGenerales)
                 this.IsConfiguracionDatosAlta = true;
 
@@ -151,6 +151,9 @@ namespace bd.webapprm.entidades.Utils
                 Cantidad++;
 
             if (this.IsVisualizarNumeroRecepcion)
+                Cantidad++;
+
+            if (this.IsVisualizarComponentes)
                 Cantidad++;
 
             if (IsConfiguracionDatosMovilizaciones)

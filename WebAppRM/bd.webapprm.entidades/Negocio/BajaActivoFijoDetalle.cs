@@ -23,5 +23,13 @@ namespace bd.webapprm.entidades
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar la {0}")]
         public int IdBajaActivoFijo { get; set; }
         public virtual BajaActivoFijo BajaActivoFijo { get; set; }
+
+        [Required(ErrorMessage = "Debe introducir el {0}")]
+        [Display(Name = "¿Es Componente?")]
+        public bool IsComponente { get; set; }
+
+        [NotMapped]
+        [Display(Name = "Componentes")]
+        public string Componentes { get; set; }
     }
 }

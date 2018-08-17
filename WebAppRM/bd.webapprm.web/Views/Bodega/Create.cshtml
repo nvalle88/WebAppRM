@@ -58,7 +58,11 @@
                                     </div>
 
                                     <legend>Dependencias asociadas</legend>
-                                    <select id="dependencias[]" name="dependencias[]" multiple="multiple" style="width:100%" class="select2 margin-top-10" asp-items="ViewBag.Dependencia"></select>
+                                    <div class="row">
+                                        <section class="col col-12 width100">
+                                            <select id="dependencias[]" name="dependencias[]" multiple="multiple" class="select2 margin-top-10 width100" asp-items="ViewBag.Dependencia"></select>
+                                        </section>
+                                    </div>
                                 </fieldset>
                                 <footer>
                                     <button type="submit" class="btn btn-primary" id="btn-guardar">Guardar</button>
