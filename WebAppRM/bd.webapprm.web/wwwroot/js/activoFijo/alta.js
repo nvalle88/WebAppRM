@@ -24,11 +24,10 @@ $(document).ready(function () {
         var last = null;
         var groupadmin = [];
         crearGrupo(api, rows, last, groupadmin, 0, "No. de recepción", 0, 23);
-    });
+    }, { mostrarTodos: true });
     Init_FileInput("file");
     Init_FileInput("fileFactura");
     partialViewFacturaActivoFijoIsCompra();
-    $('#tableDetallesActivoFijoSeleccionados').DataTable().page.len(-1).draw();
 });
 
 function eventoMotivoAlta() {
@@ -232,8 +231,7 @@ function partialViewListadoActivosFijosParaSeleccion()
                 var last = null;
                 var groupadmin = [];
                 crearGrupo(api, rows, last, groupadmin, 6, "Descripción de activo fijo", 0, 24);
-            });
-            $('#tableDetallesActivoFijoAltas').DataTable().page.len(-1).draw();
+            }, { mostrarTodos: true, ocultarTodos: true });
             tryMarcarCheckBoxTodos();
             $("#divContenedorRecepciones").waitMe("hide");
         }

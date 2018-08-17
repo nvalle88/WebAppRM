@@ -2,7 +2,7 @@
     Init_Select2();
     Init_DatetimePicker("Fecha", true, true);
     inicializarDetallesActivoSeleccion();
-    initDataTableFiltrado("tableDetallesAjustesInventario", []);
+    initDataTableFiltrado("tableDetallesAjustesInventario", [], null, { mostrarTodos: true }, true);
     eventoSucursal();
     eventoBodega();
     eventoGuardar();
@@ -64,7 +64,7 @@ function partialViewEmpleadoAutoriza()
 }
 
 function callBackInicializarTableListadoSeleccion() {
-    initDataTableFiltrado("tableDetallesArticulos", []);
+    initDataTableFiltrado("tableDetallesArticulos", [], null, { mostrarTodos: true, ocultarTodos: true }, true);
 }
 
 function callBackFunctionEliminarDatoEspecifico(idRecepcionActivoFijoDetalle) {

@@ -2,8 +2,6 @@
 var arrRecepcionActivoFijoDetalleTodos = [];
 var objAdicional = [];
 var mostrarNoSeleccionados = false;
-var isPrimeraSeleccion = true;
-var cantCheckSeleccionados = 0;
 var isComponentes = false;
 var funcionEvaluacionSeleccionarTodos = null;
 
@@ -170,7 +168,6 @@ function eventoCheckboxDetallesActivoFijo(checkbox)
             } catch (e) { }
         }
         try {
-            cantCheckSeleccionados--;
             var nombreFuncionCallback = chk.data("funcioncallback");
             if (nombreFuncionCallback)
                 eval(nombreFuncionCallback + "(" + idRecepcionActivoFijoDetalle + "," + seleccionado + ")");
@@ -207,10 +204,8 @@ function callBackFunctionSeleccionTodos(chk)
                     arrIds.push(arrRecepcionActivoFijoDetalleTodos[i]);
             }
         }
-        cantCheckSeleccionados = arrIds.length;
         for (var i = 0; i < arrIds.length; i++) {
             $("#chkDetalleActivoFijo_" + arrIds[i]).click();
-            isPrimeraSeleccion = false;
         }
     }
     else {
@@ -218,7 +213,6 @@ function callBackFunctionSeleccionTodos(chk)
             $("#chkDetalleActivoFijo_" + arrRecepcionActivoFijoDetalleTodos[i]).click();
         }
     }
-    isPrimeraSeleccion = true;
 }
 
 function tryMarcarCheckBoxTodos()
@@ -275,41 +269,28 @@ function mostrarOcultarColumnasPorArray(idTable, mostrarOcultar)
 
 function obtenerArrValores(idTableCopiando, idRecepcionActivoFijoDetalle, arrCeldasCopiando, isOpcionesUltimaColumna)
 {
+    var table = $('#' + idTableCopiando).DataTable();
+    var row = table.row("#" + idTableCopiando + idRecepcionActivoFijoDetalle);
     var arrValores = [];
     for (var i = 0; i < arrCeldasCopiando.length; i++) {
         if (i == (arrCeldasCopiando.length - 1)) {
             if (isOpcionesUltimaColumna) {
                 arrValores.push(arrCeldasCopiando[i]);
             }
-            else
-                arrValores.push($("#" + idTableCopiando + idRecepcionActivoFijoDetalle + arrCeldasCopiando[i]).html());
+            else {
+                arrValores.push(table.cell(row.index(), i + 1).data());
+            }
         }
-        else
-            arrValores.push($("#" + idTableCopiando + idRecepcionActivoFijoDetalle + arrCeldasCopiando[i]).html());
+        else {
+            arrValores.push(table.cell(row.index(), i + 1).data());
+        }
     }
     return arrValores;
 }
 
 function addRowDetallesActivosFijos(idTableACopiar, idTableCopiando, idRecepcionActivoFijoDetalle, arrCeldasCopiando, isOpcionesUltimaColumna) {
-    if (isPrimeraSeleccion) {
-        arrColumnasVisibleTableACopiar = obtenerArrColumnasVisible(idTableACopiar);
-        arrColumnasVisibleTableACopiando = obtenerArrColumnasVisible(idTableCopiando);
-
-        mostrarOcultarColumnasPorArray(idTableACopiar, true);
-        mostrarOcultarColumnasPorArray(idTableCopiando, true);
-    }
-
     var arrValores = obtenerArrValores(idTableCopiando, idRecepcionActivoFijoDetalle, arrCeldasCopiando, isOpcionesUltimaColumna);
     addRowDetallesActivosFijosPorArray(idTableACopiar, idRecepcionActivoFijoDetalle, arrCeldasCopiando, arrValores, isOpcionesUltimaColumna);
-    
-    if (cantCheckSeleccionados <= 0) {
-        ocultarColumnasPorArray(idTableACopiar, arrColumnasVisibleTableACopiar);
-        ocultarColumnasPorArray(idTableCopiando, arrColumnasVisibleTableACopiando);
-
-        cantCheckSeleccionados = 0;
-        arrColumnasVisibleTableACopiar = [];
-        arrColumnasVisibleTableACopiando = [];
-    }
 }
 
 function addRowDetallesActivosFijosPorArray(idTableACopiar, idRecepcionActivoFijoDetalle, arrCeldasCopiando, arrValores, isOpcionesUltimaColumna)
@@ -344,4 +325,17 @@ function agregarDashValorEmpty(valor)
         valor = "-";
 
     return valor;
+}
+
+function ocultarDatosTabla(idTable, objMostrarOcultarTodos) {
+    if (objMostrarOcultarTodos.mostrarTodos)
+        $('#' + idTable).DataTable().page.len(-1).draw();
+
+    if (objMostrarOcultarTodos.ocultarTodos)
+        $("#" + idTable + "_length").hide();
+}
+
+function ocultarColVis(idTable)
+{
+    $("#" + idTable + "_wrapper > div.dt-toolbar > div.col-sm-6.col-xs-6.hidden-xs > div.ColVis > button").hide();
 }

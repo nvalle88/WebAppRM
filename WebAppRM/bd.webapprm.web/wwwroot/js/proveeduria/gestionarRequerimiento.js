@@ -1,11 +1,11 @@
 ﻿$(document).ready(function () {
     inicializarDetallesActivoSeleccion();
-    initDataTableFiltrado("tableDetallesRequerimientos", []);
+    initDataTableFiltrado("tableDetallesRequerimientos", [], null, { mostrarTodos: true }, true);
     eventoGuardar();
 });
 
 function callBackInicializarTableListadoSeleccion() {
-    initDataTableFiltrado("tableDetallesArticulos", []);
+    initDataTableFiltrado("tableDetallesArticulos", [], null, { mostrarTodos: true, ocultarTodos: true }, true);
 }
 
 function callBackFunctionEliminarDatoEspecifico(idRecepcionActivoFijoDetalle) {

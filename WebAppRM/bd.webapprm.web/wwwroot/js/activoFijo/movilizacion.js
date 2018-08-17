@@ -3,7 +3,7 @@
     Init_DatetimePicker("FechaSalida", false, true);
     Init_DatetimePicker("FechaRetorno", false, true);
     inicializarDetallesActivoSeleccion();
-    initDataTableFiltrado("tableDetallesActivoFijoSeleccionados", [thClassName.bodega, thClassName.proveedor, thClassName.motivoAlta, thClassName.fechaRecepcion, thClassName.ordenCompra, thClassName.fondoFinanciamiento, thClassName.fechaAlta, thClassName.numeroFactura]);
+    initDataTableFiltrado("tableDetallesActivoFijoSeleccionados", [thClassName.bodega, thClassName.proveedor, thClassName.motivoAlta, thClassName.fechaRecepcion, thClassName.ordenCompra, thClassName.fondoFinanciamiento, thClassName.fechaAlta, thClassName.numeroFactura], null, { mostrarTodos: true });
     $('#tableDetallesActivoFijoSeleccionados').DataTable().page.len(-1).draw();
     eventoGuardar();
     Init_XEditable(function (idRecepcionActivoFijoDetalle, newValue) {
@@ -17,20 +17,12 @@ function callbackXEditableSuccess(idRecepcionActivoFijoDetalle, newValue)
 }
 
 function callBackInicializarTableListadoSeleccion() {
-    initDataTableFiltrado("tableDetallesActivoFijoAltas", [thClassName.bodega, thClassName.proveedor, thClassName.motivoAlta, thClassName.fechaRecepcion, thClassName.ordenCompra, thClassName.fondoFinanciamiento, thClassName.fechaAlta, thClassName.numeroFactura]);
+    initDataTableFiltrado("tableDetallesActivoFijoAltas", [thClassName.bodega, thClassName.proveedor, thClassName.motivoAlta, thClassName.fechaRecepcion, thClassName.ordenCompra, thClassName.fondoFinanciamiento, thClassName.fechaAlta, thClassName.numeroFactura], null, { mostrarTodos: true, ocultarTodos: true});
 }
 
 function callBackFunctionSeleccionAlta(idRecepcionActivoFijoDetalle, seleccionado) {
     if (seleccionado) {
         adicionarRecepcionActivoFijoDetalleSeleccionado(idRecepcionActivoFijoDetalle, true);
-
-        if (isPrimeraSeleccion) {
-            arrColumnasVisibleTableACopiar = obtenerArrColumnasVisible("tableDetallesActivoFijoSeleccionados");
-            arrColumnasVisibleTableACopiando = obtenerArrColumnasVisible("tableDetallesActivoFijoAltas");
-
-            mostrarOcultarColumnasPorArray("tableDetallesActivoFijoSeleccionados", true);
-            mostrarOcultarColumnasPorArray("tableDetallesActivoFijoAltas", true);
-        }
 
         var hIdRecepcionActivoFijoDetalle = '<input type="hidden" class="hiddenIdRecepcionActivoFijoDetalle" id="hIdRecepcionActivoFijoDetalle_' + idRecepcionActivoFijoDetalle + '" name="hIdRecepcionActivoFijoDetalle_' + idRecepcionActivoFijoDetalle + '" value="' + idRecepcionActivoFijoDetalle + '" />';
         var btnEliminarMovilizacion = "<div id='divEliminarDatosEspecificos_" + idRecepcionActivoFijoDetalle + "' class='btnEliminarDatosEspecificos' style='display:inline;'><a href='javascript: void(0);' id='btnEliminarDatosEspecifico_" + idRecepcionActivoFijoDetalle + "' onclick=abrirVentanaConfirmacion('btnEliminarDatosEspecifico_" + idRecepcionActivoFijoDetalle + "') data-funcioncallback=callBackFunctionEliminarDatoEspecifico('" + idRecepcionActivoFijoDetalle + "') data-titulo='Eliminar' data-descripcion='&#191; Desea eliminar el Activo Fijo seleccionado... ?'>Eliminar</a></div>";
@@ -43,12 +35,7 @@ function callBackFunctionSeleccionAlta(idRecepcionActivoFijoDetalle, seleccionad
 
         arrValores.push(hIdRecepcionActivoFijoDetalle + btnEliminarMovilizacion);
         addRowDetallesActivosFijosPorArray("tableDetallesActivoFijoSeleccionados", idRecepcionActivoFijoDetalle, [thClassName.codigoSecuencial, thClassName.tipoActivoFijo, thClassName.claseActivoFijo, thClassName.subClaseActivoFijo, thClassName.nombreActivoFijo, thClassName.marca, thClassName.modelo, thClassName.serie, thClassName.numeroChasis, thClassName.numeroMotor, thClassName.placa, thClassName.numeroClaveCatastral, thClassName.sucursal, thClassName.dependencia, thClassName.bodega, thClassName.empleado, thClassName.proveedor, thClassName.motivoAlta, thClassName.fechaRecepcion, thClassName.ordenCompra, thClassName.fondoFinanciamiento, thClassName.fechaAlta, thClassName.numeroFactura, thClassName.componentes], arrValores, true);
-
-        if (cantCheckSeleccionados <= 0) {
-            mostrarOcultarColumnas("tableDetallesActivoFijoSeleccionados", arrColumnasVisibleTableACopiar);
-            mostrarOcultarColumnas("tableDetallesActivoFijoAltas", arrColumnasVisibleTableACopiando);
-        }
-
+        
         Init_XEditable(function (idRecepcionActivoFijoDetalle, newValue) {
             callbackXEditableSuccess(idRecepcionActivoFijoDetalle, newValue.toUpperCase());
         });

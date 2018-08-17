@@ -13,14 +13,13 @@
         crearGrupo(api, rows, last, groupadmin, 21, "Fondo de financiamiento", 0, 25);
         crearGrupo(api, rows, last, groupadmin, 3, "Clase de activo fijo", 6, 25);
         crearGrupo(api, rows, last, groupadmin, 4, "Subclase de activo fijo", 12, 25);
-    });
-    $('#tableDetallesActivoFijoBajas').DataTable().page.len(-1).draw();
+    }, null, { mostrarTodos: true });
     eventoGuardar();
     eventoLectorCodigoBarras();
     inicializarIdsArrRecepcionActivoFijoDetalleTodos();
 
     //Simula la detección de un código (El parámetro debe ser un código de un activo fijo en alta)
-    //$("#CodigoActivoFijo_Codigosecuencial").scannerDetection('1.004.005.33');
+    //$("#CodigoActivoFijo_Codigosecuencial").scannerDetection('1.002.003.999');
 });
 
 function eventoLectorCodigoBarras()
@@ -47,6 +46,7 @@ function eventoScannerCodigosecuencial(barcode, qty)
             Init_BootBox("Activos fijos a constatar", data, "large", null, null, function () {
                 limpiarCampos();
             });
+            ajustarBootboxPorCiento(80);
         },
         error: function (errorObj) {
             mostrarNotificacion("Error", errorObj.responseText);
@@ -54,8 +54,7 @@ function eventoScannerCodigosecuencial(barcode, qty)
         },
         complete: function (data) {
             eventoLectorCodigoBarras();
-            initDataTableFiltrado("tableDetallesDatosInventario", []);
-            ajustarBootboxPorCiento(80);
+            initDataTableFiltrado("tableDetallesDatosInventario", [], null, { mostrarTodos: true, ocultarTodos: true }, true);
             $("#checkout-form").waitMe("hide");
         }
     });

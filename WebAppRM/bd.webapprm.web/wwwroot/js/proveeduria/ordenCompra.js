@@ -7,7 +7,7 @@
     partialViewProveedor();
     Init_FileInput("file");
     inicializarDetallesActivoSeleccion();
-    initDataTableFiltrado("tableDetallesOrdenCompra", []);
+    initDataTableFiltrado("tableDetallesOrdenCompra", [], null, { mostrarTodos: true }, true);
     eventoMotivoRecepcionArticulos();
 
     if (!isEditar)
@@ -137,7 +137,7 @@ function eventoSpinner()
 }
 
 function callBackInicializarTableListadoSeleccion() {
-    initDataTableFiltrado("tableDetallesArticulos", []);
+    initDataTableFiltrado("tableDetallesArticulos", [], null, { mostrarTodos: true, ocultarTodos: true }, true);
 }
 
 function eventoProveedor()
