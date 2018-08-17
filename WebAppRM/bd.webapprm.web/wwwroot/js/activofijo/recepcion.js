@@ -26,8 +26,7 @@ $(document).ready(function () {
     inicializarArrIdsFilasSeleccionados("tableDetallesRecepcion");
     initDataTableFiltrado("tableDetallesRecepcion", [], function () {
         actualizarSubtotales();
-    });
-    $('#tableDetallesRecepcion').DataTable().page.len(-1).draw();
+    }, { mostrarTodos: true });
     if (isRevisionActivoFijo)
         inicializarIdsArrRecepcionActivoFijoDetalleTodos();
 });
@@ -40,13 +39,6 @@ function actualizarSubtotales(isEditar)
     var last = null;
     var groupadmin = [];
     crearGrupoSubtotal(api, rows, last, groupadmin, 1, "Clase de activo fijo", 6, isSeleccion ? 14 : 13, 9, "tableDetallesRecepcion", isEditar);
-}
-
-function ocultarDatosTablaEspecificos()
-{
-    $(".ColVis").hide();
-    $('#tbDatosEspecificos').DataTable().page.len(-1).draw();
-    $(".dataTables_length").hide();
 }
 
 function gestionarWizard(isVistaDetalles)
@@ -908,13 +900,12 @@ function cargarModalDatosActivoFijo(idFila, isVistaDetalles)
             initArrIdFilas();
             eventoRadioDatosEspecificos();
             initComponentes();
-            initDataTableFiltrado("tbDatosEspecificos", []);
+            initDataTableFiltrado("tbDatosEspecificos", [], null, { mostrarTodos: true, ocultarTodos: true }, true);
             obtenerCategoria(function () {
                 if (idFila == -1)
                     crearFilas(1);
                 eventoCambiarCategoria();
             });
-            ocultarDatosTablaEspecificos();
             $("#IdFilaGestion").val(idFila);
 
             if (isVistaDetalles) {

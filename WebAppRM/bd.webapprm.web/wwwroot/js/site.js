@@ -389,7 +389,7 @@ function abrirVentanaConfirmacion(id) {
     });
 }
 
-function initDataTableFiltrado(idTabla, arrColumnHidden, fnDrawCallBack)
+function initDataTableFiltrado(idTabla, arrColumnHidden, fnDrawCallBack, objMostrarOcultarTodos, ocultarVis)
 {
     var responsiveHelper_datatable_fixed_column = undefined;
 
@@ -414,7 +414,10 @@ function initDataTableFiltrado(idTabla, arrColumnHidden, fnDrawCallBack)
         },
         "drawCallback": function (oSettings) {
             responsiveHelper_datatable_fixed_column.respond();
-            try { fnDrawCallBack(); } catch (e) { }
+            try {
+                if (fnDrawCallBack && fnDrawCallBack != null)
+                    fnDrawCallBack();
+            } catch (e) { }
         }
     });
     
@@ -428,6 +431,12 @@ function initDataTableFiltrado(idTabla, arrColumnHidden, fnDrawCallBack)
             columna.visible(false);
         }
     }
+
+    if (objMostrarOcultarTodos && objMostrarOcultarTodos != null)
+        ocultarDatosTabla(idTabla, objMostrarOcultarTodos);
+
+    if (ocultarVis)
+        ocultarColVis(idTabla);
 }
 
 function crearGrupo(api, rows, last, groupadmin, idColumna, textoLugar, paddingLeft, colspan) {

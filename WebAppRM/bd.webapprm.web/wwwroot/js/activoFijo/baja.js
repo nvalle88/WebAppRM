@@ -3,8 +3,7 @@
     Init_DatetimePicker("FechaBaja", true);
     inicializarDetallesActivoSeleccion();
     inicializarObjetoAdicional();
-    initDataTableFiltrado("tableDetallesActivoFijoSeleccionados", [thClassName.bodega, thClassName.proveedor, thClassName.motivoAlta, thClassName.fechaRecepcion, thClassName.ordenCompra, thClassName.fondoFinanciamiento, thClassName.fechaAlta, thClassName.numeroFactura]);
-    $('#tableDetallesActivoFijoSeleccionados').DataTable().page.len(-1).draw();
+    initDataTableFiltrado("tableDetallesActivoFijoSeleccionados", [thClassName.bodega, thClassName.proveedor, thClassName.motivoAlta, thClassName.fechaRecepcion, thClassName.ordenCompra, thClassName.fondoFinanciamiento, thClassName.fechaAlta, thClassName.numeroFactura], null, { mostrarTodos: true });
     eventoGuardar();
 });
 
@@ -14,7 +13,7 @@ function callBackFunctionEliminarDatoEspecifico(idRecepcionActivoFijoDetalle) {
 }
 
 function callBackInicializarTableListadoSeleccion() {
-    initDataTableFiltrado("tableDetallesActivoFijoBajas", [thClassName.bodega, thClassName.proveedor, thClassName.motivoAlta, thClassName.fechaRecepcion, thClassName.ordenCompra, thClassName.fondoFinanciamiento, thClassName.fechaAlta, thClassName.numeroFactura]);
+    initDataTableFiltrado("tableDetallesActivoFijoBajas", [thClassName.bodega, thClassName.proveedor, thClassName.motivoAlta, thClassName.fechaRecepcion, thClassName.ordenCompra, thClassName.fondoFinanciamiento, thClassName.fechaAlta, thClassName.numeroFactura], null, { mostrarTodos: true, ocultarTodos: true });
 }
 
 function callBackFunctionSeleccionBaja(idRecepcionActivoFijoDetalle, seleccionado) {

@@ -3,7 +3,7 @@
     eventoCustodioEntrega();
     eventoGuardar();
     inicializarDetallesActivoSeleccion();
-    initDataTableFiltrado("tableDetallesActivoFijoBajas", [thClassName.bodega, thClassName.proveedor, thClassName.motivoAlta, thClassName.fechaRecepcion, thClassName.ordenCompra, thClassName.fondoFinanciamiento, thClassName.fechaAlta, thClassName.numeroFactura]);
+    initDataTableFiltrado("tableDetallesActivoFijoBajas", [thClassName.bodega, thClassName.proveedor, thClassName.motivoAlta, thClassName.fechaRecepcion, thClassName.ordenCompra, thClassName.fondoFinanciamiento, thClassName.fechaAlta, thClassName.numeroFactura], null, { mostrarTodos: true });
     $('#tableDetallesActivoFijoBajas').DataTable().page.len(-1).draw();
     if (isVistaDetalles == false) {
         copiarEmpleados();
@@ -37,7 +37,7 @@ function partialViewActivosFijosPorCustodio()
         data: { idEmpleado: $("#IdEmpleadoEntrega").val() },
         success: function (data) {
             $("#divActivosFijosATransferir").html(data);
-            initDataTableFiltrado("tableDetallesActivoFijoBajas", [thClassName.bodega, thClassName.proveedor, thClassName.motivoAlta, thClassName.fechaRecepcion, thClassName.ordenCompra, thClassName.fondoFinanciamiento, thClassName.fechaAlta, thClassName.numeroFactura]);
+            initDataTableFiltrado("tableDetallesActivoFijoBajas", [thClassName.bodega, thClassName.proveedor, thClassName.motivoAlta, thClassName.fechaRecepcion, thClassName.ordenCompra, thClassName.fondoFinanciamiento, thClassName.fechaAlta, thClassName.numeroFactura], null, { mostrarTodos: true });
             arrRecepcionActivoFijoDetalleSeleccionado = [];
         },
         complete: function (data) {
