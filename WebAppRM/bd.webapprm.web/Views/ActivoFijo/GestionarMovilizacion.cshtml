@@ -31,6 +31,19 @@
                     <div>
                         <div class="jarviswidget-editbox"></div>
                         <div class="widget-body no-padding">
+                            @{ 
+                                @*if (isVistaDetalles)
+                                {
+                                    <div class="widget-body-toolbar">
+                                        <div class="row">
+                                            <div class="col-sm-4"></div>
+                                            <div class="col-sm-8 text-align-right">
+                                                <a class="btn btn-primary" asp-action="ExportarExcelMovilizacion" asp-route-id="@Model.IdMovilizacionActivoFijo"><i class="fa fa-print"></i> Imprimir Autorizaci&oacute;n de salida de bienes del BDE</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }*@
+                            }
                             <form asp-action="GestionarMovilizacion" id="checkout-form" class="smart-form" novalidate="novalidate" enctype="multipart/form-data">
                                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                 @{
