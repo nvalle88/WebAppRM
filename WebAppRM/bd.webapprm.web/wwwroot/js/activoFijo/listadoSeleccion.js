@@ -297,16 +297,18 @@ function addRowDetallesActivosFijosPorArray(idTableACopiar, idRecepcionActivoFij
 {
     var table = $('#' + idTableACopiar).DataTable();
     var rowNode = table.row.add(arrValores).draw().node();
-    var childrens = $(rowNode).children();
     $(rowNode).prop("id", idTableACopiar + idRecepcionActivoFijoDetalle);
-    $.each(childrens, function (index, value) {
-        if (index == (childrens.length - 1)) {
+    var row = table.row("#" + idTableACopiar + idRecepcionActivoFijoDetalle);
+
+    for (var i = 0; i < arrCeldasCopiando.length; i++) {
+        var celda = table.cell(row.index(), i).node();
+        if (i == arrCeldasCopiando.length - 1) {
             if (!isOpcionesUltimaColumna)
-                $(value).prop("id", idTableACopiar + idRecepcionActivoFijoDetalle + arrCeldasCopiando[index]);
+                $(celda).prop("id", idTableACopiar + idRecepcionActivoFijoDetalle + arrCeldasCopiando[i]);
         }
         else
-            $(value).prop("id", idTableACopiar + idRecepcionActivoFijoDetalle + arrCeldasCopiando[index]);
-    });
+            $(celda).prop("id", idTableACopiar + idRecepcionActivoFijoDetalle + arrCeldasCopiando[i]);
+    }
 }
 
 function deleteRowDetallesActivosFijos(idTableEliminar, idRecepcionActivoFijoDetalle) {

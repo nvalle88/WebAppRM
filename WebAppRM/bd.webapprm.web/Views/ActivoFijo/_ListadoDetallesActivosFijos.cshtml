@@ -21,7 +21,7 @@
     }
     <table id="@listadoDetallesActivosFijosViewModel.NombreTabla" class="table table-striped table-bordered table-hover" style="width:100%;">
         <thead>
-            @{ await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", listadoDetallesActivosFijosViewModel.Cantidad, new ViewDataDictionary(ViewData) { { "MostrarFiltradoUltimaColumna", listadoDetallesActivosFijosViewModel.MostrarFiltradoUltimaColumna } });}
+            @{ await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", listadoDetallesActivosFijosViewModel.Cantidad, new ViewDataDictionary(ViewData) { { "MostrarFiltradoUltimaColumna", !listadoDetallesActivosFijosViewModel.IsConfiguracionOpciones || isVistaDetalles } });}
             <tr>
                 @{
                     if (listadoDetallesActivosFijosViewModel.IsConfiguracionSeleccion)
@@ -74,6 +74,10 @@
                     {
                         <th class="thFechaBaja">@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.BajaActivoFijoActual.FechaBaja)</th>
                         <th class="thMotivoBaja">@Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.BajaActivoFijoActual.IdMotivoBaja)</th>
+                    }
+                    if (listadoDetallesActivosFijosViewModel.IsVisualizarComponentes)
+                    {
+                        <th class="thComponentes">@Html.DisplayNameFor(model => model.FirstOrDefault().Componentes)</th>
                     }
                     if (listadoDetallesActivosFijosViewModel.IsConfiguracionDatosMovilizaciones)
                     {
@@ -146,6 +150,10 @@
                             {
                                 <td id="@String.Format("{0}{1}FechaBaja", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.BajaActivoFijoActual?.FechaBaja != null ? item.RecepcionActivoFijoDetalle.BajaActivoFijoActual.FechaBaja.ToString("dd/MM/yyyy hh:mm tt") : "-");}</td>
                                 <td id="@String.Format("{0}{1}MotivoBaja", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(item?.RecepcionActivoFijoDetalle?.BajaActivoFijoActual?.MotivoBaja?.Nombre ?? "-");}</td>
+                            }
+                            if (listadoDetallesActivosFijosViewModel.IsVisualizarComponentes)
+                            {
+                                <td id="@String.Format("{0}{1}Componentes", listadoDetallesActivosFijosViewModel.NombreTabla, item.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle)">@{await ViewContext.Writer.WriteAsync(!String.IsNullOrEmpty(item?.Componentes) ? item.Componentes : "-");}</td>
                             }
                             if (listadoDetallesActivosFijosViewModel.IsConfiguracionDatosMovilizaciones)
                             {

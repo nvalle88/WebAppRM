@@ -687,8 +687,8 @@ namespace bd.webapprm.web.Controllers.MVC
             {
                 ViewData["MotivoAlta"] = new SelectList((await apiServicio.Listar<MotivoAlta>(new Uri(WebApp.BaseAddressRM), "api/MotivoAlta/ListarMotivoAlta")).Where(c => c.Descripcion.ToLower().Trim() != "adición"), "IdMotivoAlta", "Descripcion");
                 ViewData["TipoUtilizacionAlta"] = new SelectList(await apiServicio.Listar<TipoUtilizacionAlta>(new Uri(WebApp.BaseAddressRM), "api/TipoUtilizacionAlta/ListarTipoUtilizacionAlta"), "IdTipoUtilizacionAlta", "Nombre");
-                ViewData["Configuraciones"] = new ListadoDetallesActivosFijosViewModel(IsConfiguracionListadoAltasGestionar: true, IsConfiguracionAltasGestionarEditar: id != null, IsVisualizarNumeroRecepcion: true);
-                
+                ViewData["Configuraciones"] = new ListadoDetallesActivosFijosViewModel(IsConfiguracionListadoAltasGestionar: true, IsConfiguracionAltasGestionarEditar: id != null, IsVisualizarNumeroRecepcion: true, IsVisualizarComponentes: ViewData["IsVistaDetalles"] != null);
+
                 if (id != null)
                 {
                     var response = await apiServicio.SeleccionarAsync<Response>(id.ToString(), new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ObtenerAltaActivosFijos");
@@ -699,7 +699,8 @@ namespace bd.webapprm.web.Controllers.MVC
                     ViewData["ListadoRecepcionActivoFijoDetalleSeleccionado"] = altaActivoFijo.AltaActivoFijoDetalle.Select(c => new RecepcionActivoFijoDetalleSeleccionado
                     {
                         RecepcionActivoFijoDetalle = c.RecepcionActivoFijoDetalle,
-                        Seleccionado = true
+                        Seleccionado = true,
+                        Componentes = c.Componentes
                     }).ToList();
                     return View(nameof(GestionarAlta), altaActivoFijo);
                 }
@@ -854,7 +855,7 @@ namespace bd.webapprm.web.Controllers.MVC
         public async Task<IActionResult> ListadoActivosFijosSeleccionAltaResult(List<IdRecepcionActivoFijoDetalleSeleccionado> listadoRecepcionActivoFijoDetalleSeleccionado, List<IdRecepcionActivoFijoDetalleSeleccionado> objAdicional, int idRecepcionActivoFijo)
         {
             var lista = new List<RecepcionActivoFijoDetalleSeleccionado>();
-            ViewData["Configuraciones"] = new ListadoDetallesActivosFijosViewModel(IsConfiguracionSeleccion: true, IsConfiguracionSeleccionAltas: true, IsVisualizarNumeroRecepcion: true);
+            ViewData["Configuraciones"] = new ListadoDetallesActivosFijosViewModel(IsConfiguracionSeleccion: true, IsConfiguracionSeleccionAltas: true, IsVisualizarNumeroRecepcion: true, IsVisualizarComponentes: true);
             try
             {
                 lista = await apiServicio.ObtenerElementoAsync<List<RecepcionActivoFijoDetalleSeleccionado>>(new IdRecepcionActivoFijoDetalleSeleccionadoIdsInicialesAltaBaja
@@ -1282,7 +1283,12 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 ViewData["MotivoBaja"] = new SelectList(await apiServicio.Listar<MotivoBaja>(new Uri(WebApp.BaseAddressRM), "api/MotivoBaja/ListarMotivoBaja"), "IdMotivoBaja", "Nombre");
-                ViewData["Configuraciones"] = new ListadoDetallesActivosFijosViewModel(IsConfiguracionListadoBajasGestionar: true, IsConfiguracionBajasGestionarEditar: id != null);
+
+                var listadoDetallesActivosFijosViewModel = new ListadoDetallesActivosFijosViewModel(IsConfiguracionListadoBajasGestionar: true, IsConfiguracionBajasGestionarEditar: id != null, IsVisualizarComponentes: true);
+                if (ViewData["IsVistaDetalles"] != null)
+                    listadoDetallesActivosFijosViewModel.Cantidad++;
+                ViewData["Configuraciones"] = listadoDetallesActivosFijosViewModel;
+
                 if (id != null)
                 {
                     var response = await apiServicio.SeleccionarAsync<Response>(id.ToString(), new Uri(WebApp.BaseAddressRM), "api/ActivosFijos/ObtenerBajaActivosFijos");
@@ -1293,7 +1299,8 @@ namespace bd.webapprm.web.Controllers.MVC
                     ViewData["ListadoRecepcionActivoFijoDetalleSeleccionado"] = bajaActivoFijo.BajaActivoFijoDetalle.Select(c => new RecepcionActivoFijoDetalleSeleccionado
                     {
                         RecepcionActivoFijoDetalle = c.RecepcionActivoFijoDetalle,
-                        Seleccionado = true
+                        Seleccionado = true,
+                        Componentes = c.Componentes
                     }).ToList();
                     return View(nameof(GestionarBaja), bajaActivoFijo);
                 }
@@ -1376,7 +1383,7 @@ namespace bd.webapprm.web.Controllers.MVC
         public async Task<IActionResult> ListadoActivosFijosSeleccionBajaResult(List<IdRecepcionActivoFijoDetalleSeleccionado> listadoRecepcionActivoFijoDetalleSeleccionado, List<IdRecepcionActivoFijoDetalleSeleccionado> objAdicional)
         {
             var lista = new List<RecepcionActivoFijoDetalleSeleccionado>();
-            ViewData["Configuraciones"] = new ListadoDetallesActivosFijosViewModel(IsConfiguracionSeleccion: true, IsConfiguracionSeleccionBajas: true);
+            ViewData["Configuraciones"] = new ListadoDetallesActivosFijosViewModel(IsConfiguracionSeleccion: true, IsConfiguracionSeleccionBajas: true, IsVisualizarComponentes: true);
             try
             {
                 lista = await apiServicio.ObtenerElementoAsync<List<RecepcionActivoFijoDetalleSeleccionado>>(new IdRecepcionActivoFijoDetalleSeleccionadoIdsInicialesAltaBaja

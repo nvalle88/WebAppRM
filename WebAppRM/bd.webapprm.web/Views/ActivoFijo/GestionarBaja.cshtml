@@ -38,7 +38,7 @@
                                         <input type="hidden" asp-for="IdBajaActivoFijo" />
                                     }
                                 }
-                                <fieldset>
+                                <fieldset @String.Format("{0}", isVistaDetalles ? "class=padding-top-0" : "")>
                                     <legend>Informaci&oacute;n General</legend>
                                     @{ 
                                         if (isVistaDetalles)
