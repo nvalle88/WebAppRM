@@ -14,3 +14,7 @@ button.ColVis_Button{
 .dataTables_filter .input-group-addon + .form-control{
     padding-left:7px !important;
 }
+
+.btnAgruparFilas {
+    padding: 7px !important;
+}

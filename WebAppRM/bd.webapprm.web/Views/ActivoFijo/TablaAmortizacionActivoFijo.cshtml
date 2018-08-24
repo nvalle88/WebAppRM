@@ -1,4 +1,7 @@
 @model List<DepreciacionActivoFijo>
+@{
+    var nombreTabla = "dt_basic";
+}
 
 <div id="content">
     <section id="widget-grid" class="">
@@ -13,21 +16,21 @@
                         <div class="jarviswidget-editbox">
                         </div>
                         <div class="widget-body no-padding">
-                            <table id="dt_basic" class="table table-striped table-bordered table-hover">
+                            <table id="@nombreTabla" class="table table-striped table-bordered table-hover">
                                 <thead>
                                     @{await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", 4, new ViewDataDictionary(ViewData) { { "MostrarFiltradoUltimaColumna", true } });}
                                     <tr>
-                                        <th>
+                                        <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.fechaDepreciacion)">
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().FechaDepreciacion)
                                         </th>
-                                        <th>
+                                        <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.valorCompra)">
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().ValorCompra)
                                         </th>
-                                        <th>
-                                            @Html.DisplayNameFor(model => model.FirstOrDefault().ValorResidual)
-                                        </th>
-                                        <th>
+                                        <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.depreciacion)">
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().DepreciacionAcumulada)
+                                        </th>
+                                        <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.valorResidual)">
+                                            @Html.DisplayNameFor(model => model.FirstOrDefault().ValorResidual)
                                         </th>
                                     </tr>
                                 </thead>
@@ -42,10 +45,10 @@
                                                 @Html.DisplayFor(modelItem => item.ValorCompra)
                                             </td>
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.ValorResidual)
+                                                @Html.DisplayFor(modelItem => item.DepreciacionAcumulada)
                                             </td>
                                             <td>
-                                                @Html.DisplayFor(modelItem => item.DepreciacionAcumulada)
+                                                @Html.DisplayFor(modelItem => item.ValorResidual)
                                             </td>
                                         </tr>
                                     }
@@ -61,4 +64,7 @@
 
 @section Scripts {
     <script src='~/js/datatables/initDatatableFiltrado.min.js'></script>
+    <script src="~/lib/bootbox/bootbox.min.js"></script>
+    <script src='~/js/activoFijo/listadoSeleccion.min.js'></script>
+    <script src="~/js/activoFijo/listadoAgrupacion.min.js"></script>
 }

@@ -1,25 +1,28 @@
 @model List<InventarioActivoFijo>
+@{
+    var nombreTabla = "dt_basic";
+}
 
 <table id="dt_basic" class="table table-striped table-bordered table-hover" style="width:100%;">
     <thead>
         @{await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", 6);}
         <tr>
-            <th>
+            <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.numeroInforme)">
                 @Html.DisplayNameFor(model => model.FirstOrDefault().NumeroInforme)
             </th>
-            <th>
+            <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.fechaCorteInventario)">
                 @Html.DisplayNameFor(model => model.FirstOrDefault().FechaCorteInventario)
             </th>
-            <th>
+            <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.fechaInforme)">
                 @Html.DisplayNameFor(model => model.FirstOrDefault().FechaInforme)
             </th>
-            <th>
+            <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.estado)">
                 @Html.DisplayNameFor(model => model.FirstOrDefault().IdEstado)
             </th>
-            <th>
+            <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.inventarioManual)">
                 @Html.DisplayNameFor(model => model.FirstOrDefault().InventarioManual)
             </th>
-            <th>
+            <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.opciones)">
                 Opciones
             </th>
         </tr>
@@ -44,7 +47,7 @@
                     @{await ViewContext.Writer.WriteAsync(item.InventarioManual ? "Manual" : "Autom\u00E1tico");}
                 </td>
                 <td>
-                    
+
                     @{
                         if (item.InventarioManual)
                         {

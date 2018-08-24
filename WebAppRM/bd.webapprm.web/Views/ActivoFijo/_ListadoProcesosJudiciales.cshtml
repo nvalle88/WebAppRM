@@ -1,0 +1,46 @@
+@model ICollection<ProcesoJudicialActivoFijo>
+@{
+    var nombreTabla = ViewBag.NombreTabla ?? "dt_basic";
+    bool isVistaDetalles = ViewBag.IsVistaDetalles ?? false;
+}
+
+<div class="table-responsive">
+    <table id="@nombreTabla" class="table table-striped table-bordered table-hover" style="width:100%;">
+        <thead>
+            <tr>
+                @{await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", isVistaDetalles ? 1 : 2, new ViewDataDictionary(ViewData) { { "MostrarFiltradoUltimaColumna", isVistaDetalles } });}
+                <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.numeroDenuncia)">
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().NumeroDenuncia)
+                </th>
+                @{
+                    if (!isVistaDetalles)
+                    {
+                        <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.opciones)">
+                            Opciones
+                        </th>
+                    }
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NumeroDenuncia)
+                    </td>
+                    @{
+                        if (!isVistaDetalles)
+                        {
+                            <td>
+                                <a asp-action="DetallesProcesoJudicial" asp-route-id="@item.IdRecepcionActivoFijoDetalle" asp-route-id2="@item.IdProcesoJudicialActivoFijo">Detalles</a><span> | </span>
+                                @Html.ActionLink("Editar", "GestionarProcesoJudicial", new { id = item.IdRecepcionActivoFijoDetalle, id2 = item.IdProcesoJudicialActivoFijo }) |
+                                <a href="javascript:void(0);" id="@item.IdProcesoJudicialActivoFijo" onclick="abrirVentanaConfirmacion('@item.IdProcesoJudicialActivoFijo')" data-url="@Url.Action("EliminarProcesoJudicial", values: new { id = item.IdRecepcionActivoFijoDetalle, id2 = item.IdProcesoJudicialActivoFijo })" data-titulo="Eliminar" data-descripcion="&#191;Desea eliminar el Proceso Judicial... ?">Eliminar</a>
+                            </td>
+                        }
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

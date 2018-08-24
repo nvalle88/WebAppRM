@@ -1,0 +1,81 @@
+@model List<TransferenciaActivoFijoDetalle>
+@{
+    var nombreTabla = ViewBag.NombreTabla ?? "dt_basic";
+}
+
+<div class="table-responsive">
+    <table id="@nombreTabla" class="table table-striped table-bordered table-hover" style="width:100%;">
+        <thead>
+            <tr>
+                @{await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", 10, new ViewDataDictionary(ViewData) { { "MostrarFiltradoUltimaColumna", true } });}
+                <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.sucursalOrigen)">
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().TransferenciaActivoFijo.SucursalOrigen)
+                </th>
+                <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.empleadoResponsableEnvio)">
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().TransferenciaActivoFijo.IdEmpleadoResponsableEnvio)
+                </th>
+                <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.empleadoEntrega)">
+                    Custodio que entrega:
+                </th>
+                <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.sucursalDestino)">
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().TransferenciaActivoFijo.SucursalDestino)
+                </th>
+                <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.empleadoResponsableRecibo)">
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().TransferenciaActivoFijo.IdEmpleadoResponsableRecibo)
+                </th>
+                <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.empleadoRecibe)">
+                    Custodio que recibe:
+                </th>
+                <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.fechaTransferencia)">
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().TransferenciaActivoFijo.FechaTransferencia)
+                </th>
+                <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.motivoTransferencia)">
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().TransferenciaActivoFijo.IdMotivoTransferencia)
+                </th>
+                <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.estado)">
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().TransferenciaActivoFijo.IdEstado)
+                </th>
+                <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.observaciones)">
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().TransferenciaActivoFijo.Observaciones)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TransferenciaActivoFijo.SucursalOrigen.Nombre)
+                    </td>
+                    <td>
+                        @{await ViewContext.Writer.WriteAsync(item.TransferenciaActivoFijo.EmpleadoResponsableEnvio != null ? $"{item.TransferenciaActivoFijo.EmpleadoResponsableEnvio.Persona.Nombres} {item.TransferenciaActivoFijo.EmpleadoResponsableEnvio.Persona.Apellidos}" : "-");}
+                    </td>
+                    <td>
+                        @{await ViewContext.Writer.WriteAsync(item.UbicacionActivoFijoOrigen.Empleado != null ? $"{item.UbicacionActivoFijoOrigen.Empleado.Persona.Nombres} {item.UbicacionActivoFijoOrigen.Empleado.Persona.Apellidos}" : "-");}
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TransferenciaActivoFijo.SucursalDestino.Nombre)
+                    </td>
+                    <td>
+                        @{await ViewContext.Writer.WriteAsync(item.TransferenciaActivoFijo.EmpleadoResponsableRecibo != null ? $"{item.TransferenciaActivoFijo.EmpleadoResponsableRecibo.Persona.Nombres} {item.TransferenciaActivoFijo.EmpleadoResponsableRecibo.Persona.Apellidos}" : "-");}
+                    </td>
+                    <td>
+                        @{await ViewContext.Writer.WriteAsync(item.UbicacionActivoFijoDestino.Empleado != null ? $"{item.UbicacionActivoFijoDestino.Empleado.Persona.Nombres} {item.UbicacionActivoFijoDestino.Empleado.Persona.Apellidos}" : "-");}
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TransferenciaActivoFijo.FechaTransferencia)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TransferenciaActivoFijo.MotivoTransferencia.Motivo_Transferencia)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TransferenciaActivoFijo.Estado.Nombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TransferenciaActivoFijo.Observaciones)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

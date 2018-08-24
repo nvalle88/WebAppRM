@@ -1,4 +1,7 @@
 @model List<bd.webapprm.entidades.BajaActivoFijo>
+@{
+    var nombreTabla = "dt_basic";
+}
 
 <div id="content">
     <p>
@@ -20,19 +23,19 @@
                                 <thead>
                                     @{await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", 5);}
                                     <tr>
-                                        <th>
+                                        <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.sucursal)">
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().BajaActivoFijoDetalle.FirstOrDefault().RecepcionActivoFijoDetalle.UbicacionActivoFijoActual.Bodega.IdSucursal)
                                         </th>
-                                        <th>
+                                        <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.fechaBaja)">
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().FechaBaja)
                                         </th>
-                                        <th>
+                                        <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.motivoBaja)">
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().IdMotivoBaja)
                                         </th>
-                                        <th>
+                                        <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.memoOficioResolucion)">
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().MemoOficioResolucion)
                                         </th>
-                                        <th>Opciones</th>
+                                        <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.opciones)">Opciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -69,4 +72,7 @@
 
 @section Scripts {
     <script src='~/js/datatables/initDatatableFiltrado.min.js'></script>
+    <script src="~/lib/bootbox/bootbox.min.js"></script>
+    <script src='~/js/activoFijo/listadoSeleccion.min.js'></script>
+    <script src="~/js/activoFijo/listadoAgrupacion.min.js"></script>
 }

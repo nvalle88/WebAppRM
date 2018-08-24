@@ -68,4 +68,10 @@ namespace bd.webapprm.entidades.ObjectTransfer
         public string Propiedad { get; set; }
         public string Valor { get; set; }
     }
+
+    public class PropiedadValorSeleccionado
+    {
+        public PropiedadValor PropiedadValor { get; set; }
+        public bool Seleccionado { get; set; }
+    }
 }

@@ -1,5 +1,9 @@
 @model bd.webapprm.entidades.RecepcionActivoFijoDetalle
-<script src="~/lib/JsBarcode-master/dist/JsBarcode.all.min.js"></script>
+
+@section css{
+    <link rel="stylesheet" type="text/css" href="~/css/activoFijo/recepcion.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/tableSmartForm.min.css" />
+}
 <div id="content">
     <section id="widget-grid" class="">
         <div class="row">
@@ -7,40 +11,311 @@
                 <div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
                     <header>
                         <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
-                        <h2>Hoja de vida del activo fijo</h2>
+                        <h2>Reportes</h2>
                     </header>
-
-
                     <div>
                         <div class="jarviswidget-editbox"></div>
                         <div class="widget-body no-padding">
+                            <div class="widget-body-toolbar">
+                                <div class="row">
+                                    <div class="col-sm-4"></div>
+                                    <div class="col-sm-8 text-align-right">
+                                        <a class="btn btn-primary" asp-action="ExportarExcelHojaVida" asp-route-id="@Model.IdRecepcionActivoFijoDetalle"><i class="fa fa-print"></i> Imprimir Hoja de vida de activo fijo</a>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="padding-10">
                                 <br>
                                 <div class="pull-left">
-                                    <h1 style="font-size:260% !important;"><i class="fa fa-file-text-o"></i> Hoja de vida del activo fijo</h1>
-                                </div>
-                                <div class="pull-right">
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <div>
-                                                <div class="font-md">
-                                                    <strong>Fecha:&nbsp;&nbsp;&nbsp;&nbsp;</strong>
-                                                    <span class="pull-right"> <i class="fa fa-calendar"></i>&nbsp;&nbsp;@DateTime.Now.ToString("dd/MM/yyyy hh:mm tt") </span>
-                                                </div>
-                                            </div>
-                                            <br>
-                                            <div class="well well-sm  bg-color-darken txt-color-white no-border">
-                                            </div>
-                                            <br>
-                                            <br>
-                                        </div>
-                                    </div>
+                                    <h3 class="margin-top-0" style="font-size:212% !important;"><i class="fa fa-file-text-o"></i> Hoja de vida de activo fijo</h3>
                                 </div>
                                 <div class="clearfix"></div>
+                                <div class="smart-form">
+                                    <fieldset class="padding-top-0">
+                                        <div class="widget-body">
+                                            <ul id="myTab1" class="nav nav-tabs bordered">
+                                                <li class="active">
+                                                    <a href="#s1" data-toggle="tab" aria-expanded="true"> Datos generales</a>
+                                                </li>
+                                                <li class="">
+                                                    <a href="#s2" data-toggle="tab" aria-expanded="false"> Historial de mantenimientos</a>
+                                                </li>
+                                                <li class="">
+                                                    <a href="#s3" data-toggle="tab" aria-expanded="false"> Historial de movimientos</a>
+                                                </li>
+                                                <li class="">
+                                                    <a href="#s4" data-toggle="tab" aria-expanded="false"> Historial de custodios</a>
+                                                </li>
+                                                <li class="">
+                                                    <a href="#s5" data-toggle="tab" aria-expanded="false"> Procesos judiciales</a>
+                                                </li>
+                                            </ul>
+                                            <div id="myTabContent1" class="tab-content padding-10">
+                                                <div class="tab-pane fade active in" id="s1">
+                                                    <fieldset class="padding-top-0">
+                                                        <legend>Clasificaci&oacute;n</legend>
+                                                        <table class="table table-hover">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th width="50%">CAMPO</th>
+                                                                    <th width="50%">VALOR</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td><label asp-for="ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.IdTipoActivoFijo" class="negrita"></label></td>
+                                                                    <td>@Html.DisplayFor(m => m.ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.TipoActivoFijo.Nombre)</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><label asp-for="ActivoFijo.SubClaseActivoFijo.IdClaseActivoFijo" class="negrita"></label></td>
+                                                                    <td>@Html.DisplayFor(m => m.ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.Nombre)</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><label asp-for="ActivoFijo.IdSubClaseActivoFijo" class="negrita"></label></td>
+                                                                    <td>@Html.DisplayFor(m => m.ActivoFijo.SubClaseActivoFijo.Nombre)</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><label asp-for="ActivoFijo.SubClaseActivoFijo.Subramo.IdRamo" class="negrita"></label></td>
+                                                                    <td>@Html.DisplayFor(m => m.ActivoFijo.SubClaseActivoFijo.Subramo.Ramo.Nombre)</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><label asp-for="ActivoFijo.SubClaseActivoFijo.IdSubramo" class="negrita"></label></td>
+                                                                    <td>@Html.DisplayFor(m => m.ActivoFijo.SubClaseActivoFijo.Subramo.Nombre)</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
 
-                                <fieldset style="padding:15px 15px !important;">
-                                    @{ await Html.RenderPartialAsync("_HojaVidaActivo", Model); }
-                                </fieldset>
+                                                        <legend>Categor&iacute;a</legend>
+                                                        <table class="table table-hover">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th width="50%">CAMPO</th>
+                                                                    <th width="50%">VALOR</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td><label asp-for="ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.IdCategoriaActivoFijo" class="negrita"></label></td>
+                                                                    <td>@Html.DisplayFor(m => m.ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.CategoriaActivoFijo.Nombre)</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><label asp-for="Serie" class="negrita"></label></td>
+                                                                    <td>@{await ViewContext.Writer.WriteAsync(Model?.Serie ?? "-");}</td>
+                                                                </tr>
+                                                                @{
+                                                                    if (Model.ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.CategoriaActivoFijo.Nombre == Categorias.Edificio)
+                                                                    {
+                                                                        <tr>
+                                                                            <td><label asp-for="RecepcionActivoFijoDetalleEdificio.NumeroClaveCatastral" class="negrita"></label></td>
+                                                                            <td>@{await ViewContext.Writer.WriteAsync(Model?.RecepcionActivoFijoDetalleEdificio?.NumeroClaveCatastral ?? "-");}</td>
+                                                                        </tr>
+                                                                    }
+                                                                    else if (Model.ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.CategoriaActivoFijo.Nombre == Categorias.Vehiculo)
+                                                                    {
+                                                                        <tr>
+                                                                            <td><label asp-for="RecepcionActivoFijoDetalleVehiculo.NumeroChasis" class="negrita"></label></td>
+                                                                            <td>@{await ViewContext.Writer.WriteAsync(Model?.RecepcionActivoFijoDetalleVehiculo?.NumeroChasis ?? "-");}</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td><label asp-for="RecepcionActivoFijoDetalleVehiculo.NumeroMotor" class="negrita"></label></td>
+                                                                            <td>@{await ViewContext.Writer.WriteAsync(Model?.RecepcionActivoFijoDetalleVehiculo?.NumeroMotor ?? "-");}</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td><label asp-for="RecepcionActivoFijoDetalleVehiculo.Placa" class="negrita"></label></td>
+                                                                            <td>@{await ViewContext.Writer.WriteAsync(Model?.RecepcionActivoFijoDetalleVehiculo?.Placa ?? "-");}</td>
+                                                                        </tr>
+                                                                    }
+                                                                }
+                                                            </tbody>
+                                                        </table>
+
+                                                        <legend>Datos generales</legend>
+                                                        <table class="table table-hover">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th width="50%">CAMPO</th>
+                                                                    <th width="50%">VALOR</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td><label asp-for="ActivoFijo.Modelo.IdMarca" class="negrita"></label></td>
+                                                                    <td>@Html.DisplayFor(m => m.ActivoFijo.Modelo.Marca.Nombre)</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><label asp-for="ActivoFijo.IdModelo" class="negrita"></label></td>
+                                                                    <td>@Html.DisplayFor(m => m.ActivoFijo.Modelo.Nombre)</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><label asp-for="ActivoFijo.Nombre" class="negrita"></label></td>
+                                                                    <td>@Html.DisplayFor(m => m.ActivoFijo.Nombre)</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><label asp-for="ActivoFijo.ValorCompraReal" class="negrita"></label></td>
+                                                                    <td>@Html.DisplayFor(m => m.ActivoFijo.ValorCompraReal)</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><label asp-for="ActivoFijo.Depreciacion" class="negrita"></label></td>
+                                                                    <td>
+                                                                        @{
+                                                                            await Html.RenderPartialAsync("_CheckBoxSeleccion", new ViewDataDictionary(ViewData){
+                                                                                { "Seleccionado", Model.ActivoFijo.Depreciacion },
+                                                                                { "IdRecepcionActivoFijoDetalle", 1 },
+                                                                                { "IsConfiguracionSeleccionDisabled", true },
+                                                                                { "ClaseCSS", "padding-left-0" }
+                                                                            });
+                                                                        }
+                                                                    </td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><label asp-for="ActivoFijo.ValidacionTecnica" class="negrita"></label></td>
+                                                                    <td>
+                                                                        @{
+                                                                            await Html.RenderPartialAsync("_CheckBoxSeleccion", new ViewDataDictionary(ViewData){
+                                                                                { "Seleccionado", Model.ActivoFijo.ValidacionTecnica },
+                                                                                { "IdRecepcionActivoFijoDetalle", 2 },
+                                                                                { "IsConfiguracionSeleccionDisabled", true },
+                                                                                { "ClaseCSS", "padding-left-0" }
+                                                                            });
+                                                                        }
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+
+                                                        <legend>Datos de recepci&oacute;n</legend>
+                                                        <table class="table table-hover">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th width="50%">CAMPO</th>
+                                                                    <th width="50%">VALOR</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td><label asp-for="IdRecepcionActivoFijo" class="negrita"></label></td>
+                                                                    <td>@Html.DisplayFor(m => m.IdRecepcionActivoFijo)</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><label asp-for="RecepcionActivoFijo.IdMotivoAlta" class="negrita"></label></td>
+                                                                    <td>@Html.DisplayFor(m => m.RecepcionActivoFijo.MotivoAlta.Descripcion)</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><label asp-for="RecepcionActivoFijo.IdProveedor" class="negrita"></label></td>
+                                                                    <td>@Html.DisplayFor(m => m.RecepcionActivoFijo.Proveedor.RazonSocial)</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><label asp-for="RecepcionActivoFijo.IdFondoFinanciamiento" class="negrita"></label></td>
+                                                                    <td>@Html.DisplayFor(m => m.RecepcionActivoFijo.FondoFinanciamiento.Nombre)</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><label asp-for="RecepcionActivoFijo.FechaRecepcion" class="negrita"></label></td>
+                                                                    <td>@Html.DisplayFor(m => m.RecepcionActivoFijo.FechaRecepcion)</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><label asp-for="RecepcionActivoFijo.OrdenCompra" class="negrita"></label></td>
+                                                                    <td>@Html.DisplayFor(m => m.RecepcionActivoFijo.OrdenCompra)</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+
+                                                        <legend>Distribuci&oacute;n</legend>
+                                                        <table class="table table-hover">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th width="50%">CAMPO</th>
+                                                                    <th width="50%">VALOR</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td><label asp-for="SucursalActual.Nombre" class="negrita"></label></td>
+                                                                    <td>@Html.DisplayFor(m => m.SucursalActual.Nombre)</td>
+                                                                </tr>
+                                                                @{
+                                                                    if (Model.UbicacionActivoFijoActual.IdEmpleado != null)
+                                                                    {
+                                                                        <tr>
+                                                                            <td><label asp-for="UbicacionActivoFijoActual.Empleado.IdDependencia" class="negrita"></label></td>
+                                                                            <td>@{await ViewContext.Writer.WriteAsync(Model?.UbicacionActivoFijoActual?.Empleado?.Dependencia?.Nombre ?? "-");}</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td><label asp-for="UbicacionActivoFijoActual.IdEmpleado" class="negrita"></label></td>
+                                                                            <td>@{await ViewContext.Writer.WriteAsync($"{Model.UbicacionActivoFijoActual.Empleado.Persona.Nombres} {Model.UbicacionActivoFijoActual.Empleado.Persona.Apellidos}");}</td>
+                                                                        </tr>
+                                                                    }
+                                                                    else
+                                                                    {
+                                                                        <tr>
+                                                                            <td><label asp-for="UbicacionActivoFijoActual.Empleado.Dependencia.IdBodega" class="negrita"></label></td>
+                                                                            <td>@{await ViewContext.Writer.WriteAsync(Model?.UbicacionActivoFijoActual?.Bodega?.Nombre ?? "-");}</td>
+                                                                        </tr>
+                                                                    }
+                                                                }
+                                                            </tbody>
+                                                        </table>
+
+                                                        <legend>P&oacute;liza de seguro</legend>
+                                                        <table class="table table-hover">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th width="50%">CAMPO</th>
+                                                                    <th width="50%">VALOR</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td><label asp-for="RecepcionActivoFijo.PolizaSeguroActivoFijo.CompaniaSeguro.Nombre" class="negrita"></label></td>
+                                                                    <td>@Html.DisplayFor(m => m.RecepcionActivoFijo.PolizaSeguroActivoFijo.CompaniaSeguro.Nombre)</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><label asp-for="RecepcionActivoFijo.PolizaSeguroActivoFijo.NumeroPoliza" class="negrita"></label></td>
+                                                                    <td>@{await ViewContext.Writer.WriteAsync(Model?.RecepcionActivoFijo?.PolizaSeguroActivoFijo?.NumeroPoliza ?? "-");}</td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+
+                                                        <legend>Codificaci&oacute;n</legend>
+                                                        <table class="table table-hover">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th width="50%">CAMPO</th>
+                                                                    <th width="50%">VALOR</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td><label asp-for="IdCodigoActivoFijo" class="negrita"></label></td>
+                                                                    <td id="codigoSecuencial">@Html.DisplayFor(m => m.CodigoActivoFijo.Codigosecuencial)</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td><label asp-for="CodigoActivoFijo.CodigoBarras" class="negrita"></label></td>
+                                                                    <td>
+                                                                        <label class="input">
+                                                                            <img class="imgBarCode" id="barcode1" />
+                                                                        </label>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </fieldset>
+                                                </div>
+                                                <div class="tab-pane fade" id="s2">
+                                                    @{await Html.RenderPartialAsync("_ListadoMantenimientos", Model.MantenimientoActivoFijo, new ViewDataDictionary(ViewData) { { "IsVistaDetalles", true }, { "NombreTabla", "tableMantenimiento" } });}
+                                                </div>
+                                                <div class="tab-pane fade" id="s3">
+                                                    @{await Html.RenderPartialAsync("_ListadoTransferenciasDetalles", Model.TransferenciaActivoFijoDetalle, new ViewDataDictionary(ViewData) { { "NombreTabla", "tableTransferenciasDetalles" } });}
+                                                </div>
+                                                <div class="tab-pane fade" id="s4">
+                                                    @{await Html.RenderPartialAsync("_ListadoCustodios", Model.UbicacionActivoFijo, new ViewDataDictionary(ViewData) { { "NombreTabla", "tableCustodios" } });}
+                                                </div>
+                                                <div class="tab-pane fade" id="s5">
+                                                    @{await Html.RenderPartialAsync("_ListadoProcesosJudiciales", Model.ProcesoJudicialActivoFijo, new ViewDataDictionary(ViewData) { { "IsVistaDetalles", true }, { "NombreTabla", "tableProcesosJudiciales" } });}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -50,7 +325,10 @@
     </section>
 </div>
 @section Scripts{
-    <script src="~/lib/TableTools-master/src/dataTables.tableTools.js"></script>
-    <script src="~/js/activoFijo/reporteHojaVida.min.js"></script>
+    <script src="~/lib/JsBarcode-master/dist/JsBarcode.all.min.js"></script>
+    <script src='~/js/activoFijo/codificacion.min.js'></script>
+    <script src="~/lib/bootbox/bootbox.min.js"></script>
+    <script src='~/js/activoFijo/listadoSeleccion.min.js'></script>
+    <script src="~/js/activoFijo/listadoAgrupacion.min.js"></script>
+    <script src='~/js/activoFijo/reporteHojaVida.min.js'></script>
 }
-

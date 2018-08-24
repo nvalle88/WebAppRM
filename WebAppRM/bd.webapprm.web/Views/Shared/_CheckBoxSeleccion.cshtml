@@ -1,17 +1,27 @@
 @{ 
     bool seleccionado = ViewBag.Seleccionado ?? false;
     string callbackFunctionCheckBox = ViewBag.CallbackFunctionCheckBox;
-    int idRecepcionActivoFijoDetalle = ViewBag.IdRecepcionActivoFijoDetalle;
+    string idRecepcionActivoFijoDetalle = ViewData["IdRecepcionActivoFijoDetalle"].ToString();
     bool isDisabled = ViewBag.IsConfiguracionSeleccionDisabled ?? false;
     string callbackFunctionAddRowDetalleTodos = ViewBag.CallbackFunctionAddRowDetalleTodos;
     string callbackFunctionRemoveRowDetalleTodos = ViewBag.CallbackFunctionRemoveRowDetalleTodos;
-
+    string texto = ViewBag.Texto ?? String.Empty;
+    string claseCSS = ViewBag.ClaseCSS ?? String.Empty;
     bool isSeleccionTodos = !String.IsNullOrEmpty(callbackFunctionAddRowDetalleTodos) && !String.IsNullOrEmpty(callbackFunctionRemoveRowDetalleTodos);
 }
 
-<div class="checkbox">
+<div class="checkbox @claseCSS">
     <label>
         <input class="checkbox style-0 chkDetallesActivoFijo" @{await ViewContext.Writer.WriteAsync(seleccionado ? "checked='checked'" : "");} type="checkbox" onchange="eventoCheckboxDetallesActivoFijo(this)" data-funcioncallback="@callbackFunctionCheckBox" data-functioncallbackselectiontodos="@callbackFunctionAddRowDetalleTodos" data-functioncallbackremovetodos="@callbackFunctionRemoveRowDetalleTodos" data-isselecciontodos="@isSeleccionTodos" data-idrecepcionactivofijodetalle="@idRecepcionActivoFijoDetalle" id="chkDetalleActivoFijo_@idRecepcionActivoFijoDetalle" @{await ViewContext.Writer.WriteAsync(isDisabled ? "disabled='disabled'" : "");}>
-        <span>&nbsp;</span>
+        @{ 
+            if (!String.IsNullOrEmpty(texto))
+            {
+                <i></i>@texto
+            }
+            else
+            {
+                <span>&nbsp;</span>
+            }
+        }
     </label>
 </div>

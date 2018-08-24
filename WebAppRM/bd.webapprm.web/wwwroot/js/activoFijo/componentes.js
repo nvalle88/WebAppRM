@@ -45,12 +45,9 @@ function cargarFormularioComponentesDatosEspecificos(idFila) {
         },
         complete: function (data) {
             initDataTableFiltrado("tableDetallesActivoFijo", [thClassName.bodega, thClassName.proveedor, thClassName.motivoAlta, thClassName.fechaRecepcion, thClassName.ordenCompra, thClassName.fondoFinanciamiento, thClassName.fechaAlta, thClassName.numeroFactura], function () {
-                var table = $("#tableDetallesActivoFijo").dataTable();
-                var api = table.api();
-                var rows = api.rows({ page: 'current' }).nodes();
-                var last = null;
-                var groupadmin = [];
-                crearGrupo(api, rows, last, groupadmin, 2, "Clase de activo fijo", 0, 24);
+                crearGrupo("tableDetallesActivoFijo", [
+                    { propiedad: thClassName.claseActivoFijo, valor: "Clase de activo fijo" }
+                ]);
             });
             $("#tableDetallesActivoFijo_filter > label > span").prop("style", "height:32px !important;");
             ajustarBootboxPorCiento(80);

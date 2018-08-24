@@ -22,10 +22,6 @@
     <None Remove="Controllers\API\**" />
     <None Remove="wwwroot\images\ActivoFijo\**" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="wwwroot\js\activofijo\reporteMantenimientos.js" />
-  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="bd.log.guardar" Version="1.1.1" />
     <PackageReference Include="EPPlus.Core" Version="1.5.4" />

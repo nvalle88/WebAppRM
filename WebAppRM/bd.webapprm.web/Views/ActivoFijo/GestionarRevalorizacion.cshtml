@@ -1,4 +1,7 @@
-@model RevalorizacionActivoFijo
+@model DepreciacionActivoFijo
+@{ 
+    DateTime fechaDepreciacion = Model?.FechaDepreciacion ?? DateTime.Now;
+}
 
 @section css{
     <link rel="stylesheet" href="~/lib/eonasdan-bootstrap-datetimepicker/build/css/bootstrap-datetimepicker.min.css" />
@@ -23,12 +26,12 @@
                                 <fieldset>
                                     <div class="row">
                                         <section class="col col-4">
-                                            <label asp-for="FechaRevalorizacion"></label>
+                                            <label asp-for="FechaDepreciacion"></label>
                                         </section>
                                         <section class="col col-8">
                                             <label class="input">
-                                                <input type="text" asp-for="FechaRevalorizacion" class="form-control" />
-                                                <span asp-validation-for="FechaRevalorizacion" class="text-danger"></span>
+                                                <input class="form-control" value="@String.Format("{0}", fechaDepreciacion.ToString("dd/MM/yyyy hh:mm tt"))" disabled="disabled" />
+                                                <input type="hidden" asp-for="FechaDepreciacion" value="@fechaDepreciacion" />
                                             </label>
                                         </section>
                                     </div>

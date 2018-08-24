@@ -1,4 +1,7 @@
 @model List<bd.webapprm.entidades.AltaActivoFijo>
+@{ 
+    var nombreTabla = "dt_basic";
+}
 
 <div id="content">
     <p>
@@ -16,29 +19,31 @@
                         <div class="jarviswidget-editbox">
                         </div>
                         <div class="widget-body no-padding">
-                            <table id="dt_basic" class="table table-striped table-bordered table-hover">
+                            <table id="@nombreTabla" class="table table-striped table-bordered table-hover">
                                 <thead>
                                     @{await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", 7);}
                                     <tr>
-                                        <th>
+                                        <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.sucursal)">
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().AltaActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijo.Bodega.IdSucursal)
                                         </th>
-                                        <th>
+                                        <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.tipoUtilizacionAlta)">
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().AltaActivoFijoDetalle.FirstOrDefault().IdTipoUtilizacionAlta)
                                         </th>
-                                        <th>
+                                        <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.fechaAlta)">
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().FechaAlta)
                                         </th>
-                                        <th>
+                                        <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.motivoAlta)">
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().IdMotivoAlta)
                                         </th>
-                                        <th>
+                                        <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.numeroFactura)">
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().FacturaActivoFijo.NumeroFactura)
                                         </th>
-                                        <th>
+                                        <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.fechaFactura)">
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().FacturaActivoFijo.FechaFactura)
                                         </th>
-                                        <th>Opciones</th>
+                                        <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.opciones)">
+                                            Opciones
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -65,7 +70,7 @@
                                             </td>
                                             <td>
                                                 @Html.ActionLink("Detalles", "DetallesAlta", new { id = item.IdAltaActivoFijo })
-                                                @{ 
+                                                @{
                                                     if (item.IsReversarAlta)
                                                     {
                                                         <span> | </span>
@@ -87,4 +92,7 @@
 
 @section Scripts {
     <script src='~/js/datatables/initDatatableFiltrado.min.js'></script>
+    <script src="~/lib/bootbox/bootbox.min.js"></script>
+    <script src='~/js/activoFijo/listadoSeleccion.min.js'></script>
+    <script src="~/js/activoFijo/listadoAgrupacion.min.js"></script>
 }

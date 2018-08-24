@@ -1,8 +1,9 @@
 @model List<TransferenciaActivoFijo>
-@{ 
+@{
     bool isSolicitudesTransferencia = ViewBag.IsSolicitudesTransferencia ?? false;
     bool isTransferenciasCreadas = ViewBag.IsTransferenciasCreadas ?? false;
     bool isCambioCustodio = ViewBag.IsCambioCustodio ?? false;
+    var nombreTabla = "dt_basic";
 }
 <div id="content">
     <p>
@@ -48,44 +49,44 @@
                                 <thead>
                                     @{await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", (isSolicitudesTransferencia || isTransferenciasCreadas) ? 10 : 7);}
                                     <tr>
-                                        <th>
+                                        <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.sucursalOrigen)">
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().SucursalOrigen)
                                         </th>
-                                        @{ 
+                                        @{
                                             if (isSolicitudesTransferencia || isTransferenciasCreadas)
                                             {
-                                                <th>
+                                                <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.empleadoResponsableEnvio)">
                                                     @Html.DisplayNameFor(model => model.FirstOrDefault().IdEmpleadoResponsableEnvio)
                                                 </th>
                                             }
                                         }
-                                        <th>
+                                        <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.empleadoEntrega)">
                                             Custodio que entrega:
                                         </th>
-                                        @{ 
+                                        @{
                                             if (isSolicitudesTransferencia || isTransferenciasCreadas)
                                             {
-                                                <th>
+                                                <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.empleadoResponsableRecibo)">
                                                     @Html.DisplayNameFor(model => model.FirstOrDefault().IdEmpleadoResponsableRecibo)
                                                 </th>
-                                                <th>
+                                                <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.sucursalDestino)">
                                                     @Html.DisplayNameFor(model => model.FirstOrDefault().SucursalDestino)
                                                 </th>
                                             }
                                         }
-                                        <th>
+                                        <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.empleadoRecibe)">
                                             Custodio que recibe:
                                         </th>
-                                        <th>
+                                        <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.fechaTransferencia)">
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().FechaTransferencia)
                                         </th>
-                                        <th>
+                                        <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.estado)">
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().IdEstado)
                                         </th>
-                                        <th>
+                                        <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.observaciones)">
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().Observaciones)
                                         </th>
-                                        <th>Opciones</th>
+                                        <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.opciones)">Opciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -95,7 +96,7 @@
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.SucursalOrigen.Nombre)
                                             </td>
-                                            @{ 
+                                            @{
                                                 if (isSolicitudesTransferencia || isTransferenciasCreadas)
                                                 {
                                                     <td>
@@ -106,7 +107,7 @@
                                             <td>
                                                 @{await ViewContext.Writer.WriteAsync($"{item.TransferenciaActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijoOrigen.Empleado.Persona.Nombres} {item.TransferenciaActivoFijoDetalle.FirstOrDefault().UbicacionActivoFijoOrigen.Empleado.Persona.Apellidos}");}
                                             </td>
-                                            @{ 
+                                            @{
                                                 if (isSolicitudesTransferencia || isTransferenciasCreadas)
                                                 {
                                                     <td>
@@ -130,7 +131,7 @@
                                                 @Html.DisplayFor(modelItem => item.Observaciones)
                                             </td>
                                             <td>
-                                                @{ 
+                                                @{
                                                     if (isCambioCustodio)
                                                     {
                                                         <a asp-action="DetallesCambioCustodio" asp-route-id="@item.IdTransferenciaActivoFijo">Detalles</a>
@@ -172,4 +173,7 @@
 
 @section Scripts {
     <script src='~/js/datatables/initDatatableFiltrado.min.js'></script>
+    <script src="~/lib/bootbox/bootbox.min.js"></script>
+    <script src='~/js/activoFijo/listadoSeleccion.min.js'></script>
+    <script src="~/js/activoFijo/listadoAgrupacion.min.js"></script>
 }
