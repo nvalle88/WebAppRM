@@ -18,12 +18,9 @@ $(document).ready(function () {
     inicializarDetallesActivoSeleccion();
     inicializarObjetoAdicional();
     initDataTableFiltrado("tableDetallesActivoFijoSeleccionados", [thClassName.bodega, thClassName.dependencia, thClassName.proveedor, thClassName.motivoAlta, thClassName.fechaRecepcion, thClassName.ordenCompra, thClassName.fondoFinanciamiento], function () {
-        var table = $("#tableDetallesActivoFijoSeleccionados").dataTable();
-        var api = table.api();
-        var rows = api.rows({ page: 'current' }).nodes();
-        var last = null;
-        var groupadmin = [];
-        crearGrupo(api, rows, last, groupadmin, 0, "No. de recepción", 0, 23);
+        crearGrupo("tableDetallesActivoFijoSeleccionados", [
+            { propiedad: thClassName.numeroRecepcion, valor: "No. de recepción" }
+        ]);
     }, { mostrarTodos: true });
     Init_FileInput("file");
     Init_FileInput("fileFactura");

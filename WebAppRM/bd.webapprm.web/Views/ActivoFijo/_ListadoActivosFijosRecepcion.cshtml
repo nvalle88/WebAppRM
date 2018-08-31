@@ -1,5 +1,6 @@
 @model List<RecepcionActivoFijoDetalleSeleccionado>
 @{
+    string nombreTabla = "tableDetallesRecepcion";
     var igrouping = Model.GroupBy(c => new { c.RecepcionActivoFijoDetalle.ActivoFijo.IdSubClaseActivoFijo, c.RecepcionActivoFijoDetalle.ActivoFijo.IdModelo, c.RecepcionActivoFijoDetalle.ActivoFijo.Nombre });
     bool isSeleccion = ViewBag.IsSeleccion ?? false;
     bool isVistaDetalles = ViewBag.IsVistaDetalles ?? false;
@@ -8,14 +9,14 @@
 }
 
 <div class="table-responsive">
-    <table id="tableDetallesRecepcion" class="table table-striped table-bordered table-hover" style="width:100%;">
+    <table id="@nombreTabla" class="table table-striped table-bordered table-hover" style="width:100%;">
         <thead>
             @{await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", isSeleccion ? 14 : 13);}
             <tr>
                 @{
                     if (isSeleccion)
                     {
-                        <th>
+                        <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.seleccion)">
                             @{
                                 await Html.RenderPartialAsync("_CheckBoxSeleccion", new ViewDataDictionary(ViewData){
                                                 { "Seleccionado", false },
@@ -27,43 +28,43 @@
                         </th>
                     }
                 }
-                <th>
+                <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.tipoActivoFijo)">
                     @Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.ClaseActivoFijo.IdTipoActivoFijo)
                 </th>
-                <th>
+                <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.claseActivoFijo)">
                     @Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.IdClaseActivoFijo)
                 </th>
-                <th>
+                <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.subClaseActivoFijo)">
                     @Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.IdSubClaseActivoFijo)
                 </th>
-                <th>
+                <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.nombreActivoFijo)">
                     @Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.Nombre)
                 </th>
-                <th>
+                <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.marca)">
                     @Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.Modelo.IdMarca)
                 </th>
-                <th>
+                <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.modelo)">
                     @Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.IdModelo)
                 </th>
-                <th>
+                <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.ramo)">
                     @Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.Subramo.IdRamo)
                 </th>
-                <th>
+                <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.tipoActivoFijo)">
                     @Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.SubClaseActivoFijo.IdSubramo)
                 </th>
-                <th>
+                <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.cantidad)">
                     @Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.Cantidad)
                 </th>
-                <th>
+                <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.valorCompra)">
                     @Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.ValorCompra)
                 </th>
-                <th>
+                <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.depreciacion)">
                     @Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.Depreciacion)
                 </th>
-                <th>
+                <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.validacionTecnica)">
                     @Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.ActivoFijo.ValidacionTecnica)
                 </th>
-                <th>
+                <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.opciones)">
                     Opciones
                 </th>
             </tr>

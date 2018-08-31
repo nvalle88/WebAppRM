@@ -1,18 +1,4 @@
-﻿var objName = {
-    nameNumeroClaveCatastral: "NumeroClaveCatastral",
-    nameNumeroChasis: "NumeroChasis",
-    nameNumeroMotor: "NumeroMotor",
-    namePlaca: "Placa",
-    nameSerie: "Serie"
-};
-var objCategorias = {
-    Edificio: "EDIFICIOS",
-    MueblesEnseres: "MUEBLES Y ENSERES",
-    EquiposOficina: "EQUIPOS DE OFICINA",
-    Vehiculo: "VEHÍCULOS",
-    EquiposComputoSoftware: "EQUIPOS DE CÓMPUTO Y SOFTWARE"
-};
-var arrIdsfilas = Array();
+﻿var arrIdsfilas = Array();
 var arrIdsFilasSeleccionados = [];
 $(document).ready(function () {
     Init_Select2();
@@ -33,12 +19,9 @@ $(document).ready(function () {
 
 function actualizarSubtotales(isEditar)
 {
-    var table = $("#tableDetallesRecepcion").dataTable();
-    var api = table.api();
-    var rows = api.rows({ page: 'current' }).nodes();
-    var last = null;
-    var groupadmin = [];
-    crearGrupoSubtotal(api, rows, last, groupadmin, 1, "Clase de activo fijo", 6, isSeleccion ? 14 : 13, 9, "tableDetallesRecepcion", isEditar);
+    crearGrupoSubtotal("tableDetallesRecepcion", [
+        { propiedad: thClassName.claseActivoFijo, valor: "Clase de activo fijo" }
+    ], thClassName.claseActivoFijo, isEditar);
 }
 
 function gestionarWizard(isVistaDetalles)
@@ -275,11 +258,11 @@ function crearFilas(cantidad)
     for (var i = 0; i < cantidad; i++)
     {
         var nuevoIdFila = arrIdsfilas.length;
-        var hNumeroClaveCatastral = "<input type='hidden' id='h" + objName.nameNumeroClaveCatastral + "_" + nuevoIdFila + "'" + "name='h" + objName.nameNumeroClaveCatastral + "_" + nuevoIdFila + "'" + "/>";
-        var hNumeroChasis = "<input type='hidden' id='h" + objName.nameNumeroChasis + "_" + nuevoIdFila + "'" + "name='h" + objName.nameNumeroChasis + "_" + nuevoIdFila + "'" + "/>";
-        var hNumeroMotor = "<input type='hidden' id='h" + objName.nameNumeroMotor + "_" + nuevoIdFila + "'" + "name='h" + objName.nameNumeroMotor + "_" + nuevoIdFila + "'" + "/>";
-        var hPlaca = "<input type='hidden' id='h" + objName.namePlaca + "_" + nuevoIdFila + "'" + "name='h" + objName.namePlaca + "_" + nuevoIdFila + "'" + "/>";
-        var hSerie = "<input type='hidden' id='h" + objName.nameSerie + "_" + nuevoIdFila + "'" + "name='h" + objName.nameSerie + "_" + nuevoIdFila + "'" + "/>";
+        var hNumeroClaveCatastral = "<input type='hidden' id='h" + thClassName.numeroClaveCatastral + "_" + nuevoIdFila + "'" + "name='h" + thClassName.numeroClaveCatastral + "_" + nuevoIdFila + "'" + "/>";
+        var hNumeroChasis = "<input type='hidden' id='h" + thClassName.numeroChasis + "_" + nuevoIdFila + "'" + "name='h" + thClassName.numeroChasis + "_" + nuevoIdFila + "'" + "/>";
+        var hNumeroMotor = "<input type='hidden' id='h" + thClassName.numeroMotor + "_" + nuevoIdFila + "'" + "name='h" + thClassName.numeroMotor + "_" + nuevoIdFila + "'" + "/>";
+        var hPlaca = "<input type='hidden' id='h" + thClassName.placa + "_" + nuevoIdFila + "'" + "name='h" + thClassName.placa + "_" + nuevoIdFila + "'" + "/>";
+        var hSerie = "<input type='hidden' id='h" + thClassName.serie + "_" + nuevoIdFila + "'" + "name='h" + thClassName.serie + "_" + nuevoIdFila + "'" + "/>";
         var hBodega = "<input type='hidden' id='hBodega_" + nuevoIdFila + "'" + "name='hBodega_" + nuevoIdFila + "'" + "/>";
         var hEmpleado = "<input type='hidden' id='hEmpleado_" + nuevoIdFila + "'" + "name='hEmpleado_" + nuevoIdFila + "'" + "/>";
         var hRecepcionActivoFijoDetalle = "<input type='hidden' id='hIdRecepcionActivoFijoDetalle_" + nuevoIdFila + "' name='hIdRecepcionActivoFijoDetalle_" + nuevoIdFila + "' />";
@@ -295,7 +278,7 @@ function crearFilas(cantidad)
         mostrarOcultarColumnas("tbDatosEspecificos", [true, true, true, true, true]);
         addRowTableDatosEspecificos(['-', '-', '-', '-', '-', '-', '-', '-',
             hNumeroClaveCatastral + hNumeroChasis + hNumeroMotor + hPlaca + hSerie + hBodega + hEmpleado + hRecepcionActivoFijoDetalle + hUbicacion + hComponentes + hCodigoSecuencial + hIdCodigoActivoFijo + btnEditarDatosEspecificos + btnEditarCodificacion + btnComponentesDatosEspecificos + btnEliminarDatosEspecificos],
-            nuevoIdFila, [objName.nameNumeroClaveCatastral, objName.nameNumeroChasis, objName.nameNumeroMotor, objName.namePlaca, objName.nameSerie, "Bodega", "Empleado", "Codificacion"]);
+            nuevoIdFila, [thClassName.numeroClaveCatastral, thClassName.numeroChasis, thClassName.numeroMotor, thClassName.placa, thClassName.serie, "Bodega", "Empleado", "Codificacion"]);
         eventoCambiarCategoria();
 
         arrIdsfilas.push(nuevoIdFila);
@@ -360,14 +343,14 @@ function cargarFormularioDatosEspecificos(idFila)
     objData.RecepcionActivoFijoDetalleVehiculo = new Object();
 
     if (categoria == objCategorias.Edificio)
-        objData.RecepcionActivoFijoDetalleEdificio.NumeroClaveCatastral = $("#h" + objName.nameNumeroClaveCatastral + "_" + idFila).val();
+        objData.RecepcionActivoFijoDetalleEdificio.NumeroClaveCatastral = $("#h" + thClassName.numeroClaveCatastral + "_" + idFila).val();
     else if (categoria == objCategorias.Vehiculo)
     {
-        objData.RecepcionActivoFijoDetalleVehiculo.NumeroChasis = $("#h" + objName.nameNumeroChasis + "_" + idFila).val();
-        objData.RecepcionActivoFijoDetalleVehiculo.NumeroMotor = $("#h" + objName.nameNumeroMotor + "_" + idFila).val();
-        objData.RecepcionActivoFijoDetalleVehiculo.Placa = $("#h" + objName.namePlaca + "_" + idFila).val();
+        objData.RecepcionActivoFijoDetalleVehiculo.NumeroChasis = $("#h" + thClassName.numeroChasis + "_" + idFila).val();
+        objData.RecepcionActivoFijoDetalleVehiculo.NumeroMotor = $("#h" + thClassName.numeroMotor + "_" + idFila).val();
+        objData.RecepcionActivoFijoDetalleVehiculo.Placa = $("#h" + thClassName.placa + "_" + idFila).val();
     }
-    objData.Serie = $("#h" + objName.nameSerie + "_" + idFila).val();
+    objData.Serie = $("#h" + thClassName.serie + "_" + idFila).val();
     objData.IdBodega = $("#hBodega_" + idFila).val();
     objData.IdEmpleado = $("#hEmpleado_" + idFila).val();
 
@@ -425,13 +408,13 @@ function guardarDatosEspecificos()
 
     var objData = new Object();
     if (categoria == objCategorias.Edificio)
-        objData.NumeroClaveCatastral = $("#RecepcionActivoFijoDetalleEdificio_" + objName.nameNumeroClaveCatastral).val();
+        objData.NumeroClaveCatastral = $("#RecepcionActivoFijoDetalleEdificio_" + thClassName.numeroClaveCatastral).val();
     else if (categoria == objCategorias.Vehiculo) {
-        objData.NumeroChasis = $("#RecepcionActivoFijoDetalleVehiculo_" + objName.nameNumeroChasis).val();
-        objData.NumeroMotor = $("#RecepcionActivoFijoDetalleVehiculo_" + objName.nameNumeroMotor).val();
-        objData.Placa = $("#RecepcionActivoFijoDetalleVehiculo_" + objName.namePlaca).val();
+        objData.NumeroChasis = $("#RecepcionActivoFijoDetalleVehiculo_" + thClassName.numeroChasis).val();
+        objData.NumeroMotor = $("#RecepcionActivoFijoDetalleVehiculo_" + thClassName.numeroMotor).val();
+        objData.Placa = $("#RecepcionActivoFijoDetalleVehiculo_" + thClassName.placa).val();
     }
-    objData.Serie = $("#" + objName.nameSerie).val();
+    objData.Serie = $("#" + thClassName.serie).val();
     objData.IdFila = $("#hIdFilaModalDatosEspecificos").val();
     objData.IdRecepcionActivoFijoDetalle = $("#hIdRecepcionActivoFijoDetalle").val();
     objData.IdBodega = $("#IdBodega").val();
@@ -534,29 +517,29 @@ function putDatoBodegaEmpleadoFila(idFila, selector, datoSpan, datoHidden)
 
 function putDatoNumeroClaveCatastralFila(idFila, dato)
 {
-    $('#tbDatosEspecificos').DataTable().cell($('#td' + objName.nameNumeroClaveCatastral + "_" + idFila)).data(dash(dato)).draw();
-    $("#h" + objName.nameNumeroClaveCatastral + "_" + idFila).val(dato);
+    $('#tbDatosEspecificos').DataTable().cell($('#td' + thClassName.numeroClaveCatastral + "_" + idFila)).data(dash(dato)).draw();
+    $("#h" + thClassName.numeroClaveCatastral + "_" + idFila).val(dato);
 }
 
 function putDatoNumeroChasisFila(idFila, dato)
 {
-    $('#tbDatosEspecificos').DataTable().cell($('#td' + objName.nameNumeroChasis + "_" + idFila)).data(dash(dato)).draw();
-    $("#h" + objName.nameNumeroChasis + "_" + idFila).val(dato);
+    $('#tbDatosEspecificos').DataTable().cell($('#td' + thClassName.numeroChasis + "_" + idFila)).data(dash(dato)).draw();
+    $("#h" + thClassName.numeroChasis + "_" + idFila).val(dato);
 }
 
 function putDatoNumeroMotorFila(idFila, dato) {
-    $('#tbDatosEspecificos').DataTable().cell($('#td' + objName.nameNumeroMotor + "_" + idFila)).data(dash(dato)).draw();
-    $("#h" + objName.nameNumeroMotor + "_" + idFila).val(dato);
+    $('#tbDatosEspecificos').DataTable().cell($('#td' + thClassName.numeroMotor + "_" + idFila)).data(dash(dato)).draw();
+    $("#h" + thClassName.numeroMotor + "_" + idFila).val(dato);
 }
 
 function putDatoPlacaFila(idFila, dato) {
-    $('#tbDatosEspecificos').DataTable().cell($('#td' + objName.namePlaca + "_" + idFila)).data(dash(dato)).draw();
-    $("#h" + objName.namePlaca + "_" + idFila).val(dato);
+    $('#tbDatosEspecificos').DataTable().cell($('#td' + thClassName.placa + "_" + idFila)).data(dash(dato)).draw();
+    $("#h" + thClassName.placa + "_" + idFila).val(dato);
 }
 
 function putDatoSerieFila(idFila, dato) {
-    $('#tbDatosEspecificos').DataTable().cell($('#td' + objName.nameSerie + "_" + idFila)).data(dash(dato)).draw();
-    $("#h" + objName.nameSerie + "_" + idFila).val(dato);
+    $('#tbDatosEspecificos').DataTable().cell($('#td' + thClassName.serie + "_" + idFila)).data(dash(dato)).draw();
+    $("#h" + thClassName.serie + "_" + idFila).val(dato);
 }
 
 function putDatoCodificacion(idFila, dato)
@@ -583,62 +566,62 @@ function validarDatosEspecificosTablaActivosFijosAdicionados(objData) {
     var idFilaGestion = parseInt($("#IdFilaGestion").val());
     var validar = true;
     if (categoria == objCategorias.Edificio) {
-        var arrNumerosClaveCatastral = $(".hidden" + objName.nameNumeroClaveCatastral).toArray();
+        var arrNumerosClaveCatastral = $(".hidden" + thClassName.numeroClaveCatastral).toArray();
         for (var j = 0; j < arrNumerosClaveCatastral.length; j++) {
             var numClaveCatastral = $(arrNumerosClaveCatastral[j]);
             var idFila = numClaveCatastral.prop("id").split("_")[1];
             if (idFilaGestion != idFila && objData.NumeroClaveCatastral != null && objData.NumeroClaveCatastral != "") {
                 if (numClaveCatastral.val() == objData.NumeroClaveCatastral) {
-                    $("#val" + objName.nameNumeroClaveCatastral).html("El Número de clave catastral: está asignado a un Activo Fijo adicionado.");
+                    $("#val" + thClassName.numeroClaveCatastral).html("El Número de clave catastral: está asignado a un Activo Fijo adicionado.");
                     validar = false;
                 }
             }
         }
     }
     else if (categoria == objCategorias.Vehiculo) {
-        var arrNumerosChasis = $(".hidden" + objName.nameNumeroChasis).toArray();
+        var arrNumerosChasis = $(".hidden" + thClassName.numeroChasis).toArray();
         for (var j = 0; j < arrNumerosChasis.length; j++) {
             var numChasis = $(arrNumerosChasis[j]);
             var idFila = numChasis.prop("id").split("_")[1];
             if (idFilaGestion != idFila && objData.NumeroChasis != null && objData.NumeroChasis != "") {
                 if (numChasis.val() == objData.NumeroChasis) {
-                    $("#val" + objName.nameNumeroChasis).html("El Número de chasis: está asignado a un Activo Fijo adicionado.");
+                    $("#val" + thClassName.numeroChasis).html("El Número de chasis: está asignado a un Activo Fijo adicionado.");
                     validar = false;
                 }
             }
         }
 
-        var arrNumerosMotor = $(".hidden" + objName.nameNumeroMotor).toArray();
+        var arrNumerosMotor = $(".hidden" + thClassName.numeroMotor).toArray();
         for (var j = 0; j < arrNumerosMotor.length; j++) {
             var numMotor = $(arrNumerosMotor[j]);
             var idFila = numMotor.prop("id").split("_")[1];
             if (idFilaGestion != idFila && objData.NumeroMotor != null && objData.NumeroMotor != "") {
                 if (numMotor.val() == objData.NumeroMotor) {
-                    $("#val" + objName.nameNumeroMotor).html("El Número de motor: está asignado a un Activo Fijo adicionado.");
+                    $("#val" + thClassName.numeroMotor).html("El Número de motor: está asignado a un Activo Fijo adicionado.");
                     validar = false;
                 }
             }
         }
 
-        var arrNumerosPlaca = $(".hidden" + objName.namePlaca).toArray();
+        var arrNumerosPlaca = $(".hidden" + thClassName.placa).toArray();
         for (var j = 0; j < arrNumerosPlaca.length; j++) {
             var numPlaca = $(arrNumerosPlaca[j]);
             var idFila = numPlaca.prop("id").split("_")[1];
             if (idFilaGestion != idFila && objData.Placa != null && objData.Placa != "") {
                 if (numPlaca.val() == objData.Placa) {
-                    $("#val" + objName.namePlaca).html("La Placa: está asignada a un Activo Fijo adicionado.");
+                    $("#val" + thClassName.placa).html("La Placa: está asignada a un Activo Fijo adicionado.");
                     validar = false;
                 }
             }
         }
     }
-    var arrNumerosSerie = $(".hidden" + objName.nameSerie).toArray();
+    var arrNumerosSerie = $(".hidden" + thClassName.serie).toArray();
     for (var j = 0; j < arrNumerosSerie.length; j++) {
         var numSerie = $(arrNumerosSerie[j]);
         var idFila = numSerie.prop("id").split("_")[1];
         if (idFilaGestion != idFila && objData.Serie != null && objData.Serie != "") {
             if (numSerie.val() == objData.Serie) {
-                $("#val" + objName.nameSerie).html("La Serie: está asignada a un Activo Fijo adicionado.");
+                $("#val" + thClassName.serie).html("La Serie: está asignada a un Activo Fijo adicionado.");
                 validar = false;
             }
         }
@@ -655,29 +638,29 @@ function validarDatosEspecificosExisten(objData)
         {
             if (categoria == objCategorias.Edificio)
             {
-                if (objData.NumeroClaveCatastral == $("#td" + objName.nameNumeroClaveCatastral + "_" + idFila).html()) {
-                    $("#val" + objName.nameNumeroClaveCatastral).html("El Número de clave catastral: ya existe.");
+                if (objData.NumeroClaveCatastral == $("#td" + thClassName.numeroClaveCatastral + "_" + idFila).html()) {
+                    $("#val" + thClassName.numeroClaveCatastral).html("El Número de clave catastral: ya existe.");
                     return false;
                 }
             }
             else if (categoria == objCategorias.Vehiculo)
             {
                 var validar = true;
-                if (objData.NumeroChasis == $("#td" + objName.nameNumeroChasis + "_" + idFila).html()) {
-                    $("#val" + objName.nameNumeroChasis).html("El Número de chasis: ya existe.");
+                if (objData.NumeroChasis == $("#td" + thClassName.numeroChasis + "_" + idFila).html()) {
+                    $("#val" + thClassName.numeroChasis).html("El Número de chasis: ya existe.");
                     validar = false;
                 }
-                if (objData.NumeroMotor == $("#td" + objName.nameNumeroMotor + "_" + idFila).html()) {
-                    $("#val" + objName.nameNumeroMotor).html("El Número de motor: ya existe.");
+                if (objData.NumeroMotor == $("#td" + thClassName.numeroMotor + "_" + idFila).html()) {
+                    $("#val" + thClassName.numeroMotor).html("El Número de motor: ya existe.");
                     validar = false;
                 }
-                if (objData.Placa == $("#td" + objName.namePlaca + "_" + idFila).html()) {
-                    $("#val" + objName.namePlaca).html("La Placa: ya existe.");
+                if (objData.Placa == $("#td" + thClassName.placa + "_" + idFila).html()) {
+                    $("#val" + thClassName.placa).html("La Placa: ya existe.");
                     validar = false;
                 }
             }
-            if (objData.Serie == $("#td" + objName.nameSerie + "_" + idFila).html()) {
-                $("#val" + objName.nameSerie).html("La Serie: ya existe.");
+            if (objData.Serie == $("#td" + thClassName.serie + "_" + idFila).html()) {
+                $("#val" + thClassName.serie).html("La Serie: ya existe.");
                 validar = false;
             }
         }
@@ -826,11 +809,11 @@ function cargarModalDatosActivoFijo(idFila, isVistaDetalles)
         rafd.ActivoFijo.Depreciacion = $("#hhDepreciacion_" + idFila).val();
         rafd.ActivoFijo.ValidacionTecnica = $("#hhValidacionTecnica_" + idFila).val();
 
-        try { var arrNumeroClaveCatastral = $("#hh" + objName.nameNumeroClaveCatastral + "_" + idFila).val().split(","); } catch (e) { var arrNumeroClaveCatastral = []; }
-        try { var arrNumeroChasis = $("#hh" + objName.nameNumeroChasis + "_" + idFila).val().split(","); } catch (e) { var arrNumeroChasis = []; }
-        try { var arrNumeroMotor = $("#hh" + objName.nameNumeroMotor + "_" + idFila).val().split(","); } catch (e) { var arrNumeroMotor = []; }
-        try { var arrPlaca = $("#hh" + objName.namePlaca + "_" + idFila).val().split(","); } catch (e) { var arrPlaca = []; }
-        try { var arrSerie = $("#hh" + objName.nameSerie + "_" + idFila).val().split(","); } catch (e) { var arrSerie = []; }
+        try { var arrNumeroClaveCatastral = $("#hh" + thClassName.numeroClaveCatastral + "_" + idFila).val().split(","); } catch (e) { var arrNumeroClaveCatastral = []; }
+        try { var arrNumeroChasis = $("#hh" + thClassName.numeroChasis + "_" + idFila).val().split(","); } catch (e) { var arrNumeroChasis = []; }
+        try { var arrNumeroMotor = $("#hh" + thClassName.numeroMotor + "_" + idFila).val().split(","); } catch (e) { var arrNumeroMotor = []; }
+        try { var arrPlaca = $("#hh" + thClassName.placa + "_" + idFila).val().split(","); } catch (e) { var arrPlaca = []; }
+        try { var arrSerie = $("#hh" + thClassName.serie + "_" + idFila).val().split(","); } catch (e) { var arrSerie = []; }
         try { var arrEmpleado = $("#hhEmpleado_" + idFila).val().split(","); } catch (e) { var arrEmpleado = []; }
         try { var arrCodigoSecuencial = $("#hhCodigoSecuencial_" + idFila).val().split(","); } catch (e) { var arrCodigoSecuencial = []; }
         try { var arrCodigoActivoFijo = $("#hhIdCodigoActivoFijo_" + idFila).val().split(","); } catch (e) { var arrCodigoActivoFijo = []; }
@@ -974,14 +957,14 @@ function guardarDatosActivoFijoRow()
         for (var i = 0; i < arrIdsfilas.length; i++) {
             var row = arrIdsfilas[i];
             if (categoria == objCategorias.Edificio) {
-                arrNumeroClaveCatastral.push($("#td" + objName.nameNumeroClaveCatastral + "_" + row).html());
+                arrNumeroClaveCatastral.push($("#td" + thClassName.numeroClaveCatastral + "_" + row).html());
             }
             else if (categoria == objCategorias.Vehiculo) {
-                arrNumeroChasis.push($("#td" + objName.nameNumeroChasis + "_" + row).html());
-                arrNumeroMotor.push($("#td" + objName.nameNumeroMotor + "_" + row).html());
-                arrPlacas.push($("#td" + objName.namePlaca + "_" + row).html());
+                arrNumeroChasis.push($("#td" + thClassName.numeroChasis + "_" + row).html());
+                arrNumeroMotor.push($("#td" + thClassName.numeroMotor + "_" + row).html());
+                arrPlacas.push($("#td" + thClassName.placa + "_" + row).html());
             }
-            arrSeries.push($("#td" + objName.nameSerie + "_" + row).html());
+            arrSeries.push($("#td" + thClassName.serie + "_" + row).html());
             arrBodegas.push(dash($("#hBodega_" + row).val()));
             arrEmpleados.push(dash($("#hEmpleado_" + row).val()));
             arrCodigosSecuencial.push(dash($("#hCodigoSecuencial_" + row).val()));

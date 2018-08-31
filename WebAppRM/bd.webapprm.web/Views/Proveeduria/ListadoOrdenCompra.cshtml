@@ -1,6 +1,6 @@
 @model List<OrdenCompra>
 
-@{ 
+@{
     string estado = ViewBag.Estado;
 }
 <div id="content">
@@ -87,7 +87,7 @@
                                             </td>
                                             <td>
                                                 <a asp-action="DetallesOrdenCompraEnTramite" asp-route-id="@item.IdOrdenCompra">Detalles</a>
-                                                @{ 
+                                                @{
                                                     if (estado == Estados.EnTramite)
                                                     {
                                                         <span> | </span>
@@ -110,4 +110,7 @@
 </div>
 @section Scripts {
     <script src='~/js/datatables/initDatatableFiltrado.min.js'></script>
+    <script src="~/lib/bootbox/bootbox.min.js"></script>
+    <script src='~/js/activoFijo/listadoSeleccion.min.js'></script>
+    <script src="~/js/activoFijo/listadoAgrupacion.min.js"></script>
 }

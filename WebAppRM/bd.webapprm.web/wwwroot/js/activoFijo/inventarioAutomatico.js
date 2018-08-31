@@ -4,15 +4,11 @@
     Init_Select2();
     adicionarArrRecepcionActivoFijoDetalle();
     initDataTableFiltrado("tableDetallesActivoFijoBajas", [thClassName.bodega, thClassName.proveedor, thClassName.motivoAlta, thClassName.fechaRecepcion, thClassName.ordenCompra, thClassName.fondoFinanciamiento, thClassName.fechaAlta, thClassName.numeroFactura], function () {
-        var table = $("#tableDetallesActivoFijoBajas").dataTable();
-        var api = table.api();
-        var rows = api.rows({ page: 'current' }).nodes();
-        var last = null;
-        var groupadmin = [];
-
-        crearGrupo(api, rows, last, groupadmin, 21, "Fondo de financiamiento", 0, 25);
-        crearGrupo(api, rows, last, groupadmin, 3, "Clase de activo fijo", 6, 25);
-        crearGrupo(api, rows, last, groupadmin, 4, "Subclase de activo fijo", 12, 25);
+        crearGrupo("tableDetallesActivoFijoBajas", [
+            { propiedad: thClassName.fondoFinanciamiento, valor: "Fondo de financiamiento" },
+            { propiedad: thClassName.claseActivoFijo, valor: "Clase de activo fijo" },
+            { propiedad: thClassName.subClaseActivoFijo, valor: "Subclase de activo fijo" }
+        ]);
     }, null, { mostrarTodos: true });
     eventoGuardar();
     eventoLectorCodigoBarras();

@@ -1,0 +1,81 @@
+@model List<RecepcionActivoFijoDetalleSeleccionado>
+@{
+    bool isHojaVida = ViewBag.IsHojaVida ?? false;
+    bool isReimprimirEtiquetas = ViewBag.IsReimprimirEtiquetas ?? false;
+}
+
+<div id="content">
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                        @{ 
+                            if (isReimprimirEtiquetas)
+                            {
+                                <h2>Reportes</h2>
+                            }
+                            else
+                            {
+                                <h2>@ViewBag.Titulo de activos fijos</h2>
+                            }
+                        }
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox">
+                        </div>
+                        <div class="widget-body no-padding">
+                            @{
+                                if (isReimprimirEtiquetas)
+                                {
+                                    <div class="widget-body-toolbar">
+                                        <div class="row">
+                                            <div class="col-sm-4"></div>
+                                            <div class="col-sm-8 text-align-right">
+                                                <form asp-action="ExportarPDFReimprimirEtiquetas" id="checkout-form" class="smart-form noFormLoading" novalidate="novalidate" enctype="multipart/form-data">
+                                                    <div id="divContenedorInputEtiquetas"></div>
+                                                    <button type="button" class="btn btn-primary padding-7" id="btn-guardar"><i class="fa fa-print"></i> Imprimir etiquetas</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="padding-10">
+                                        <div class="pull-left">
+                                            <h3 class="margin-top-0" style="font-size:212% !important;"><i class="fa fa-file-text-o"></i> Reimprimir etiquetas</h3>
+                                        </div>
+                                        <div class="clearfix"></div>
+                                        <div class="smart-form">
+                                            <fieldset class="padding-top-0">
+                                                <div class="row padding-left-10 padding-right-10">
+                                                    <div class="alert alert-info alert-block" style="border-left-width:5px !important;">
+                                                        <h4 class="alert-heading">Informaci&oacute;n</h4>
+                                                        Escoja los Activos Fijos a los cuales desea reimprimir sus etiquetas marcando las casillas de selecci&oacute;n.
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                            <img class="imgBarCode hide" id="barcode1" />
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            @{await Html.RenderPartialAsync("_ListadoDetallesActivosFijos", Model);}
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+@section Scripts {
+    <script src="~/lib/JsBarcode-master/dist/JsBarcode.all.min.js"></script>
+    <script src="~/lib/bootbox/bootbox.min.js"></script>
+    <script src='~/js/activoFijo/listadoSeleccion.min.js'></script>
+    <script src="~/js/activoFijo/listadoAgrupacion.min.js"></script>
+    <script src="~/js/activoFijo/reporteSeleccion.min.js"></script>
+    <script>
+        var idsRecepcionActivoFijoDetalle = "@String.Join(",", Model.Select(c => $"{c.RecepcionActivoFijoDetalle.IdRecepcionActivoFijoDetalle}_{c.Seleccionado}"))";
+        var isHojaVida = "@isHojaVida".toLowerCase() === 'true';
+        var isReimprimirEtiquetas = "@isReimprimirEtiquetas".toLowerCase() === 'true';
+    </script>
+}

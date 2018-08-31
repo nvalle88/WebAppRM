@@ -1,5 +1,6 @@
 @model List<RecepcionActivoFijo>
-@{ 
+@{
+    var nombreTabla = "dt_basic";
     bool isListadoRecepciones = ViewBag.IsListadoRecepciones ?? false;
     bool isListadoValidacionesTecnicas = ViewBag.IsListadoValidacionesTecnicas ?? false;
     bool isListadoPolizaSeguroSinAsignar = ViewBag.IsListadoPolizaSeguroSinAsignar ?? false;
@@ -36,46 +37,46 @@
                         <div class="jarviswidget-editbox">
                         </div>
                         <div class="widget-body no-padding">
-                            <table id="dt_basic" class="table table-striped table-bordered table-hover">
+                            <table id="@nombreTabla" class="table table-striped table-bordered table-hover">
                                 <thead>
                                     <tr>
                                         @{await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", cantidadFilasFiltrado);}
-                                        <th>
+                                        <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.numeroRecepcion)">
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().IdRecepcionActivoFijo)
                                         </th>
-                                        <th>
+                                        <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.sucursal)">
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().RecepcionActivoFijoDetalle.FirstOrDefault().SucursalActual.Nombre)
                                         </th>
-                                        <th>
+                                        <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.ordenCompra)">
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().OrdenCompra)
                                         </th>
-                                        <th>
+                                        <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.proveedor)">
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().IdProveedor)
                                         </th>
-                                        <th>
+                                        <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.fechaRecepcion)">
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().FechaRecepcion)
                                         </th>
-                                        <th>
+                                        <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.fondoFinanciamiento)">
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().IdFondoFinanciamiento)
                                         </th>
-                                        <th>
+                                        <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.motivoAlta)">
                                             @Html.DisplayNameFor(model => model.FirstOrDefault().IdMotivoAlta)
                                         </th>
                                         @{
                                             if (isListadoPolizaSeguroSinAsignar || isListadoPolizaSeguroAsignadas)
                                             {
-                                                <th>
+                                                <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.companiaSeguro)">
                                                     @Html.DisplayNameFor(model => model.FirstOrDefault().PolizaSeguroActivoFijo.IdCompaniaSeguro)
                                                 </th>
                                                 if (isListadoPolizaSeguroAsignadas)
                                                 {
-                                                    <th>
+                                                    <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.numeroPolizaSeguro)">
                                                         @Html.DisplayNameFor(model => model.FirstOrDefault().PolizaSeguroActivoFijo.NumeroPoliza)
                                                     </th>
                                                 }
                                             }
                                         }
-                                        <th></th>
+                                        <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.opciones)">Opciones</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -103,7 +104,7 @@
                                             <td>
                                                 @Html.DisplayFor(modelItem => item.MotivoAlta.Descripcion)
                                             </td>
-                                            @{ 
+                                            @{
                                                 if (isListadoPolizaSeguroSinAsignar || isListadoPolizaSeguroAsignadas)
                                                 {
                                                     <td>
@@ -129,7 +130,7 @@
                                                     }
                                                 }
                                                 @Html.ActionLink("Detalles", "DetallesRecepcion", new { id = item.IdRecepcionActivoFijo })
-                                                @{ 
+                                                @{
                                                     if (isListadoRecepciones || isListadoValidacionesTecnicas)
                                                     {
                                                         <span> | </span>
@@ -152,4 +153,7 @@
 
 @section Scripts {
     <script src='~/js/datatables/initDatatableFiltrado.min.js'></script>
+    <script src="~/lib/bootbox/bootbox.min.js"></script>
+    <script src='~/js/activoFijo/listadoSeleccion.min.js'></script>
+    <script src="~/js/activoFijo/listadoAgrupacion.min.js"></script>
 }

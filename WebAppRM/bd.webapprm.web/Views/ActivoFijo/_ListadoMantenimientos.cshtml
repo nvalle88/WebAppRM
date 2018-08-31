@@ -1,0 +1,75 @@
+@model ICollection<MantenimientoActivoFijo>
+@{
+    var nombreTabla = ViewBag.NombreTabla ?? "dt_basic";
+    bool isVistaDetalles = ViewBag.IsVistaDetalles ?? false;
+}
+
+<div class="table-responsive">
+    <table id="@nombreTabla" class="table table-striped table-bordered table-hover" style="width:100%;">
+        <thead>
+            <tr>
+                @{await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", isVistaDetalles ? 6 : 7, new ViewDataDictionary(ViewData) { { "MostrarFiltradoUltimaColumna", isVistaDetalles } });}
+                <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.fechaMantenimiento)">
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().FechaMantenimiento)
+                </th>
+                <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.fechaDesde)">
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().FechaDesde)
+                </th>
+                <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.fechaHasta)">
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().FechaHasta)
+                </th>
+                <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.empleado)">
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().IdEmpleado)
+                </th>
+                <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.valorCompra)">
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().Valor)
+                </th>
+                <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.observaciones)">
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().Observaciones)
+                </th>
+                @{
+                    if (!isVistaDetalles)
+                    {
+                        <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.opciones)">
+                            Opciones
+                        </th>
+                    }
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FechaMantenimiento)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FechaDesde)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FechaHasta)
+                    </td>
+                    <td>
+                        @{ await ViewContext.Writer.WriteAsync(String.Format("{0} {1}", item.Empleado.Persona.Nombres, item.Empleado.Persona.Apellidos)); }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Valor)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Observaciones)
+                    </td>
+                    @{
+                        if (!isVistaDetalles)
+                        {
+                            <td>
+                                @Html.ActionLink("Editar", "EditarMantenimiento", new { id = item.IdRecepcionActivoFijoDetalle, id2 = item.IdMantenimientoActivoFijo }) |
+                                <a href="javascript:void(0);" id="@item.IdMantenimientoActivoFijo" onclick="abrirVentanaConfirmacion('@item.IdMantenimientoActivoFijo')" data-url="@Url.Action("EliminarMantenimiento", values: new { id = item.IdRecepcionActivoFijoDetalle, id2 = item.IdMantenimientoActivoFijo })" data-titulo="Eliminar" data-descripcion="&#191;Desea eliminar el Mantenimiento... ?">Eliminar</a>
+                            </td>
+                        }
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

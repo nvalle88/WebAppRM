@@ -20,7 +20,6 @@ namespace bd.webapprm.entidades
             ProcesoJudicialActivoFijo = new HashSet<ProcesoJudicialActivoFijo>();
             InventarioActivoFijoDetalle = new HashSet<InventarioActivoFijoDetalle>();
             MovilizacionActivoFijoDetalle = new HashSet<MovilizacionActivoFijoDetalle>();
-            RevalorizacionActivoFijo = new HashSet<RevalorizacionActivoFijo>();
         }
 
         [Key]
@@ -83,6 +82,5 @@ namespace bd.webapprm.entidades
         public virtual ICollection<ProcesoJudicialActivoFijo> ProcesoJudicialActivoFijo { get; set; }
         public virtual ICollection<InventarioActivoFijoDetalle> InventarioActivoFijoDetalle { get; set; }
         public virtual ICollection<MovilizacionActivoFijoDetalle> MovilizacionActivoFijoDetalle { get; set; }
-        public virtual ICollection<RevalorizacionActivoFijo> RevalorizacionActivoFijo { get; set; }
     }
 }

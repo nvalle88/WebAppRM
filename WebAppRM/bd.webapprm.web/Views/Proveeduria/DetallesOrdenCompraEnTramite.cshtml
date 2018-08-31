@@ -12,6 +12,15 @@
                     <div>
                         <div class="jarviswidget-editbox"></div>
                         <div class="widget-body no-padding">
+                            <div class="widget-body-toolbar">
+                                <div class="row">
+                                    <div class="col-sm-4"></div>
+                                    <div class="col-sm-8 text-align-right">
+                                        <a class="btn btn-primary" asp-action="ExportarExcelOrdenCompra" asp-route-id="@Model.IdOrdenCompra"><i class="fa fa-print"></i> Imprimir Orden de compra</a>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="smart-form">
                                 <fieldset class="padding-top-0">
                                     <legend>Datos generales</legend>

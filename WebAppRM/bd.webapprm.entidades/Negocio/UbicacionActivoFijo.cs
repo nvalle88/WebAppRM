@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text;
 
 namespace bd.webapprm.entidades
@@ -35,13 +36,17 @@ namespace bd.webapprm.entidades
 
         [Required(ErrorMessage = "Debe introducir la {0}")]
         [Display(Name = "Fecha de ubicación:")]
-        [DataType(DataType.Date)]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        [DataType(DataType.DateTime)]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy hh:mm tt}", ApplyFormatInEditMode = true)]
         public DateTime FechaUbicacion { get; set; }
 
         [Required(ErrorMessage = "Debe introducir la {0}")]
         [Display(Name = "¿Confirmación?")]
         public bool Confirmacion { get; set; }
+
+        [NotMapped]
+        [Display(Name = "Motivo de ubicación:")]
+        public string MotivoUbicacion { get; set; }
 
         public virtual ICollection<TransferenciaActivoFijo> TransferenciasActivoFijoDestino { get; set; }
         public virtual ICollection<TransferenciaActivoFijo> TransferenciasActivoFijoUbicacion { get; set; }

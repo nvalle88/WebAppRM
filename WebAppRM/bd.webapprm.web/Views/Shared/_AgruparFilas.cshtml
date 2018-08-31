@@ -1,0 +1,66 @@
+@model List<PropiedadValorSeleccionado>
+@{ 
+    string nombreTabla = ViewData["IdTabla"].ToString();
+}
+
+<div class="smart-form">
+    <section>
+        @{ 
+            for (int i = 0; i < Model.Count; i+= 3)
+            {
+                <div class="row margin-top-10">
+                    @{ 
+                        if (i <= (Model.Count - 1))
+                        {
+                            if (Model[i].PropiedadValor.Propiedad != ThClassName.seleccion && Model[i].PropiedadValor.Propiedad != ThClassName.opciones && !String.IsNullOrEmpty(Model[i].PropiedadValor.Valor))
+                            {
+                                <div class="col col-4">
+                                    @{
+                                        await Html.RenderPartialAsync("_CheckBoxSeleccion", new ViewDataDictionary(ViewData){
+                                                { "Seleccionado", Model[i].Seleccionado },
+                                                { "IdRecepcionActivoFijoDetalle", $"{nombreTabla}{Model[i].PropiedadValor.Propiedad}" },
+                                                { "Texto", Model[i].PropiedadValor.Valor },
+                                                { "CallbackFunctionCheckBox", "callBackFunctionSeleccionColumna" }
+                                            });
+                                    }
+                                </div>
+                            }
+                        }
+                        if ((i + 1) <= (Model.Count - 1))
+                        {
+                            if (Model[i + 1].PropiedadValor.Propiedad != ThClassName.seleccion && Model[i + 1].PropiedadValor.Propiedad != ThClassName.opciones && !String.IsNullOrEmpty(Model[i + 1].PropiedadValor.Valor))
+                            {
+                                <div class="col col-4">
+                                    @{
+                                        await Html.RenderPartialAsync("_CheckBoxSeleccion", new ViewDataDictionary(ViewData){
+                                                { "Seleccionado", Model[i + 1].Seleccionado },
+                                                { "IdRecepcionActivoFijoDetalle", $"{nombreTabla}{Model[i + 1].PropiedadValor.Propiedad}" },
+                                                { "Texto", Model[i + 1].PropiedadValor.Valor },
+                                                { "CallbackFunctionCheckBox", "callBackFunctionSeleccionColumna" }
+                                            });
+                                    }
+                                </div>
+                            }
+                        }
+                        if ((i + 2) <= (Model.Count - 1))
+                        {
+                            if (Model[i + 2].PropiedadValor.Propiedad != ThClassName.seleccion && Model[i + 2].PropiedadValor.Propiedad != ThClassName.opciones && !String.IsNullOrEmpty(Model[i + 2].PropiedadValor.Valor))
+                            {
+                                <div class="col col-4">
+                                    @{
+                                        await Html.RenderPartialAsync("_CheckBoxSeleccion", new ViewDataDictionary(ViewData){
+                                                { "Seleccionado", Model[i + 2].Seleccionado },
+                                                { "IdRecepcionActivoFijoDetalle", $"{nombreTabla}{Model[i + 2].PropiedadValor.Propiedad}" },
+                                                { "Texto", Model[i + 2].PropiedadValor.Valor },
+                                                { "CallbackFunctionCheckBox", "callBackFunctionSeleccionColumna" }
+                                            });
+                                    }
+                                </div>
+                            }
+                        }
+                    }
+                </div>
+            }
+        }
+    </section>
+</div>

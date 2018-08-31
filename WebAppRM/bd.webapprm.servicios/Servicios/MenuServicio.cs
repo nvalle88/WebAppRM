@@ -28,6 +28,7 @@ namespace bd.webapprm.servicios.Servicios
             { "/ActivoFijo/GestionarTransferenciaSucursal", new List<string> { "DetallesTransferenciaSucursal" } },
             { "/ActivoFijo/ListadoInventarioActivosFijos", new List<string> { "GestionarInventarioManual", "GestionarInventarioAutomatico", "DetallesInventarioManual", "DetallesInventarioAutomatico" } },
             { "/ActivoFijo/ListadoMovilizacionActivosFijos", new List<string> { "GestionarMovilizacion", "DetallesMovilizacion" } },
+            { "/ActivoFijo/HojaVidaReporte", new List<string> { "HojaVidaActivoFijo" } },
             { "/Proveeduria/ListadoOrdenCompraEntramite", new List<string> { "DetallesOrdenCompraEnTramite" } },
             { "/Proveeduria/ListadoOrdenCompraProcesadas", new List<string> { "ProcesarOrdenCompraEnTramite" } },
             { "/Proveeduria/ListadoRequerimientosSolicitados", new List<string> { "DetallesRequerimientoArticulos" } },

@@ -170,7 +170,7 @@ function eventoCheckboxDetallesActivoFijo(checkbox)
         try {
             var nombreFuncionCallback = chk.data("funcioncallback");
             if (nombreFuncionCallback)
-                eval(nombreFuncionCallback + "(" + idRecepcionActivoFijoDetalle + "," + seleccionado + ")");
+                eval(nombreFuncionCallback + "('" + idRecepcionActivoFijoDetalle + "'," + seleccionado + ")");
         } catch (e) { }
 
         if (isComponentes)
@@ -267,6 +267,16 @@ function mostrarOcultarColumnasPorArray(idTable, mostrarOcultar)
     }
 }
 
+function obtenerPosColumna(idTabla, columna) {
+    var columnas = $('#' + idTabla).dataTable().fnSettings().aoColumns;
+    for (var i = 0; i < columnas.length; i++) {
+        var nombreColumna = $(columnas[i].nTh).prop("id").replace(idTabla, "").replace("th", "");
+        if (nombreColumna == columna)
+            return i;
+    }
+    return -1;
+}
+
 function obtenerArrValores(idTableCopiando, idRecepcionActivoFijoDetalle, arrCeldasCopiando, isOpcionesUltimaColumna)
 {
     var table = $('#' + idTableCopiando).DataTable();
@@ -278,11 +288,11 @@ function obtenerArrValores(idTableCopiando, idRecepcionActivoFijoDetalle, arrCel
                 arrValores.push(arrCeldasCopiando[i]);
             }
             else {
-                arrValores.push(table.cell(row.index(), i + 1).data());
+                arrValores.push(table.cell(row.index(), obtenerPosColumna(idTableCopiando, arrCeldasCopiando[i])).data());
             }
         }
         else {
-            arrValores.push(table.cell(row.index(), i + 1).data());
+            arrValores.push(table.cell(row.index(), obtenerPosColumna(idTableCopiando, arrCeldasCopiando[i])).data());
         }
     }
     return arrValores;

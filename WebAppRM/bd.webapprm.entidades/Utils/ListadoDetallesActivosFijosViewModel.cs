@@ -33,8 +33,10 @@ namespace bd.webapprm.entidades.Utils
         public bool IsConfiguracionListadoMovilizacionesGestionar { get; set; }
         public bool IsConfiguracionListadoMovilizaciones { get; set; }
         public bool IsConfiguracionListadoGenerales { get; set; }
+        public bool IsConfiguracionReporteHojaVida { get; set; }
         public bool IsVisualizarNumeroRecepcion { get; set; }
         public bool IsVisualizarComponentes { get; set; }
+        public bool IsVisualizarEstado { get; set; }
         public bool MostrarFiltradoUltimaColumna { get; set; }
         public string CallbackFunctionCheckBox { get; set; }
         public string CallbackFunctionRemoveTodos { get; set; } = "callBackFunctionEliminarDatoEspecifico";
@@ -67,7 +69,9 @@ namespace bd.webapprm.entidades.Utils
             bool? IsConfiguracionListadoMovilizaciones = null,
             bool? IsConfiguracionListadoGenerales = null,
             bool? IsVisualizarNumeroRecepcion = null,
-            bool? IsVisualizarComponentes = null)
+            bool? IsVisualizarComponentes = null,
+            bool? IsConfiguracionReporteHojaVida = null,
+            bool? IsVisualizarEstado = null)
         {
             this.IsConfiguracionSeleccion = IsConfiguracionSeleccion ?? false;
             this.IsConfiguracionSeleccionDisabled = IsConfiguracionSeleccionDisabled ?? false;
@@ -96,14 +100,17 @@ namespace bd.webapprm.entidades.Utils
             this.IsConfiguracionListadoGenerales = IsConfiguracionListadoGenerales ?? false;
             this.IsVisualizarNumeroRecepcion = IsVisualizarNumeroRecepcion ?? false;
             this.IsVisualizarComponentes = IsVisualizarComponentes ?? false;
-            
+            this.IsConfiguracionReporteHojaVida = IsConfiguracionReporteHojaVida ?? false;
+            this.IsVisualizarEstado = IsVisualizarEstado ?? false;
+
+
             if (this.IsConfiguracionListadoComponentes || this.IsConfiguracionSeleccionComponentes || this.IsConfiguracionListadoAltas || this.IsConfiguracionListadoMantenimientos || this.IsConfiguracionListadoRevalorizaciones || this.IsConfiguracionListadoProcesosJudiciales || this.IsConfiguracionListadoBajas || this.IsConfiguracionListadoBajasGestionar || this.IsConfiguracionSeleccionBajas || this.IsConfiguracionSeleccionMovilizaciones || this.IsConfiguracionListadoMovilizacionesGestionar || this.IsConfiguracionListadoMovilizaciones || this.IsConfiguracionListadoGenerales)
                 this.IsConfiguracionDatosAlta = true;
 
             if (this.IsConfiguracionListadoBajas)
                 this.IsConfiguracionDatosBaja = true;
 
-            if (this.IsConfiguracionListadoComponentes || this.IsConfiguracionListadoMantenimientos || this.IsConfiguracionListadoRevalorizaciones || this.IsConfiguracionListadoProcesosJudiciales || this.IsConfiguracionListadoAltasGestionar || (this.IsConfiguracionListadoBajasGestionar && !this.IsConfiguracionBajasGestionarEditar) || this.IsConfiguracionGestionarInventarioAutomatico || this.IsConfiguracionSeleccionMovilizaciones)
+            if (this.IsConfiguracionListadoComponentes || this.IsConfiguracionListadoMantenimientos || this.IsConfiguracionListadoRevalorizaciones || this.IsConfiguracionListadoProcesosJudiciales || this.IsConfiguracionListadoAltasGestionar || (this.IsConfiguracionListadoBajasGestionar && !this.IsConfiguracionBajasGestionarEditar) || this.IsConfiguracionGestionarInventarioAutomatico || this.IsConfiguracionSeleccionMovilizaciones || this.IsConfiguracionReporteHojaVida)
                 this.IsConfiguracionOpciones = true;
 
             if (this.IsConfiguracionSeleccionMovilizaciones || this.IsConfiguracionListadoMovilizacionesGestionar || this.IsConfiguracionListadoMovilizaciones)
@@ -135,7 +142,7 @@ namespace bd.webapprm.entidades.Utils
                 NombreTabla += "Altas";
                 CallbackFunctionCheckBox = "callBackFunctionSeleccionAlta";
             }
-            else if (this.IsConfiguracionListadoGenerales)
+            else if (this.IsConfiguracionListadoGenerales || this.IsConfiguracionReporteHojaVida)
                 NombreTabla = "dt_basic";
 
             if (this.IsConfiguracionOpciones)
@@ -154,6 +161,9 @@ namespace bd.webapprm.entidades.Utils
                 Cantidad++;
 
             if (this.IsVisualizarComponentes)
+                Cantidad++;
+
+            if (this.IsVisualizarEstado)
                 Cantidad++;
 
             if (IsConfiguracionDatosMovilizaciones)

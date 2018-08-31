@@ -26,7 +26,7 @@ namespace bd.webapprm.entidades
         public int IdTipoActivoFijo { get; set; }
         public virtual TipoActivoFijo TipoActivoFijo { get; set; }
 
-        [Display(Name = "Categoría de activo fijo")]
+        [Display(Name = "Categoría de activo fijo:")]
         [Required(ErrorMessage = "Debe seleccionar la {0}")]
         [Range(1, double.MaxValue, ErrorMessage = "Debe seleccionar la {0}")]
         public int IdCategoriaActivoFijo { get; set; }

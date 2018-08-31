@@ -1,48 +1,9 @@
-﻿var thClassName = {
-    seleccion: "Seleccion",
-    codigoSecuencial: "Codigosecuencial",
-    tipoActivoFijo: "TipoActivoFijo",
-    claseActivoFijo: "ClaseActivoFijo",
-    subClaseActivoFijo: "SubclaseActivoFijo",
-    nombreActivoFijo: "NombreActivoFijo",
-    marca: "Marca",
-    modelo: "Modelo",
-    valorCompra: "ValorCompra",
-    depreciacion: "Depreciacion",
-    validacionTecnica: "ValidacionTecnica",
-    serie: "Serie",
-    numeroChasis: "NumeroChasis",
-    numeroMotor: "NumeroMotor",
-    placa: "Placa",
-    numeroClaveCatastral: "NumeroClaveCatastral",
-    sucursal: "Sucursal",
-    dependencia: "Dependencia",
-    bodega: "Bodega",
-    empleado: "Empleado",
-    proveedor: "Proveedor",
-    motivoAlta: "MotivoAlta",
-    fechaRecepcion: "FechaRecepcion",
-    ordenCompra: "OrdenCompra",
-    fondoFinanciamiento: "FondoFinanciamiento",
-    fechaAlta: "FechaAlta",
-    numeroFactura: "NumeroFactura",
-    fechaBaja: "FechaBaja",
-    motivoBaja: "MotivoBaja",
-    componentes: "Componentes",
-    observaciones: "Observaciones",
-    opciones: "Opciones",
-    nombreArticulo: "NombreArticulo",
-    cantidad: "Cantidad",
-    cantidadBodega: "CantidadBodega",
-    unidadMedida: "UnidadMedida",
-    valorUnitario: "ValorUnitario",
-    valorTotal: "ValorTotal",
-    tipoArticulo: "TipoArticulo",
-    claseArticulo: "ClaseArticulo",
-    subclaseArticulo: "SubclaseArticulo",
-    ramo: "Ramo",
-    subramo: "Subramo",
-    numeroRecepcion: "NumeroRecepcion"
+﻿var objCategorias = {
+    Edificio: "EDIFICIOS",
+    MueblesEnseres: "MUEBLES Y ENSERES",
+    EquiposOficina: "EQUIPOS DE OFICINA",
+    Vehiculo: "VEHÍCULOS",
+    EquiposComputoSoftware: "EQUIPOS DE CÓMPUTO Y SOFTWARE"
 };
 
 $(document).ready(function () {
@@ -392,7 +353,6 @@ function abrirVentanaConfirmacion(id) {
 function initDataTableFiltrado(idTabla, arrColumnHidden, fnDrawCallBack, objMostrarOcultarTodos, ocultarVis)
 {
     var responsiveHelper_datatable_fixed_column = undefined;
-
     var breakpointDefinition = {
         tablet: 1024,
         phone: 480
@@ -435,29 +395,84 @@ function initDataTableFiltrado(idTabla, arrColumnHidden, fnDrawCallBack, objMost
     if (objMostrarOcultarTodos && objMostrarOcultarTodos != null)
         ocultarDatosTabla(idTabla, objMostrarOcultarTodos);
 
-    if (ocultarVis)
+    if (ocultarVis && ocultarVis != null)
         ocultarColVis(idTabla);
-}
 
-function crearGrupo(api, rows, last, groupadmin, idColumna, textoLugar, paddingLeft, colspan) {
-    api.column(idColumna, { page: 'current' }).data().each(function (group, i) {
-        if (last !== group) {
-            $(rows).eq(i).before(
-                '<tr class="group" id="' + i + '"><td colspan="' + colspan + '" style="font-weight:bold;">' + "<i class='fa fa-angle-down' style='font-weight:bold;padding-left:" + paddingLeft + "px;'></i> " + textoLugar + ": " + group + '</td></tr>'
-            );
-            groupadmin.push(i);
-            last = group;
+    try {
+        if (mostrarBtnAgrupar && mostrarBtnAgrupar == true) {
+            var btn = '<button type="button" class="btn btn-default btnAgruparFilas" data-idtabla="' + idTabla + '" onclick="eventoWndAgrupar(this)" style="float:right !important;margin-right:3px !important;"><i class="fa fa-list"></i> Agrupar por columnas</button>';
+            $(btn).insertAfter("#" + idTabla + "_length + div");
         }
-    });
+    } catch (e) { }
 }
 
-function crearGrupoSubtotal(api, rows, last, groupadmin, idColumna, textoLugar, paddingLeft, colspan, idColumnaSubtotal, nombreTabla, isEditar)
+function changeDrawDataTableFiltrado(idTabla, fnDrawCallBack)
 {
+    var table = $('#' + idTabla).DataTable();
+    table.off('preDraw');
+    table.off('row');
+    table.off('draw');
+
+    var responsiveHelper_datatable_fixed_column = undefined;
+    var breakpointDefinition = {
+        tablet: 1024,
+        phone: 480
+    };
+
+    table.on('preDraw', function () {
+        if (!responsiveHelper_datatable_fixed_column)
+            responsiveHelper_datatable_fixed_column = new ResponsiveDatatablesHelper($('#' + idTabla), breakpointDefinition);
+    });
+
+    table.on('row', function () {
+        responsiveHelper_datatable_fixed_column.createExpandIcon(nRow);
+    });
+
+    table.on('draw', function () {
+        responsiveHelper_datatable_fixed_column.respond();
+        fnDrawCallBack();
+    });
+
+    var oTable = $('#' + idTabla).dataTable();
+    oTable.fnDraw();
+}
+
+function crearGrupo(idTabla, arrIdColumna)
+{
+    var table = $("#" + idTabla).dataTable();
+    var api = table.api();
+    var rows = api.rows().nodes();
+    var last = null;
+    var groupadmin = [];
+
+    var paddingLeft = 0;
+    for (var j = 0; j < arrIdColumna.length; j++) {
+        api.column("#th" + idTabla + arrIdColumna[j].propiedad).data().each(function (group, i) {
+            if (last !== group) {
+                $(rows).eq(i).before(
+                    '<tr class="group ' + (idTabla + arrIdColumna[j].propiedad) + '" id="grupo' + i + '"><td colspan="' + table.fnSettings().aoColumns.length + '" style="font-weight:bold;">' + "<i class='fa fa-angle-down' style='font-weight:bold;padding-left:" + paddingLeft + "px;'></i> " + arrIdColumna[j].valor + ": " + group + '</td></tr>'
+                );
+                groupadmin.push(i);
+                last = group;
+            }
+        });
+        paddingLeft += 10;
+    }
+}
+
+function crearGrupoSubtotal(idTabla, columnasGrupoAgrupacion, nameColumnaAgruparSubtotal, isEditar)
+{
+    var table = $("#" + idTabla).dataTable();
+    var api = table.api();
+    var rows = api.rows().nodes();
+    var last = null;
+    var groupadmin = [];
+
     if (!isEditar)
         isEditar = false;
 
     if (isEditar == false)
-        crearGrupo(api, rows, last, groupadmin, idColumna, textoLugar, paddingLeft, colspan);
+        crearGrupo(idTabla, columnasGrupoAgrupacion);
 
     var cantidadFilas = api.rows().nodes().length;
     var total = 0;
@@ -465,7 +480,7 @@ function crearGrupoSubtotal(api, rows, last, groupadmin, idColumna, textoLugar, 
         var posInicial = 0;
         var posAnterior = 0;
         do {
-            posInicial = obtenerPosArrMismoTextoDatatable(posInicial, api, idColumna);
+            posInicial = obtenerPosArrMismoTextoDatatable(posInicial, idTabla, api, nameColumnaAgruparSubtotal);
             var subtotal = 0;
             var nombreGrupo = "";
             for (var i = posAnterior; i <= posInicial; i++) {
@@ -478,9 +493,9 @@ function crearGrupoSubtotal(api, rows, last, groupadmin, idColumna, textoLugar, 
             total += subtotal;
             if (isEditar == false) {
                 $(rows).eq(posInicial).after(
-                    '<tr class="trSpanSubtotal"><td colspan="' + (colspan - 2) + '" style="background:white !important;">' + '</td>' +
+                    '<tr class="trSpanSubtotal"><td colspan="' + (table.fnSettings().aoColumns.length - 2) + '" style="background:white !important;">' + '</td>' +
                     '<td colspan="2" style="font-weight:bold;background:#ddd !important;">' + "Subtotal" + ": $" + '<span id="spanSubtotal_' + nombreGrupo + '">' + subtotal.toFixed(2) + '</span>' + '</td></tr>' +
-                    '<tr class="trEmtpySpace"><td colspan="' + colspan + '" style="padding-top:20px !important;">' + '</td></tr>'
+                    '<tr class="trEmtpySpace"><td colspan="' + table.fnSettings().aoColumns.length + '" style="padding-top:20px !important;">' + '</td></tr>'
                 );
             }
             else {
@@ -500,17 +515,20 @@ function inicializarArrIdsFilasSeleccionados(nombreTabla) {
     });
 }
 
-function obtenerPosArrMismoTextoDatatable(posInicial, api, columnaTexto)
+function obtenerPosArrMismoTextoDatatable(posInicial, idTabla, api, columnaTexto)
 {
+    var table = $('#' + idTabla).DataTable();
     var cantidadFilas = api.rows().nodes().length;
     var texto = "";
     for (var i = posInicial; i < cantidadFilas; i++) {
+        var idFila = $(table.row(i).node()).prop("id").replace(idTabla, "");
+        var datoCelda = table.cell("#" + idTabla + idFila + columnaTexto).data();
+
         if (texto == "") {
-            texto = api.rows(i).data()[0][columnaTexto];
+            texto = datoCelda;
         }
         else {
-            var grupo = api.rows(i).data()[0][columnaTexto];
-            if (grupo != texto) {
+            if (datoCelda != texto) {
                 return i - 1;
             }
         }

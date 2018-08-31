@@ -328,6 +328,22 @@ namespace bd.webapprm.web.Controllers.MVC
             { }
             return PartialView("_BodegaProcesarSelect", new OrdenCompra());
         }
+
+        public async Task<IActionResult> ExportarExcelOrdenCompra(int? id)
+        {
+            try
+            {
+                var fileContents = await apiServicio.ObtenerElementoAsync<byte[]>(id, new Uri(WebApp.BaseAddressRM), "api/Proveeduria/ExcelOrdenCompra");
+                if (fileContents.Length > 0)
+                {
+                    var fileName = "Orden de compra.xlsx";
+                    return File(fileContents, MimeTypes.GetMimeType(fileName), fileName);
+                }
+            }
+            catch (Exception)
+            { }
+            return StatusCode(500);
+        }
         #endregion
 
         #region Requerimientos
