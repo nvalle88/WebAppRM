@@ -991,7 +991,7 @@ namespace bd.webapprm.web.Controllers.MVC
             }
             catch (Exception)
             { }
-            return StatusCode(500);
+            return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorReporte}", nameof(DetallesCambioCustodio), routeValues: new { id });
         }
 
         [HttpPost]
@@ -1221,7 +1221,7 @@ namespace bd.webapprm.web.Controllers.MVC
             }
             catch (Exception)
             { }
-            return StatusCode(500);
+            return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorReporte}", nameof(DetallesTransferenciaSucursal), routeValues: new { id });
         }
         #endregion
         #endregion
@@ -2062,7 +2062,7 @@ namespace bd.webapprm.web.Controllers.MVC
             }
             catch (Exception)
             { }
-            return StatusCode(500);
+            return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorReporte}", nameof(DetallesMovilizacion), routeValues: new { id });
         }
         #endregion
 
@@ -2231,19 +2231,20 @@ namespace bd.webapprm.web.Controllers.MVC
             }
             catch (Exception)
             { }
-            return StatusCode(500);
+            return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorReporte}", nameof(HojaVidaActivoFijo), routeValues: new { id });
         }
         #endregion
 
         #region Bienes por área usuaria (ubicación física y bodega)
-        public async Task<IActionResult> BienesReporte()
+        public async Task<IActionResult> BienesReporte(int? id, int? id2)
         {
             try
             {
                 var claimTransfer = claimsTransfer.ObtenerClaimsTransferHttpContext();
                 ViewData["Sucursal"] = new SelectList(new List<Sucursal> { new Sucursal { IdSucursal = claimTransfer.IdSucursal, Nombre = claimTransfer.NombreSucursal } }, "IdSucursal", "Nombre");
-                ViewData["Empleado"] = await ObtenerSelectListEmpleado(claimTransfer.IdSucursal, incluirTodos: true);
-                ViewData["Bodega"] = await ObtenerSelectListBodega(claimTransfer.IdSucursal, incluirTodos: true);
+                ViewData["Empleado"] = await ObtenerSelectListEmpleado(claimTransfer.IdSucursal, idEmpleado: id2, incluirTodos: true);
+                ViewData["Bodega"] = await ObtenerSelectListBodega(claimTransfer.IdSucursal, idBodega: id, incluirTodos: true);
+                ViewData["ÌsBodega"] = id != null;
             }
             catch (Exception ex)
             {
@@ -2280,7 +2281,7 @@ namespace bd.webapprm.web.Controllers.MVC
             }
             catch (Exception)
             { }
-            return StatusCode(500);
+            return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorReporte}", nameof(BienesReporte), routeValues: isBodega ? new { id = idBodegaEmpleado, id2 = -1 } : new { id = -1, id2 = idBodegaEmpleado });
         }
         #endregion
 
@@ -2299,7 +2300,7 @@ namespace bd.webapprm.web.Controllers.MVC
             try
             {
                 var listaCodigosBarras = new List<byte[]>();
-                var listaSrcImagenes = Request.Form.Where(c=> c.Key.StartsWith("codigoSecuencial_"));
+                var listaSrcImagenes = Request.Form.Where(c => c.Key.StartsWith("codigoSecuencial_"));
                 foreach (var item in listaSrcImagenes)
                 {
                     var base64Data = Regex.Match(item.Value, @"data:image/(?<type>.+?),(?<data>.+)").Groups["data"].Value;
@@ -2316,7 +2317,7 @@ namespace bd.webapprm.web.Controllers.MVC
             }
             catch (Exception)
             { }
-            return StatusCode(500);
+            return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorReporte}", nameof(ReimprimirEtiquetasReporte));
         }
         #endregion
         #endregion

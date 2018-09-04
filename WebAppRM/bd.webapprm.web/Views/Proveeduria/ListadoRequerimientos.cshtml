@@ -13,7 +13,16 @@
         if (estado == Estados.Solicitado && claimsTransfer.IsADMIGrupo(ADMI_Grupos.FuncionarioSolicitante))
         {
             <p>
-                <a asp-action="GestionarRequerimiento" class="btn btn-primary">Nuevo requerimiento de art&iacute;culos</a>
+                @{
+                    if (DateTime.Now.Day <= WebApp.DiasPedido)
+                    {
+                        <a asp-action="GestionarRequerimiento" class="btn btn-primary">Nuevo requerimiento de art&iacute;culos</a>
+                    }
+                    else
+                    {
+                        <a href="javascript: void(0);" class="btn btn-primary" disabled="disabled">Nuevo requerimiento de art&iacute;culos</a>
+                    }
+                }
             </p>
         }
     }
