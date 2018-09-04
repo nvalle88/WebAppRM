@@ -43,6 +43,11 @@ namespace bd.webapprm.entidades
         [StringLength(500, MinimumLength = 2, ErrorMessage = "Las {0} no pueden tener más de {1} y menos de {2}")]
         public string Observaciones { get; set; }
 
+        [Display(Name = "Código del pedido:")]
+        [Required(ErrorMessage = "Debe introducir el {0}")]
+        [RegularExpression(@"^\d*$", ErrorMessage = "El {0} solo puede contener números.")]
+        public string CodigoPedido { get; set; }
+
         public virtual ICollection<RequerimientosArticulosDetalles> RequerimientosArticulosDetalles { get; set; }
         public virtual ICollection<SalidaArticulos> SalidaArticulos { get; set; }
     }

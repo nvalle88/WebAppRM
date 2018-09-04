@@ -80,9 +80,9 @@
         </tr>
 
         <tr>
+            <td><b>@Html.DisplayNameFor(model => model.OrdenCompraDetalles.FirstOrDefault().MaestroArticuloSucursal.Articulo.Nombre)</b></td>
             <td><b>@Html.DisplayNameFor(model => model.OrdenCompraDetalles.FirstOrDefault().Cantidad)</b></td>
             <td><b>@Html.DisplayNameFor(model => model.OrdenCompraDetalles.FirstOrDefault().MaestroArticuloSucursal.Articulo.IdUnidadMedida)</b></td>
-            <td><b>@Html.DisplayNameFor(model => model.OrdenCompraDetalles.FirstOrDefault().MaestroArticuloSucursal.Articulo.Nombre)</b></td>
             <td><b>@Html.DisplayNameFor(model => model.OrdenCompraDetalles.FirstOrDefault().ValorUnitario)</b></td>
             <td><b>Valor total</b></td>
         </tr>
@@ -94,18 +94,14 @@
                 decimal valorTotal = (item.Cantidad * item.ValorUnitario);
                 total += valorTotal;
                 <tr>
+                    <td>@Html.DisplayFor(m=> item.MaestroArticuloSucursal.Articulo.Nombre)</td>
                     <td>@Html.DisplayFor(m=> item.Cantidad)</td>
                     <td>@Html.DisplayFor(m=> item.MaestroArticuloSucursal.Articulo.UnidadMedida.Nombre)</td>
-                    <td>@Html.DisplayFor(m=> item.MaestroArticuloSucursal.Articulo.Nombre)</td>
                     <td>@Html.DisplayFor(m=> item.ValorUnitario)</td>
                     <td>@{await ViewContext.Writer.WriteAsync(valorTotal.ToString("C2"));}</td>
                 </tr>
             }
         }
-
-        <tr>
-            <td colspan="5" class="noBorder">&nbsp;</td>
-        </tr>
 
         <tr>
             <td colspan="3" class="noBorder"></td>

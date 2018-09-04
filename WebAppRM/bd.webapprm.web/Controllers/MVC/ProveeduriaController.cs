@@ -342,7 +342,7 @@ namespace bd.webapprm.web.Controllers.MVC
             }
             catch (Exception)
             { }
-            return StatusCode(500);
+            return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorReporte}", nameof(DetallesOrdenCompraEnTramite), routeValues: new { id });
         }
         #endregion
 
@@ -567,12 +567,15 @@ namespace bd.webapprm.web.Controllers.MVC
 
                 foreach (var item in requerimientoArticulos.RequerimientosArticulosDetalles)
                 {
-                    string cantidad = Request.Form[$"cantidad_{item.IdMaestroArticuloSucursal}"].ToString();
-                    if (!String.IsNullOrEmpty(cantidad))
-                    {
-                        item.CantidadSolicitada = int.Parse(cantidad);
-                        listaRequerimientoArticulosDetalles.Add(item);
-                    }
+                    string cantidadAprobada = Request.Form[$"cantidadAprobada_{item.IdMaestroArticuloSucursal}"].ToString();
+                    if (!String.IsNullOrEmpty(cantidadAprobada))
+                        item.CantidadAprobada = int.Parse(cantidadAprobada);
+
+                    string cantidadEntregada = Request.Form[$"cantidadEntregada_{item.IdMaestroArticuloSucursal}"].ToString();
+                    if (!String.IsNullOrEmpty(cantidadEntregada))
+                        item.CantidadEntregada = int.Parse(cantidadEntregada);
+
+                    listaRequerimientoArticulosDetalles.Add(item);
                 }
                 salidaArticulos.RequerimientoArticulos.RequerimientosArticulosDetalles = listaRequerimientoArticulosDetalles;
 
@@ -619,6 +622,22 @@ namespace bd.webapprm.web.Controllers.MVC
             catch (Exception)
             { }
             return StatusCode(500);
+        }
+
+        public async Task<IActionResult> ExportarExcelRequerimiento(int? id)
+        {
+            try
+            {
+                var fileContents = await apiServicio.ObtenerElementoAsync<byte[]>(id, new Uri(WebApp.BaseAddressRM), "api/Proveeduria/ExcelRequerimientoArticulos");
+                if (fileContents.Length > 0)
+                {
+                    var fileName = "Requerimiento de artículos.xlsx";
+                    return File(fileContents, MimeTypes.GetMimeType(fileName), fileName);
+                }
+            }
+            catch (Exception)
+            { }
+            return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorReporte}", nameof(DetallesRequerimientoArticulos), routeValues: new { id });
         }
         #endregion
 

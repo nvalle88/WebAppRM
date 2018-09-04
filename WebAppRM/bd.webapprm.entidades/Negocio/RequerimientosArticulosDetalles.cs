@@ -32,7 +32,17 @@ namespace bd.webapprm.entidades
         [Display(Name = "Cantidad aprobada:")]
         public int CantidadAprobada { get; set; }
 
+        [Required(ErrorMessage = "Debe introducir la {0}")]
+        [Display(Name = "Cantidad entregada:")]
+        public int CantidadEntregada { get; set; }
+
+        [Required(ErrorMessage = "Debe introducir el {0}")]
+        [Display(Name = "Valor de artículo:")]
+        [DisplayFormat(DataFormatString = "{0:C2}", ApplyFormatInEditMode = false)]
+        public decimal ValorActual { get; set; }
+
         [NotMapped]
+        [Display(Name = "Cantidad en bodega:")]
         public int CantidadBodega { get; set; }
     }
 }

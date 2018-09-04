@@ -14,6 +14,7 @@ namespace bd.webapprm.entidades.Utils
         public static string Excepcion { get { return "Ha ocurrido una Excepción."; } }
         public static string ErrorCargarDatos { get { return "Ha ocurrido un error al cargar los datos."; } }
         public static string ErrorUploadFiles { get { return "Ha ocurrido un error al subir la documentación adicional."; } }
+        public static string ErrorReporte { get { return "Ha ocurrido un error al generar el reporte."; } }
         public static string ModeloInvalido { get { return "El Módelo es inválido."; } }
         public static string Informacion { get { return "Información"; } }
         public static string Error { get { return "Error"; } }
@@ -157,5 +158,6 @@ namespace bd.webapprm.entidades.Utils
         public static string motivoTransferencia { get { return "MotivoTransferencia"; } }
         public static string fechaUbicacion { get { return "FechaUbicacion"; } }
         public static string motivoUbicacion { get { return "MotivoUbicacion"; } }
+        public static string valorActual { get { return "ValorActual"; } }
     }
 }

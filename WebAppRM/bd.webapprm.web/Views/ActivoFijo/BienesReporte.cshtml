@@ -1,4 +1,7 @@
 @model RecepcionActivoFijoDetalle
+@{ 
+    bool isBodega = ViewBag.IsBodega ?? false;
+}
 
 @section css{
     <link rel="stylesheet" type="text/css" href="~/css/activoFijo/recepcion.min.css" />
@@ -36,11 +39,11 @@
                                         <section>
                                             <div class="inline-group">
                                                 <label class="radio">
-                                                    <input type="radio" name="radio-inline" id="radioBodegaDatosEspecificos" data-ubicacion="Bodega" class="radioDatosEspecificos" checked="checked">
+                                                    <input type="radio" name="radio-inline" id="radioBodegaDatosEspecificos" data-ubicacion="Bodega" class="radioDatosEspecificos" @String.Format("{0}", isBodega ? "checked=checked" : "")>
                                                     <i></i>@Html.DisplayNameFor(model => model.UbicacionActivoFijoActual.IdBodega)
                                                 </label>
                                                 <label class="radio">
-                                                    <input type="radio" name="radio-inline" id="radioEmpleadoDatosEspecificos" data-ubicacion="Empleado" class="radioDatosEspecificos">
+                                                    <input type="radio" name="radio-inline" id="radioEmpleadoDatosEspecificos" data-ubicacion="Empleado" class="radioDatosEspecificos" @String.Format("{0}", !isBodega ? "checked=checked" : "")>
                                                     <i></i>@Html.DisplayNameFor(model => model.UbicacionActivoFijoActual.IdEmpleado)
                                                 </label>
                                             </div>
@@ -58,7 +61,7 @@
                                             </section>
                                         </div>
 
-                                        <div id="divDatosEspecificosBodega" class="row">
+                                        <div id="divDatosEspecificosBodega" class="row @String.Format("{0}", !isBodega ? "hide" : "")">
                                             <section class="col col-2">
                                                 <label>@Html.DisplayNameFor(model => model.UbicacionActivoFijoActual.IdBodega)</label>
                                             </section>
@@ -70,7 +73,7 @@
                                             </section>
                                         </div>
 
-                                        <div id="divDatosEspecificosEmpleado" class="row hide">
+                                        <div id="divDatosEspecificosEmpleado" class="row  @String.Format("{0}", isBodega ? "hide" : "")">
                                             <section class="col col-2">
                                                 <label>@Html.DisplayNameFor(model => model.UbicacionActivoFijoActual.IdEmpleado)</label>
                                             </section>

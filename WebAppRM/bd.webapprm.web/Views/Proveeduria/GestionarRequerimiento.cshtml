@@ -32,6 +32,33 @@
                                     <legend>Datos generales</legend>
                                     <div class="row">
                                         <section class="col col-4">
+                                            <label asp-for="CodigoPedido"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <input asp-for="CodigoPedido" class="form-control" />
+                                                <span asp-validation-for="CodigoPedido" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label asp-for="Observaciones"></label>
+                                        </section>
+
+                                        <section class="col col-8">
+                                            <label class="input">
+                                                <textarea asp-for="Observaciones" class="form-control paddingTextArea98"></textarea>
+                                                <span asp-validation-for="Observaciones" class="text-danger"></span>
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    <legend>Datos de ubicaci&oacute;n</legend>
+                                    <div class="row margin-top-25">
+                                        <section class="col col-4">
                                             <label asp-for="FuncionarioSolicitante.Dependencia.IdSucursal"></label>
                                         </section>
 
@@ -88,19 +115,6 @@
                                         </section>
                                     </div>
 
-                                    <div class="row">
-                                        <section class="col col-4">
-                                            <label asp-for="Observaciones"></label>
-                                        </section>
-
-                                        <section class="col col-8">
-                                            <label class="input">
-                                                <textarea asp-for="Observaciones" class="form-control paddingTextArea97"></textarea>
-                                                <span asp-validation-for="Observaciones" class="text-danger"></span>
-                                            </label>
-                                        </section>
-                                    </div>
-
                                     <legend>Detalles</legend>
                                     <p class="margin-top-10">
                                         <button type="button" class="btn btn-primary" style="padding:7px !important;margin-left:7px !important;" onclick="cargarListadoActivosFijosParaSeleccion(this,'Art&iacute;culos')" data-funcioncallback="callBackInicializarTableListadoSeleccion" id="btnAdicionarArticulos">Adicionar / Eliminar Art&iacute;culos</button>
@@ -109,11 +123,12 @@
                                     <div class="table-responsive">
                                         <table id="tableDetallesRequerimientos" class="table table-striped table-bordered table-hover" style="width:100%;">
                                             <thead>
-                                                @{ await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", 4);}
+                                                @{ await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", 5);}
                                                 <tr>
                                                     <th>@Html.DisplayNameFor(m => m.RequerimientosArticulosDetalles.FirstOrDefault().MaestroArticuloSucursal.Articulo.Nombre)</th>
                                                     <th>@Html.DisplayNameFor(m => m.RequerimientosArticulosDetalles.FirstOrDefault().CantidadSolicitada)</th>
-                                                    <th>Cantidad en bodega</th>
+                                                    <th>@Html.DisplayNameFor(m => m.RequerimientosArticulosDetalles.FirstOrDefault().ValorActual)</th>
+                                                    <th>@Html.DisplayNameFor(m => m.RequerimientosArticulosDetalles.FirstOrDefault().CantidadBodega)</th>
                                                     <th>Opciones</th>
                                                 </tr>
                                             </thead>
@@ -136,6 +151,7 @@
                                                                         </div>
                                                                     </div>
                                                                 </td>
+                                                                <td>@Html.DisplayFor(m => item.ValorActual)</td>
                                                                 <td>@Html.DisplayFor(m => item.CantidadBodega)</td>
                                                                 <td>
                                                                     <input type="hidden" class="hiddenIdRecepcionActivoFijoDetalle" id="hIdRecepcionActivoFijoDetalle_@item.IdMaestroArticuloSucursal" name="hIdRecepcionActivoFijoDetalle_@item.IdMaestroArticuloSucursal" value="@item.IdMaestroArticuloSucursal">

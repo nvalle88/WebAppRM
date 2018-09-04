@@ -135,7 +135,15 @@ namespace bd.webapprm.servicios.Servicios
                     if (item.AdmeTipo == "M")
                         htmlContentBuilder.AppendHtml($"<a href='#'><i class='fa fa-lg fa-folder-o'></i> <span style='font-family:Arial' class='font-sm'>  {item.AdmeAplicacion}</span></a>");
                     if (item.AdmeTipo == "A")
-                        htmlContentBuilder.AppendHtml($"<a href='{url.Action(ObtenerAccion(item.AdmeControlador), ObtenerControlador(item.AdmeControlador))}'><i class='fa fa-lg fa-gear'></i> <span style='font-family:Arial' class='font-sm'>  {item.AdmeAplicacion}</span></a>");
+                    {
+                        if (item.AdmeAplicacion == "Crear requerimiento")
+                        {
+                            if (DateTime.Now.Day <= WebApp.DiasPedido)
+                                htmlContentBuilder.AppendHtml($"<a href='{url.Action(ObtenerAccion(item.AdmeControlador), ObtenerControlador(item.AdmeControlador))}'><i class='fa fa-lg fa-gear'></i> <span style='font-family:Arial' class='font-sm'>  {item.AdmeAplicacion}</span></a>");
+                        }
+                        else
+                            htmlContentBuilder.AppendHtml($"<a href='{url.Action(ObtenerAccion(item.AdmeControlador), ObtenerControlador(item.AdmeControlador))}'><i class='fa fa-lg fa-gear'></i> <span style='font-family:Arial' class='font-sm'>  {item.AdmeAplicacion}</span></a>");
+                    }
                     else
                     {
                         if (niveles > 1)

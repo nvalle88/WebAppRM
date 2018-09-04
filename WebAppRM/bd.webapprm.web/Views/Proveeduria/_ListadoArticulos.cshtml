@@ -8,7 +8,7 @@
     <table id="@nombreTabla" class="table table-striped table-bordered table-hover" style="width:100%;">
         <thead>
             <tr>
-                @{ await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", 8, new ViewDataDictionary(ViewData) { { "MostrarFiltradoUltimaColumna", true } });}
+                @{ await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", 9, new ViewDataDictionary(ViewData) { { "MostrarFiltradoUltimaColumna", true } });}
                 <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.seleccion)">
                     @{
                         await Html.RenderPartialAsync("_CheckBoxSeleccion", new ViewDataDictionary(ViewData){
@@ -39,6 +39,9 @@
                 </th>
                 <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.modelo)">
                     @Html.DisplayNameFor(model => model.FirstOrDefault().MaestroArticuloSucursal.Articulo.IdModelo)
+                </th>
+                <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.valorActual)">
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().MaestroArticuloSucursal.ValorActual)
                 </th>
                 <th class="hide" id="@String.Format("th{0}{1}", nombreTabla, ThClassName.cantidad)"></th>
                 <th class="hide" id="@String.Format("th{0}{1}", nombreTabla, ThClassName.valorUnitario)"></th>
@@ -87,6 +90,10 @@
 
                     <td class="thModelo" id="@String.Format("{0}{1}{2}", nombreTabla, item.MaestroArticuloSucursal.IdMaestroArticuloSucursal, ThClassName.modelo)">
                         @Html.DisplayFor(modelItem => item.MaestroArticuloSucursal.Articulo.Modelo.Nombre)
+                    </td>
+
+                    <td class="thModelo" id="@String.Format("{0}{1}{2}", nombreTabla, item.MaestroArticuloSucursal.IdMaestroArticuloSucursal, ThClassName.valorActual)">
+                        @Html.DisplayFor(modelItem => item.MaestroArticuloSucursal.ValorActual)
                     </td>
 
                     <td class="thCantidad hide" id="@String.Format("{0}{1}{2}", nombreTabla, item.MaestroArticuloSucursal.IdMaestroArticuloSucursal, ThClassName.cantidad)">
