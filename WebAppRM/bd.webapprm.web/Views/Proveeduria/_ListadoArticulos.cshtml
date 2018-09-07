@@ -3,22 +3,33 @@
 @{
     string nombreTabla = "tableDetallesArticulos";
     bool isFuncionarioSolicitante = claimsTransfer.IsADMIGrupo(ADMI_Grupos.FuncionarioSolicitante);
+    bool isSeleccion = ViewBag.IsSeleccion ?? true;
+    var cantidad = 8;
+    if (isSeleccion)
+    {
+        cantidad++;
+    }
 }
 <div class="table-responsive">
     <table id="@nombreTabla" class="table table-striped table-bordered table-hover" style="width:100%;">
         <thead>
             <tr>
-                @{ await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", 9, new ViewDataDictionary(ViewData) { { "MostrarFiltradoUltimaColumna", true } });}
-                <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.seleccion)">
-                    @{
-                        await Html.RenderPartialAsync("_CheckBoxSeleccion", new ViewDataDictionary(ViewData){
-                            { "Seleccionado", false },
-                            { "IdRecepcionActivoFijoDetalle", 0 },
-                            { "CallbackFunctionAddRowDetalleTodos", "CallbackFunctionCheckBoxArticulo" },
-                            { "CallbackFunctionRemoveRowDetalleTodos", "callBackFunctionEliminarDatoEspecifico" }
-                        });
+                @{
+                    await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", cantidad, new ViewDataDictionary(ViewData) { { "MostrarFiltradoUltimaColumna", true } });
+                    if (isSeleccion)
+                    {
+                        <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.seleccion)">
+                            @{
+                                await Html.RenderPartialAsync("_CheckBoxSeleccion", new ViewDataDictionary(ViewData){
+                                    { "Seleccionado", false },
+                                    { "IdRecepcionActivoFijoDetalle", 0 },
+                                    { "CallbackFunctionAddRowDetalleTodos", "CallbackFunctionCheckBoxArticulo" },
+                                    { "CallbackFunctionRemoveRowDetalleTodos", "callBackFunctionEliminarDatoEspecifico" }
+                                });
+                            }
+                        </th>
                     }
-                </th>
+                }
                 <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.nombreArticulo)">
                     @Html.DisplayNameFor(model => model.FirstOrDefault().MaestroArticuloSucursal.IdArticulo)
                 </th>
@@ -47,22 +58,27 @@
                 <th class="hide" id="@String.Format("th{0}{1}", nombreTabla, ThClassName.valorUnitario)"></th>
                 <th class="hide" id="@String.Format("th{0}{1}", nombreTabla, ThClassName.valorTotal)"></th>
                 <th class="hide" id="@String.Format("th{0}{1}", nombreTabla, ThClassName.cantidadBodega)"></th>
+                <th class="hide" id="@String.Format("th{0}{1}", nombreTabla, ThClassName.proveedor)"></th>
             </tr>
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
                 <tr id="@String.Format("{0}{1}", nombreTabla, item.MaestroArticuloSucursal.IdMaestroArticuloSucursal)">
-                    <td class="thSeleccion">
-                        @{
-                            await Html.RenderPartialAsync("_CheckBoxSeleccion", new ViewDataDictionary(ViewData){
-                                { "Seleccionado", item.Seleccionado },
-                                { "CallbackFunctionCheckBox", "CallbackFunctionCheckBoxArticulo" },
-                                { "IdRecepcionActivoFijoDetalle", item.MaestroArticuloSucursal.IdMaestroArticuloSucursal }
-                            });
+                    @{ 
+                        if (isSeleccion)
+                        {
+                            <td class="thSeleccion">
+                                @{
+                                    await Html.RenderPartialAsync("_CheckBoxSeleccion", new ViewDataDictionary(ViewData){
+                                        { "Seleccionado", item.Seleccionado },
+                                        { "CallbackFunctionCheckBox", "CallbackFunctionCheckBoxArticulo" },
+                                        { "IdRecepcionActivoFijoDetalle", item.MaestroArticuloSucursal.IdMaestroArticuloSucursal }
+                                    });
+                                }
+                            </td>
                         }
-                    </td>
-
+                    }
 
                     <td class="thNombreArticulo" id="@String.Format("{0}{1}{2}", nombreTabla, item.MaestroArticuloSucursal.IdMaestroArticuloSucursal, ThClassName.nombreArticulo)">
                         @Html.DisplayFor(modelItem => item.MaestroArticuloSucursal.Articulo.Nombre)
@@ -113,6 +129,9 @@
                     <td class="thValorTotal hide" id="@String.Format("{0}{1}{2}", nombreTabla, item.MaestroArticuloSucursal.IdMaestroArticuloSucursal, ThClassName.valorTotal)"><span id="spanValorTotal_@item.MaestroArticuloSucursal.IdMaestroArticuloSucursal">0.00</span></td>
                     <td class="thCantidadBodega hide" id="@String.Format("{0}{1}{2}", nombreTabla, item.MaestroArticuloSucursal.IdMaestroArticuloSucursal, ThClassName.cantidadBodega)">
                         @Html.DisplayFor(modelItem => item.CantidadBodega)
+                    </td>
+                    <td class="thProveedor hide" id="@String.Format("{0}{1}{2}", nombreTabla, item.MaestroArticuloSucursal.IdMaestroArticuloSucursal, ThClassName.proveedor)">
+                        @Html.DisplayFor(modelItem => item.Proveedor.RazonSocial)
                     </td>
                 </tr>
             }

@@ -1,0 +1,70 @@
+@model MaestroArticuloSucursal
+
+@section css{
+    <link rel="stylesheet" type="text/css" href="~/css/activoFijo/recepcion.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/tableSmartForm.min.css" />
+}
+<div id="content">
+    <section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="jarviswidget jarviswidget-color-darken" id="wid-id-0" data-widget-editbutton="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-table"></i> </span>
+                        <h2>Reportes</h2>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox"></div>
+                        <div class="widget-body no-padding">
+                            <div class="widget-body-toolbar">
+                                <div class="row">
+                                    <div class="col-sm-4"></div>
+                                    <div class="col-sm-8 text-align-right">
+                                        <form asp-action="ExportarExcelProveedorArticulo" id="checkout-form" class="smart-form noFormLoading" novalidate="novalidate">
+                                            <input type="hidden" id="idArticulo" name="idArticulo" />
+                                            <button type="submit" class="btn btn-primary padding-7" id="btn-guardar"><i class="fa fa-print"></i> Imprimir Proveedores por art&iacute;culo</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="padding-10">
+                                <br>
+                                <div class="pull-left">
+                                    <h3 class="margin-top-0" style="font-size:212% !important;"><i class="fa fa-file-text-o"></i> Proveedores por art&iacute;culo</h3>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="smart-form padding-top-0">
+                                    <fieldset>
+                                        <legend>Datos generales</legend>
+                                        <div class="row">
+                                            <section class="col col-2">
+                                                <label asp-for="IdArticulo"></label>
+                                            </section>
+
+                                            <section class="col col-6">
+                                                <label class="input">
+                                                    <select asp-for="IdArticulo" class="form-control" asp-items="ViewBag.Articulo"></select>
+                                                </label>
+                                            </section>
+                                        </div>
+
+                                        <div id="divListadoProveedores"></div>
+                                    </fieldset>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+</div>
+@section Scripts{
+    <script src="~/lib/bootbox/bootbox.min.js"></script>
+    <script src='~/js/activoFijo/listadoSeleccion.min.js'></script>
+    <script src="~/js/activoFijo/listadoAgrupacion.min.js"></script>
+    <script src="~/js/proveeduria/proveedoresPorArticuloReporte.min.js"></script>
+    <script>
+        var urlListadoProveedoresPorArticulo = "@Url.Action("ProveedoresPorArticuloResult")";
+    </script>
+}

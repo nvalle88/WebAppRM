@@ -28,6 +28,7 @@ namespace bd.webapprm.entidades.ObjectTransfer
         public MaestroArticuloSucursal MaestroArticuloSucursal { get; set; }
         public bool Seleccionado { get; set; }
         public int CantidadBodega { get; set; }
+        public Proveedor Proveedor { get; set; }
     }
 
     public class IdSucursalIdRecepcionActivoFijoDetalleSeleccionado

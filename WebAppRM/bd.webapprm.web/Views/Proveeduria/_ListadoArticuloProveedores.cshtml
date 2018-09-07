@@ -1,0 +1,105 @@
+@model List<ArticuloProveedoresTransfer>
+@{ 
+    var nombreTabla = "dt_basic";
+}
+
+<div class="table-responsive">
+    <table id="@nombreTabla" class="table table-striped table-bordered table-hover" style="width:100%;">
+        <thead>
+            <tr>
+                @{ await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", 12, new ViewDataDictionary(ViewData) { { "MostrarFiltradoUltimaColumna", true } });}
+                <th class="hide" id="@String.Format("th{0}{1}", nombreTabla, ThClassName.nombreArticulo)">
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().Articulo.Nombre)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().ListadoProveedores.FirstOrDefault().Codigo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().ListadoProveedores.FirstOrDefault().RepresentanteLegal)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().ListadoProveedores.FirstOrDefault().PersonaContacto)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().ListadoProveedores.FirstOrDefault().Identificacion)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().ListadoProveedores.FirstOrDefault().IdLineaServicio)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().ListadoProveedores.FirstOrDefault().RazonSocial)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().ListadoProveedores.FirstOrDefault().Telefono)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().ListadoProveedores.FirstOrDefault().Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().ListadoProveedores.FirstOrDefault().Cargo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().ListadoProveedores.FirstOrDefault().Direccion)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().ListadoProveedores.FirstOrDefault().Observaciones)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FirstOrDefault().ListadoProveedores.FirstOrDefault().Activo)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                if (item.ListadoProveedores != null && item.ListadoProveedores.Count > 0)
+                {
+                    foreach (var prov in item.ListadoProveedores)
+                    {
+                        <tr>
+                            <td class="hide" id="@String.Format("{0}{1}{2}", nombreTabla, item.Articulo.IdArticulo, ThClassName.nombreArticulo)">
+                                @Html.DisplayFor(modelItem => item.Articulo.Nombre)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => prov.Codigo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => prov.RepresentanteLegal)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => prov.PersonaContacto)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => prov.Identificacion)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => prov.LineaServicio.Nombre)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => prov.RazonSocial)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => prov.Telefono)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => prov.Email)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => prov.Cargo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => prov.Direccion)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => prov.Observaciones)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => prov.Activo)
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
+</div>

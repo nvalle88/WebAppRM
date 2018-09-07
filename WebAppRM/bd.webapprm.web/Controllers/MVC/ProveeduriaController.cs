@@ -818,6 +818,113 @@ namespace bd.webapprm.web.Controllers.MVC
         }
         #endregion
 
+        #region Reportes
+        #region Proveedores por artículo
+        public async Task<IActionResult> ProveedoresPorArticuloReporte(int? id)
+        {
+            try
+            {
+                var claimTransfer = claimsTransfer.ObtenerClaimsTransferHttpContext();
+                var listaArticulos = claimsTransfer.IsADMIGrupo(ADMI_Grupos.AdminNacionalProveeduria) ? await apiServicio.Listar<Articulo>(new Uri(WebApp.BaseAddressRM), "api/Articulo/ListarArticulos") : await apiServicio.ObtenerElementoAsync<List<Articulo>>(claimTransfer.IdSucursal, new Uri(WebApp.BaseAddressRM), "api/Articulo/ListarArticulosPorSucursal");
+                listaArticulos.Insert(0, new Articulo { IdArticulo = -1, Nombre = "Todos" });
+                ViewData["Articulo"] = new SelectList(listaArticulos, "IdArticulo", "Nombre", id);
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Proveedores por artículo", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webapprm" });
+                TempData["Mensaje"] = $"{Mensaje.Error}|{Mensaje.ErrorListado}";
+            }
+            var maestroArticuloSucursal = new MaestroArticuloSucursal();
+            if (id != null)
+                maestroArticuloSucursal.IdArticulo = (int)id;
+            return View(maestroArticuloSucursal);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ProveedoresPorArticuloResult(int idArticulo)
+        {
+            var lista = new List<ArticuloProveedoresTransfer>();
+            try
+            {
+                lista = await apiServicio.ObtenerElementoAsync<List<ArticuloProveedoresTransfer>>(idArticulo, new Uri(WebApp.BaseAddressRM), "api/Proveeduria/ListadoProveedoresPorArticulo");
+            }
+            catch (Exception)
+            { }
+            return PartialView("_ListadoArticuloProveedores", lista);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ExportarExcelProveedorArticulo(int? idArticulo)
+        {
+            try
+            {
+                var fileContents = await apiServicio.ObtenerElementoAsync<byte[]>(idArticulo, new Uri(WebApp.BaseAddressRM), "api/Proveeduria/ExcelProveedoresPorArticulo");
+                if (fileContents.Length > 0)
+                {
+                    var fileName = "Proveedores por artículo.xlsx";
+                    return File(fileContents, MimeTypes.GetMimeType(fileName), fileName);
+                }
+            }
+            catch (Exception)
+            { }
+            return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorReporte}", nameof(ProveedoresPorArticuloReporte), routeValues: new { id = idArticulo });
+        }
+        #endregion
+
+        #region Artículos por proveedor
+        public async Task<IActionResult> ArticuloPorProveedoresReporte(int? id)
+        {
+            try
+            {
+                var listaProveedor = await apiServicio.ObtenerElementoAsync<List<Proveedor>>(new ProveedorTransfer { LineaServicio = LineasServicio.ActivosFijos, Activo = true }, new Uri(WebApp.BaseAddressRM), "api/Proveedor/ListarProveedoresPorLineaServicioEstado");
+                listaProveedor.Insert(0, new Proveedor { IdProveedor = -1, RazonSocial = "Todos" });
+                ViewData["Proveedor"] = new SelectList(listaProveedor, "IdProveedor", "RazonSocial", id);
+
+            }
+            catch (Exception ex)
+            {
+                await GuardarLogService.SaveLogEntry(new LogEntryTranfer { ApplicationName = Convert.ToString(Aplicacion.WebAppRM), Message = "Artículos por proveedor", ExceptionTrace = ex.Message, LogCategoryParametre = Convert.ToString(LogCategoryParameter.NetActivity), LogLevelShortName = Convert.ToString(LogLevelParameter.ERR), UserName = "Usuario APP webapprm" });
+                TempData["Mensaje"] = $"{Mensaje.Error}|{Mensaje.ErrorListado}";
+            }
+            var proveedor = new Proveedor();
+            if (id != null)
+                proveedor.IdProveedor = (int)id;
+            return View(proveedor);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ArticulosPorProveedorResult(int idProveedor)
+        {
+            var lista = new List<MaestroArticuloSucursalSeleccionado>();
+            ViewData["IsSeleccion"] = false;
+            try
+            {
+                lista = await apiServicio.ObtenerElementoAsync<List<MaestroArticuloSucursalSeleccionado>>(idProveedor, new Uri(WebApp.BaseAddressRM), "api/Proveeduria/ListadoArticulosPorProveedor");
+            }
+            catch (Exception)
+            { }
+            return PartialView("_ListadoArticulos", lista);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ExportarExcelArticuloProveedor(int? idProveedor)
+        {
+            try
+            {
+                var fileContents = await apiServicio.ObtenerElementoAsync<byte[]>(idProveedor, new Uri(WebApp.BaseAddressRM), "api/Proveeduria/ExcelArticulosPorProveedor");
+                if (fileContents.Length > 0)
+                {
+                    var fileName = "Artículos por proveedor.xlsx";
+                    return File(fileContents, MimeTypes.GetMimeType(fileName), fileName);
+                }
+            }
+            catch (Exception)
+            { }
+            return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorReporte}", nameof(ArticuloPorProveedoresReporte), routeValues: new { id = idProveedor });
+        }
+        #endregion
+        #endregion
+
         #region Descargar Archivos
         public async Task<IActionResult> DescargarArchivo(int id)
         {
