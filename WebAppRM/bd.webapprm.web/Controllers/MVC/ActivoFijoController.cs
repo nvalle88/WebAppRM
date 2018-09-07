@@ -2244,7 +2244,7 @@ namespace bd.webapprm.web.Controllers.MVC
                 ViewData["Sucursal"] = new SelectList(new List<Sucursal> { new Sucursal { IdSucursal = claimTransfer.IdSucursal, Nombre = claimTransfer.NombreSucursal } }, "IdSucursal", "Nombre");
                 ViewData["Empleado"] = await ObtenerSelectListEmpleado(claimTransfer.IdSucursal, idEmpleado: id2, incluirTodos: true);
                 ViewData["Bodega"] = await ObtenerSelectListBodega(claimTransfer.IdSucursal, idBodega: id, incluirTodos: true);
-                ViewData["ÌsBodega"] = id != null;
+                ViewData["IsBodega"] = id2 == null || id2 == -1;
             }
             catch (Exception ex)
             {
@@ -2268,6 +2268,7 @@ namespace bd.webapprm.web.Controllers.MVC
             return PartialView("_ListadoDetallesActivosFijos", lista);
         }
 
+        [HttpPost]
         public async Task<IActionResult> ExportarExcelBienesReporte(bool isBodega, int idBodegaEmpleado)
         {
             try

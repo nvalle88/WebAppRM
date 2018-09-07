@@ -41,6 +41,10 @@ function partialViewDetallesActivosFijos() {
     mostrarLoadingPanel("content", "Cargando datos...");
     var isBodega = $("#radioBodegaDatosEspecificos").prop("checked");
     var idBodegaEmpleado = isBodega == true ? $("#IdBodega").val() : $("#IdEmpleado").val();
+
+    $("#isBodega").val(isBodega);
+    $("#idBodegaEmpleado").val(idBodegaEmpleado);
+
     $.ajax({
         url: urlListadoActivosFijosBodegaEmpleadoResult,
         method: "POST",
@@ -61,12 +65,4 @@ function partialViewDetallesActivosFijos() {
             $("#content").waitMe("hide");
         }
     });
-}
-
-function eventoExportarExcel() {
-    var isBodega = $("#radioBodegaDatosEspecificos").prop("checked");
-    var idBodegaEmpleado = isBodega == true ? $("#IdBodega").val() : $("#IdEmpleado").val();
-    var btnExportarExcel = $("#btnExportarExcel");
-    var hrefBtnExportarExcel = btnExportarExcel.prop("href");
-    btnExportarExcel.prop("href", hrefBtnExportarExcel + "/" + isBodega.toString() + "/" + idBodegaEmpleado.toString());
 }
