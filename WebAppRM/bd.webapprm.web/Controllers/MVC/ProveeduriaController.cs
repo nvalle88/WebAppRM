@@ -923,6 +923,65 @@ namespace bd.webapprm.web.Controllers.MVC
             return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorReporte}", nameof(ArticuloPorProveedoresReporte), routeValues: new { id = idProveedor });
         }
         #endregion
+
+        #region Movimientos de recepción
+        public IActionResult MovimientosRecepcionReporte()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ListadoOCResultPorRangoFecha(string fechaInicial, string fechaFinal)
+        {
+            var listadoOrdenesCompra = new List<OrdenCompra>();
+            try
+            {
+                if (!String.IsNullOrEmpty(fechaInicial) && !String.IsNullOrEmpty(fechaFinal))
+                {
+                    var arrFechaInicial = fechaInicial.Split('/');
+                    var arrFechaFinal = fechaFinal.Split('/');
+
+                    DateTime fInicial = new DateTime(int.Parse(arrFechaInicial[2]), int.Parse(arrFechaInicial[0]), int.Parse(arrFechaInicial[1]), 0, 0, 0);
+                    DateTime fFinal = new DateTime(int.Parse(arrFechaFinal[2]), int.Parse(arrFechaFinal[0]), int.Parse(arrFechaFinal[1]), 23, 59, 59);
+                    listadoOrdenesCompra = await apiServicio.ObtenerElementoAsync<List<OrdenCompra>>(new RangoFechaTransfer { FechaInicial = fInicial, FechaFinal = fFinal }, new Uri(WebApp.BaseAddressRM), "api/Proveeduria/ListadoOrdenCompraPorRangoFecha");
+                }
+                else
+                    listadoOrdenesCompra = await apiServicio.Listar<OrdenCompra>(new Uri(WebApp.BaseAddressRM), "api/Proveeduria/ListadoOrdenCompra");
+            }
+            catch (Exception)
+            { }
+            return PartialView("_ListadoOrdenCompra", listadoOrdenesCompra);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ExportarExcelMovRecepcion(string fechaInicial, string fechaFinal)
+        {
+            try
+            {
+                DateTime? fInicial = null;
+                DateTime? fFinal = null;
+
+                if (!String.IsNullOrEmpty(fechaInicial) && !String.IsNullOrEmpty(fechaFinal))
+                {
+                    var arrFechaInicial = fechaInicial.Split('/');
+                    var arrFechaFinal = fechaFinal.Split('/');
+
+                    fInicial = new DateTime(int.Parse(arrFechaInicial[2]), int.Parse(arrFechaInicial[0]), int.Parse(arrFechaInicial[1]), 0, 0, 0);
+                    fFinal = new DateTime(int.Parse(arrFechaFinal[2]), int.Parse(arrFechaFinal[0]), int.Parse(arrFechaFinal[1]), 23, 59, 59);
+                }
+
+                var fileContents = await apiServicio.ObtenerElementoAsync<byte[]>(new RangoFechaTransfer { FechaInicial = fInicial, FechaFinal = fFinal }, new Uri(WebApp.BaseAddressRM), "api/Proveeduria/ExcelMovimientosRecepcion");
+                if (fileContents.Length > 0)
+                {
+                    var fileName = "Movimientos de recepción.xlsx";
+                    return File(fileContents, MimeTypes.GetMimeType(fileName), fileName);
+                }
+            }
+            catch (Exception)
+            { }
+            return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorReporte}", nameof(MovimientosRecepcionReporte));
+        }
+        #endregion
         #endregion
 
         #region Descargar Archivos

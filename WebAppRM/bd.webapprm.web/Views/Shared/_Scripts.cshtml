@@ -14,7 +14,7 @@
 <script src="~/js/smart-vector.js"></script>
 <script src="~/js/smart-calendar.js"></script>
 <script src='~/lib/waitMe/waitMe.min.js'></script>
-<script src="~/js/site.min.js"></script>
+<script src="~/js/site.js"></script>
 
 <script>
     var urlAgruparFilas = "@Url.Action("AgruparFilasResult", "ActivoFijo")";
@@ -101,6 +101,8 @@
         fechaUbicacion: "@ThClassName.fechaUbicacion",
         motivoUbicacion: "@ThClassName.motivoUbicacion",
         valorActual: "@ThClassName.valorActual",
+        cantidadArticulos: "@ThClassName.cantidadArticulos",
+        valorTotalOrdenCompra: "@ThClassName.valorTotalOrdenCompra",
     };
 
     $(document).ready(function () {

@@ -4,8 +4,14 @@
     string nombreTabla = "tableDetallesArticulos";
     bool isFuncionarioSolicitante = claimsTransfer.IsADMIGrupo(ADMI_Grupos.FuncionarioSolicitante);
     bool isSeleccion = ViewBag.IsSeleccion ?? true;
-    var cantidad = 8;
+    bool mostrarValorActual = ViewBag.MostrarValorActual ?? true;
+
+    var cantidad = 7;
     if (isSeleccion)
+    {
+        cantidad++;
+    }
+    if (mostrarValorActual)
     {
         cantidad++;
     }
@@ -51,14 +57,22 @@
                 <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.modelo)">
                     @Html.DisplayNameFor(model => model.FirstOrDefault().MaestroArticuloSucursal.Articulo.IdModelo)
                 </th>
-                <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.valorActual)">
-                    @Html.DisplayNameFor(model => model.FirstOrDefault().MaestroArticuloSucursal.ValorActual)
-                </th>
+                @{ 
+                    if (mostrarValorActual)
+                    {
+                        <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.valorActual)">
+                            @Html.DisplayNameFor(model => model.FirstOrDefault().MaestroArticuloSucursal.ValorActual)
+                        </th>
+                    }
+                }
                 <th class="hide" id="@String.Format("th{0}{1}", nombreTabla, ThClassName.cantidad)"></th>
                 <th class="hide" id="@String.Format("th{0}{1}", nombreTabla, ThClassName.valorUnitario)"></th>
                 <th class="hide" id="@String.Format("th{0}{1}", nombreTabla, ThClassName.valorTotal)"></th>
                 <th class="hide" id="@String.Format("th{0}{1}", nombreTabla, ThClassName.cantidadBodega)"></th>
                 <th class="hide" id="@String.Format("th{0}{1}", nombreTabla, ThClassName.proveedor)"></th>
+                <th class="hide" id="@String.Format("th{0}{1}", nombreTabla, ThClassName.codigoSecuencial)"></th>
+                <th class="hide" id="@String.Format("th{0}{1}", nombreTabla, ThClassName.bodega)"></th>
+                <th class="hide" id="@String.Format("th{0}{1}", nombreTabla, ThClassName.fechaRecepcion)"></th>
             </tr>
         </thead>
         <tbody>
@@ -108,9 +122,14 @@
                         @Html.DisplayFor(modelItem => item.MaestroArticuloSucursal.Articulo.Modelo.Nombre)
                     </td>
 
-                    <td class="thModelo" id="@String.Format("{0}{1}{2}", nombreTabla, item.MaestroArticuloSucursal.IdMaestroArticuloSucursal, ThClassName.valorActual)">
-                        @Html.DisplayFor(modelItem => item.MaestroArticuloSucursal.ValorActual)
-                    </td>
+                    @{ 
+                        if (mostrarValorActual)
+                        {
+                            <td class="thValorActual" id="@String.Format("{0}{1}{2}", nombreTabla, item.MaestroArticuloSucursal.IdMaestroArticuloSucursal, ThClassName.valorActual)">
+                                @Html.DisplayFor(modelItem => item.MaestroArticuloSucursal.ValorActual)
+                            </td>
+                        }
+                    }
 
                     <td class="thCantidad hide" id="@String.Format("{0}{1}{2}", nombreTabla, item.MaestroArticuloSucursal.IdMaestroArticuloSucursal, ThClassName.cantidad)">
                         <div class="input-group spinner" data-trigger="spinner" id="spinner_@item.MaestroArticuloSucursal.IdMaestroArticuloSucursal">
@@ -121,15 +140,21 @@
                             </div>
                         </div>
                     </td>
+
                     <td class="thValorUnitario hide" id="@String.Format("{0}{1}{2}", nombreTabla, item.MaestroArticuloSucursal.IdMaestroArticuloSucursal, ThClassName.valorUnitario)">
                         <label class="input">
                             <input id="valorUnitario_@item.MaestroArticuloSucursal.IdMaestroArticuloSucursal" name="valorUnitario_@item.MaestroArticuloSucursal.IdMaestroArticuloSucursal" class="form-control touchspin_tasa" onchange="calcularCostos();" />
                         </label>
                     </td>
-                    <td class="thValorTotal hide" id="@String.Format("{0}{1}{2}", nombreTabla, item.MaestroArticuloSucursal.IdMaestroArticuloSucursal, ThClassName.valorTotal)"><span id="spanValorTotal_@item.MaestroArticuloSucursal.IdMaestroArticuloSucursal">0.00</span></td>
+
+                    <td class="thValorTotal hide" id="@String.Format("{0}{1}{2}", nombreTabla, item.MaestroArticuloSucursal.IdMaestroArticuloSucursal, ThClassName.valorTotal)">
+                        <span id="spanValorTotal_@item.MaestroArticuloSucursal.IdMaestroArticuloSucursal">0.00</span>
+                    </td>
+
                     <td class="thCantidadBodega hide" id="@String.Format("{0}{1}{2}", nombreTabla, item.MaestroArticuloSucursal.IdMaestroArticuloSucursal, ThClassName.cantidadBodega)">
                         @Html.DisplayFor(modelItem => item.CantidadBodega)
                     </td>
+
                     <td class="thProveedor hide" id="@String.Format("{0}{1}{2}", nombreTabla, item.MaestroArticuloSucursal.IdMaestroArticuloSucursal, ThClassName.proveedor)">
                         @Html.DisplayFor(modelItem => item.Proveedor.RazonSocial)
                     </td>
