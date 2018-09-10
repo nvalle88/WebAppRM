@@ -6,7 +6,7 @@ namespace bd.webapprm.entidades.ObjectTransfer
 {
     public class RangoFechaTransfer
     {
-        public DateTime FechaInicial { get; set; }
-        public DateTime FechaFinal { get; set; }
+        public DateTime? FechaInicial { get; set; }
+        public DateTime? FechaFinal { get; set; }
     }
 }

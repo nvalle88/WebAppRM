@@ -159,5 +159,7 @@ namespace bd.webapprm.entidades.Utils
         public static string fechaUbicacion { get { return "FechaUbicacion"; } }
         public static string motivoUbicacion { get { return "MotivoUbicacion"; } }
         public static string valorActual { get { return "ValorActual"; } }
+        public static string cantidadArticulos { get { return "CantidadArticulos"; } }
+        public static string valorTotalOrdenCompra { get { return "ValorTotalOrdenCompra"; } }
     }
 }

@@ -1,8 +1,8 @@
 @model List<OrdenCompra>
-
 @{
     string estado = ViewBag.Estado;
 }
+
 <div id="content">
     @{
         if (estado == Estados.EnTramite)
@@ -24,83 +24,7 @@
                         <div class="jarviswidget-editbox">
                         </div>
                         <div class="widget-body no-padding">
-                            <table id="dt_basic" class="table table-striped table-bordered table-hover" style="width:100%;">
-                                <thead>
-                                    <tr>
-                                        @{ await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", 9);}
-                                        <th>
-                                            @Html.DisplayNameFor(model => model.FirstOrDefault().Bodega.IdSucursal)
-                                        </th>
-                                        <th>
-                                            @Html.DisplayNameFor(model => model.FirstOrDefault().IdBodega)
-                                        </th>
-                                        <th>
-                                            @Html.DisplayNameFor(model => model.FirstOrDefault().IdMotivoRecepcionArticulos)
-                                        </th>
-                                        <th>
-                                            @Html.DisplayNameFor(model => model.FirstOrDefault().Codigo)
-                                        </th>
-                                        <th>
-                                            @Html.DisplayNameFor(model => model.FirstOrDefault().IdEmpleadoDevolucion)
-                                        </th>
-                                        <th>
-                                            @Html.DisplayNameFor(model => model.FirstOrDefault().IdProveedor)
-                                        </th>
-                                        <th>
-                                            @Html.DisplayNameFor(model => model.FirstOrDefault().Fecha)
-                                        </th>
-                                        <th>
-                                            @Html.DisplayNameFor(model => model.FirstOrDefault().Factura.NumeroFactura)
-                                        </th>
-                                        <th>
-                                            Opciones
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model)
-                                    {
-                                        <tr>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Bodega.Sucursal.Nombre)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Bodega.Nombre)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.MotivoRecepcionArticulos.Descripcion)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Codigo)
-                                            </td>
-                                            <td>
-                                                @{await ViewContext.Writer.WriteAsync(item.EmpleadoDevolucion != null ? $"{item.EmpleadoDevolucion.Persona.Nombres} {item.EmpleadoDevolucion.Persona.Apellidos}" : "-");}
-                                            </td>
-                                            <td>
-                                                @{await ViewContext.Writer.WriteAsync(item.Proveedor != null ? item.Proveedor.RazonSocial : "-");}
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Fecha)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Factura.NumeroFactura)
-                                            </td>
-                                            <td>
-                                                <a asp-action="DetallesOrdenCompraEnTramite" asp-route-id="@item.IdOrdenCompra">Detalles</a>
-                                                @{
-                                                    if (estado == Estados.EnTramite)
-                                                    {
-                                                        <span> | </span>
-                                                        <a asp-action="GestionarOrdenCompraEnTramite" asp-route-id="@item.IdOrdenCompra">Editar</a><span> | </span>
-                                                        <a href="javascript:void(0);" id="@item.IdOrdenCompra" onclick="abrirVentanaConfirmacion('@item.IdOrdenCompra')" data-url="@Url.Action("ProcesarOrdenCompra", values: new { id = item.IdOrdenCompra })" data-titulo="Procesar" data-descripcion="&#191;Desea procesar la Orden de compra... ?">Procesar</a>
-                                                        <a href="javascript:void(0);" id="@item.IdOrdenCompra" onclick="abrirVentanaConfirmacion('@item.IdOrdenCompra')" data-url="@Url.Action("DeleteOrdenCompraEnTramite", values: new { id = item.IdOrdenCompra })" data-titulo="Eliminar" data-descripcion="&#191;Desea eliminar la Orden de compra... ?">Eliminar</a>
-                                                    }
-                                                }
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
+                            @{await Html.RenderPartialAsync("_ListadoOrdenCompra", Model);}
                         </div>
                     </div>
                 </div>
