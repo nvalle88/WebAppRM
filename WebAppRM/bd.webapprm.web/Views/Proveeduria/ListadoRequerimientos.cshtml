@@ -3,11 +3,8 @@
 @{
     var claimTransfer = claimsTransfer.ObtenerClaimsTransferHttpContext();
     string estado = ViewBag.Estado;
-    bool isAdminZonalProveeduria = claimsTransfer.IsADMIGrupo(ADMI_Grupos.AdminZonalProveeduria);
-    bool isAdminNacionalProveeduria = claimsTransfer.IsADMIGrupo(ADMI_Grupos.AdminNacionalProveeduria);
-    bool isFuncionarioSolicitante = claimsTransfer.IsADMIGrupo(ADMI_Grupos.FuncionarioSolicitante);
-    var nombreTabla = "dt_basic";
 }
+
 <div id="content">
     @{
         if (estado == Estados.Solicitado && claimsTransfer.IsADMIGrupo(ADMI_Grupos.FuncionarioSolicitante))
@@ -38,92 +35,7 @@
                         <div class="jarviswidget-editbox">
                         </div>
                         <div class="widget-body no-padding">
-                            <table id="@nombreTabla" class="table table-striped table-bordered table-hover" style="width:100%;">
-                                <thead>
-                                    <tr>
-                                        @{ await Html.RenderPartialAsync("~/Views/Shared/_VistaFiltradoText.cshtml", estado == Estados.Desaprobado || estado == Estados.Despachado ? 7 : 6);}
-                                        <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.sucursal)">
-                                            @Html.DisplayNameFor(model => model.FirstOrDefault().FuncionarioSolicitante.Dependencia.IdSucursal)
-                                        </th>
-                                        <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.dependencia)">
-                                            @Html.DisplayNameFor(model => model.FirstOrDefault().FuncionarioSolicitante.IdDependencia)
-                                        </th>
-                                        <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.empleado)">
-                                            @Html.DisplayNameFor(model => model.FirstOrDefault().IdFuncionarioSolicitante)
-                                        </th>
-                                        <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.fechaSolicitud)">
-                                            @Html.DisplayNameFor(model => model.FirstOrDefault().FechaSolicitud)
-                                        </th>
-                                        @{
-                                            if (estado == Estados.Desaprobado || estado == Estados.Despachado)
-                                            {
-                                                <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.fechaAprobadoDenegado)">
-                                                    @Html.DisplayNameFor(model => model.FirstOrDefault().FechaAprobadoDenegado)
-                                                </th>
-                                            }
-                                        }
-                                        <th id="@String.Format("th{0}{1}", nombreTabla, ThClassName.observaciones)">
-                                            @Html.DisplayNameFor(model => model.FirstOrDefault().Observaciones)
-                                        </th>
-                                        <th>
-                                            Opciones
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var item in Model)
-                                    {
-                                        <tr>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.FuncionarioSolicitante.Dependencia.Sucursal.Nombre)
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.FuncionarioSolicitante.Dependencia.Nombre)
-                                            </td>
-                                            <td>
-                                                @{await ViewContext.Writer.WriteAsync($"{item.FuncionarioSolicitante.Persona.Nombres} {item.FuncionarioSolicitante.Persona.Apellidos}");}
-                                            </td>
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.FechaSolicitud)
-                                            </td>
-                                            @{
-                                                if (estado == Estados.Desaprobado || estado == Estados.Despachado)
-                                                {
-                                                    <td>
-                                                        @Html.DisplayFor(modelItem => item.FechaAprobadoDenegado)
-                                                    </td>
-                                                }
-                                            }
-                                            <td>
-                                                @Html.DisplayFor(modelItem => item.Observaciones)
-                                            </td>
-                                            <td>
-                                                <a asp-action="DetallesRequerimientoArticulos" asp-route-id="@item.IdRequerimientoArticulos">Detalles</a>
-                                                @{
-                                                    if (estado == Estados.Solicitado)
-                                                    {
-                                                        if (isFuncionarioSolicitante)
-                                                        {
-                                                            <span> | </span>
-                                                            <a asp-action="GestionarRequerimiento" asp-route-id="@item.IdRequerimientoArticulos">Editar</a>
-                                                        }
-
-                                                        if (isAdminZonalProveeduria || isAdminNacionalProveeduria)
-                                                        {
-                                                            <span> | </span>
-                                                            <a asp-action="DespacharRequerimiento" asp-route-id="@item.IdRequerimientoArticulos">Dar salida</a><span> | </span>
-                                                            <a href="javascript:void(0);" id="@item.IdRequerimientoArticulos" onclick="abrirVentanaConfirmacion('@item.IdRequerimientoArticulos')" data-url="@Url.Action("DenegarRequerimiento", values: new { id = item.IdRequerimientoArticulos })" data-titulo="Denegar requerimiento" data-descripcion="&#191;Desea denegar el Requerimiento de art&iacute;culos... ?">Denegar</a>
-                                                        }
-
-                                                        <span> | </span>
-                                                        <a href="javascript:void(0);" id="@item.IdRequerimientoArticulos" onclick="abrirVentanaConfirmacion('@item.IdRequerimientoArticulos')" data-url="@Url.Action("DeleteRequerimiento", values: new { id = item.IdRequerimientoArticulos })" data-titulo="Eliminar" data-descripcion="&#191;Desea eliminar el Requerimiento de art&iacute;culos... ?">Eliminar</a>
-                                                    }
-                                                }
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
+                            @{await Html.RenderPartialAsync("_ListadoRequerimientos", Model);}
                         </div>
                     </div>
                 </div>

@@ -9,4 +9,10 @@ namespace bd.webapprm.entidades.ObjectTransfer
         public DateTime? FechaInicial { get; set; }
         public DateTime? FechaFinal { get; set; }
     }
+
+    public class RangoFechaEstadoTransfer
+    {
+        public RangoFechaTransfer RangoFechaTransfer { get; set; }
+        public List<string> Estados { get; set; }
+    }
 }

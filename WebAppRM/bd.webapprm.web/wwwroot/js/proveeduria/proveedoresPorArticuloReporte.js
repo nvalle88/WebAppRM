@@ -36,3 +36,19 @@ function partialViewArticulo() {
         }
     });
 }
+
+function eventoSubmitExcel() {
+    var api = $("#dt_basic").dataTable().api();
+    var form = $("#checkout-form");
+    var validar = true;
+
+    if (api.rows().nodes().length == 0) {
+        mostrarNotificacion("Error", "No existen registros para generar el reporte.");
+        validar = false;
+    }
+    if (!form.valid())
+        validar = false;
+
+    if (validar)
+        $("#checkout-form").submit();
+}
