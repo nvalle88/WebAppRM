@@ -22,7 +22,7 @@
                                     <div class="col-sm-8 text-align-right">
                                         <form asp-action="ExportarExcelProveedorArticulo" id="checkout-form" class="smart-form noFormLoading" novalidate="novalidate">
                                             <input type="hidden" id="idArticulo" name="idArticulo" />
-                                            <button type="submit" class="btn btn-primary padding-7" id="btn-guardar"><i class="fa fa-print"></i> Imprimir Proveedores por art&iacute;culo</button>
+                                            <button type="button" class="btn btn-primary padding-7" id="btn-guardar" onclick="eventoSubmitExcel()"><i class="fa fa-print"></i> Imprimir Proveedores por art&iacute;culo</button>
                                         </form>
                                     </div>
                                 </div>

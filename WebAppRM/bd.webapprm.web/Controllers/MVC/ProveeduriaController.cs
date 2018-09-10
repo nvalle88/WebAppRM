@@ -41,7 +41,7 @@ namespace bd.webapprm.web.Controllers.MVC
             ViewData["Estado"] = estado;
             try
             {
-                lista = await apiServicio.ObtenerElementoAsync<List<OrdenCompra>>(estado, new Uri(WebApp.BaseAddressRM), "api/Proveeduria/ListadoOrdenCompraPorEstado");
+                lista = await apiServicio.ObtenerElementoAsync<List<OrdenCompra>>(new List<string>() { estado }, new Uri(WebApp.BaseAddressRM), "api/Proveeduria/ListadoOrdenCompraPorEstado");
             }
             catch (Exception ex)
             {
@@ -943,7 +943,7 @@ namespace bd.webapprm.web.Controllers.MVC
 
                     DateTime fInicial = new DateTime(int.Parse(arrFechaInicial[2]), int.Parse(arrFechaInicial[0]), int.Parse(arrFechaInicial[1]), 0, 0, 0);
                     DateTime fFinal = new DateTime(int.Parse(arrFechaFinal[2]), int.Parse(arrFechaFinal[0]), int.Parse(arrFechaFinal[1]), 23, 59, 59);
-                    listadoOrdenesCompra = await apiServicio.ObtenerElementoAsync<List<OrdenCompra>>(new RangoFechaTransfer { FechaInicial = fInicial, FechaFinal = fFinal }, new Uri(WebApp.BaseAddressRM), "api/Proveeduria/ListadoOrdenCompraPorRangoFecha");
+                    listadoOrdenesCompra = await apiServicio.ObtenerElementoAsync<List<OrdenCompra>>(new RangoFechaEstadoTransfer { RangoFechaTransfer = new RangoFechaTransfer { FechaInicial = fInicial, FechaFinal = fFinal }, Estados = new List<string>() { Estados.EnTramite, Estados.Procesada } }, new Uri(WebApp.BaseAddressRM), "api/Proveeduria/ListadoOrdenCompraPorEstadoRangoFecha");
                 }
                 else
                     listadoOrdenesCompra = await apiServicio.Listar<OrdenCompra>(new Uri(WebApp.BaseAddressRM), "api/Proveeduria/ListadoOrdenCompra");
@@ -970,7 +970,7 @@ namespace bd.webapprm.web.Controllers.MVC
                     fFinal = new DateTime(int.Parse(arrFechaFinal[2]), int.Parse(arrFechaFinal[0]), int.Parse(arrFechaFinal[1]), 23, 59, 59);
                 }
 
-                var fileContents = await apiServicio.ObtenerElementoAsync<byte[]>(new RangoFechaTransfer { FechaInicial = fInicial, FechaFinal = fFinal }, new Uri(WebApp.BaseAddressRM), "api/Proveeduria/ExcelMovimientosRecepcion");
+                var fileContents = await apiServicio.ObtenerElementoAsync<byte[]>(new RangoFechaEstadoTransfer { RangoFechaTransfer = new RangoFechaTransfer { FechaInicial = fInicial, FechaFinal = fFinal }, Estados = new List<string>() { Estados.EnTramite, Estados.Procesada } }, new Uri(WebApp.BaseAddressRM), "api/Proveeduria/ExcelMovimientosRecepcion");
                 if (fileContents.Length > 0)
                 {
                     var fileName = "Movimientos de recepción.xlsx";
@@ -980,6 +980,66 @@ namespace bd.webapprm.web.Controllers.MVC
             catch (Exception)
             { }
             return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorReporte}", nameof(MovimientosRecepcionReporte));
+        }
+        #endregion
+
+        #region Movimientos de salida
+        public IActionResult MovimientosSalidaReporte()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ListadoReqResultRangoFecha(string fechaInicial, string fechaFinal)
+        {
+            var listadoRequerimientoArticulos = new List<RequerimientoArticulos>();
+            try
+            {
+                if (!String.IsNullOrEmpty(fechaInicial) && !String.IsNullOrEmpty(fechaFinal))
+                {
+                    var arrFechaInicial = fechaInicial.Split('/');
+                    var arrFechaFinal = fechaFinal.Split('/');
+
+                    DateTime fInicial = new DateTime(int.Parse(arrFechaInicial[2]), int.Parse(arrFechaInicial[0]), int.Parse(arrFechaInicial[1]), 0, 0, 0);
+                    DateTime fFinal = new DateTime(int.Parse(arrFechaFinal[2]), int.Parse(arrFechaFinal[0]), int.Parse(arrFechaFinal[1]), 23, 59, 59);
+                    listadoRequerimientoArticulos = await apiServicio.ObtenerElementoAsync<List<RequerimientoArticulos>>(new RangoFechaEstadoTransfer { RangoFechaTransfer = new RangoFechaTransfer { FechaInicial = fInicial, FechaFinal = fFinal }, Estados = new List<string>() { Estados.Despachado } }, new Uri(WebApp.BaseAddressRM), "api/Proveeduria/ListadoRequerimientoArticulosPorEstadoRangoFecha");
+                }
+                else
+                    listadoRequerimientoArticulos = await apiServicio.ObtenerElementoAsync<List<RequerimientoArticulos>>(new List<string>() { Estados.Despachado }, new Uri(WebApp.BaseAddressRM), "api/Proveeduria/ListadoRequerimientoArticulosPorEstado");
+            }
+            catch (Exception)
+            { }
+            ViewData["Estado"] = Estados.Despachado;
+            return PartialView("_ListadoRequerimientos", listadoRequerimientoArticulos);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ExportarExcelMovSalida(string fechaInicial, string fechaFinal)
+        {
+            try
+            {
+                DateTime? fInicial = null;
+                DateTime? fFinal = null;
+
+                if (!String.IsNullOrEmpty(fechaInicial) && !String.IsNullOrEmpty(fechaFinal))
+                {
+                    var arrFechaInicial = fechaInicial.Split('/');
+                    var arrFechaFinal = fechaFinal.Split('/');
+
+                    fInicial = new DateTime(int.Parse(arrFechaInicial[2]), int.Parse(arrFechaInicial[0]), int.Parse(arrFechaInicial[1]), 0, 0, 0);
+                    fFinal = new DateTime(int.Parse(arrFechaFinal[2]), int.Parse(arrFechaFinal[0]), int.Parse(arrFechaFinal[1]), 23, 59, 59);
+                }
+
+                var fileContents = await apiServicio.ObtenerElementoAsync<byte[]>(new RangoFechaEstadoTransfer { RangoFechaTransfer = new RangoFechaTransfer { FechaInicial = fInicial, FechaFinal = fFinal }, Estados = new List<string>() { Estados.Despachado } }, new Uri(WebApp.BaseAddressRM), "api/Proveeduria/ExcelMovimientosSalida");
+                if (fileContents.Length > 0)
+                {
+                    var fileName = "Movimientos de salida.xlsx";
+                    return File(fileContents, MimeTypes.GetMimeType(fileName), fileName);
+                }
+            }
+            catch (Exception)
+            { }
+            return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorReporte}", nameof(MovimientosSalidaReporte));
         }
         #endregion
         #endregion
