@@ -359,7 +359,7 @@ namespace bd.webapprm.web.Controllers.MVC
             ViewData["Estado"] = estado;
             try
             {
-                lista = await apiServicio.ObtenerElementoAsync<List<RequerimientoArticulos>>(estado, new Uri(WebApp.BaseAddressRM), "api/Proveeduria/ListadoRequerimientoArticulosPorEstado");
+                lista = await apiServicio.ObtenerElementoAsync<List<RequerimientoArticulos>>(new List<string>() { estado }, new Uri(WebApp.BaseAddressRM), "api/Proveeduria/ListadoRequerimientoArticulosPorEstado");
             }
             catch (Exception ex)
             {
@@ -1040,6 +1040,19 @@ namespace bd.webapprm.web.Controllers.MVC
             catch (Exception)
             { }
             return this.Redireccionar($"{Mensaje.Error}|{Mensaje.ErrorReporte}", nameof(MovimientosSalidaReporte));
+        }
+        #endregion
+
+        #region Existencia de artículos
+        public async Task<IActionResult> ExistenciaArticulosReporte()
+        {
+            var claimTransfer = claimsTransfer.ObtenerClaimsTransferHttpContext();
+            ViewData["Sucursal"] = new SelectList(claimsTransfer.IsADMIGrupo(ADMI_Grupos.AdminNacionalProveeduria) ? await apiServicio.Listar<Sucursal>(new Uri(WebApp.BaseAddressTH), "api/Sucursal/ListarSucursal") : new List<Sucursal> { new Sucursal { IdSucursal = claimTransfer.IdSucursal, Nombre = claimTransfer.NombreSucursal } }, "IdSucursal", "Nombre");
+
+            if (claimsTransfer.IsADMIGrupo(ADMI_Grupos.AdminZonalProveeduria))
+                ViewData["Bodega"] = await apiServicio.ObtenerElementoAsync<Bodega>(claimTransfer.IdDependencia, new Uri(WebApp.BaseAddressRM), "api/Proveeduria/BodegaPorDependencia");
+
+            return View();
         }
         #endregion
         #endregion
